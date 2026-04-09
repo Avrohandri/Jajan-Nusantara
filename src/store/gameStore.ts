@@ -132,9 +132,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     quizzesCorrect: s.quizzesCorrect + (correct ? 1 : 0),
     quizzesTriggered: s.quizzesTriggered + 1,
     score: s.score + (correct ? 50 : 0),
-    currentQuizIndex: s.currentQuizIndex + 1,
   })),
-  closeQuiz: () => set({ showQuiz: false, isPaused: false }),
+  closeQuiz: () => set(s => ({ showQuiz: false, isPaused: false, currentQuizIndex: s.currentQuizIndex + 1 })),
 
   // Cooking
   currentRecipe: null,
