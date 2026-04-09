@@ -32,7 +32,7 @@ export async function seedFirestore() {
       // Menyimpan berdasarkan ID kuis (q1, q2, dst)
       const { id, ...quizData } = quiz; 
       const docRef = doc(collection(db, 'quizzes'), id);
-      await setDoc(docRef, quiz); 
+      await setDoc(docRef, quizData); 
     }
     console.log('✅ Quizzes berhasil diunggah.');
 
