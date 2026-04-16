@@ -10,7 +10,7 @@ export function StepMixing({ onComplete }: Props) {
   const [totalDegrees, setTotalDegrees] = useState(0);
   const [isStirring, setIsStirring] = useState(false);
   const [whirlAngle, setWhirlAngle] = useState(0);
-  const [completed, setCompleted] = useState(false);
+  const completedRef = useRef(false);
 
   const bowlRef = useRef<HTMLDivElement>(null);
   const lastAngleRef = useRef<number | null>(null);
@@ -39,8 +39,8 @@ export function StepMixing({ onComplete }: Props) {
     if (delta > 0) {
       setTotalDegrees(prev => {
         const next = Math.min(prev + delta, REQUIRED_DEGREES);
-        if (next >= REQUIRED_DEGREES && !completed) {
-          setCompleted(true);
+        if (next >= REQUIRED_DEGREES && !completedRef.current) {
+          completedRef.current = true;
           setTimeout(() => onComplete(), 600);
         }
         return next;
@@ -48,7 +48,7 @@ export function StepMixing({ onComplete }: Props) {
       setWhirlAngle(a => a + delta);
     }
     lastAngleRef.current = angle;
-  }, [completed, onComplete]);
+  }, [onComplete]);
 
   // Mouse events
   const onMouseDown = (e: React.MouseEvent) => {

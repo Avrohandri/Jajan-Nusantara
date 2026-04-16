@@ -26,7 +26,8 @@ export function StepShaping({ onComplete }: Props) {
 
   // Mouse drag sugar
   const handleSugarDragStart = (e: React.DragEvent) => {
-    setDraggingSugar(true);
+    // Delay setting dragging state so browser can capture full-opacity drag ghost
+    setTimeout(() => setDraggingSugar(true), 0);
     e.dataTransfer.effectAllowed = 'move';
   };
 
@@ -56,8 +57,8 @@ export function StepShaping({ onComplete }: Props) {
     const touch = e.touches[0];
     setDraggingSugar(true);
     const ghost = document.createElement('div');
-    ghost.style.cssText = `position:fixed;left:${touch.clientX - 24}px;top:${touch.clientY - 24}px;font-size:40px;pointer-events:none;z-index:999;`;
-    ghost.textContent = '🟫';
+    ghost.style.cssText = `position:fixed;left:${touch.clientX - 24}px;top:${touch.clientY - 24}px;width:40px;height:40px;pointer-events:none;z-index:999;`;
+    ghost.innerHTML = `<img src="/assets/klepon/ing_gula.png" style="width:100%;height:100%;object-fit:contain;" />`;
     document.body.appendChild(ghost);
     ghostRef.current = ghost;
   };
@@ -91,7 +92,6 @@ export function StepShaping({ onComplete }: Props) {
     });
   };
 
-  const shapeDegrees = [0, 33, -25];
 
   return (
     <div className="klepon-step-content">
@@ -106,9 +106,15 @@ export function StepShaping({ onComplete }: Props) {
               style={{
                 borderRadius: `${30 + tapCount * 20}% ${30 + tapCount * 10}% ${30 + tapCount * 25}% ${30 + tapCount * 15}%`,
                 transform: `scale(${0.85 + tapCount * 0.05})`,
+                backgroundColor: '#7CAD58', // Pandan green
+                width: '100px',
+                height: '100px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: 'inset -5px -5px 10px rgba(0,0,0,0.1)'
               }}
             >
-              <span style={{ fontSize: '48px' }}>🟤</span>
             </div>
             <div className="tap-progress-row">
               {Array.from({ length: TAPS_NEEDED }).map((_, i) => (
@@ -123,12 +129,13 @@ export function StepShaping({ onComplete }: Props) {
       {(phase === 'filling' || phase === 'done') && (
         <>
           <p className="klepon-instruction">
-            Drag gula merah ke dalam setiap klepon! 🟫→🟢
+            Drag gula merah ke dalam setiap klepon!
           </p>
           <div className="sugar-source">
             <div
               ref={sugarRef}
-              className={`sugar-block ${draggingSugar ? 'sugar-dragging' : ''}`}
+              className={draggingSugar ? 'sugar-dragging' : ''}
+              style={{ cursor: 'grab', touchAction: 'none', transition: 'transform 0.15s, opacity 0.15s', display: 'flex', justifyContent: 'center' }}
               draggable
               onDragStart={handleSugarDragStart}
               onDragEnd={() => setDraggingSugar(false)}
@@ -136,8 +143,7 @@ export function StepShaping({ onComplete }: Props) {
               onTouchMove={handleSugarTouchMove}
               onTouchEnd={handleSugarTouchEnd}
             >
-              <span style={{ fontSize: '40px' }}>🟫</span>
-              <span style={{ fontSize: '12px', fontWeight: 700 }}>Gula Merah</span>
+              <img src="/assets/klepon/ing_gula.png" style={{ width: '90px', height: '90px', objectFit: 'contain', filter: 'drop-shadow(0 4px 4px rgba(0,0,0,0.2))' }} alt="Gula" />
             </div>
           </div>
 
@@ -146,17 +152,13 @@ export function StepShaping({ onComplete }: Props) {
               <div
                 key={idx}
                 className="klepon-ball"
-                style={{ transform: `rotate(${shapeDegrees[idx]}deg)` }}
+                style={{ border: 'none', background: 'transparent' }}
                 onDragOver={handleKleponDragOver}
                 onDrop={e => handleKleponDrop(e, idx)}
               >
-                {sugarDropped[idx] ? (
-                  <>
-                    <span style={{ fontSize: '44px' }}>🟢</span>
-                    <span className="sugar-filled-badge">✅</span>
-                  </>
-                ) : (
-                  <span style={{ fontSize: '44px' }}>⚪</span>
+                <img src="/assets/klepon/adonan_klepon_noalas.png" style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="Adonan Klepon" />
+                {sugarDropped[idx] && (
+                  <span className="sugar-filled-badge">✅</span>
                 )}
               </div>
             ))}
