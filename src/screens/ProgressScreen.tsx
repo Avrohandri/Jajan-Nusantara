@@ -107,7 +107,7 @@ export function ProgressScreen() {
         )}
       </div>
 
-      <Button variant="secondary" fullWidth onClick={() => setScreen('home')}>
+      <Button variant="secondary" fullWidth onClick={() => setScreen('mainMenu')}>
         🏠 Kembali
       </Button>
     </div>

@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { MergeScene } from './scenes/MergeScene';
+import { GameScene } from './scenes/GameScene';
 
 export function createGameConfig(
   width: number,
@@ -11,8 +11,8 @@ export function createGameConfig(
     width,
     height,
     parent,
-    backgroundColor: '#FFF8F0',
-    transparent: false,
+    backgroundColor: 'transparent',
+    transparent: true,
     physics: {
       default: 'matter',
       matter: {
@@ -20,7 +20,7 @@ export function createGameConfig(
         debug: false,
       },
     },
-    scene: [MergeScene],
+    scene: [GameScene],
     scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,

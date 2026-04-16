@@ -15,7 +15,7 @@ export function CookingScreen() {
     return (
       <div className="screen cooking-screen">
         <h2>Tidak ada resep tersedia</h2>
-        <Button variant="primary" onClick={() => setScreen('home')}>Kembali</Button>
+        <Button variant="primary" onClick={() => setScreen('mainMenu')}>Kembali</Button>
       </div>
     );
   }
@@ -28,7 +28,7 @@ export function CookingScreen() {
 
   const handleBack = () => {
     resetCooking();
-    setScreen('home');
+    setScreen('mainMenu');
   };
 
   return (

@@ -84,7 +84,6 @@ export function PhaserGame({ width, height }: PhaserGameProps) {
         height: `${height}px`,
         borderRadius: '12px',
         overflow: 'hidden',
-        border: '3px solid #D4A373',
       }}
     />
   );

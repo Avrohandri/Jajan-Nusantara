@@ -11,9 +11,8 @@ export function ResultScreen() {
     highestTier,
     startTime,
     snacks,
-    recipes,
     setScreen,
-    startCooking,
+    startKleponGame,
   } = useGameStore();
 
   const highestSnack = snacks.find(s => s.tier === highestTier);
@@ -23,11 +22,6 @@ export function ResultScreen() {
   const quizAccuracy = quizzesTriggered > 0
     ? Math.round((quizzesCorrect / quizzesTriggered) * 100)
     : 0;
-
-  // Find a recipe to offer as minigame
-  const availableRecipe = highestSnack
-    ? recipes.find(r => r.snackName === highestSnack.name) || recipes[0]
-    : recipes[0];
 
   return (
     <div className="screen result-screen">
@@ -65,20 +59,19 @@ export function ResultScreen() {
       )}
 
       <div className="result-actions">
-        {availableRecipe && (
+        {/* Always offer Klepon mini-game */}
           <Button
             variant="primary"
             size="lg"
             fullWidth
-            onClick={() => startCooking(availableRecipe.snackName)}
+            onClick={startKleponGame}
           >
-            🍳 Lanjut ke Minigame Memasak
+            🍡 Memasak Klepon — Minigame!
           </Button>
-        )}
         <Button variant="secondary" fullWidth onClick={() => setScreen('game')}>
           🔄 Main Lagi
         </Button>
-        <Button variant="accent" fullWidth onClick={() => setScreen('home')}>
+        <Button variant="accent" fullWidth onClick={() => setScreen('mainMenu')}>
           🏠 Kembali
         </Button>
       </div>

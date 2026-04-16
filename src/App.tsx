@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useGameStore } from './store/gameStore';
 import { initFirebase, signInAnon, isFirebaseConfigured } from './lib/firebase/config';
-import { HomeScreen } from './screens/HomeScreen';
+import { MainMenuScreen } from './screens/MainMenuScreen';
+import { MapSelectScreen } from './screens/MapSelectScreen';
+import { SettingsScreen } from './screens/SettingsScreen';
 import { GameScreen } from './screens/GameScreen';
 import { ResultScreen } from './screens/ResultScreen';
-import { CookingScreen } from './screens/CookingScreen';
+import { CookingScreen } from './screens/CookingScreen'; // legacy, kept for fallback
+import { KleponMiniGameScreen } from './screens/KleponMiniGameScreen';
 import { ProgressScreen } from './screens/ProgressScreen';
 
 export default function App() {
@@ -50,12 +53,17 @@ export default function App() {
 
   const renderScreen = () => {
     switch (currentScreen) {
-      case 'home': return <HomeScreen />;
+      case 'mainMenu': return <MainMenuScreen />;
+      case 'home': return <MainMenuScreen />; // Redirect old 'home' to MainMenu
+      case 'mapSelect': return <MapSelectScreen />;
+      case 'settings': return <SettingsScreen />;
+      case 'jajanpedia': return <MainMenuScreen />; // Placeholder — will be built later
       case 'game': return <GameScreen />;
       case 'result': return <ResultScreen />;
-      case 'cooking': return <CookingScreen />;
+      case 'cooking': return <CookingScreen />; // legacy
+      case 'kleponGame': return <KleponMiniGameScreen />;
       case 'progress': return <ProgressScreen />;
-      default: return <HomeScreen />;
+      default: return <MainMenuScreen />;
     }
   };
 

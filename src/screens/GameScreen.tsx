@@ -6,6 +6,7 @@ import { QuizModal } from '../features/quiz/QuizModal';
 import { Modal } from '../components/Modal';
 import { Button } from '../components/Button';
 import type { SnackData } from '../types';
+import { FOOD_CONFIG } from '../game/characters/FoodConfig';
 
 export function GameScreen() {
   const {
@@ -22,21 +23,26 @@ export function GameScreen() {
     endSession,
     snacks,
     highestTier,
+    seenTiers,
   } = useGameStore();
 
   const [nextItem, setNextItem] = useState<SnackData | null>(null);
   const [showInstructions, setShowInstructions] = useState(!hasSeenInstructions);
 
-  // Get game canvas dimensions (mobile-first portrait)
-  const gameWidth = Math.min(360, window.innerWidth - 32);
-  const gameHeight = Math.min(560, window.innerHeight - 200);
+  // Get game canvas dimensions (mobile-first portrait) - Calculate ONCE on mount to prevent game engine restart
+  const [gameWidth] = useState(() => Math.min(360, window.innerWidth - 32));
+  const [gameHeight] = useState(() => Math.min(560, window.innerHeight - 200));
 
   useEffect(() => {
     // Reset game state when entering
     resetGame();
 
     const handleNextItem = (data: unknown) => {
-      setNextItem(data as SnackData);
+      const snack = data as SnackData;
+      setNextItem(snack);
+      if (snack.tier !== undefined) {
+        useGameStore.getState().markTierSeen(snack.tier);
+      }
     };
 
     EventBus.on('next-item', handleNextItem);
@@ -44,7 +50,7 @@ export function GameScreen() {
     return () => {
       EventBus.off('next-item', handleNextItem);
     };
-  }, []);
+  }, [resetGame]);
 
   const handlePause = () => {
     setPaused(true);
@@ -79,6 +85,9 @@ export function GameScreen() {
       {/* HUD */}
       <div className="game-hud">
         <div className="hud-left">
+          <button onClick={handlePause} className="pause-btn-top">
+            ❚❚
+          </button>
           <div className="hud-stat">
             <span className="hud-label">Skor</span>
             <span className="hud-value">{score}</span>
@@ -94,9 +103,13 @@ export function GameScreen() {
               <span className="hud-label">Berikutnya</span>
               <div
                 className="next-preview"
-                style={{ backgroundColor: nextItem.color }}
+                style={{ background: 'none' }}
               >
-                {nextItem.emoji}
+                <img 
+                  src={`/assets/foods/${FOOD_CONFIG[nextItem.tier]?.textureKey || '00_Klepon'}.png`} 
+                  alt="Next hint"
+                  style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                />
               </div>
             </div>
           )}
@@ -104,29 +117,30 @@ export function GameScreen() {
       </div>
 
       {/* Game Canvas */}
-      <div className="game-canvas-wrapper">
+      <div 
+        className="game-canvas-wrapper"
+        style={{ width: gameWidth, height: gameHeight, flex: 'none' }}
+      >
         <PhaserGame width={gameWidth} height={gameHeight} />
       </div>
 
-      {/* Bottom Controls */}
-      <div className="game-controls">
-        {!isGameOver ? (
-          <>
-            <Button variant="secondary" size="sm" onClick={isPaused ? handleResume : handlePause}>
-              {isPaused ? '▶️ Lanjut' : '⏸️ Jeda'}
-            </Button>
-            <Button variant="danger" size="sm" onClick={handleRestart}>
-              🔄 Ulang
-            </Button>
-            <Button variant="accent" size="sm" onClick={handleEndGame}>
-              🏁 Selesai
-            </Button>
-          </>
-        ) : (
-          <Button variant="primary" size="lg" fullWidth onClick={handleEndGame}>
-            📊 Lihat Hasil
-          </Button>
-        )}
+      {/* Bottom Controls / Progress */}
+      <div className="game-progress-bar">
+        {FOOD_CONFIG.map((item) => {
+          const isUnlocked = seenTiers.includes(item.tier);
+          return (
+            <div 
+              key={item.tier} 
+              className={`progress-food ${isUnlocked ? 'unlocked' : 'locked'}`}
+            >
+              {isUnlocked ? (
+                <img src={`/assets/foods/${item.textureKey}.png`} alt={item.name} />
+              ) : (
+                <span style={{color: '#8B7355', fontWeight: 'bold'}}>?</span>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Instructions Overlay (first launch only) */}
@@ -155,6 +169,14 @@ export function GameScreen() {
             {highestSnack && (
               <p>Jajanan Tertinggi: {highestSnack.emoji} {highestSnack.name}</p>
             )}
+            <br />
+            <Button variant="primary" size="lg" fullWidth onClick={handleEndGame}>
+              📊 Lihat Hasil
+            </Button>
+            <div style={{marginTop: 8}}></div>
+            <Button variant="danger" size="lg" fullWidth onClick={handleRestart}>
+              🔄 Ulang Bermain
+            </Button>
           </div>
         </div>
       )}
@@ -164,7 +186,11 @@ export function GameScreen() {
         <div className="pause-overlay">
           <div className="pause-content">
             <h2>⏸️ Dijeda</h2>
-            <Button variant="primary" onClick={handleResume}>▶️ Lanjutkan</Button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px' }}>
+              <Button variant="primary" onClick={handleResume}>▶️ Lanjutkan</Button>
+              <Button variant="danger" onClick={handleRestart}>🔄 Ulang</Button>
+              <Button variant="accent" onClick={handleEndGame}>🏁 Selesai</Button>
+            </div>
           </div>
         </div>
       )}

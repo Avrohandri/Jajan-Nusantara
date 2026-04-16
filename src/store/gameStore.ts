@@ -18,12 +18,14 @@ interface GameStore {
   score: number;
   mergeCount: number;
   highestTier: number;
+  seenTiers: number[];
   isPaused: boolean;
   isGameOver: boolean;
   startTime: number | null;
 
   addScore: (points: number) => void;
   incrementMerge: (tier: number) => void;
+  markTierSeen: (tier: number) => void;
   setPaused: (paused: boolean) => void;
   setGameOver: () => void;
   resetGame: () => void;
@@ -37,13 +39,20 @@ interface GameStore {
   answerQuiz: (correct: boolean) => void;
   closeQuiz: () => void;
 
-  // --- Cooking Minigame State ---
+  // --- Cooking Minigame State (Legacy) ---
   currentRecipe: RecipeData | null;
   cookingStep: number;
   cookingComplete: boolean;
   startCooking: (recipeName: string) => void;
   advanceCookingStep: () => void;
   resetCooking: () => void;
+
+  // --- Klepon Mini-Game State ---
+  kleponStep: number;
+  kleponComplete: boolean;
+  startKleponGame: () => void;
+  advanceKleponStep: () => void;
+  resetKleponGame: () => void;
 
   // --- Player Profile ---
   userId: string;
@@ -65,11 +74,15 @@ interface GameStore {
   // --- Settings ---
   soundEnabled: boolean;
   toggleSound: () => void;
+  isMusicOn: boolean;
+  isSfxOn: boolean;
+  toggleMusic: () => void;
+  toggleSfx: () => void;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
   // Screen
-  currentScreen: 'home',
+  currentScreen: 'mainMenu',
   setScreen: (screen) => set({ currentScreen: screen }),
 
   // Content
@@ -90,6 +103,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   score: 0,
   mergeCount: 0,
   highestTier: 0,
+  seenTiers: [] as number[],
   isPaused: false,
   isGameOver: false,
   startTime: null,
@@ -98,6 +112,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   incrementMerge: (tier) => set(s => ({
     mergeCount: s.mergeCount + 1,
     highestTier: Math.max(s.highestTier, tier),
+    seenTiers: s.seenTiers.includes(tier) ? s.seenTiers : [...s.seenTiers, tier],
+  })),
+  markTierSeen: (tier) => set(s => ({
+    seenTiers: s.seenTiers.includes(tier) ? s.seenTiers : [...s.seenTiers, tier],
   })),
   setPaused: (paused) => set({ isPaused: paused }),
   setGameOver: () => set({ isGameOver: true }),
@@ -105,6 +123,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     score: 0,
     mergeCount: 0,
     highestTier: 0,
+    seenTiers: [],
     isPaused: false,
     isGameOver: false,
     startTime: Date.now(),
@@ -166,6 +185,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
   resetCooking: () => set({ currentRecipe: null, cookingStep: 0, cookingComplete: false }),
+
+  // Klepon Mini-Game
+  kleponStep: 0,
+  kleponComplete: false,
+  startKleponGame: () => set({ kleponStep: 0, kleponComplete: false, currentScreen: 'kleponGame' }),
+  advanceKleponStep: () => set(s => {
+    const nextStep = s.kleponStep + 1;
+    if (nextStep >= 5) {
+      // All 5 steps done
+      return {
+        kleponComplete: true,
+        kleponStep: nextStep,
+        unlockedRecipes: s.unlockedRecipes.includes('Klepon')
+          ? s.unlockedRecipes
+          : [...s.unlockedRecipes, 'Klepon'],
+      };
+    }
+    return { kleponStep: nextStep };
+  }),
+  resetKleponGame: () => set({ kleponStep: 0, kleponComplete: false }),
 
   // Profile
   userId: 'local_player',
@@ -246,4 +285,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // Settings
   soundEnabled: true,
   toggleSound: () => set(s => ({ soundEnabled: !s.soundEnabled })),
+  isMusicOn: true,
+  isSfxOn: true,
+  toggleMusic: () => set(s => ({ isMusicOn: !s.isMusicOn })),
+  toggleSfx: () => set(s => ({ isSfxOn: !s.isSfxOn })),
 }));
