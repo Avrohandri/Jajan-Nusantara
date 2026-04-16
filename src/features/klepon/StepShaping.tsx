@@ -57,7 +57,7 @@ export function StepShaping({ onComplete }: Props) {
     const touch = e.touches[0];
     setDraggingSugar(true);
     const ghost = document.createElement('div');
-    ghost.style.cssText = `position:fixed;left:${touch.clientX - 24}px;top:${touch.clientY - 24}px;width:40px;height:40px;pointer-events:none;z-index:999;`;
+    ghost.style.cssText = `position:fixed;left:${touch.clientX - 50}px;top:${touch.clientY - 50}px;width:100px;height:100px;pointer-events:none;z-index:999;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.3))`;
     ghost.innerHTML = `<img src="/assets/klepon/ing_gula.png" style="width:100%;height:100%;object-fit:contain;" />`;
     document.body.appendChild(ghost);
     ghostRef.current = ghost;
@@ -104,7 +104,7 @@ export function StepShaping({ onComplete }: Props) {
             <div
               className="dough-blob"
               style={{
-                borderRadius: `${30 + tapCount * 20}% ${30 + tapCount * 10}% ${30 + tapCount * 25}% ${30 + tapCount * 15}%`,
+                borderRadius: tapCount === TAPS_NEEDED - 1 ? '50%' : `${30 + tapCount * 15}% ${40 + tapCount * 5}% ${25 + tapCount * 10}% ${35 + tapCount * 5}%`,
                 transform: `scale(${0.85 + tapCount * 0.05})`,
                 backgroundColor: '#7CAD58', // Pandan green
                 width: '100px',
@@ -143,7 +143,7 @@ export function StepShaping({ onComplete }: Props) {
               onTouchMove={handleSugarTouchMove}
               onTouchEnd={handleSugarTouchEnd}
             >
-              <img src="/assets/klepon/ing_gula.png" style={{ width: '90px', height: '90px', objectFit: 'contain', filter: 'drop-shadow(0 4px 4px rgba(0,0,0,0.2))' }} alt="Gula" />
+              <img src="/assets/klepon/ing_gula.png" style={{ width: '120px', height: '120px', objectFit: 'contain', filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.25))' }} alt="Gula" />
             </div>
           </div>
 

@@ -82,21 +82,20 @@ export function StepIngredients({ onComplete }: Props) {
     ghost.className = 'ing-ghost';
     ghost.style.cssText = [
       `position:fixed`,
-      `left:${touch.clientX - 45}px`,
-      `top:${touch.clientY - 45}px`,
-      `width:90px`,
-      `height:90px`,
-      `border-radius:50%`,
-      `background:${ing.plateColor}`,
+      `left:${touch.clientX - 55}px`,
+      `top:${touch.clientY - 55}px`,
+      `width:110px`,
+      `height:110px`,
+      `background:transparent`,
       `display:flex`,
       `align-items:center`,
       `justify-content:center`,
       `pointer-events:none`,
       `z-index:9999`,
-      `box-shadow:0 8px 24px rgba(0,0,0,0.35)`,
+      `filter:drop-shadow(0 8px 16px rgba(0,0,0,0.3))`,
       `transition:none`,
     ].join(';');
-    ghost.innerHTML = `<img src="${ing.imgSrc}" style="width:70%;height:70%;object-fit:contain;" />`;
+    ghost.innerHTML = `<img src="${ing.imgSrc}" style="width:100%;height:100%;object-fit:contain;" />`;
     document.body.appendChild(ghost);
     ghostRef.current = ghost;
   };

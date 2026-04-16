@@ -42,7 +42,7 @@ export function StepCoating({ onComplete }: Props) {
     const touch = e.touches[0];
     setDragging(true);
     const ghost = document.createElement('div');
-    ghost.style.cssText = `position:fixed;left:${touch.clientX - 40}px;top:${touch.clientY - 40}px;width:80px;height:80px;pointer-events:none;z-index:999;`;
+    ghost.style.cssText = `position:fixed;left:${touch.clientX - 60}px;top:${touch.clientY - 60}px;width:120px;height:120px;pointer-events:none;z-index:999;filter:drop-shadow(0 6px 12px rgba(0,0,0,0.3))`;
     ghost.innerHTML = `<img src="/assets/klepon/kelapa_parut.png" style="width:100%;height:100%;object-fit:contain;" />`;
     document.body.appendChild(ghost);
     ghostRef.current = ghost;

@@ -61,7 +61,7 @@ export function StepBoiling({ onComplete }: Props) {
   const handleTouchStart = (e: React.TouchEvent, idx: number) => {
     const touch = e.touches[0];
     const ghost = document.createElement('div');
-    ghost.style.cssText = `position:fixed;left:${touch.clientX - 40}px;top:${touch.clientY - 40}px;width:80px;height:80px;pointer-events:none;z-index:999;`;
+    ghost.style.cssText = `position:fixed;left:${touch.clientX - 55}px;top:${touch.clientY - 55}px;width:110px;height:110px;pointer-events:none;z-index:999;filter:drop-shadow(0 6px 12px rgba(0,0,0,0.3))`;
     ghost.innerHTML = `<img src="/assets/klepon/adonan_klepon.png" style="width:100%;height:100%;object-fit:contain;" />`;
     ghost.dataset.idx = String(idx);
     document.body.appendChild(ghost);
