@@ -5,9 +5,6 @@ import { EventBus } from '../EventBus';
 import { useGameStore } from '../../store/gameStore';
 import type { SnackData } from '../../types';
 
-export const SPAWN_Y = 140;
-export const CONFIG_DANGER_LINE_Y = 170;
-const DANGER_LINE_Y = CONFIG_DANGER_LINE_Y;
 const WALL_THICKNESS = 30;
 const DROP_COOLDOWN = 500; // ms
 
@@ -30,6 +27,11 @@ export class GameScene extends Phaser.Scene {
 
   private currentRegion: string = 'jogja';
   private currentConfig: FoodItem[] = [];
+
+  // Computed in create() — proportional to canvas size (includes DPR)
+  private scaleFactor = 1;
+  private dangerLineY = 170;
+  private spawnY = 140;
 
   constructor() {
     super({ key: 'GameScene' });
@@ -60,6 +62,13 @@ export class GameScene extends Phaser.Scene {
     this.containerHeight = Number(this.game.config.height);
     this.pointerX = this.containerWidth / 2;
 
+    // Baseline canvas is 560px tall at DPR=1 → containerHeight = 560.
+    // On mobile DPR=3, containerHeight = 1680, so scaleFactor = 3.
+    // This keeps food sizes and Y-positions proportional on all screens.
+    this.scaleFactor  = this.containerHeight / 560;
+    this.dangerLineY  = Math.round(this.containerHeight * 0.30);
+    this.spawnY       = Math.round(this.containerHeight * 0.25);
+
     this.debugGraphics = this.add.graphics();
     this.debugGraphics.setDepth(100);
 
@@ -83,11 +92,14 @@ export class GameScene extends Phaser.Scene {
     // Danger line
     this.dangerLine = this.add.graphics();
     this.dangerLine.lineStyle(2, 0xff0000, 0.4);
-    this.dangerLine.lineBetween(WALL_THICKNESS, DANGER_LINE_Y, w - WALL_THICKNESS, DANGER_LINE_Y);
+    this.dangerLine.lineBetween(WALL_THICKNESS, this.dangerLineY, w - WALL_THICKNESS, this.dangerLineY);
 
     this.dropIndicator = this.add.graphics();
-    this.previewSprite = this.add.sprite(this.pointerX, SPAWN_Y, this.currentConfig[0].textureKey);
-    this.previewSprite.setDisplaySize(this.currentConfig[0].displaySize.width, this.currentConfig[0].displaySize.height);
+    const previewConfig = this.currentConfig[0];
+    const pw = Math.round(previewConfig.displaySize.width  * this.scaleFactor);
+    const ph = Math.round(previewConfig.displaySize.height * this.scaleFactor);
+    this.previewSprite = this.add.sprite(this.pointerX, this.spawnY, previewConfig.textureKey);
+    this.previewSprite.setDisplaySize(pw, ph);
     this.previewSprite.setAlpha(0.6); // Semi-transparent preview
     this.previewSprite.setDepth(50); // Pastikan ada di atas indikator
 
@@ -245,7 +257,6 @@ export class GameScene extends Phaser.Scene {
       for (const item of this.activeItems) {
         if (!item.active || !item.body) continue;
         const body = item.body as MatterJS.BodyType;
-        // Use an approximate radius for collision detection on the indicator line
         const snackRadius = (item.width * item.scale * 0.5) || 20;
 
         const dx = Math.abs(body.position.x - this.pointerX);
@@ -253,7 +264,7 @@ export class GameScene extends Phaser.Scene {
         if (dx < snackRadius) {
           const dy = Math.sqrt(snackRadius * snackRadius - dx * dx);
           const hitY = body.position.y - dy;
-          if (hitY < targetY && hitY > SPAWN_Y) {
+          if (hitY < targetY && hitY > this.spawnY) {
             targetY = hitY;
           }
         }
@@ -266,10 +277,10 @@ export class GameScene extends Phaser.Scene {
       const step = dashLength + gapLength;
 
       const timeOffset = (this.time.now / 30) % step;
-      let currentY = SPAWN_Y + timeOffset - step;
+      let currentY = this.spawnY + timeOffset - step;
 
       while (currentY < targetY) {
-        const startY = Math.max(SPAWN_Y, currentY);
+        const startY = Math.max(this.spawnY, currentY);
         const endY = Math.min(targetY, currentY + dashLength);
         if (startY < endY) {
           this.dropIndicator.lineBetween(this.pointerX, startY, this.pointerX, endY);
@@ -295,7 +306,9 @@ export class GameScene extends Phaser.Scene {
     const config = this.currentConfig[this.nextTier];
     if (this.previewSprite && config) {
       this.previewSprite.setTexture(config.textureKey);
-      this.previewSprite.setDisplaySize(config.displaySize.width, config.displaySize.height);
+      const pw = Math.round(config.displaySize.width  * this.scaleFactor);
+      const ph = Math.round(config.displaySize.height * this.scaleFactor);
+      this.previewSprite.setDisplaySize(pw, ph);
     }
 
     // Update HUD React jika ada tipe
@@ -307,8 +320,11 @@ export class GameScene extends Phaser.Scene {
     const config = this.currentConfig[tier];
     if (!config) return;
 
+    const sw = Math.round(config.displaySize.width  * this.scaleFactor);
+    const sh = Math.round(config.displaySize.height * this.scaleFactor);
+
     const sprite = this.matter.add.sprite(x, y, config.textureKey);
-    sprite.setDisplaySize(config.displaySize.width, config.displaySize.height);
+    sprite.setDisplaySize(sw, sh);
 
     const customBody = ColliderFactory.createFoodBody(this, config, x, y);
 
@@ -321,7 +337,7 @@ export class GameScene extends Phaser.Scene {
 
     sprite.setPosition(x, y);
 
-    if (y < SPAWN_Y + 10) {
+    if (y < this.spawnY + 10) {
       this.activeItems.push(sprite);
     } else {
       this.activeItems.push(sprite);
@@ -329,7 +345,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private dropSnack(x: number) {
-    this.spawnFood(this.nextTier, x, SPAWN_Y);
+    this.spawnFood(this.nextTier, x, this.spawnY);
 
     this.lastDropTime = Date.now();
     this.canDrop = false;
@@ -364,8 +380,8 @@ export class GameScene extends Phaser.Scene {
 
       const speed = Math.sqrt(body.velocity.x ** 2 + body.velocity.y ** 2);
 
-      if (speed < 0.2 && body.position.y < DANGER_LINE_Y) {
-        if (body.position.y <= SPAWN_Y + 5) continue;
+      if (speed < 0.2 && body.position.y < this.dangerLineY) {
+        if (body.position.y <= this.spawnY + 5) continue;
 
         this.gameOver = true;
         this.canDrop = false;

@@ -7,10 +7,9 @@ import { useGameStore } from '../store/gameStore';
 interface PhaserGameProps {
   width: number;
   height: number;
-  scaleFactor: number;
 }
 
-export function PhaserGame({ width, height, scaleFactor }: PhaserGameProps) {
+export function PhaserGame({ width, height }: PhaserGameProps) {
   const gameRef = useRef<Phaser.Game | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const {
@@ -39,11 +38,11 @@ export function PhaserGame({ width, height, scaleFactor }: PhaserGameProps) {
     if (snacks.length > 0) {
       // Small delay to let scene initialize
       const timer = setTimeout(() => {
-        EventBus.emit('set-snacks', { snacks, scaleFactor });
+        EventBus.emit('set-snacks', snacks);
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [snacks, scaleFactor]);
+  }, [snacks]);
 
   // Listen for game events
   useEffect(() => {
