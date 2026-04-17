@@ -252,7 +252,7 @@ function scaleFoodConfig(config: FoodItem[], factor: number): FoodItem[] {
   });
 }
 
-const SCALE_FACTOR = 1.3;
+const SCALE_FACTOR = 1.1;
 
 export const REGION_FOOD_CONFIGS: Record<string, FoodItem[]> = Object.fromEntries(
   Object.entries(REGION_FOOD_CONFIGS_RAW).map(([key, cfg]) => [key, scaleFoodConfig(cfg, SCALE_FACTOR)])
