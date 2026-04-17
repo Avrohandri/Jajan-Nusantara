@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { REGION_FOOD_CONFIGS, type FoodItem } from '../characters/FoodConfig';
+import { REGION_FOOD_CONFIGS, REGION_FOOD_CONFIGS_RAW, scaleFoodConfig, type FoodItem } from '../characters/FoodConfig';
 import { ColliderFactory } from '../physics/ColliderFactory';
 import { EventBus } from '../EventBus';
 import { useGameStore } from '../../store/gameStore';
@@ -38,16 +38,18 @@ export class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    // Determine current region and configuration
+    // Determine current region
     this.currentRegion = useGameStore.getState().activeRegion || 'jogja';
-    this.currentConfig = REGION_FOOD_CONFIGS[this.currentRegion] || REGION_FOOD_CONFIGS['jogja'];
+    // currentConfig will be set in create() after we know containerHeight.
+    // For preload, use the unscaled config just to get texture keys.
+    const baseConfig = REGION_FOOD_CONFIGS[this.currentRegion] || REGION_FOOD_CONFIGS['jogja'];
     
     const assetFolder = `foods_${this.currentRegion}`;
-    
-    // Dynamically load images for the current region
-    for (const item of this.currentConfig) {
+    for (const item of baseConfig) {
       this.load.image(item.textureKey, `/assets/${assetFolder}/${item.textureKey}.png`);
     }
+    // Store region for use in create()
+    this.currentConfig = baseConfig;
   }
 
   init() {
@@ -64,10 +66,15 @@ export class GameScene extends Phaser.Scene {
 
     // Baseline canvas is 560px tall at DPR=1 → containerHeight = 560.
     // On mobile DPR=3, containerHeight = 1680, so scaleFactor = 3.
-    // This keeps food sizes and Y-positions proportional on all screens.
+    // Scale the ENTIRE config (displaySize + all collider dimensions) so
+    // both sprite visual and physics body are proportional on all screens.
     this.scaleFactor  = this.containerHeight / 560;
     this.dangerLineY  = Math.round(this.containerHeight * 0.30);
     this.spawnY       = Math.round(this.containerHeight * 0.25);
+
+    // Re-build scaled config — start from RAW and apply base 1.1 × DPR factor
+    const rawConfig = REGION_FOOD_CONFIGS_RAW[this.currentRegion] || REGION_FOOD_CONFIGS_RAW['jogja'];
+    this.currentConfig = scaleFoodConfig(rawConfig, 1.1 * this.scaleFactor);
 
     this.debugGraphics = this.add.graphics();
     this.debugGraphics.setDepth(100);
@@ -96,10 +103,8 @@ export class GameScene extends Phaser.Scene {
 
     this.dropIndicator = this.add.graphics();
     const previewConfig = this.currentConfig[0];
-    const pw = Math.round(previewConfig.displaySize.width  * this.scaleFactor);
-    const ph = Math.round(previewConfig.displaySize.height * this.scaleFactor);
     this.previewSprite = this.add.sprite(this.pointerX, this.spawnY, previewConfig.textureKey);
-    this.previewSprite.setDisplaySize(pw, ph);
+    this.previewSprite.setDisplaySize(previewConfig.displaySize.width, previewConfig.displaySize.height);
     this.previewSprite.setAlpha(0.6); // Semi-transparent preview
     this.previewSprite.setDepth(50); // Pastikan ada di atas indikator
 
@@ -306,9 +311,7 @@ export class GameScene extends Phaser.Scene {
     const config = this.currentConfig[this.nextTier];
     if (this.previewSprite && config) {
       this.previewSprite.setTexture(config.textureKey);
-      const pw = Math.round(config.displaySize.width  * this.scaleFactor);
-      const ph = Math.round(config.displaySize.height * this.scaleFactor);
-      this.previewSprite.setDisplaySize(pw, ph);
+      this.previewSprite.setDisplaySize(config.displaySize.width, config.displaySize.height);
     }
 
     // Update HUD React jika ada tipe
@@ -320,11 +323,8 @@ export class GameScene extends Phaser.Scene {
     const config = this.currentConfig[tier];
     if (!config) return;
 
-    const sw = Math.round(config.displaySize.width  * this.scaleFactor);
-    const sh = Math.round(config.displaySize.height * this.scaleFactor);
-
     const sprite = this.matter.add.sprite(x, y, config.textureKey);
-    sprite.setDisplaySize(sw, sh);
+    sprite.setDisplaySize(config.displaySize.width, config.displaySize.height);
 
     const customBody = ColliderFactory.createFoodBody(this, config, x, y);
 

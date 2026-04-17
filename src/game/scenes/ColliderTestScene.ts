@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { REGION_FOOD_CONFIGS } from '../characters/FoodConfig';
+import { REGION_FOOD_CONFIGS, REGION_FOOD_CONFIGS_RAW, scaleFoodConfig } from '../characters/FoodConfig';
 import { ColliderFactory } from '../physics/ColliderFactory';
 
 export class ColliderTestScene extends Phaser.Scene {
@@ -21,18 +21,22 @@ export class ColliderTestScene extends Phaser.Scene {
   private regionTitle!: Phaser.GameObjects.Text;
 
   create() {
-    const width = Number(this.game.config.width);
+    const width  = Number(this.game.config.width);
     const height = Number(this.game.config.height);
+    // Scale factor: baseline 560px canvas at DPR=1; mobile DPR=3 → height=1680 → factor=3
+    const scaleFactor = height / 560;
+    const fontSize = Math.round(24 * scaleFactor);
+    const subFontSize = Math.round(14 * scaleFactor);
 
     // Title
-    this.regionTitle = this.add.text(width / 2, 40, 'Collider Test Mode', {
-      fontSize: '24px',
+    this.regionTitle = this.add.text(width / 2, Math.round(40 * scaleFactor), 'Collider Test Mode', {
+      fontSize: `${fontSize}px`,
       color: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5);
 
-    this.add.text(width / 2, 70, 'Drag and drop items to test physics.', {
-      fontSize: '14px',
+    this.add.text(width / 2, Math.round(70 * scaleFactor), 'Drag and drop items to test physics.', {
+      fontSize: `${subFontSize}px`,
       color: '#aaaaaa'
     }).setOrigin(0.5);
 
@@ -51,7 +55,9 @@ export class ColliderTestScene extends Phaser.Scene {
   }
 
   private spawnRegion(region: string) {
-    const width = Number(this.game.config.width);
+    const width  = Number(this.game.config.width);
+    const height = Number(this.game.config.height);
+    const scaleFactor = height / 560;
     
     // Clear existing
     this.activeItems.forEach(item => {
@@ -62,11 +68,15 @@ export class ColliderTestScene extends Phaser.Scene {
 
     this.regionTitle.setText(`Collider Test Mode: ${region.toUpperCase()}`);
 
-    const configArray = REGION_FOOD_CONFIGS[region];
-    if (!configArray) return;
+    const rawConfig = REGION_FOOD_CONFIGS_RAW[region];
+    if (!rawConfig) return;
+    // Apply base 1.1 scale (matches REGION_FOOD_CONFIGS) × DPR factor
+    const configArray = scaleFoodConfig(rawConfig, 1.1 * scaleFactor);
 
-    let startX = 60;
-    let startY = 120;
+    let startX = Math.round(60 * scaleFactor);
+    let startY = Math.round(120 * scaleFactor);
+    const stepX = Math.round(80 * scaleFactor);
+    const stepY = Math.round(100 * scaleFactor);
     
     for (const item of configArray) {
       const sprite = this.matter.add.sprite(startX, startY, item.textureKey);
@@ -84,10 +94,10 @@ export class ColliderTestScene extends Phaser.Scene {
       
       this.activeItems.push(sprite);
 
-      startX += 80;
-      if (startX > width - 60) {
-        startX = 60;
-        startY += 100;
+      startX += stepX;
+      if (startX > width - Math.round(60 * scaleFactor)) {
+        startX = Math.round(60 * scaleFactor);
+        startY += stepY;
       }
     }
   }

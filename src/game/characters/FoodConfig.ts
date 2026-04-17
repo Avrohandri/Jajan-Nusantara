@@ -225,7 +225,7 @@ export const REGION_FOOD_CONFIGS_RAW: Record<string, FoodItem[]> = {
 
 /** Scale all numeric collider and display dimensions by `factor`. 
  *  renderOrigin and angle are ratios/radians — they are preserved as-is. */
-function scaleFoodConfig(config: FoodItem[], factor: number): FoodItem[] {
+export function scaleFoodConfig(config: FoodItem[], factor: number): FoodItem[] {
   return config.map(item => {
     const opts = item.colliderOptions;
     return {
