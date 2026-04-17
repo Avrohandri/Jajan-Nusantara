@@ -36,8 +36,9 @@ export function GameScreen() {
   // Get game canvas dimensions (mobile-first portrait) - Calculate ONCE on mount to prevent game engine restart
   const [gameWidth] = useState(() => Math.min(360, window.innerWidth - 32));
   const [gameHeight] = useState(() => Math.min(560, window.innerHeight - 200));
-  // scaleFactor: food radius & positions scale proportionally from 560px baseline
-  const scaleFactor = gameHeight / 560;
+  // scaleFactor: food radius scales with both canvas height AND device pixel ratio,
+  // because Phaser's game world is (width×DPR) × (height×DPR) in coordinate space.
+  const scaleFactor = (gameHeight / 560) * (window.devicePixelRatio || 1);
 
   useEffect(() => {
     // Reset game state when entering
