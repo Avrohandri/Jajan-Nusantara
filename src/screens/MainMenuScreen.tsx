@@ -83,7 +83,6 @@ export function MainMenuScreen() {
               )}
             </button>
 
-            {/* Tombol Keluar */}
             <button
               className="main-menu-btn main-menu-btn-exit"
               onClick={() => {/* Belum berfungsi */ }}
@@ -97,6 +96,14 @@ export function MainMenuScreen() {
                   <span className="menu-btn-label">KELUAR</span>
                 </>
               )}
+            </button>
+            <button
+              className="main-menu-btn"
+              style={{ backgroundColor: '#e74c3c' }}
+              onClick={() => setScreen('colliderTest')}
+            >
+              <span className="menu-btn-icon">🧪</span>
+              <span className="menu-btn-label">UJI COLLIDER</span>
             </button>
           </div>
         </div>

@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
-import { FOOD_CONFIG } from '../characters/FoodConfig';
+import { REGION_FOOD_CONFIGS, type FoodItem } from '../characters/FoodConfig';
 import { ColliderFactory } from '../physics/ColliderFactory';
-import { TextureMapper } from '../utils/TextureMapper';
 import { EventBus } from '../EventBus';
+import { useGameStore } from '../../store/gameStore';
 import type { SnackData } from '../../types';
 
 export const SPAWN_Y = 140;
@@ -28,19 +28,24 @@ export class GameScene extends Phaser.Scene {
   private dangerLine: Phaser.GameObjects.Graphics | null = null;
   private pointerX = 0;
 
+  private currentRegion: string = 'jogja';
+  private currentConfig: FoodItem[] = [];
+
   constructor() {
     super({ key: 'GameScene' });
   }
 
   preload() {
-    this.load.image('00_Klepon', '/assets/foods/00_Klepon.png');
-    this.load.image('01_Cenil', '/assets/foods/01_Cenil.png');
-    this.load.image('02_Yangko', '/assets/foods/02_Yangko.png');
-    this.load.image('03_Geplak', '/assets/foods/03_Geplak.png');
-    this.load.image('04_Bakpia', '/assets/foods/04_Bakpia.png');
-    this.load.image('05_Lemper', '/assets/foods/05_Lemper.png');
-    this.load.image('06_TiwulAyu', '/assets/foods/06_TiwulAyu.png');
-    this.load.image('07_JadahTempe', '/assets/foods/07_JadahTempe.png');
+    // Determine current region and configuration
+    this.currentRegion = useGameStore.getState().activeRegion || 'jogja';
+    this.currentConfig = REGION_FOOD_CONFIGS[this.currentRegion] || REGION_FOOD_CONFIGS['jogja'];
+    
+    const assetFolder = this.currentRegion === 'jogja' ? 'foods' : `foods_${this.currentRegion}`;
+    
+    // Dynamically load images for the current region
+    for (const item of this.currentConfig) {
+      this.load.image(item.textureKey, `/assets/${assetFolder}/${item.textureKey}.png`);
+    }
   }
 
   init() {
@@ -81,8 +86,8 @@ export class GameScene extends Phaser.Scene {
     this.dangerLine.lineBetween(WALL_THICKNESS, DANGER_LINE_Y, w - WALL_THICKNESS, DANGER_LINE_Y);
 
     this.dropIndicator = this.add.graphics();
-    this.previewSprite = this.add.sprite(this.pointerX, SPAWN_Y, FOOD_CONFIG[0].textureKey);
-    this.previewSprite.setDisplaySize(FOOD_CONFIG[0].displaySize.width, FOOD_CONFIG[0].displaySize.height);
+    this.previewSprite = this.add.sprite(this.pointerX, SPAWN_Y, this.currentConfig[0].textureKey);
+    this.previewSprite.setDisplaySize(this.currentConfig[0].displaySize.width, this.currentConfig[0].displaySize.height);
     this.previewSprite.setAlpha(0.6); // Semi-transparent preview
     this.previewSprite.setDepth(50); // Pastikan ada di atas indikator
 
@@ -159,11 +164,11 @@ export class GameScene extends Phaser.Scene {
         if (!objA || !objB) continue;
         if (!objA.active || !objB.active) continue;
 
-        const configA = FOOD_CONFIG.find(f => f.name === bodyA.label);
+        const configA = this.currentConfig.find(f => f.name === bodyA.label);
         if (!configA) continue;
 
         if (bodyA.label === bodyB.label) {
-          const tier = TextureMapper.getTierFromLabel(bodyA.label);
+          const tier = configA.tier;
 
           const midX = (bodyA.position.x + bodyB.position.x) / 2;
           const midY = (bodyA.position.y + bodyB.position.y) / 2;
@@ -187,9 +192,9 @@ export class GameScene extends Phaser.Scene {
           // Push Effect to nearby items (Ditingkatkan kekuatan dorongnya)
           this.applyPushEffect(midX, midY, 180, 0.25);
 
-          if (tier < 7) {
+          if (tier < this.currentConfig.length - 1) {
             const nextTier = tier + 1;
-            const configNext = FOOD_CONFIG[nextTier];
+            const configNext = this.currentConfig[nextTier];
             const pts = configNext ? configNext.mergeScore : 10;
             const nm = configNext ? configNext.name : 'Unknown';
 
@@ -287,7 +292,7 @@ export class GameScene extends Phaser.Scene {
 
   private updatePreview() {
     // Selalu update preview sprite dalam engine (tidak bergantung pada react store array)
-    const config = FOOD_CONFIG[this.nextTier];
+    const config = this.currentConfig[this.nextTier];
     if (this.previewSprite && config) {
       this.previewSprite.setTexture(config.textureKey);
       this.previewSprite.setDisplaySize(config.displaySize.width, config.displaySize.height);
@@ -299,9 +304,8 @@ export class GameScene extends Phaser.Scene {
   }
 
   public spawnFood(tier: number, x: number, y: number) {
-    if (!TextureMapper.isValidTier(tier)) return;
-
-    const config = FOOD_CONFIG[tier];
+    const config = this.currentConfig[tier];
+    if (!config) return;
 
     const sprite = this.matter.add.sprite(x, y, config.textureKey);
     sprite.setDisplaySize(config.displaySize.width, config.displaySize.height);
@@ -375,7 +379,7 @@ export class GameScene extends Phaser.Scene {
 
     for (const body of bodies) {
       if (!body.label) continue;
-      const config = FOOD_CONFIG.find(f => f.name === body.label);
+      const config = this.currentConfig.find(f => f.name === body.label);
       if (!config) continue;
 
       switch (config.colliderType) {

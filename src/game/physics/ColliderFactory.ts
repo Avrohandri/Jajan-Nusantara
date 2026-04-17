@@ -29,6 +29,9 @@ export class ColliderFactory {
           config.colliderOptions.polyRadius || 32, 
           defaultOptions
         );
+        if (config.colliderOptions.angle) {
+          scene.matter.body.setAngle(body, config.colliderOptions.angle);
+        }
         break;
       case 'fromVertices':
         // fromVertices expects an array of vertex arrays (Vector[][])
@@ -41,7 +44,10 @@ export class ColliderFactory {
           y, 
           config.colliderOptions.width || 40, 
           config.colliderOptions.height || 40, 
-          defaultOptions
+          {
+            ...defaultOptions,
+            chamfer: config.colliderOptions.chamferRadius ? { radius: config.colliderOptions.chamferRadius } : undefined
+          }
         );
         if (config.colliderOptions.angle) {
           scene.matter.body.setAngle(body, config.colliderOptions.angle);

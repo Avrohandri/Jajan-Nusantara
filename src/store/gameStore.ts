@@ -6,6 +6,8 @@ interface GameStore {
   // --- Screen ---
   currentScreen: ScreenName;
   setScreen: (screen: ScreenName) => void;
+  activeRegion: string;
+  setActiveRegion: (region: string) => void;
 
   // --- Game Content (from Firestore / fallback) ---
   snacks: SnackData[];
@@ -84,6 +86,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // Screen
   currentScreen: 'mainMenu',
   setScreen: (screen) => set({ currentScreen: screen }),
+  activeRegion: 'jogja',
+  setActiveRegion: (region) => set({ activeRegion: region }),
 
   // Content
   snacks: [],

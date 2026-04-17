@@ -1137,7 +1137,12 @@ body {
    ======================================================== */
 .settings-screen {
   position: relative;
-  background: linear-gradient(180deg, #FFF8F0 0%, #F5E6D3 100%);
+  /* ==============================================================
+     UBAH GAMBAR BACKGROUND SETTING DI SINI:
+     Ganti tulisan di dalah url('...') dengan path file gambar Anda.
+     Contoh: background: url('/assets/bg_setting.png') center top / cover no-repeat;
+     ============================================================== */
+  background: url('/assets/bg_setting_mainmenu.png') center top / cover no-repeat;
   align-items: center;
   padding-top: 60px;
 }
@@ -1231,7 +1236,8 @@ body {
 }
 
 .settings-version {
-  margin-top: 40px;
+  margin-top: auto;
+  margin-bottom: 8px;
   font-size: 12px;
   color: var(--color-text-light);
   opacity: 0.6;

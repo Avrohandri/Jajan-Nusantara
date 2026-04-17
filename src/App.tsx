@@ -9,6 +9,7 @@ import { ResultScreen } from './screens/ResultScreen';
 import { CookingScreen } from './screens/CookingScreen'; // legacy, kept for fallback
 import { KleponMiniGameScreen } from './screens/KleponMiniGameScreen';
 import { ProgressScreen } from './screens/ProgressScreen';
+import { ColliderTestScreen } from './screens/ColliderTestScreen';
 
 export default function App() {
   const { currentScreen, contentLoaded, loadContent, setUserId } = useGameStore();
@@ -63,6 +64,7 @@ export default function App() {
       case 'cooking': return <CookingScreen />; // legacy
       case 'kleponGame': return <KleponMiniGameScreen />;
       case 'progress': return <ProgressScreen />;
+      case 'colliderTest': return <ColliderTestScreen />;
       default: return <MainMenuScreen />;
     }
   };
@@ -73,3 +75,4 @@ export default function App() {
     </div>
   );
 }
+

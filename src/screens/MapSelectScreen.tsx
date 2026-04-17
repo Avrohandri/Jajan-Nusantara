@@ -28,9 +28,9 @@ interface MapItem {
 const MAP_NODES: MapItem[] = [
   //         ukuran    posisi vertikal
   { id: 'jogja',  unlocked: true,  column: 'right', widthPx: 270, bottomPct: 0  },
-  { id: 'bali',   unlocked: false, column: 'left',  widthPx: 275, bottomPct: 20 },
-  { id: 'aceh',   unlocked: false, column: 'right', widthPx: 250, bottomPct: 42 },
-  { id: 'maluku', unlocked: false, column: 'left',  widthPx: 260, bottomPct: 57 },
+  { id: 'bali',   unlocked: true,  column: 'left',  widthPx: 275, bottomPct: 20 },
+  { id: 'aceh',   unlocked: true,  column: 'right', widthPx: 250, bottomPct: 42 },
+  { id: 'maluku', unlocked: true,  column: 'left',  widthPx: 260, bottomPct: 57 },
 ];
 
 // Posisi kolom kiri/kanan (% dari kiri layar)
@@ -50,6 +50,7 @@ export function MapSelectScreen() {
 
   const handleMapClick = (map: MapItem) => {
     if (map.unlocked) {
+      useGameStore.getState().setActiveRegion(map.id);
       resetGame();
       setScreen('game');
     } else {

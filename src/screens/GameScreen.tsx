@@ -6,7 +6,7 @@ import { QuizModal } from '../features/quiz/QuizModal';
 import { Modal } from '../components/Modal';
 import { Button } from '../components/Button';
 import type { SnackData } from '../types';
-import { FOOD_CONFIG } from '../game/characters/FoodConfig';
+import { REGION_FOOD_CONFIGS } from '../game/characters/FoodConfig';
 
 export function GameScreen() {
   const {
@@ -24,7 +24,11 @@ export function GameScreen() {
     snacks,
     highestTier,
     seenTiers,
+    activeRegion,
   } = useGameStore();
+
+  const currentConfig = REGION_FOOD_CONFIGS[activeRegion] || REGION_FOOD_CONFIGS['jogja'];
+  const assetFolder = activeRegion === 'jogja' ? 'foods' : `foods_${activeRegion}`;
 
   const [nextItem, setNextItem] = useState<SnackData | null>(null);
   const [showInstructions, setShowInstructions] = useState(!hasSeenInstructions);
@@ -106,7 +110,7 @@ export function GameScreen() {
                 style={{ background: 'none' }}
               >
                 <img 
-                  src={`/assets/foods/${FOOD_CONFIG[nextItem.tier]?.textureKey || '00_Klepon'}.png`} 
+                  src={`/assets/${assetFolder}/${currentConfig[nextItem.tier]?.textureKey || currentConfig[0].textureKey}.png`} 
                   alt="Next hint"
                   style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                 />
@@ -119,14 +123,14 @@ export function GameScreen() {
       {/* Game Canvas */}
       <div 
         className="game-canvas-wrapper"
-        style={{ width: gameWidth, height: gameHeight, flex: 'none' }}
+        style={{ width: gameWidth, height: gameHeight, flex: 'none', backgroundImage: `url('/${activeRegion}BG.png')` }}
       >
         <PhaserGame width={gameWidth} height={gameHeight} />
       </div>
 
       {/* Bottom Controls / Progress */}
       <div className="game-progress-bar">
-        {FOOD_CONFIG.map((item) => {
+        {currentConfig.map((item) => {
           const isUnlocked = seenTiers.includes(item.tier);
           return (
             <div 
@@ -134,7 +138,7 @@ export function GameScreen() {
               className={`progress-food ${isUnlocked ? 'unlocked' : 'locked'}`}
             >
               {isUnlocked ? (
-                <img src={`/assets/foods/${item.textureKey}.png`} alt={item.name} />
+                <img src={`/assets/${assetFolder}/${item.textureKey}.png`} alt={item.name} />
               ) : (
                 <span style={{color: '#8B7355', fontWeight: 'bold'}}>?</span>
               )}
