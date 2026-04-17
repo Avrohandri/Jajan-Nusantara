@@ -36,6 +36,8 @@ export function GameScreen() {
   // Get game canvas dimensions (mobile-first portrait) - Calculate ONCE on mount to prevent game engine restart
   const [gameWidth] = useState(() => Math.min(360, window.innerWidth - 32));
   const [gameHeight] = useState(() => Math.min(560, window.innerHeight - 200));
+  // scaleFactor: food radius & positions scale proportionally from 560px baseline
+  const scaleFactor = gameHeight / 560;
 
   useEffect(() => {
     // Reset game state when entering
@@ -125,7 +127,7 @@ export function GameScreen() {
         className="game-canvas-wrapper"
         style={{ width: gameWidth, height: gameHeight, flex: 'none', backgroundImage: `url('/${activeRegion}BG.png')` }}
       >
-        <PhaserGame width={gameWidth} height={gameHeight} />
+        <PhaserGame width={gameWidth} height={gameHeight} scaleFactor={scaleFactor} />
       </div>
 
       {/* Bottom Controls / Progress */}
