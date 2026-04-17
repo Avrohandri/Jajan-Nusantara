@@ -42,7 +42,7 @@ export class ColliderTestScene extends Phaser.Scene {
     this.matter.add.rectangle(width, height / 2, 50, height, { isStatic: true });
 
     import('../EventBus').then(({ EventBus }) => {
-      EventBus.on('collider-change-region', (region: string) => this.spawnRegion(region));
+      EventBus.on('collider-change-region', (region) => this.spawnRegion(region as string));
       // Read initial region parameter passed via url or fallback to 'jogja'
       // Or we can just wait for the component to emit the default on mount.
       // We will init with 'jogja'
