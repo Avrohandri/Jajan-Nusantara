@@ -28,7 +28,7 @@ export function GameScreen() {
   } = useGameStore();
 
   const currentConfig = REGION_FOOD_CONFIGS[activeRegion] || REGION_FOOD_CONFIGS['jogja'];
-  const assetFolder = activeRegion === 'jogja' ? 'foods' : `foods_${activeRegion}`;
+  const assetFolder = `foods_${activeRegion}`;
 
   const [nextItem, setNextItem] = useState<SnackData | null>(null);
   const [showInstructions, setShowInstructions] = useState(!hasSeenInstructions);

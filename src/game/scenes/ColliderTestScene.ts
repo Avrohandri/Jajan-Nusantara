@@ -10,19 +10,22 @@ export class ColliderTestScene extends Phaser.Scene {
   preload() {
     // Load ALL regions' food
     for (const [region, configArray] of Object.entries(REGION_FOOD_CONFIGS)) {
-      const assetFolder = region === 'jogja' ? 'foods' : `foods_${region}`;
+      const assetFolder = `foods_${region}`;
       for (const item of configArray) {
         this.load.image(item.textureKey, `/assets/${assetFolder}/${item.textureKey}.png`);
       }
     }
   }
 
+  private activeItems: Phaser.GameObjects.Sprite[] = [];
+  private regionTitle!: Phaser.GameObjects.Text;
+
   create() {
     const width = Number(this.game.config.width);
     const height = Number(this.game.config.height);
 
     // Title
-    this.add.text(width / 2, 40, 'Collider Test Mode', {
+    this.regionTitle = this.add.text(width / 2, 40, 'Collider Test Mode', {
       fontSize: '24px',
       color: '#ffffff',
       fontStyle: 'bold'
@@ -38,30 +41,55 @@ export class ColliderTestScene extends Phaser.Scene {
     this.matter.add.rectangle(0, height / 2, 50, height, { isStatic: true });
     this.matter.add.rectangle(width, height / 2, 50, height, { isStatic: true });
 
+    import('../EventBus').then(({ EventBus }) => {
+      EventBus.on('collider-change-region', (region: string) => this.spawnRegion(region));
+      // Read initial region parameter passed via url or fallback to 'jogja'
+      // Or we can just wait for the component to emit the default on mount.
+      // We will init with 'jogja'
+      this.spawnRegion('jogja');
+    });
+  }
+
+  private spawnRegion(region: string) {
+    const width = Number(this.game.config.width);
+    
+    // Clear existing
+    this.activeItems.forEach(item => {
+      if (item.body) this.matter.world.remove(item.body);
+      item.destroy();
+    });
+    this.activeItems = [];
+
+    this.regionTitle.setText(`Collider Test Mode: ${region.toUpperCase()}`);
+
+    const configArray = REGION_FOOD_CONFIGS[region];
+    if (!configArray) return;
+
     let startX = 60;
     let startY = 120;
     
-    // Spawn all items
-    for (const configArray of Object.values(REGION_FOOD_CONFIGS)) {
-      for (const item of configArray) {
-        const sprite = this.matter.add.sprite(startX, startY, item.textureKey);
-        sprite.setDisplaySize(item.displaySize.width, item.displaySize.height);
+    for (const item of configArray) {
+      const sprite = this.matter.add.sprite(startX, startY, item.textureKey);
+      sprite.setDisplaySize(item.displaySize.width, item.displaySize.height);
 
-        const customBody = ColliderFactory.createFoodBody(this, item, startX, startY);
-        sprite.setExistingBody(customBody);
-        
-        // Phaser's fromVertices sets origin to match center of mass.
-        // We will leave it standard as in GameScene.ts so we test actual game-behavior.
-        
-        sprite.setPosition(startX, startY);
-        this.matter.add.mouseSpring({ length: 1, stiffness: 0.6 });
+      const customBody = ColliderFactory.createFoodBody(this, item, startX, startY);
+      sprite.setExistingBody(customBody);
+      
+      if (item.colliderOptions.renderOrigin) {
+        sprite.setOrigin(item.colliderOptions.renderOrigin.x, item.colliderOptions.renderOrigin.y);
+      }
+      
+      sprite.setPosition(startX, startY);
+      this.matter.add.mouseSpring({ length: 1, stiffness: 0.6 });
+      
+      this.activeItems.push(sprite);
 
-        startX += 80;
-        if (startX > width - 60) {
-          startX = 60;
-          startY += 100;
-        }
+      startX += 80;
+      if (startX > width - 60) {
+        startX = 60;
+        startY += 100;
       }
     }
   }
 }
+

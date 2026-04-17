@@ -40,7 +40,7 @@ export class GameScene extends Phaser.Scene {
     this.currentRegion = useGameStore.getState().activeRegion || 'jogja';
     this.currentConfig = REGION_FOOD_CONFIGS[this.currentRegion] || REGION_FOOD_CONFIGS['jogja'];
     
-    const assetFolder = this.currentRegion === 'jogja' ? 'foods' : `foods_${this.currentRegion}`;
+    const assetFolder = `foods_${this.currentRegion}`;
     
     // Dynamically load images for the current region
     for (const item of this.currentConfig) {
@@ -314,6 +314,10 @@ export class GameScene extends Phaser.Scene {
 
     sprite.setExistingBody(customBody);
     (customBody as any).gameObject = sprite;
+    
+    if (config.colliderOptions.renderOrigin) {
+      sprite.setOrigin(config.colliderOptions.renderOrigin.x, config.colliderOptions.renderOrigin.y);
+    }
 
     sprite.setPosition(x, y);
 

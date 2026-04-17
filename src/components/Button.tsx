@@ -7,6 +7,7 @@ interface ButtonProps {
   fullWidth?: boolean;
   disabled?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  style?: React.CSSProperties;
 }
 
 export function Button({
@@ -16,12 +17,14 @@ export function Button({
   fullWidth = false,
   disabled = false,
   size = 'md',
+  style,
 }: ButtonProps) {
   return (
     <button
       className={`btn btn-${variant} btn-${size} ${fullWidth ? 'btn-full' : ''}`}
       onClick={onClick}
       disabled={disabled}
+      style={style}
     >
       {children}
     </button>
