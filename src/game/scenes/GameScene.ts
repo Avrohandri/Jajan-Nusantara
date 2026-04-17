@@ -72,6 +72,10 @@ export class GameScene extends Phaser.Scene {
     this.dangerLineY  = Math.round(this.containerHeight * 0.30);
     this.spawnY       = Math.round(this.containerHeight * 0.25);
 
+    // Override gravity to feel the same on all screen sizes.
+    // In a 3× world, gravity needs to be 3× stronger for the same apparent fall speed.
+    this.matter.world.setGravity(0, 1.5 * this.scaleFactor);
+
     // Re-build scaled config — start from RAW and apply base 1.1 × DPR factor
     const rawConfig = REGION_FOOD_CONFIGS_RAW[this.currentRegion] || REGION_FOOD_CONFIGS_RAW['jogja'];
     this.currentConfig = scaleFoodConfig(rawConfig, 1.1 * this.scaleFactor);
@@ -96,11 +100,18 @@ export class GameScene extends Phaser.Scene {
       isStatic: true, label: 'wall',
     });
 
-    // Danger line
+    // Danger line — scale line width with world size
     this.dangerLine = this.add.graphics();
-    this.dangerLine.lineStyle(2, 0xff0000, 0.4);
+    this.dangerLine.lineStyle(Math.max(2, Math.round(2 * this.scaleFactor)), 0xff0000, 0.6);
     this.dangerLine.lineBetween(WALL_THICKNESS, this.dangerLineY, w - WALL_THICKNESS, this.dangerLineY);
 
+    // Buat texture untuk partikel — scale ukuran agar terlihat di semua layar
+    const pxGraphics = this.make.graphics({ x: 0, y: 0 }, false);
+    const pSize = Math.round(12 * this.scaleFactor);
+    pxGraphics.fillStyle(0xffffff, 1);
+    pxGraphics.fillCircle(pSize / 2, pSize / 2, pSize / 2);
+    pxGraphics.generateTexture('particle_circle', pSize, pSize);
+    pxGraphics.destroy();
     this.dropIndicator = this.add.graphics();
     const previewConfig = this.currentConfig[0];
     this.previewSprite = this.add.sprite(this.pointerX, this.spawnY, previewConfig.textureKey);
@@ -112,13 +123,6 @@ export class GameScene extends Phaser.Scene {
     this.time.delayedCall(100, () => {
       EventBus.emit('next-item', { tier: this.nextTier });
     });
-
-    // Buat texture untuk partikel (lingkaran putih kecil)
-    const pxGraphics = this.make.graphics({ x: 0, y: 0 }, false);
-    pxGraphics.fillStyle(0xffffff, 1);
-    pxGraphics.fillCircle(6, 6, 6);
-    pxGraphics.generateTexture('particle_circle', 12, 12);
-    pxGraphics.destroy();
 
     // Event hooks
     const onSetSnacks = (data: unknown) => {
@@ -193,9 +197,10 @@ export class GameScene extends Phaser.Scene {
           this.removeItem(objA);
           this.removeItem(objB);
 
-          // Particles Effect
+          // Particles Effect — scale speed and push radius with world size
+          const sf = this.scaleFactor;
           const particles = this.add.particles(midX, midY, 'particle_circle', {
-            speed: { min: 60, max: 180 },
+            speed: { min: Math.round(60 * sf), max: Math.round(180 * sf) },
             scale: { start: 1, end: 0 },
             alpha: { start: 1, end: 0 },
             lifespan: 700,
@@ -206,8 +211,8 @@ export class GameScene extends Phaser.Scene {
           particles.explode(15);
           this.time.delayedCall(1000, () => particles.destroy());
 
-          // Push Effect to nearby items (Ditingkatkan kekuatan dorongnya)
-          this.applyPushEffect(midX, midY, 180, 0.25);
+          // Push Effect
+          this.applyPushEffect(midX, midY, Math.round(180 * sf), 0.25 * sf);
 
           if (tier < this.currentConfig.length - 1) {
             const nextTier = tier + 1;
@@ -230,10 +235,11 @@ export class GameScene extends Phaser.Scene {
     this.matter.world.on('collisionactive', handleMergeCollision);
 
     this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+      const margin = WALL_THICKNESS + Math.round(30 * this.scaleFactor);
       this.pointerX = Phaser.Math.Clamp(
         pointer.x,
-        WALL_THICKNESS + 30,
-        this.containerWidth - WALL_THICKNESS - 30,
+        margin,
+        this.containerWidth - margin,
       );
     });
 
@@ -275,10 +281,10 @@ export class GameScene extends Phaser.Scene {
         }
       }
 
-      this.dropIndicator.lineStyle(2, 0xFFFFFF, 0.5);
+      this.dropIndicator.lineStyle(Math.max(2, Math.round(2 * this.scaleFactor)), 0xFFFFFF, 0.5);
 
-      const dashLength = 8;
-      const gapLength = 8;
+      const dashLength = Math.round(8 * this.scaleFactor);
+      const gapLength  = Math.round(8 * this.scaleFactor);
       const step = dashLength + gapLength;
 
       const timeOffset = (this.time.now / 30) % step;
