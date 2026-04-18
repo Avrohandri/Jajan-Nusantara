@@ -2,6 +2,7 @@ import { useState, useRef, useCallback } from 'react';
 
 interface Ingredient {
   id: string;
+  name: string;        // display name
   imgSrc: string;       // path to transparent PNG (user-supplied)
   plateColor: string;   // CSS color for the decorative plate
   correct: boolean;
@@ -9,12 +10,12 @@ interface Ingredient {
 }
 
 const INITIAL_INGREDIENTS: Ingredient[] = [
-  { id: 'tepung', imgSrc: '/assets/klepon/ing_tepung.png',  plateColor: '#EEE8DA', correct: true,  dropped: false },
-  { id: 'pandan', imgSrc: '/assets/klepon/ing_pandan.png',  plateColor: '#4CAF50', correct: true,  dropped: false },
-  { id: 'gula',   imgSrc: '/assets/klepon/ing_gula.png',    plateColor: '#5D3A1A', correct: true,  dropped: false },
-  { id: 'bawang', imgSrc: '/assets/klepon/ing_bawang.png',  plateColor: '#9C6BAE', correct: false, dropped: false },
-  { id: 'tomat',  imgSrc: '/assets/klepon/ing_tomat.png',   plateColor: '#87CEEB', correct: false, dropped: false },
-  { id: 'cabai',  imgSrc: '/assets/klepon/ing_cabai.png',   plateColor: '#FFC107', correct: false, dropped: false },
+  { id: 'tepung', name: 'Tepung',     imgSrc: '/assets/klepon/ing_tepung.png',  plateColor: '#EEE8DA', correct: true,  dropped: false },
+  { id: 'pandan', name: 'Pandan',     imgSrc: '/assets/klepon/ing_pandan.png',  plateColor: '#4CAF50', correct: true,  dropped: false },
+  { id: 'gula',   name: 'Gula Merah', imgSrc: '/assets/klepon/ing_gula.png',    plateColor: '#5D3A1A', correct: true,  dropped: false },
+  { id: 'bawang', name: 'Bawang',     imgSrc: '/assets/klepon/ing_bawang.png',  plateColor: '#9C6BAE', correct: false, dropped: false },
+  { id: 'tomat',  name: 'Tomat',      imgSrc: '/assets/klepon/ing_tomat.png',   plateColor: '#87CEEB', correct: false, dropped: false },
+  { id: 'cabai',  name: 'Cabai',      imgSrc: '/assets/klepon/ing_cabai.png',   plateColor: '#FFC107', correct: false, dropped: false },
 ];
 
 interface Props {
@@ -175,11 +176,19 @@ export function StepIngredients({ onComplete }: Props) {
             <div className="ing-coaster">
               <img
                 src={ing.imgSrc}
-                alt=""
+                alt={ing.name}
                 className="ing-img"
                 draggable={false}
+                style={ing.id === 'pandan' ? { transform: 'translate(5px, -5px) scale(1.1)' } : undefined}
               />
             </div>
+
+            {/* Ingredient Name Label */}
+            {!ing.dropped && (
+              <div className="ing-label">
+                {ing.name}
+              </div>
+            )}
           </div>
         ))}
       </div>

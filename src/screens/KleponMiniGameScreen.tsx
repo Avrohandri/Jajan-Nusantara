@@ -63,7 +63,7 @@ export function KleponMiniGameScreen() {
       <div className="klepon-topbar">
         <button className="klepon-back-btn" onClick={handleBack}>←</button>
         <div className="klepon-topbar-title">
-          <img src="/assets/foods/00_Klepon.png" alt="" className="klepon-topbar-img" />
+          <img src="/assets/foods_jogja/00_Klepon.png" alt="" className="klepon-topbar-img" />
           <span>Bikin Klepon</span>
         </div>
       </div>

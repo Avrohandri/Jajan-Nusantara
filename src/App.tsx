@@ -8,6 +8,8 @@ import { GameScreen } from './screens/GameScreen';
 import { ResultScreen } from './screens/ResultScreen';
 import { CookingScreen } from './screens/CookingScreen'; // legacy, kept for fallback
 import { KleponMiniGameScreen } from './screens/KleponMiniGameScreen';
+import { PieSusuMiniGameScreen } from './screens/PieSusuMiniGameScreen';
+import { SamaloyangMiniGameScreen } from './screens/SamaloyangMiniGameScreen';
 import { ProgressScreen } from './screens/ProgressScreen';
 import { ColliderTestScreen } from './screens/ColliderTestScreen';
 
@@ -63,6 +65,8 @@ export default function App() {
       case 'result': return <ResultScreen />;
       case 'cooking': return <CookingScreen />; // legacy
       case 'kleponGame': return <KleponMiniGameScreen />;
+      case 'pieSusuGame': return <PieSusuMiniGameScreen />;
+      case 'samaloyangGame': return <SamaloyangMiniGameScreen />;
       case 'progress': return <ProgressScreen />;
       case 'colliderTest': return <ColliderTestScreen />;
       default: return <MainMenuScreen />;

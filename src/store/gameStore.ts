@@ -56,6 +56,20 @@ interface GameStore {
   advanceKleponStep: () => void;
   resetKleponGame: () => void;
 
+  // --- Pie Susu Mini-Game State ---
+  pieSusuStep: number;
+  pieSusuComplete: boolean;
+  startPieSusuGame: () => void;
+  advancePieSusuStep: () => void;
+  resetPieSusuGame: () => void;
+
+  // --- Samaloyang Mini-Game State ---
+  samaloyangStep: number;
+  samaloyangComplete: boolean;
+  startSamaloyangGame: () => void;
+  advanceSamaloyangStep: () => void;
+  resetSamaloyangGame: () => void;
+
   // --- Player Profile ---
   userId: string;
   totalSessions: number;
@@ -209,6 +223,46 @@ export const useGameStore = create<GameStore>((set, get) => ({
     return { kleponStep: nextStep };
   }),
   resetKleponGame: () => set({ kleponStep: 0, kleponComplete: false }),
+
+  // Pie Susu Mini-Game
+  pieSusuStep: 0,
+  pieSusuComplete: false,
+  startPieSusuGame: () => set({ pieSusuStep: 0, pieSusuComplete: false, currentScreen: 'pieSusuGame' }),
+  advancePieSusuStep: () => set(s => {
+    const nextStep = s.pieSusuStep + 1;
+    if (nextStep >= 5) {
+      // All 5 steps done + completion screen
+      return {
+        pieSusuComplete: true,
+        pieSusuStep: nextStep,
+        unlockedRecipes: s.unlockedRecipes.includes('Pie Susu')
+          ? s.unlockedRecipes
+          : [...s.unlockedRecipes, 'Pie Susu'],
+      };
+    }
+    return { pieSusuStep: nextStep };
+  }),
+  resetPieSusuGame: () => set({ pieSusuStep: 0, pieSusuComplete: false }),
+
+  // Samaloyang Mini-Game
+  samaloyangStep: 0,
+  samaloyangComplete: false,
+  startSamaloyangGame: () => set({ samaloyangStep: 0, samaloyangComplete: false, currentScreen: 'samaloyangGame' }),
+  advanceSamaloyangStep: () => set(s => {
+    const nextStep = s.samaloyangStep + 1;
+    if (nextStep >= 4) {
+      // 4 steps done + completion screen
+      return {
+        samaloyangComplete: true,
+        samaloyangStep: nextStep,
+        unlockedRecipes: s.unlockedRecipes.includes('Samaloyang')
+          ? s.unlockedRecipes
+          : [...s.unlockedRecipes, 'Samaloyang'],
+      };
+    }
+    return { samaloyangStep: nextStep };
+  }),
+  resetSamaloyangGame: () => set({ samaloyangStep: 0, samaloyangComplete: false }),
 
   // Profile
   userId: 'local_player',

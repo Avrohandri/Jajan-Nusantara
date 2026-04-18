@@ -13,6 +13,8 @@ export function ResultScreen() {
     snacks,
     setScreen,
     startKleponGame,
+    startPieSusuGame,
+    activeRegion,
   } = useGameStore();
 
   const highestSnack = snacks.find(s => s.tier === highestTier);
@@ -59,7 +61,25 @@ export function ResultScreen() {
       )}
 
       <div className="result-actions">
-        {/* Always offer Klepon mini-game */}
+        {activeRegion === 'aceh' ? (
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
+            onClick={() => useGameStore.getState().startSamaloyangGame()}
+          >
+            ⚜️ Memasak Samaloyang — Minigame!
+          </Button>
+        ) : activeRegion === 'bali' ? (
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
+            onClick={startPieSusuGame}
+          >
+            🥧 Memasak Pie Susu — Minigame!
+          </Button>
+        ) : (
           <Button
             variant="primary"
             size="lg"
@@ -68,6 +88,7 @@ export function ResultScreen() {
           >
             🍡 Memasak Klepon — Minigame!
           </Button>
+        )}
         <Button variant="secondary" fullWidth onClick={() => setScreen('game')}>
           🔄 Main Lagi
         </Button>

@@ -1699,6 +1699,10 @@ body {
   cursor: grab;
   transition: opacity 0.3s, transform 0.15s;
   touch-action: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .ing-item:active {
@@ -1717,7 +1721,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 110px;
+  min-height: 75px;
 }
 
 .ing-img {
@@ -1727,6 +1731,21 @@ body {
   object-fit: contain;
   pointer-events: none;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  transition: transform 0.2s ease;
+}
+
+.ing-label {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-top: -10px;
+  display: inline-block;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: none;
 }
 
 /* Bowl drop zone */
@@ -2430,4 +2449,12 @@ body {
 
 .pause-btn-top:active {
   transform: scale(0.92);
+}
+
+@keyframes error-shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-15px) rotate(-5deg); }
+  50% { transform: translateX(15px) rotate(5deg); }
+  75% { transform: translateX(-15px) rotate(-5deg); }
+  100% { transform: translateX(0); }
 }
