@@ -10,7 +10,7 @@ export function StepDippingMold({ onComplete }: Props) {
   const ghostRef = useRef<HTMLImageElement | null>(null);
 
   // Desktop Drag
-  const handleDragStart = (e: React.DragEvent) => {
+  const handleDragStart = () => {
     setTimeout(() => setIsDragging(true), 0);
   };
   const handleDragOver = (e: React.DragEvent) => e.preventDefault();
