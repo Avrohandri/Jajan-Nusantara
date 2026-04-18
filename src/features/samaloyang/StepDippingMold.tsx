@@ -105,6 +105,7 @@ export function StepDippingMold({ onComplete }: Props) {
               style={{
                 height: '200px', width: '120px', objectFit: 'contain',
                 cursor: 'grab',
+                touchAction: 'none',
                 opacity: isDragging ? 0.3 : 1,
                 transform: isDragging ? 'scale(0.95)' : 'scale(1)',
                 transition: 'transform 0.2s',

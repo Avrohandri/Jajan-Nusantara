@@ -62,7 +62,12 @@ export function SamaloyangMiniGameScreen() {
       <div className="klepon-topbar">
         <button className="klepon-back-btn" onClick={handleBack}>←</button>
         <div className="klepon-topbar-title">
-          <span style={{ fontSize: '24px', marginRight: '8px' }}>🥨</span>
+          <img 
+            src="/assets/foods_aceh/00_samaloyang.png" 
+            alt="Samaloyang" 
+            className="klepon-topbar-img" 
+            style={{ width: '32px', height: '32px', objectFit: 'contain', marginRight: '8px' }} 
+          />
           <span>Bikin Samaloyang</span>
         </div>
       </div>

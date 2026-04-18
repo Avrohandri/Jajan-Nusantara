@@ -119,6 +119,7 @@ export function StepBakingOven({ onComplete }: Props) {
                 height: '140px',
                 objectFit: 'contain',
                 cursor: 'grab',
+                touchAction: 'none',
                 opacity: draggingPie ? 0.3 : 1,
                 transform: draggingPie ? 'scale(0.9)' : 'scale(1)',
                 transition: 'transform 0.2s',

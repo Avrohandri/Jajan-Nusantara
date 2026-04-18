@@ -38,7 +38,7 @@ export function MainMenuScreen() {
             onClick={() => setScreen('colliderTest')}
             title="Uji Collider"
           >
-            <span className="uji-icon">🧪</span> UJI COLLIDER
+            <span className="uji-icon">🧪</span>
           </button>
 
           {/* Play button area - centered */}
