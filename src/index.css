@@ -2110,8 +2110,8 @@ body {
 }
 
 .klepon-ball {
-  width: 70px;
-  height: 70px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   border: 2px dashed var(--color-border);
   display: flex;
@@ -2214,8 +2214,8 @@ body {
 }
 
 .pan-klepon-img {
-  width: 54px;
-  height: 54px;
+  width: 45px;
+  height: 45px;
   object-fit: contain;
   animation: bowlItemIn 0.35s ease;
 }
@@ -2280,8 +2280,8 @@ body {
 }
 
 .source-klepon-img {
-  width: 110px;
-  height: 110px;
+  width: 90px;
+  height: 90px;
   object-fit: contain;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
 }

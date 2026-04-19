@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface Props {
   onComplete: () => void;
@@ -14,6 +14,15 @@ export function StepShaping({ onComplete }: Props) {
   const [phase, setPhase] = useState<'tapping' | 'filling' | 'done'>('tapping');
   const sugarRef = useRef<HTMLDivElement>(null);
   const ghostRef = useRef<HTMLDivElement | null>(null);
+  const completedRef = useRef(false);
+
+  useEffect(() => {
+    if (phase === 'filling' && sugarDropped.every(Boolean) && !completedRef.current) {
+      completedRef.current = true;
+      setPhase('done');
+      setTimeout(() => onComplete(), 800);
+    }
+  }, [sugarDropped, phase, onComplete]);
 
   const handleTap = () => {
     if (phase !== 'tapping') return;
@@ -41,13 +50,9 @@ export function StepShaping({ onComplete }: Props) {
 
   const dropSugar = (idx: number) => {
     setSugarDropped(prev => {
+      if (prev[idx]) return prev;
       const next = [...prev];
       next[idx] = true;
-      const allDone = next.every(Boolean);
-      if (allDone) {
-        setPhase('done');
-        setTimeout(() => onComplete(), 800);
-      }
       return next;
     });
   };
@@ -101,21 +106,17 @@ export function StepShaping({ onComplete }: Props) {
             Tap untuk membentuk adonan menjadi bulat! 👆
           </p>
           <div className="shaping-area" onClick={handleTap}>
-            <div
-              className="dough-blob"
+            <img
+              src={`/assets/klepon/${tapCount === 0 ? 'adonan 1' : tapCount === 1 ? 'adonan 2' : 'adonan_bundar'}.png`}
+              alt="Adonan"
               style={{
-                borderRadius: tapCount === TAPS_NEEDED - 1 ? '50%' : `${30 + tapCount * 15}% ${40 + tapCount * 5}% ${25 + tapCount * 10}% ${35 + tapCount * 5}%`,
+                width: '120px',
+                height: '120px',
+                objectFit: 'contain',
                 transform: `scale(${0.85 + tapCount * 0.05})`,
-                backgroundColor: '#7CAD58', // Pandan green
-                width: '100px',
-                height: '100px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: 'inset -5px -5px 10px rgba(0,0,0,0.1)'
+                transition: 'transform 0.2s ease-in-out'
               }}
-            >
-            </div>
+            />
             <div className="tap-progress-row">
               {Array.from({ length: TAPS_NEEDED }).map((_, i) => (
                 <span key={i} className={`tap-dot ${i < tapCount ? 'tap-dot-filled' : ''}`} />
@@ -156,7 +157,7 @@ export function StepShaping({ onComplete }: Props) {
                 onDragOver={handleKleponDragOver}
                 onDrop={e => handleKleponDrop(e, idx)}
               >
-                <img src="/assets/klepon/adonan_klepon_noalas.png" style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="Adonan Klepon" />
+                <img src={`/assets/klepon/${sugarDropped[idx] ? 'adonan_isi' : 'adonan_bolong'}.png`} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="Adonan Klepon" />
                 {sugarDropped[idx] && (
                   <span className="sugar-filled-badge">✅</span>
                 )}

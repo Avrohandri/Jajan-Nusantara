@@ -14,6 +14,7 @@ export function ResultScreen() {
     setScreen,
     startKleponGame,
     startPieSusuGame,
+    startPisangAsarGame,
     activeRegion,
   } = useGameStore();
 
@@ -69,6 +70,15 @@ export function ResultScreen() {
             onClick={() => useGameStore.getState().startSamaloyangGame()}
           >
             ⚜️ Memasak Samaloyang — Minigame!
+          </Button>
+        ) : activeRegion === 'maluku' ? (
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
+            onClick={startPisangAsarGame}
+          >
+            🍌 Memasak Pisang Asar — Minigame!
           </Button>
         ) : activeRegion === 'bali' ? (
           <Button

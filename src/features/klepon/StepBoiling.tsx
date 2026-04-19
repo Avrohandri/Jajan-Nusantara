@@ -15,11 +15,14 @@ export function StepBoiling({ onComplete }: Props) {
   const ghostRef = useRef<HTMLDivElement | null>(null);
   const bubbleIdRef = useRef(0);
   const bubbleInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const completedRef = useRef(false);
+  const boilingStartedRef = useRef(false);
 
   const allIn = inPan.every(Boolean);
 
   useEffect(() => {
-    if (allIn && !boiling) {
+    if (allIn && !boilingStartedRef.current) {
+      boilingStartedRef.current = true;
       setBoiling(true);
       // Start bubble animation
       bubbleInterval.current = setInterval(() => {
@@ -32,11 +35,16 @@ export function StepBoiling({ onComplete }: Props) {
       setTimeout(() => {
         if (bubbleInterval.current) clearInterval(bubbleInterval.current);
         setDone(true);
-        setTimeout(() => onComplete(), 500);
+        setTimeout(() => {
+          if (!completedRef.current) {
+            completedRef.current = true;
+            onComplete();
+          }
+        }, 500);
       }, 2500);
     }
     return () => { if (bubbleInterval.current) clearInterval(bubbleInterval.current); };
-  }, [allIn, boiling, onComplete]);
+  }, [allIn, onComplete]);
 
   const dropKlepon = (idx: number) => {
     if (inPan[idx]) return;
@@ -61,8 +69,8 @@ export function StepBoiling({ onComplete }: Props) {
   const handleTouchStart = (e: React.TouchEvent, idx: number) => {
     const touch = e.touches[0];
     const ghost = document.createElement('div');
-    ghost.style.cssText = `position:fixed;left:${touch.clientX - 55}px;top:${touch.clientY - 55}px;width:110px;height:110px;pointer-events:none;z-index:999;filter:drop-shadow(0 6px 12px rgba(0,0,0,0.3))`;
-    ghost.innerHTML = `<img src="/assets/klepon/adonan_klepon.png" style="width:100%;height:100%;object-fit:contain;" />`;
+    ghost.style.cssText = `position:fixed;left:${touch.clientX - 45}px;top:${touch.clientY - 45}px;width:90px;height:90px;pointer-events:none;z-index:999;filter:drop-shadow(0 6px 12px rgba(0,0,0,0.3))`;
+    ghost.innerHTML = `<img src="/assets/klepon/adonan_isi.png" style="width:100%;height:100%;object-fit:contain;" />`;
     ghost.dataset.idx = String(idx);
     document.body.appendChild(ghost);
     ghostRef.current = ghost;
@@ -118,7 +126,7 @@ export function StepBoiling({ onComplete }: Props) {
                 inn ? (
                   <img
                     key={i}
-                    src="/assets/klepon/adonan_klepon.png"
+                    src="/assets/klepon/adonan_isi.png"
                     alt="adonan"
                     className={`pan-klepon-img ${boiling ? 'klepon-floating' : ''}`}
                     style={{ animationDelay: `${i * 0.3}s` }}
@@ -159,7 +167,7 @@ export function StepBoiling({ onComplete }: Props) {
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
               >
-                <img src="/assets/klepon/adonan_klepon.png" alt="adonan" className="source-klepon-img" />
+                <img src="/assets/klepon/adonan_isi.png" alt="adonan" className="source-klepon-img" />
               </div>
             ) : null
           )}

@@ -63,6 +63,13 @@ interface GameStore {
   advancePieSusuStep: () => void;
   resetPieSusuGame: () => void;
 
+  // --- Pisang Asar Mini-Game State ---
+  pisangAsarStep: number;
+  pisangAsarComplete: boolean;
+  startPisangAsarGame: () => void;
+  advancePisangAsarStep: () => void;
+  resetPisangAsarGame: () => void;
+
   // --- Samaloyang Mini-Game State ---
   samaloyangStep: number;
   samaloyangComplete: boolean;
@@ -243,6 +250,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
     return { pieSusuStep: nextStep };
   }),
   resetPieSusuGame: () => set({ pieSusuStep: 0, pieSusuComplete: false }),
+
+  // Pisang Asar Mini-Game
+  pisangAsarStep: 0,
+  pisangAsarComplete: false,
+  startPisangAsarGame: () => set({ pisangAsarStep: 0, pisangAsarComplete: false, currentScreen: 'pisangAsarGame' }),
+  advancePisangAsarStep: () => set(s => {
+    const nextStep = s.pisangAsarStep + 1;
+    if (nextStep >= 5) {
+      // All 5 steps done + completion screen
+      return {
+        pisangAsarComplete: true,
+        pisangAsarStep: nextStep,
+        unlockedRecipes: s.unlockedRecipes.includes('Pisang Asar')
+          ? s.unlockedRecipes
+          : [...s.unlockedRecipes, 'Pisang Asar'],
+      };
+    }
+    return { pisangAsarStep: nextStep };
+  }),
+  resetPisangAsarGame: () => set({ pisangAsarStep: 0, pisangAsarComplete: false }),
 
   // Samaloyang Mini-Game
   samaloyangStep: 0,

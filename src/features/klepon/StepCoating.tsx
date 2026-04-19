@@ -113,12 +113,9 @@ export function StepCoating({ onComplete }: Props) {
                 onDrop={e => handleKleponDrop(e, idx)}
               >
                 {coated[idx] ? (
-                  <div className="coated-visual">
-                    <img src="/assets/klepon/adonan_klepon_noalas.png" alt="klepon" className="plate-klepon-img" draggable={false} />
-                    <img src="/assets/klepon/kelapa_parut.png" alt="kelapa" className="coconut-overlay-img" draggable={false} />
-                  </div>
+                  <img src="/assets/klepon/adonan_kelapa.png" alt="klepon kelapa" className="plate-klepon-img" draggable={false} />
                 ) : (
-                  <img src="/assets/klepon/adonan_klepon_noalas.png" alt="klepon" className="plate-klepon-img" draggable={false} />
+                  <img src="/assets/klepon/adonan_bundar.png" alt="klepon" className="plate-klepon-img" draggable={false} />
                 )}
               </div>
             ))}
