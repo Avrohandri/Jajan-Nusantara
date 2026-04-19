@@ -8,7 +8,7 @@ import { StepBakeOven } from '../features/pisangasar/StepBakeOven';
 const STEPS = [
   { label: '', desc: '' },
   { label: 'Potong Pisang', desc: 'Belah pisang menjadi dua bagian' },
-  { label: 'Campur Topping', desc: 'Aduk topping telur, kenari, margarin, gula aren' },
+  { label: 'Campur Topping', desc: '' },
   { label: 'Oles Topping', desc: 'Oleskan topping ke pisang' },
   { label: 'Panggang', desc: 'Masukkan pisang ke dalam oven' },
 ];
@@ -62,7 +62,7 @@ export function PisangAsarMiniGameScreen() {
       <div className="klepon-topbar">
         <button className="klepon-back-btn" onClick={handleBack}>←</button>
         <div className="klepon-topbar-title">
-          <img src="/assets/pisang_asar/07_pisang asar.png" alt="icon" style={{ height: '32px', marginRight: '8px', objectFit: 'contain' }} onError={(e) => { e.currentTarget.outerHTML = '<span style="font-size: 24px; margin-right: 8px;">🍌</span>'; }} />
+          <img src="/assets/foods_maluku/06_pisang asar.png" alt="icon" style={{ height: '32px', marginRight: '8px', objectFit: 'contain' }} onError={(e) => { e.currentTarget.outerHTML = '<span style="font-size: 24px; margin-right: 8px;">🍌</span>'; }} />
           <span>Bikin Pisang Asar</span>
         </div>
       </div>
