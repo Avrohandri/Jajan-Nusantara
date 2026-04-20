@@ -18,48 +18,49 @@ export interface FoodItem {
   displaySize: { width: number; height: number };
   mergeScore: number;     // poin saat merge (tier+1 * 10)
   nextTier: number | null;
+  funFact?: string;       // fact for NPC notification
 }
 
 export const JOGJA_FOOD_CONFIG: FoodItem[] = [
   {
     tier: 0, name: "00_Klepon", textureKey: "00_Klepon", color: 0x7CAD58,
     colliderType: "circle", colliderOptions: { radius: 23 }, displaySize: { width: 44, height: 44 },
-    mergeScore: 10, nextTier: 1
+    mergeScore: 10, nextTier: 1, funFact: "Klepon — Warna hijaunya asli dari daun pandan!"
   },
   {
     tier: 1, name: "01_Cenil", textureKey: "01_Cenil", color: 0xE74C3C,
     colliderType: "circle", colliderOptions: { radius: 30 }, displaySize: { width: 60, height: 60 },
-    mergeScore: 20, nextTier: 2
+    mergeScore: 20, nextTier: 2, funFact: "Cenil — Terbuat dari singkong, makanya kenyal!"
   },
   {
     tier: 2, name: "02_Yangko", textureKey: "02_Yangko", color: 0xFFF8DC,
     colliderType: "rectangle", colliderOptions: { width: 63, height: 54, angle: -0.45 },
-    displaySize: { width: 69, height: 69 }, mergeScore: 30, nextTier: 3
+    displaySize: { width: 69, height: 69 }, mergeScore: 30, nextTier: 3, funFact: "Yangko — Oleh-oleh khas Jogja sejak zaman Keraton!"
   },
   {
     tier: 3, name: "03_Geplak", textureKey: "03_Geplak", color: 0xFFD700,
     colliderType: "circle", colliderOptions: { radius: 32, renderOrigin: { x: 0.51, y: 0.5 } }, displaySize: { width: 69, height: 69 },
-    mergeScore: 40, nextTier: 4
+    mergeScore: 40, nextTier: 4, funFact: "Geplak — Manis gurih dari parutan kelapa asli!"
   },
   {
     tier: 4, name: "04_Bakpia", textureKey: "04_Bakpia", color: 0xD4A373,
     colliderType: "circle", colliderOptions: { radius: 42 }, displaySize: { width: 82, height: 92 },
-    mergeScore: 50, nextTier: 5
+    mergeScore: 50, nextTier: 5, funFact: "Bakpia — Kue dengan kejutan manis di dalamnya!"
   },
   {
     tier: 5, name: "05_Lemper", textureKey: "05_Lemper", color: 0x2E8B57,
     colliderType: "circle", colliderOptions: { radius: 50 }, displaySize: { width: 120, height: 120 },
-    mergeScore: 60, nextTier: 6
+    mergeScore: 60, nextTier: 6, funFact: "Lemper — Dibungkus daun pisang biar wangi alami!"
   },
   {
     tier: 6, name: "06_TiwulAyu", textureKey: "06_TiwulAyu", color: 0x8B4513,
     colliderType: "circle", colliderOptions: { radius: 53 }, displaySize: { width: 123, height: 123 },
-    mergeScore: 70, nextTier: 7
+    mergeScore: 70, nextTier: 7, funFact: "Tiwul — Dulu jadi makanan pokok pengganti nasi!"
   },
   {
     tier: 7, name: "07_JadahTempe", textureKey: "07_JadahTempe", color: 0xA0522D,
     colliderType: "polygon", colliderOptions: { sides: 8, polyRadius: 60 }, displaySize: { width: 135, height: 155 },
-    mergeScore: 80, nextTier: null
+    mergeScore: 80, nextTier: null, funFact: "Jadah Tempe — Pasangan sempurna dari lereng Merapi!"
   }
 ];
 
@@ -67,32 +68,32 @@ export const BALI_FOOD_CONFIG: FoodItem[] = [
   {
     tier: 0, name: "Laklak", textureKey: "00_laklak", color: 0x6DAA2C,
     colliderType: "circle", colliderOptions: { radius: 23 }, displaySize: { width: 47, height: 47 },
-    mergeScore: 10, nextTier: 1
+    mergeScore: 10, nextTier: 1, funFact: "Laklak: Serabi hijau mungil bertaburan kelapa!"
   },
   {
     tier: 1, name: "Kaliadrem", textureKey: "01_kaliadrem", color: 0xA35D20,
     colliderType: "fromVertices", colliderOptions: { vertices: [{ x: 0, y: -35 }, { x: 40, y: 30 }, { x: -40, y: 30 }], renderOrigin: { x: 0.52, y: 0.61 } }, displaySize: { width: 75, height: 70 },
-    mergeScore: 20, nextTier: 2
+    mergeScore: 20, nextTier: 2, funFact: "Kaliadrem: Donat segitiga khas Bali yang renyah!"
   },
   {
     tier: 2, name: "Pie Susu", textureKey: "02_pie susu", color: 0xFFC72C,
     colliderType: "circle", colliderOptions: { radius: 37 }, displaySize: { width: 82, height: 82 },
-    mergeScore: 30, nextTier: 3
+    mergeScore: 30, nextTier: 3, funFact: "Pie Susu: Oleh-oleh hits Bali dengan isian susu lumer!"
   },
   {
     tier: 3, name: "Jaje Walik", textureKey: "03_jaje walik", color: 0xB57B3F,
     colliderType: "fromVertices", colliderOptions: { vertices: [{ x: 0, y: -50 }, { x: 52, y: 0 }, { x: 0, y: 50 }, { x: -52, y: 0 }] }, displaySize: { width: 92, height: 92 },
-    mergeScore: 40, nextTier: 4
+    mergeScore: 40, nextTier: 4, funFact: "Jaje Walik: Unik, digoreng dengan cara dibalik (walik)!"
   },
   {
     tier: 4, name: "Bendu", textureKey: "04_bendu", color: 0xE8A0CE,
     colliderType: "rectangle", colliderOptions: { width: 62, height: 104, chamferRadius: 27 }, displaySize: { width: 94, height: 109 },
-    mergeScore: 50, nextTier: 5
+    mergeScore: 50, nextTier: 5, funFact: "Bendu: Kue ketan yang wajib ada di upacara adat!"
   },
   {
     tier: 5, name: "Jaje Uli", textureKey: "05_jaje uli", color: 0x932026,
     colliderType: "circle", colliderOptions: { radius: 49, renderOrigin: { x: 0.50, y: 0.52 } }, displaySize: { width: 103, height: 120 },
-    mergeScore: 60, nextTier: 6
+    mergeScore: 60, nextTier: 6, funFact: "Jaje Uli: Ketan tumbuk, jodoh sejatinya tape!"
   },
   {
     tier: 6, name: "Pisang Rai", textureKey: "06_pisang rai", color: 0xDBC36D,
@@ -106,7 +107,7 @@ export const BALI_FOOD_CONFIG: FoodItem[] = [
         { x: -55, y: -13 },  // tengah kiri
       ]
     }, displaySize: { width: 150, height: 120 },
-    mergeScore: 80, nextTier: null
+    mergeScore: 80, nextTier: null, funFact: "Pisang Rai: Pisang berkemul tepung beras & taburan kelapa!"
   }
 ];
 

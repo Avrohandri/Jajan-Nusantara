@@ -13,6 +13,7 @@ import { SamaloyangMiniGameScreen } from './screens/SamaloyangMiniGameScreen';
 import { PisangAsarMiniGameScreen } from './screens/PisangAsarMiniGameScreen';
 import { ProgressScreen } from './screens/ProgressScreen';
 import { ColliderTestScreen } from './screens/ColliderTestScreen';
+import { JajanpediaScreen } from './screens/JajanpediaScreen';
 
 export default function App() {
   const { currentScreen, contentLoaded, loadContent, setUserId } = useGameStore();
@@ -61,7 +62,7 @@ export default function App() {
       case 'home': return <MainMenuScreen />; // Redirect old 'home' to MainMenu
       case 'mapSelect': return <MapSelectScreen />;
       case 'settings': return <SettingsScreen />;
-      case 'jajanpedia': return <MainMenuScreen />; // Placeholder — will be built later
+      case 'jajanpedia': return <JajanpediaScreen />;
       case 'game': return <GameScreen />;
       case 'result': return <ResultScreen />;
       case 'cooking': return <CookingScreen />; // legacy

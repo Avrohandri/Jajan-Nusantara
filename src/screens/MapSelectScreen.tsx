@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 
 import levelSelectBg from '../assets/map/level_select_bg.png';
+import backButtonImg from '../assets/universal/back button.png';
 
 // ============================================================
 // KONFIGURASI PULAU — ubah sesuai kebutuhan Anda
@@ -75,7 +76,7 @@ export function MapSelectScreen() {
           id="btn-back-map"
           aria-label="Kembali ke menu"
         >
-          <span aria-hidden>←</span>
+          <img src={backButtonImg} alt="Back" className="map-back-icon-img" />
         </button>
 
         {/* Area jalur pulau */}

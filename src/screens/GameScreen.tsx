@@ -5,6 +5,7 @@ import { EventBus } from '../game/EventBus';
 import { QuizModal } from '../features/quiz/QuizModal';
 import { Modal } from '../components/Modal';
 import { Button } from '../components/Button';
+import { NpcNotification } from '../components/NpcNotification';
 import type { SnackData } from '../types';
 import { REGION_FOOD_CONFIGS } from '../game/characters/FoodConfig';
 
@@ -198,6 +199,9 @@ export function GameScreen() {
           </div>
         </div>
       )}
+
+      {/* NPC Notification Overlay */}
+      <NpcNotification />
     </div>
   );
 }

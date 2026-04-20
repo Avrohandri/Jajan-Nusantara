@@ -1,4 +1,5 @@
 import { useGameStore } from '../store/gameStore';
+import backButtonImg from '../assets/universal/back button.png';
 
 export function SettingsScreen() {
   const { setScreen, isMusicOn, isSfxOn, toggleMusic, toggleSfx } = useGameStore();
@@ -11,7 +12,7 @@ export function SettingsScreen() {
         onClick={() => setScreen('mainMenu')}
         id="btn-back-settings"
       >
-        ← Kembali
+        <img src={backButtonImg} alt="Back" className="settings-back-icon-img" />
       </button>
 
       {/* Header */}

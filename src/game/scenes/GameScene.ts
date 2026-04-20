@@ -15,6 +15,7 @@ export class GameScene extends Phaser.Scene {
   private snacks: SnackData[] = [];
   private activeItems: Phaser.Physics.Matter.Sprite[] = [];
   private nextTier = 0;
+  private isFirstDrop = true;
   private canDrop = true;
   private lastDropTime = 0;
   private gameOver = false;
@@ -146,6 +147,7 @@ export class GameScene extends Phaser.Scene {
       this.activeItems = [];
       this.gameOver = false;
       this.canDrop = true;
+      this.isFirstDrop = true; // Reset agar klepon muncul lagi pertama kali
       if (this.matter?.world) this.matter.world.resume();
       this.pickNextTier();
       this.updatePreview();
@@ -223,6 +225,8 @@ export class GameScene extends Phaser.Scene {
             this.time.delayedCall(50, () => {
               this.spawnFood(nextTier, midX, midY);
               EventBus.emit('on-merge', { tier: nextTier, points: pts, name: nm });
+              // Emit food-revealed saat kuliner baru muncul hasil merge
+              EventBus.emit('food-revealed', { tier: nextTier });
             });
           } else {
             EventBus.emit('on-merge', { tier, points: 200, name: configA.name });
@@ -309,7 +313,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   private pickNextTier() {
-    this.nextTier = Phaser.Math.Between(0, 2);
+    if (this.isFirstDrop) {
+      this.nextTier = 0; // Klepon selalu pertama
+      this.isFirstDrop = false;
+    } else {
+      this.nextTier = Phaser.Math.Between(0, 2);
+    }
   }
 
   private updatePreview() {
@@ -351,7 +360,11 @@ export class GameScene extends Phaser.Scene {
   }
 
   private dropSnack(x: number) {
-    this.spawnFood(this.nextTier, x, this.spawnY);
+    const droppedTier = this.nextTier;
+    this.spawnFood(droppedTier, x, this.spawnY);
+
+    // Emit food-revealed saat kuliner benar-benar di-drop ke papan
+    EventBus.emit('food-revealed', { tier: droppedTier });
 
     this.lastDropTime = Date.now();
     this.canDrop = false;
