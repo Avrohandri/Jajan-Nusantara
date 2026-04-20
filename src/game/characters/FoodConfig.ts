@@ -115,7 +115,7 @@ export const ACEH_FOOD_CONFIG: FoodItem[] = [
   {
     tier: 0, name: "Samaloyang", textureKey: "00_samaloyang", color: 0xFF8C00,
     colliderType: "circle", colliderOptions: { radius: 23 }, displaySize: { width: 47, height: 47 },
-    mergeScore: 10, nextTier: 1
+    mergeScore: 10, nextTier: 1, funFact: "Samaloyang: Kue Aceh Barat, dimasak pakai cetakan besi."
   },
   {
     tier: 1, name: "Timphan", textureKey: "01_timphan", color: 0x3CB371,
@@ -129,12 +129,12 @@ export const ACEH_FOOD_CONFIG: FoodItem[] = [
         { x: -32, y: -12 },  // kiri atas
       ]
     }, displaySize: { width: 80, height: 80 },
-    mergeScore: 20, nextTier: 2
+    mergeScore: 20, nextTier: 2, funFact: "Timphan: Sajian hari besar, isi pisang/kelapa manis."
   },
   {
-    tier: 2, name: "Pulot Ijo", textureKey: "02_pulot ijo", color: 0x32CD32,
+    tier: 2, name: "Pulut Ijo", textureKey: "02_pulot ijo", color: 0x32CD32,
     colliderType: "rectangle", colliderOptions: { width: 42, height: 82, chamferRadius: 5 }, displaySize: { width: 98, height: 88 },
-    mergeScore: 30, nextTier: 3
+    mergeScore: 30, nextTier: 3, funFact: "Pulut Ijo: Ketan hijau, kenyal dan gurih."
   },
   {
     tier: 3, name: "Keukarah", textureKey: "03_keukarah", color: 0x8B4513,
@@ -152,43 +152,43 @@ export const ACEH_FOOD_CONFIG: FoodItem[] = [
       ],
       renderOrigin: { x: 0.5, y: 0.52 }
     }, displaySize: { width: 115, height: 115 },
-    mergeScore: 40, nextTier: 4
+    mergeScore: 40, nextTier: 4, funFact: "Keukarah: “Kue jaring” karena bentuknya unik."
   },
   {
     tier: 4, name: "Bungong Kayee", textureKey: "04_bungong kayee", color: 0xFFFACD,
     colliderType: "circle", colliderOptions: { radius: 48 }, displaySize: { width: 101, height: 111 },
-    mergeScore: 50, nextTier: 5
+    mergeScore: 50, nextTier: 5, funFact: "Bungong Kayee: Berarti bunga pohon, bentuknya seperti bunga."
   },
   {
     tier: 5, name: "Meuseukat", textureKey: "05_meuseukat", color: 0xFFD700,
     colliderType: "circle", colliderOptions: { radius: 52 }, displaySize: { width: 130, height: 130 },
-    mergeScore: 60, nextTier: 6
+    mergeScore: 60, nextTier: 6, funFact: "Meuseukat: Kue nanas, mirip dodol lebih padat."
   },
   {
     tier: 6, name: "Kue Adee", textureKey: "06_kue adee", color: 0xD2691E,
     colliderType: "circle", colliderOptions: { radius: 62 }, displaySize: { width: 149, height: 149 },
-    mergeScore: 80, nextTier: null
+    mergeScore: 80, nextTier: null, funFact: "Kue Adee: Kue panggang, manis gurih santan."
   }
 ];
 
 export const MALUKU_FOOD_CONFIG: FoodItem[] = [
   {
-    tier: 0, name: "00_Koyabu", textureKey: "00_koyabu", color: 0xFFE4B5,
+    tier: 0, name: "Koyabu", textureKey: "00_koyabu", color: 0xFFE4B5,
     colliderType: "fromVertices", colliderOptions: { vertices: [{ x: 0, y: -24 }, { x: 33, y: 26 }, { x: -31, y: 27 }] }, displaySize: { width: 60, height: 60 },
-    mergeScore: 10, nextTier: 1
+    mergeScore: 10, nextTier: 1, funFact: "Koyabu: Makanan dari sagu yang bikin kenyang lebih lama!"
   },
   {
-    tier: 1, name: "01_SaguLempeng", textureKey: "01_sagu lempeng", color: 0xD87093,
+    tier: 1, name: "Sagu Lempeng", textureKey: "01_sagu lempeng", color: 0xD87093,
     colliderType: "rectangle", colliderOptions: { width: 36, height: 67, chamferRadius: 5 }, displaySize: { width: 74, height: 80 },
-    mergeScore: 20, nextTier: 2
+    mergeScore: 20, nextTier: 2, funFact: "Sagu Lempeng: Keras banget, sering dicelup teh biar enak!"
   },
   {
-    tier: 2, name: "02_SaguGula", textureKey: "02_sagu gula", color: 0x8B4513,
+    tier: 2, name: "Sagu Gula", textureKey: "02_sagu gula", color: 0x8B4513,
     colliderType: "rectangle", colliderOptions: { width: 61, height: 61, chamferRadius: 8 }, displaySize: { width: 81, height: 81 },
-    mergeScore: 30, nextTier: 3
+    mergeScore: 30, nextTier: 3, funFact: "Sagu Gula: Manis simpel, favorit camilan santai!"
   },
   {
-    tier: 3, name: "03_TalamSaguBakar", textureKey: "03_talam sagu bakar", color: 0xD2B48C,
+    tier: 3, name: "Talam Sagu Bakar", textureKey: "03_talam sagu bakar", color: 0xD2B48C,
     colliderType: "fromVertices", colliderOptions: {
       vertices: [
         { x: -35, y: -37 },  // kiri atas
@@ -198,22 +198,22 @@ export const MALUKU_FOOD_CONFIG: FoodItem[] = [
       ],
       renderOrigin: { x: 0.5, y: 0.52 }
     }, displaySize: { width: 97, height: 110 },
-    mergeScore: 40, nextTier: 4
+    mergeScore: 40, nextTier: 4, funFact: "Talam Sagu Bakar: Dipanggang, aromanya khas bikin nagih!"
   },
   {
-    tier: 4, name: "04_Asida", textureKey: "04_asida", color: 0x8B0000,
+    tier: 4, name: "Asida", textureKey: "04_asida", color: 0x8B0000,
     colliderType: "circle", colliderOptions: { radius: 44, renderOrigin: { x: 0.48, y: 0.5 } }, displaySize: { width: 107, height: 124 },
-    mergeScore: 50, nextTier: 5
+    mergeScore: 50, nextTier: 5, funFact: "Asida: Bubur manis yang lembut dan legit!"
   },
   {
-    tier: 5, name: "05_KueBagea", textureKey: "05_kue bagea", color: 0xDEB887,
+    tier: 5, name: "Kue Bagea", textureKey: "05_kue bagea", color: 0xDEB887,
     colliderType: "circle", colliderOptions: { radius: 50, renderOrigin: { x: 0.52, y: 0.5 } }, displaySize: { width: 120, height: 120 },
-    mergeScore: 60, nextTier: 6
+    mergeScore: 60, nextTier: 6, funFact: "Kue Bagea: Kue sagu keras yang jadi ciri khas Maluku!"
   },
   {
-    tier: 6, name: "06_PisangAsar", textureKey: "06_pisang asar", color: 0xDAA520,
+    tier: 6, name: "Pisang Asar", textureKey: "06_pisang asar", color: 0xDAA520,
     colliderType: "rectangle", colliderOptions: { width: 148, height: 62, chamferRadius: 27, renderOrigin: { x: 0.5, y: 0.53 } }, displaySize: { width: 155, height: 155 },
-    mergeScore: 80, nextTier: null
+    mergeScore: 80, nextTier: null, funFact: "Pisang Asar: Pisang bakar dengan saus manis favorit!"
   }
 ];
 

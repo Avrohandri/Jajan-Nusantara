@@ -98,7 +98,7 @@ export function NpcNotification() {
   if (!activeItem) return null;
 
   // Configuration based on region
-  const isLeftSide = activeItem.region === 'bali';
+  const isLeftSide = activeItem.region === 'bali' || activeItem.region === 'maluku';
   const npcAsset = `/assets/NPC/npc_${activeItem.region}.png`;
   const wrapperClass = isLeftSide ? 'npc-notification-wrapper npc-slide-left' : 'npc-notification-wrapper npc-slide-right';
   const bubbleClass = isLeftSide ? 'npc-bubble bubble-left' : 'npc-bubble bubble-right';
