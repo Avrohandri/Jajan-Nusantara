@@ -24,6 +24,17 @@ export default function App() {
       // Initialize Firebase (will silently skip if not configured)
       initFirebase();
 
+      // Force-clear stale quiz cache (old data without 'region' field)
+      try {
+        const raw = localStorage.getItem('kuliner_quizzes');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0 && !parsed[0].region) {
+            localStorage.removeItem('kuliner_quizzes');
+          }
+        }
+      } catch (_) {}
+
       // Try anonymous login
       if (isFirebaseConfigured()) {
         const uid = await signInAnon();

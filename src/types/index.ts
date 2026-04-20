@@ -15,6 +15,7 @@ export interface QuizData {
   options: string[];
   correctAnswerIndex: number;
   explanation: string;
+  region?: string;
 }
 
 export interface RecipeStep {

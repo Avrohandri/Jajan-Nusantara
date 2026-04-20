@@ -5,11 +5,15 @@ import { Modal } from '../../components/Modal';
 import { Button } from '../../components/Button';
 
 export function QuizModal() {
-  const { quizzes, currentQuizIndex, answerQuiz, closeQuiz } = useGameStore();
+  const { quizzes, currentQuizIndex, answerQuiz, closeQuiz, activeRegion } = useGameStore();
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
 
-  const quiz = quizzes[currentQuizIndex % quizzes.length];
+  // Filter quizzes by region
+  const regionalQuizzes = quizzes.filter(q => q.region === activeRegion);
+  // Fallback to all quizzes if none match region (safeguard)
+  const validQuizzes = regionalQuizzes.length > 0 ? regionalQuizzes : quizzes;
+  const quiz = validQuizzes[currentQuizIndex % validQuizzes.length];
   if (!quiz) return null;
 
   const handleAnswer = (index: number) => {

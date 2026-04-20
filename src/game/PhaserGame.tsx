@@ -14,10 +14,6 @@ export function PhaserGame({ width, height }: PhaserGameProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const {
     snacks,
-    addScore,
-    incrementMerge,
-    setGameOver,
-    triggerQuiz,
   } = useGameStore();
 
   useEffect(() => {
@@ -44,26 +40,29 @@ export function PhaserGame({ width, height }: PhaserGameProps) {
     }
   }, [snacks]);
 
+  const mergesSinceQuizRef = useRef(0);
+
   // Listen for game events
   useEffect(() => {
-    let mergesSinceQuiz = 0;
-
     const handleMerge = (data: unknown) => {
       const { tier, points } = data as { tier: number; points: number; name: string };
-      addScore(points);
-      incrementMerge(tier);
-      mergesSinceQuiz++;
+      const store = useGameStore.getState();
+      store.addScore(points);
+      store.incrementMerge(tier);
+      mergesSinceQuizRef.current++;
 
-      // Trigger quiz every 5 merges
-      if (mergesSinceQuiz >= 5) {
-        mergesSinceQuiz = 0;
-        triggerQuiz();
-        EventBus.emit('pause-game');
+      // Trigger quiz every 6 merges (6, 12, 18, etc.)
+      if (mergesSinceQuizRef.current >= 6) {
+        mergesSinceQuizRef.current = 0;
+        const triggered = store.triggerQuiz();
+        if (triggered) {
+          EventBus.emit('pause-game');
+        }
       }
     };
 
     const handleGameOver = () => {
-      setGameOver();
+      useGameStore.getState().setGameOver();
     };
 
     EventBus.on('on-merge', handleMerge);
@@ -73,7 +72,7 @@ export function PhaserGame({ width, height }: PhaserGameProps) {
       EventBus.off('on-merge', handleMerge);
       EventBus.off('game-over', handleGameOver);
     };
-  }, [addScore, incrementMerge, triggerQuiz, setGameOver]);
+  }, []); // Empty deps: listener set up once, always reads fresh state via getState()
 
   return (
     <div

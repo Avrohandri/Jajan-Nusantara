@@ -153,7 +153,7 @@ export function GameScreen() {
         <div className="instructions">
           <p>1. <strong>Sentuh/klik</strong> di area atas untuk menjatuhkan jajanan</p>
           <p>2. <strong>Gabungkan</strong> dua jajanan yang sama untuk naik tier</p>
-          <p>3. Setiap <strong>5 merge</strong> akan muncul kuis budaya kuliner</p>
+          <p>3. Setiap <strong>6 merge</strong> akan muncul kuis budaya kuliner</p>
           <p>4. Permainan berakhir jika jajanan melewati garis merah</p>
           <p>5. Raih skor tertinggi!</p>
         </div>

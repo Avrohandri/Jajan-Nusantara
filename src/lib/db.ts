@@ -47,21 +47,9 @@ export async function fetchSnacks(): Promise<SnackData[]> {
 }
 
 export async function fetchQuizzes(): Promise<QuizData[]> {
-  if (isFirebaseConfigured()) {
-    try {
-      const db = getDb()!;
-      const snap = await getDocs(collection(db, 'quizzes'));
-      const data = snap.docs.map(d => ({ ...d.data(), id: d.id } as QuizData));
-      if (data.length > 0) {
-        localStorage.setItem(LS_QUIZZES, JSON.stringify(data));
-        return data;
-      }
-    } catch (e) {
-      console.warn('[DB] Gagal ambil quizzes dari Firestore:', e);
-    }
-  }
-  const cached = localStorage.getItem(LS_QUIZZES);
-  if (cached) return JSON.parse(cached);
+  // Always use local fallback quizzes (region-specific manual data)
+  // Skip Firestore to avoid stale data without 'region' field
+  localStorage.removeItem(LS_QUIZZES);
   return fallbackQuizzes;
 }
 

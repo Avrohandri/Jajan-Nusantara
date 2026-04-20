@@ -37,7 +37,7 @@ interface GameStore {
   currentQuizIndex: number;
   quizzesCorrect: number;
   quizzesTriggered: number;
-  triggerQuiz: () => void;
+  triggerQuiz: () => boolean;
   answerQuiz: (correct: boolean) => void;
   closeQuiz: () => void;
 
@@ -164,13 +164,34 @@ export const useGameStore = create<GameStore>((set, get) => ({
   quizzesCorrect: 0,
   quizzesTriggered: 0,
   triggerQuiz: () => {
-    const { quizzes, currentQuizIndex } = get();
-    if (quizzes.length === 0) return;
+    const state = get();
+    const regionalQuizzes = state.quizzes.filter(q => q.region === state.activeRegion);
+    
+    // Debug log — remove after testing
+    console.log('[Quiz] triggerQuiz called', {
+      activeRegion: state.activeRegion,
+      totalQuizzes: state.quizzes.length,
+      regionalCount: regionalQuizzes.length,
+      currentIndex: state.currentQuizIndex,
+    });
+
+    if (regionalQuizzes.length === 0) {
+      console.warn('[Quiz] No quizzes found for region:', state.activeRegion, '— check that fallbackQuizzes has matching region values');
+      return false;
+    }
+    
+    // Stop if all quizzes for the region have been answered
+    if (state.currentQuizIndex >= regionalQuizzes.length) {
+      console.log('[Quiz] All quizzes exhausted for region:', state.activeRegion);
+      return false;
+    }
+
     set({
       showQuiz: true,
       isPaused: true,
-      currentQuizIndex: currentQuizIndex % quizzes.length,
+      currentQuizIndex: state.currentQuizIndex,
     });
+    return true;
   },
   answerQuiz: (correct) => set(s => ({
     quizzesCorrect: s.quizzesCorrect + (correct ? 1 : 0),
