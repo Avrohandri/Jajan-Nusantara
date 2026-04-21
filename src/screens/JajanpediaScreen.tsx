@@ -11,6 +11,20 @@ const REGIONS = [
   { id: 'maluku', name: 'Maluku', folder: 'foods_maluku', icon: '🥁' }
 ];
 
+// Map food textureKey to a detail screen
+const FOOD_CARD_SCREENS: Record<string, string> = {
+  '00_Klepon': 'kleponCard',
+  '01_Cenil': 'cenilCard',
+  '02_Yangko': 'yangkoCard',
+  '03_Geplak': 'geplakCard',
+  '04_Bakpia': 'bakpiaCard',
+  '05_Lemper': 'lemperCard',
+  '06_TiwulAyu': 'tiwulAyuCard',
+  '07_JadahTempe': 'jadahTempeCard',
+};
+
+
+
 export function JajanpediaScreen() {
   const { setScreen } = useGameStore();
   const [regionIndex, setRegionIndex] = useState(0);
@@ -96,8 +110,14 @@ export function JajanpediaScreen() {
                   }
                   cleanName = cleanName.replace(/([A-Z])/g, ' $1').trim();
 
+                  const targetScreen = FOOD_CARD_SCREENS[food.textureKey];
+
                   return (
-                    <div key={index} className="jajan-card">
+                    <div
+                      key={index}
+                      className={`jajan-card${targetScreen ? ' jajan-card-clickable' : ''}`}
+                      onClick={targetScreen ? () => setScreen(targetScreen as any) : undefined}
+                    >
                       <div className="jajan-card-img-wrapper">
                         <img src={imgPath} alt={cleanName} className="jajan-card-img" />
                       </div>

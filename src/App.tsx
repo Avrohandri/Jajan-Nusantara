@@ -14,6 +14,14 @@ import { PisangAsarMiniGameScreen } from './screens/PisangAsarMiniGameScreen';
 import { ProgressScreen } from './screens/ProgressScreen';
 import { ColliderTestScreen } from './screens/ColliderTestScreen';
 import { JajanpediaScreen } from './screens/JajanpediaScreen';
+import { KleponCardScreen } from './screens/KleponCardScreen';
+import { CenilCardScreen } from './screens/CenilCardScreen';
+import { YangkoCardScreen } from './screens/YangkoCardScreen';
+import { GeplakCardScreen } from './screens/GeplakCardScreen';
+import { BakpiaCardScreen } from './screens/BakpiaCardScreen';
+import { LemperCardScreen } from './screens/LemperCardScreen';
+import { TiwulAyuCardScreen } from './screens/TiwulAyuCardScreen';
+import { JadahTempeCardScreen } from './screens/JadahTempeCardScreen';
 
 export default function App() {
   const { currentScreen, contentLoaded, loadContent, setUserId } = useGameStore();
@@ -74,6 +82,14 @@ export default function App() {
       case 'mapSelect': return <MapSelectScreen />;
       case 'settings': return <SettingsScreen />;
       case 'jajanpedia': return <JajanpediaScreen />;
+      case 'kleponCard': return <KleponCardScreen />;
+      case 'cenilCard': return <CenilCardScreen />;
+      case 'yangkoCard': return <YangkoCardScreen />;
+      case 'geplakCard': return <GeplakCardScreen />;
+      case 'bakpiaCard': return <BakpiaCardScreen />;
+      case 'lemperCard': return <LemperCardScreen />;
+      case 'tiwulAyuCard': return <TiwulAyuCardScreen />;
+      case 'jadahTempeCard': return <JadahTempeCardScreen />;
       case 'game': return <GameScreen />;
       case 'result': return <ResultScreen />;
       case 'cooking': return <CookingScreen />; // legacy

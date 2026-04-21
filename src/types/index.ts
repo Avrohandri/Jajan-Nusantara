@@ -58,4 +58,7 @@ export interface UserProfile {
 
 // === App State Types ===
 
-export type ScreenName = 'home' | 'mainMenu' | 'mapSelect' | 'settings' | 'jajanpedia' | 'game' | 'result' | 'cooking' | 'progress' | 'kleponGame' | 'pieSusuGame' | 'samaloyangGame' | 'pisangAsarGame' | 'colliderTest';
+export type ScreenName = 'home' | 'mainMenu' | 'mapSelect' | 'settings' | 'jajanpedia' | 'kleponCard' | 'cenilCard' | 'yangkoCard' | 'geplakCard' | 'bakpiaCard' | 'lemperCard' | 'tiwulAyuCard' | 'jadahTempeCard' | 'game' | 'result' | 'cooking' | 'progress' | 'kleponGame' | 'pieSusuGame' | 'samaloyangGame' | 'pisangAsarGame' | 'colliderTest';
+
+
+

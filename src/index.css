@@ -2646,6 +2646,22 @@ body {
   box-shadow: 0 4px 8px rgba(139, 69, 19, 0.1);
 }
 
+.jajan-card-clickable {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.jajan-card-clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(100, 160, 50, 0.25);
+  border-color: #a8d56a;
+}
+
+.jajan-card-clickable:active {
+  transform: scale(0.96);
+}
+
+
 .jajan-card-img-wrapper {
   background: #e99539;
   padding: 12px;
@@ -2824,3 +2840,346 @@ body {
     opacity: 0;
   }
 }
+
+/* ========================================================
+   KLEPON CARD SCREEN
+   ======================================================== */
+.klepon-card-screen {
+  position: relative;
+  min-height: 100dvh;
+  /* background set inline in component to pedia_bg */
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.klepon-card-content {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 20px 16px;
+  margin-top: 10px;
+  /* Reduced to move everything up */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+
+/* Back button */
+.klepon-card-back-btn {
+  position: absolute;
+  top: 15px;
+  left: 14px;
+  background: transparent;
+  /* No background as requested */
+  border: none;
+  width: 54px;
+  /* Same as Jajanpedia back button */
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  z-index: 10;
+}
+
+.klepon-card-back-btn:active {
+  transform: scale(0.9);
+}
+
+.klepon-card-back-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+
+/* Header */
+.klepon-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.klepon-card-title {
+  font-family: var(--font);
+  font-size: 32px;
+  color: #4a7c1f;
+  text-shadow: 1px 2px 0 rgba(0, 0, 0, 0.08);
+  letter-spacing: 1px;
+}
+
+.klepon-card-leaf {
+  font-size: 20px;
+  animation: leafSway 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes leafSway {
+  0% {
+    transform: rotate(-10deg);
+  }
+
+  100% {
+    transform: rotate(10deg);
+  }
+}
+
+/* Mascot */
+.klepon-card-mascot-wrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.klepon-card-mascot {
+  width: 190px;
+  height: 190px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 18px rgba(80, 140, 30, 0.25));
+  animation: mascotFloat 3s ease-in-out infinite;
+}
+
+@keyframes mascotFloat {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.klepon-card-sparkle {
+  position: absolute;
+  font-size: 18px;
+  color: #c8e87a;
+  animation: sparklePulse 2s ease-in-out infinite;
+}
+
+.klepon-card-sparkle.top-left {
+  top: 0;
+  left: 4px;
+  animation-delay: 0s;
+}
+
+.klepon-card-sparkle.top-right {
+  top: 8px;
+  right: 0;
+  animation-delay: 0.7s;
+}
+
+.klepon-card-sparkle.bottom-left {
+  bottom: 16px;
+  left: 0;
+  animation-delay: 1.4s;
+}
+
+@keyframes sparklePulse {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Tagline */
+.klepon-card-tagline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.klepon-card-tagline p {
+  font-family: var(--font);
+  font-size: 17px;
+  color: #4a7c1f;
+  text-align: center;
+}
+
+.klepon-leaf-sm {
+  font-size: 14px;
+}
+
+/* About Box */
+.klepon-card-about-box {
+  background: #fffdf5;
+  border: 1.5px solid #d6e8b0;
+  border-radius: 16px;
+  padding: 14px 18px;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(100, 160, 50, 0.08);
+}
+
+.klepon-card-about-text {
+  font-family: var(--font);
+  font-size: 13px;
+  color: #5a4a2a;
+  text-align: center;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+}
+
+.klepon-highlight {
+  color: #5da832;
+  font-weight: bold;
+}
+
+/* Info Row */
+.klepon-card-info-row {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  gap: 8px;
+}
+
+.klepon-card-info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.klepon-card-info-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.klepon-icon-red {
+  background: #fff0f0;
+  border: 1.5px solid #ffccc8;
+}
+
+.klepon-icon-pink {
+  background: #fff0f5;
+  border: 1.5px solid #ffbad0;
+}
+
+.klepon-icon-brown {
+  background: #fdf5e8;
+  border: 1.5px solid #e8ceaa;
+}
+
+.klepon-card-info-label {
+  font-family: var(--font);
+  font-size: 12px;
+  color: #5da832;
+  font-weight: bold;
+}
+
+.klepon-card-info-value {
+  font-family: var(--font);
+  font-size: 11px;
+  color: #5a4a2a;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* Fun Fact */
+.klepon-card-funfact {
+  background: #f0fadf;
+  border: 1.5px solid #b8dc80;
+  border-radius: 16px;
+  padding: 14px 16px;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(100, 160, 50, 0.1);
+}
+
+.klepon-card-funfact-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.klepon-card-funfact-title {
+  font-family: var(--font);
+  font-size: 15px;
+  color: #4a7c1f;
+  margin-bottom: 4px;
+}
+
+.klepon-card-funfact-text {
+  font-family: var(--font);
+  font-size: 12px;
+  color: #5a4a2a;
+  line-height: 1.6;
+}
+
+/* --- Theme Color Modifiers --- */
+
+/* Cenil (Red) */
+.cenil-theme .klepon-card-title { color: #d63031; }
+.cenil-theme .klepon-highlight { color: #d63031; }
+.cenil-theme .klepon-card-info-label { color: #d63031; }
+.cenil-theme .klepon-card-funfact { background: #fee2e2; border-color: #f87171; }
+.cenil-theme .klepon-card-funfact-title { color: #b91c1c; }
+
+/* Yangko (Pink) */
+.yangko-theme .klepon-card-title { color: #db2777; }
+.yangko-theme .klepon-highlight { color: #db2777; }
+.yangko-theme .klepon-card-info-label { color: #db2777; }
+.yangko-theme .klepon-card-funfact { background: #fdf2f8; border-color: #f9a8d4; }
+.yangko-theme .klepon-card-funfact-title { color: #9d174d; }
+
+/* Geplak (Yellow/Orange) */
+.geplak-theme .klepon-card-title { color: #d97706; }
+.geplak-theme .klepon-highlight { color: #d97706; }
+.geplak-theme .klepon-card-info-label { color: #d97706; }
+.geplak-theme .klepon-card-funfact { background: #fffbeb; border-color: #fcd34d; }
+.geplak-theme .klepon-card-funfact-title { color: #92400e; }
+
+/* Bakpia (Brown) */
+.bakpia-theme .klepon-card-title { color: #8b4513; }
+.bakpia-theme .klepon-highlight { color: #8b4513; }
+.bakpia-theme .klepon-card-info-label { color: #8b4513; }
+.bakpia-theme .klepon-card-funfact { background: #fef3c7; border-color: #d97706; }
+.bakpia-theme .klepon-card-funfact-title { color: #92400e; }
+
+/* Lemper (Light Green) */
+.lemper-theme .klepon-card-title { color: #166534; }
+.lemper-theme .klepon-highlight { color: #166534; }
+.lemper-theme .klepon-card-info-label { color: #166534; }
+.lemper-theme .klepon-card-funfact { background: #f0fdf4; border-color: #86efac; }
+.lemper-theme .klepon-card-funfact-title { color: #14532d; }
+
+/* Tiwul Ayu (Yellowish-Brown) */
+.tiwulayu-theme .klepon-card-title { color: #9a3412; }
+.tiwulayu-theme .klepon-highlight { color: #9a3412; }
+.tiwulayu-theme .klepon-card-info-label { color: #9a3412; }
+.tiwulayu-theme .klepon-card-funfact { background: #fff7ed; border-color: #fdba74; }
+.tiwulayu-theme .klepon-card-funfact-title { color: #7c2d12; }
+
+/* Jadah Tempe (Deep Brown) */
+.jadahtempe-theme .klepon-card-title { color: #431407; }
+.jadahtempe-theme .klepon-highlight { color: #431407; }
+.jadahtempe-theme .klepon-card-info-label { color: #431407; }
+.jadahtempe-theme .klepon-card-funfact { background: #fffcf0; border-color: #d2b48c; }
+.jadahtempe-theme .klepon-card-funfact-title { color: #3e2723; }
+
