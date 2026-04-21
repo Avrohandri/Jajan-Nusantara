@@ -2963,28 +2963,21 @@ body {
 
 .klepon-card-sparkle {
   position: absolute;
-  font-size: 18px;
-  color: #c8e87a;
+  font-size: 20px;
+  color: #5da832; /* More contrastive green */
   animation: sparklePulse 2s ease-in-out infinite;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
 }
 
-.klepon-card-sparkle.top-left {
-  top: 0;
-  left: 4px;
-  animation-delay: 0s;
-}
+.klepon-card-sparkle.top-left { top: 10px; left: 10px; animation-delay: 0s; }
+.klepon-card-sparkle.top-right { top: 15px; right: 10px; animation-delay: 0.7s; }
+.klepon-card-sparkle.top-center { top: -5px; left: 50%; transform: translateX(-50%); animation-delay: 1.2s; }
+.klepon-card-sparkle.bottom-left { bottom: 20px; left: 15px; animation-delay: 1.4s; }
+.klepon-card-sparkle.bottom-right { bottom: 15px; right: 15px; animation-delay: 0.3s; }
+.klepon-card-sparkle.mid-left { top: 50%; left: -5px; transform: translateY(-50%); animation-delay: 0.9s; }
+.klepon-card-sparkle.mid-right { top: 55%; right: -5px; transform: translateY(-50%); animation-delay: 1.6s; }
 
-.klepon-card-sparkle.top-right {
-  top: 8px;
-  right: 0;
-  animation-delay: 0.7s;
-}
-
-.klepon-card-sparkle.bottom-left {
-  bottom: 16px;
-  left: 0;
-  animation-delay: 1.4s;
-}
 
 @keyframes sparklePulse {
 
@@ -3140,6 +3133,7 @@ body {
 .cenil-theme .klepon-card-info-label { color: #d63031; }
 .cenil-theme .klepon-card-funfact { background: #fee2e2; border-color: #f87171; }
 .cenil-theme .klepon-card-funfact-title { color: #b91c1c; }
+.cenil-theme .klepon-card-sparkle { color: #ff3e3e; }
 
 /* Yangko (Pink) */
 .yangko-theme .klepon-card-title { color: #db2777; }
@@ -3147,6 +3141,7 @@ body {
 .yangko-theme .klepon-card-info-label { color: #db2777; }
 .yangko-theme .klepon-card-funfact { background: #fdf2f8; border-color: #f9a8d4; }
 .yangko-theme .klepon-card-funfact-title { color: #9d174d; }
+.yangko-theme .klepon-card-sparkle { color: #f472b6; }
 
 /* Geplak (Yellow/Orange) */
 .geplak-theme .klepon-card-title { color: #d97706; }
@@ -3154,6 +3149,7 @@ body {
 .geplak-theme .klepon-card-info-label { color: #d97706; }
 .geplak-theme .klepon-card-funfact { background: #fffbeb; border-color: #fcd34d; }
 .geplak-theme .klepon-card-funfact-title { color: #92400e; }
+.geplak-theme .klepon-card-sparkle { color: #fbbf24; }
 
 /* Bakpia (Brown) */
 .bakpia-theme .klepon-card-title { color: #8b4513; }
@@ -3161,6 +3157,7 @@ body {
 .bakpia-theme .klepon-card-info-label { color: #8b4513; }
 .bakpia-theme .klepon-card-funfact { background: #fef3c7; border-color: #d97706; }
 .bakpia-theme .klepon-card-funfact-title { color: #92400e; }
+.bakpia-theme .klepon-card-sparkle { color: #9a3412; }
 
 /* Lemper (Light Green) */
 .lemper-theme .klepon-card-title { color: #166534; }
@@ -3168,6 +3165,7 @@ body {
 .lemper-theme .klepon-card-info-label { color: #166534; }
 .lemper-theme .klepon-card-funfact { background: #f0fdf4; border-color: #86efac; }
 .lemper-theme .klepon-card-funfact-title { color: #14532d; }
+.lemper-theme .klepon-card-sparkle { color: #4ade80; }
 
 /* Tiwul Ayu (Yellowish-Brown) */
 .tiwulayu-theme .klepon-card-title { color: #9a3412; }
@@ -3175,6 +3173,7 @@ body {
 .tiwulayu-theme .klepon-card-info-label { color: #9a3412; }
 .tiwulayu-theme .klepon-card-funfact { background: #fff7ed; border-color: #fdba74; }
 .tiwulayu-theme .klepon-card-funfact-title { color: #7c2d12; }
+.tiwulayu-theme .klepon-card-sparkle { color: #ea580c; }
 
 /* Jadah Tempe (Deep Brown) */
 .jadahtempe-theme .klepon-card-title { color: #431407; }
@@ -3182,4 +3181,6 @@ body {
 .jadahtempe-theme .klepon-card-info-label { color: #431407; }
 .jadahtempe-theme .klepon-card-funfact { background: #fffcf0; border-color: #d2b48c; }
 .jadahtempe-theme .klepon-card-funfact-title { color: #3e2723; }
+.jadahtempe-theme .klepon-card-sparkle { color: #431407; }
+
 

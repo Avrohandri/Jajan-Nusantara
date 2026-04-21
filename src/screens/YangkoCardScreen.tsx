@@ -35,7 +35,11 @@ export function YangkoCardScreen() {
         <div className="klepon-card-mascot-wrapper">
           <div className="klepon-card-sparkle top-left">✦</div>
           <div className="klepon-card-sparkle top-right">✦</div>
+          <div className="klepon-card-sparkle top-center">✦</div>
           <div className="klepon-card-sparkle bottom-left">✦</div>
+          <div className="klepon-card-sparkle bottom-right">✦</div>
+          <div className="klepon-card-sparkle mid-left">✦</div>
+          <div className="klepon-card-sparkle mid-right">✦</div>
           <img src="/assets/foods_jogja/02_Yangko.png" alt="Yangko Mascot" className="klepon-card-mascot" />
         </div>
 
