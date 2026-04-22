@@ -4,6 +4,7 @@ import { StepShapingMold } from '../features/pieSusu/StepShapingMold';
 import { StepPouringFilling } from '../features/pieSusu/StepPouringFilling';
 import { StepBakingOven } from '../features/pieSusu/StepBakingOven';
 import { StepPieIngredients } from '../features/pieSusu/StepPieIngredients';
+import backButtonImg from '../assets/universal/back button.png';
 
 const STEPS = [
   { label: 'Pilih Bahan',    desc: 'Pilih bahan untuk Pie Susu' },
@@ -65,7 +66,9 @@ export function PieSusuMiniGameScreen() {
 
       {/* ── Header bar ── */}
       <div className="klepon-topbar">
-        <button className="klepon-back-btn" onClick={handleBack}>←</button>
+        <button className="klepon-back-btn" onClick={handleBack} title="Kembali">
+          <img src={backButtonImg} alt="Back" className="klepon-back-icon-img" />
+        </button>
         <div className="klepon-topbar-title">
           <img src="/assets/foods_bali/02_pie susu.png" alt="" style={{ width: '28px', height: '28px', objectFit: 'contain', marginRight: '8px' }} />
           <span>Bikin Pie Susu</span>

@@ -4,6 +4,7 @@ import { StepCutBanana } from '../features/pisangasar/StepCutBanana';
 import { StepMixTopping } from '../features/pisangasar/StepMixTopping';
 import { StepSpreadTopping } from '../features/pisangasar/StepSpreadTopping';
 import { StepBakeOven } from '../features/pisangasar/StepBakeOven';
+import backButtonImg from '../assets/universal/back button.png';
 
 const STEPS = [
   { label: '', desc: '' },
@@ -60,7 +61,9 @@ export function PisangAsarMiniGameScreen() {
 
       {/* ── Header bar ── */}
       <div className="klepon-topbar">
-        <button className="klepon-back-btn" onClick={handleBack}>←</button>
+        <button className="klepon-back-btn" onClick={handleBack} title="Kembali">
+          <img src={backButtonImg} alt="Back" className="klepon-back-icon-img" />
+        </button>
         <div className="klepon-topbar-title">
           <img src="/assets/foods_maluku/06_pisang asar.png" alt="icon" style={{ height: '32px', marginRight: '8px', objectFit: 'contain' }} onError={(e) => { e.currentTarget.outerHTML = '<span style="font-size: 24px; margin-right: 8px;">🍌</span>'; }} />
           <span>Bikin Pisang Asar</span>

@@ -3,6 +3,7 @@ import { StepMatchIngredients } from '../features/samaloyang/StepMatchIngredient
 import { StepDoughMixing } from '../features/samaloyang/StepDoughMixing';
 import { StepDippingMold } from '../features/samaloyang/StepDippingMold';
 import { StepFrying } from '../features/samaloyang/StepFrying';
+import backButtonImg from '../assets/universal/back button.png';
 
 const STEPS = [
   { label: 'Kumpulkan Bahan', desc: 'Cocokkan tulisan dengan gambar bahan!' },
@@ -60,7 +61,9 @@ export function SamaloyangMiniGameScreen() {
 
       {/* ── Header bar ── */}
       <div className="klepon-topbar">
-        <button className="klepon-back-btn" onClick={handleBack}>←</button>
+        <button className="klepon-back-btn" onClick={handleBack} title="Kembali">
+          <img src={backButtonImg} alt="Back" className="klepon-back-icon-img" />
+        </button>
         <div className="klepon-topbar-title">
           <img 
             src="/assets/foods_aceh/00_samaloyang.png" 

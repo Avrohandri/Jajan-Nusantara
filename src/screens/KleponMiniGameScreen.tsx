@@ -4,6 +4,7 @@ import { StepMixing } from '../features/klepon/StepMixing';
 import { StepShaping } from '../features/klepon/StepShaping';
 import { StepBoiling } from '../features/klepon/StepBoiling';
 import { StepCoating } from '../features/klepon/StepCoating';
+import backButtonImg from '../assets/universal/back button.png';
 
 const STEPS = [
   { label: '🌾 Pilih Bahan',    desc: 'Pilih bahan yang tepat'   },
@@ -61,7 +62,9 @@ export function KleponMiniGameScreen() {
 
       {/* ── Header bar ── */}
       <div className="klepon-topbar">
-        <button className="klepon-back-btn" onClick={handleBack}>←</button>
+        <button className="klepon-back-btn" onClick={handleBack} title="Kembali">
+          <img src={backButtonImg} alt="Back" className="klepon-back-icon-img" />
+        </button>
         <div className="klepon-topbar-title">
           <img src="/assets/foods_jogja/00_Klepon.png" alt="" className="klepon-topbar-img" />
           <span>Bikin Klepon</span>

@@ -1687,22 +1687,27 @@ body {
 }
 
 .klepon-back-btn {
-  width: 40px;
-  height: 40px;
-  border: 2px solid rgba(255, 220, 160, 0.6);
-  border-radius: 50%;
-  background: rgba(255, 248, 220, 0.85);
-  font-size: 20px;
+  width: 54px;
+  height: 54px;
+  background: transparent;
+  border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.15s;
   flex-shrink: 0;
+  padding: 0;
 }
 
 .klepon-back-btn:active {
-  transform: scale(0.92);
+  transform: scale(0.9);
+}
+
+.klepon-back-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .klepon-topbar-title {

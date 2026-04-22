@@ -391,33 +391,33 @@ export class GameScene extends Phaser.Scene {
   }
 
   private checkGameOver() {
-    if (this.gameOver || !this.matter.world.enabled || !this.canDrop) return;
-    if (Date.now() - this.lastDropTime < 2500) return;
+    if (this.gameOver || !this.matter.world.enabled) return;
 
-    const DANGER_THRESHOLD_MS = 3000; // item must be above danger line for 3 seconds to trigger game over
+    const DANGER_THRESHOLD_MS = 3000; // item must stay above danger line for 3 seconds continuously
     const now = Date.now();
 
-    // Track which body IDs are currently in danger
+    // Track which body IDs are currently crossing the danger line
     const inDangerNow = new Set<number>();
 
     for (const item of this.activeItems) {
       if (!item.active || !item.body) continue;
       const body = item.body as MatterJS.BodyType;
-      const speed = Math.sqrt(body.velocity.x ** 2 + body.velocity.y ** 2);
 
-      // Skip items that are still very close to the spawn (just dropped)
+      // Skip items that were just spawned at the top (within spawn area)
       if (body.position.y <= this.spawnY + 5) continue;
 
-      if (speed < 0.2 && body.position.y < this.dangerLineY) {
+      // Trigger danger as soon as the collider top is above the danger line
+      // (no speed requirement — any item above the line counts)
+      if (body.position.y < this.dangerLineY) {
         inDangerNow.add(body.id);
 
         if (!this.dangerTimers.has(body.id)) {
-          // First frame this body enters the danger zone
+          // First frame this body crosses the danger line
           this.dangerTimers.set(body.id, now);
         } else {
           const enteredAt = this.dangerTimers.get(body.id)!;
           if (now - enteredAt >= DANGER_THRESHOLD_MS) {
-            // Has been in danger zone continuously for 3+ seconds
+            // Has been above the danger line continuously for 3+ seconds → game over
             this.gameOver = true;
             this.canDrop = false;
             this.matter.world.pause();
@@ -429,7 +429,7 @@ export class GameScene extends Phaser.Scene {
       }
     }
 
-    // Clear timers for bodies that are no longer in danger
+    // Reset timers for bodies that have fallen back below the danger line
     for (const id of this.dangerTimers.keys()) {
       if (!inDangerNow.has(id)) {
         this.dangerTimers.delete(id);
