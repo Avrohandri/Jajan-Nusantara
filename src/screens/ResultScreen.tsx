@@ -1,110 +1,151 @@
+import { useEffect, useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
-import { Button } from '../components/Button';
-import { Card } from '../components/Card';
+
+/* Map each region to its mascot image and cooking action */
+const REGION_CONFIG: Record<string, {
+  mascot: string;
+  foodName: string;
+  cookAction: () => void;
+  cookLabel: string;
+}> = {
+  jogja: {
+    mascot: '/assets/result_mascots/jadahtempe_jempol.png',
+    foodName: 'Jadah Tempe',
+    cookAction: () => useGameStore.getState().startKleponGame(),
+    cookLabel: 'Memasak Klepon',
+  },
+  bali: {
+    mascot: '/assets/result_mascots/pisangrai_jempol.png',
+    foodName: 'Pisang Rai',
+    cookAction: () => useGameStore.getState().startPieSusuGame(),
+    cookLabel: 'Memasak Pie Susu',
+  },
+  aceh: {
+    mascot: '/assets/result_mascots/kue adee_jempol.png',
+    foodName: 'Kue Adee',
+    cookAction: () => useGameStore.getState().startSamaloyangGame(),
+    cookLabel: 'Memasak Samaloyang',
+  },
+  maluku: {
+    mascot: '/assets/result_mascots/pisang asar_jempol.png',
+    foodName: 'Pisang Asar',
+    cookAction: () => useGameStore.getState().startPisangAsarGame(),
+    cookLabel: 'Memasak Pisang Asar',
+  },
+};
+
+/* Confetti particle data */
+const CONFETTI_COLORS = ['#FF6B35', '#FFD166', '#06D6A0', '#118AB2', '#EF476F', '#FFF'];
+const CONFETTI_COUNT = 22;
+
+function randomBetween(a: number, b: number) {
+  return a + Math.random() * (b - a);
+}
 
 export function ResultScreen() {
-  const {
-    score,
-    mergeCount,
-    quizzesCorrect,
-    quizzesTriggered,
-    highestTier,
-    startTime,
-    snacks,
-    setScreen,
-    startKleponGame,
-    startPieSusuGame,
-    startPisangAsarGame,
-    activeRegion,
-  } = useGameStore();
+  const { activeRegion, setScreen } = useGameStore();
 
-  const highestSnack = snacks.find(s => s.tier === highestTier);
-  const timePlayed = startTime ? Math.floor((Date.now() - startTime) / 1000) : 0;
-  const minutes = Math.floor(timePlayed / 60);
-  const seconds = timePlayed % 60;
-  const quizAccuracy = quizzesTriggered > 0
-    ? Math.round((quizzesCorrect / quizzesTriggered) * 100)
-    : 0;
+  const config = REGION_CONFIG[activeRegion] ?? REGION_CONFIG['jogja'];
+
+  /* Generate stable confetti pieces */
+  const confettiRef = useRef(
+    Array.from({ length: CONFETTI_COUNT }, (_, i) => ({
+      id: i,
+      left: randomBetween(2, 98),
+      delay: randomBetween(0, 2.5),
+      duration: randomBetween(2.2, 3.8),
+      size: randomBetween(8, 16),
+      color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+      rotate: randomBetween(0, 360),
+      wide: Math.random() > 0.5,
+    }))
+  );
+
+  /* Scroll to top on mount */
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
-    <div className="screen result-screen">
-      <h1 className="result-title">📊 Hasil Permainan</h1>
-
-      <div className="result-cards">
-        <Card title="Skor">
-          <p className="result-big-number">{score}</p>
-        </Card>
-        <Card title="Total Merge">
-          <p className="result-big-number">{mergeCount}</p>
-        </Card>
-        <Card title="Kuis">
-          <p className="result-big-number">{quizzesCorrect}/{quizzesTriggered}</p>
-          <p className="result-sub">{quizAccuracy}% akurasi</p>
-        </Card>
-        <Card title="Waktu">
-          <p className="result-big-number">{minutes}:{seconds.toString().padStart(2, '0')}</p>
-        </Card>
+    <div className="result-hebat-screen">
+      {/* Confetti */}
+      <div className="result-confetti-layer" aria-hidden="true">
+        {confettiRef.current.map((p) => (
+          <div
+            key={p.id}
+            className="result-confetti-piece"
+            style={{
+              left: `${p.left}%`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`,
+              width: p.wide ? p.size * 1.8 : p.size,
+              height: p.size,
+              background: p.color,
+              transform: `rotate(${p.rotate}deg)`,
+            }}
+          />
+        ))}
       </div>
 
-      {highestSnack && (
-        <div className="result-highlight">
-          <p>Jajanan Tertinggi Dicapai:</p>
-          <div className="result-snack">
-            <span
-              className="result-snack-circle"
-              style={{ backgroundColor: highestSnack.color }}
-            >
-              {highestSnack.emoji}
-            </span>
-            <span className="result-snack-name">{highestSnack.name}</span>
-          </div>
-        </div>
-      )}
+      {/* Top sparkle decoration */}
+      <div className="result-top-deco" aria-hidden="true">
+        <span className="result-sparkle result-sparkle--lg">✦</span>
+        <span className="result-sparkle result-sparkle--sm">✦</span>
+        <span className="result-sparkle result-sparkle--md">✦</span>
+      </div>
 
-      <div className="result-actions">
-        {activeRegion === 'aceh' ? (
-          <Button
-            variant="primary"
-            size="lg"
-            fullWidth
-            onClick={() => useGameStore.getState().startSamaloyangGame()}
-          >
-            ⚜️ Memasak Samaloyang — Minigame!
-          </Button>
-        ) : activeRegion === 'maluku' ? (
-          <Button
-            variant="primary"
-            size="lg"
-            fullWidth
-            onClick={startPisangAsarGame}
-          >
-            🍌 Memasak Pisang Asar — Minigame!
-          </Button>
-        ) : activeRegion === 'bali' ? (
-          <Button
-            variant="primary"
-            size="lg"
-            fullWidth
-            onClick={startPieSusuGame}
-          >
-            🥧 Memasak Pie Susu — Minigame!
-          </Button>
-        ) : (
-          <Button
-            variant="primary"
-            size="lg"
-            fullWidth
-            onClick={startKleponGame}
-          >
-            🍡 Memasak Klepon — Minigame!
-          </Button>
-        )}
-        <Button variant="secondary" fullWidth onClick={() => setScreen('game')}>
-          🔄 Main Lagi
-        </Button>
-        <Button variant="accent" fullWidth onClick={() => setScreen('mainMenu')}>
-          🏠 Kembali
-        </Button>
+      {/* HEBAT! title */}
+      <div className="result-hebat-title-wrap">
+        <h1 className="result-hebat-title">HEBAT!</h1>
+      </div>
+
+      {/* Subtitle banner */}
+      <div className="result-banner-wrap">
+        <div className="result-banner">
+          <span>Kamu berhasil mencocokkan kuliner!</span>
+        </div>
+      </div>
+
+      {/* Mascot image */}
+      <div className="result-mascot-wrap">
+        {/* Glow ring */}
+        <div className="result-mascot-glow" aria-hidden="true" />
+
+        <img
+          src={config.mascot}
+          alt={`Maskot ${config.foodName} jempol`}
+          className="result-mascot-img"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).style.opacity = '0';
+          }}
+        />
+
+        {/* Side sparkles */}
+        <span className="result-side-spark result-side-spark--left">✨</span>
+        <span className="result-side-spark result-side-spark--right">⭐</span>
+      </div>
+
+      {/* Info card */}
+      <div className="result-info-card">
+        <p className="result-info-main">Sekarang saatnya kita memasak!</p>
+        <p className="result-info-sub">Siap jadi koki hebat?</p>
+      </div>
+
+      {/* Action buttons */}
+      <div className="result-actions-wrap">
+        <button
+          className="result-lanjut-btn"
+          onClick={config.cookAction}
+        >
+          LANJUT MEMASAK
+        </button>
+
+        <button
+          className="result-back-btn"
+          onClick={() => setScreen('mainMenu')}
+        >
+          Kembali ke Menu
+        </button>
       </div>
     </div>
   );
