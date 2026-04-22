@@ -21,13 +21,36 @@ const FOOD_CARD_SCREENS: Record<string, string> = {
   '05_Lemper': 'lemperCard',
   '06_TiwulAyu': 'tiwulAyuCard',
   '07_JadahTempe': 'jadahTempeCard',
+  // Bali
+  '00_laklak': 'laklakCard',
+  '01_kaliadrem': 'kaliadremCard',
+  '02_pie susu': 'pieSusuCard',
+  '03_jaje walik': 'jajeWalikCard',
+  '04_bendu': 'benduCard',
+  '05_jaje uli': 'jajeUliCard',
+  '06_pisang rai': 'pisangRaiCard',
+  // Aceh
+  '00_samaloyang': 'samaloyangCard',
+  '01_timphan': 'timphanCard',
+  '02_pulot ijo': 'pulotIjoCard',
+  '03_keukarah': 'keukarahCard',
+  '04_bungong kayee': 'bungongKayeeCard',
+  '05_meuseukat': 'meuseukatCard',
+  '06_kue adee': 'kueAdeeCard',
+  // Maluku
+  '00_koyabu': 'koyabuCard',
+  '01_sagu lempeng': 'saguLempengCard',
+  '02_sagu gula': 'sagugulaCard',
+  '03_talam sagu bakar': 'talamsaguBakarCard',
+  '04_asida': 'asidaCard',
+  '05_kue bagea': 'kuebageaCard',
+  '06_pisang asar': 'pisangasarCard',
 };
 
 
 
 export function JajanpediaScreen() {
-  const { setScreen } = useGameStore();
-  const [regionIndex, setRegionIndex] = useState(0);
+  const { setScreen, jajanpediaRegionIndex: regionIndex, setJajanpediaRegionIndex: setRegionIndexStore } = useGameStore();
 
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -56,11 +79,13 @@ export function JajanpediaScreen() {
   };
 
   const prevRegion = () => {
-    setRegionIndex((prev) => (prev > 0 ? prev - 1 : REGIONS.length - 1));
+    const nextIdx = regionIndex > 0 ? regionIndex - 1 : REGIONS.length - 1;
+    setRegionIndexStore(nextIdx);
   };
 
   const nextRegion = () => {
-    setRegionIndex((prev) => (prev < REGIONS.length - 1 ? prev + 1 : 0));
+    const nextIdx = regionIndex < REGIONS.length - 1 ? regionIndex + 1 : 0;
+    setRegionIndexStore(nextIdx);
   };
 
   const currentRegion = REGIONS[regionIndex];

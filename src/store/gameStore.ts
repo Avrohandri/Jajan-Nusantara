@@ -8,6 +8,8 @@ interface GameStore {
   setScreen: (screen: ScreenName) => void;
   activeRegion: string;
   setActiveRegion: (region: string) => void;
+  jajanpediaRegionIndex: number;
+  setJajanpediaRegionIndex: (index: number) => void;
 
   // --- Game Content (from Firestore / fallback) ---
   snacks: SnackData[];
@@ -109,6 +111,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   setScreen: (screen) => set({ currentScreen: screen }),
   activeRegion: 'jogja',
   setActiveRegion: (region) => set({ activeRegion: region }),
+  jajanpediaRegionIndex: 0,
+  setJajanpediaRegionIndex: (index) => set({ jajanpediaRegionIndex: index }),
 
   // Content
   snacks: [],

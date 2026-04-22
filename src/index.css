@@ -3183,4 +3183,178 @@ body {
 .jadahtempe-theme .klepon-card-funfact-title { color: #3e2723; }
 .jadahtempe-theme .klepon-card-sparkle { color: #431407; }
 
+/* --- Bali Snacks Themes --- */
+
+/* Laklak (Hijau Tua) */
+.laklak-theme .klepon-card-title { color: #1b4d3e; }
+.laklak-theme .klepon-highlight { color: #1b4d3e; }
+.laklak-theme .klepon-card-info-label { color: #1b4d3e; }
+.laklak-theme .klepon-card-funfact { background: #e6f3ef; border-color: #3d8c7a; }
+.laklak-theme .klepon-card-funfact-title { color: #1b4d3e; }
+.laklak-theme .klepon-card-sparkle { color: #2d5a27; }
+
+/* Kaliadrem (Coklat Tua) */
+.kaliadrem-theme .klepon-card-title { color: #3d2717; }
+.kaliadrem-theme .klepon-highlight { color: #3d2717; }
+.kaliadrem-theme .klepon-card-info-label { color: #3d2717; }
+.kaliadrem-theme .klepon-card-funfact { background: #efebe9; border-color: #8d6e63; }
+.kaliadrem-theme .klepon-card-funfact-title { color: #3d2717; }
+.kaliadrem-theme .klepon-card-sparkle { color: #5d4037; }
+
+/* Pie Susu (Kuning) */
+.piesusu-theme .klepon-card-title { color: #eab308; }
+.piesusu-theme .klepon-highlight { color: #eab308; }
+.piesusu-theme .klepon-card-info-label { color: #eab308; }
+.piesusu-theme .klepon-card-funfact { background: #fefce8; border-color: #fde047; }
+.piesusu-theme .klepon-card-funfact-title { color: #854d0e; }
+.piesusu-theme .klepon-card-sparkle { color: #facc15; }
+
+/* Jaje Walik (Coklat Muda) */
+.jajewalik-theme .klepon-card-title { color: #9c6644; }
+.jajewalik-theme .klepon-highlight { color: #9c6644; }
+.jajewalik-theme .klepon-card-info-label { color: #9c6644; }
+.jajewalik-theme .klepon-card-funfact { background: #f7ede2; border-color: #ddb892; }
+.jajewalik-theme .klepon-card-funfact-title { color: #7f5539; }
+.jajewalik-theme .klepon-card-sparkle { color: #b08968; }
+
+/* Bendu (Ungu) */
+.bendu-theme .klepon-card-title { color: #6b21a8; }
+.bendu-theme .klepon-highlight { color: #6b21a8; }
+.bendu-theme .klepon-card-info-label { color: #6b21a8; }
+.bendu-theme .klepon-card-funfact { background: #f5f3ff; border-color: #ddd6fe; }
+.bendu-theme .klepon-card-funfact-title { color: #5b21b6; }
+.bendu-theme .klepon-card-sparkle { color: #a78bfa; }
+
+/* Jaje Uli (Putih Krem) */
+.jajeuli-theme .klepon-card-title { color: #8b7355; }
+.jajeuli-theme .klepon-highlight { color: #8b7355; }
+.jajeuli-theme .klepon-card-info-label { color: #8b7355; }
+.jajeuli-theme .klepon-card-funfact { background: #fafaf9; border-color: #e7e5e4; }
+.jajeuli-theme .klepon-card-funfact-title { color: #57534e; }
+.jajeuli-theme .klepon-card-sparkle { color: #d6d3d1; }
+
+/* Pisang Rai (Kuning Krem) */
+.pisangrai-theme .klepon-card-title { color: #a16207; }
+.pisangrai-theme .klepon-highlight { color: #a16207; }
+.pisangrai-theme .klepon-card-info-label { color: #a16207; }
+.pisangrai-theme .klepon-card-funfact { background: #fefce8; border-color: #fef08a; }
+.pisangrai-theme .klepon-card-funfact-title { color: #713f12; }
+.pisangrai-theme .klepon-card-sparkle { color: #eab308; }
+
+/* --- Aceh Snacks Themes --- */
+
+/* Samaloyang (Coklat Tua) */
+.samaloyang-theme .klepon-card-title { color: #3d2717; }
+.samaloyang-theme .klepon-highlight { color: #3d2717; }
+.samaloyang-theme .klepon-card-info-label { color: #3d2717; }
+.samaloyang-theme .klepon-card-funfact { background: #efebe9; border-color: #8d6e63; }
+.samaloyang-theme .klepon-card-funfact-title { color: #3d2717; }
+.samaloyang-theme .klepon-card-sparkle { color: #5d4037; }
+
+/* Timphan (Hijau Daun Pisang) */
+.timphan-theme .klepon-card-title { color: #2d5a27; }
+.timphan-theme .klepon-highlight { color: #2d5a27; }
+.timphan-theme .klepon-card-info-label { color: #2d5a27; }
+.timphan-theme .klepon-card-funfact { background: #f0fdf4; border-color: #4ade80; }
+.timphan-theme .klepon-card-funfact-title { color: #166534; }
+.timphan-theme .klepon-card-sparkle { color: #22c55e; }
+
+/* Pulot Ijo (Hijau Muda) */
+.pulotijo-theme .klepon-card-title { color: #166534; }
+.pulotijo-theme .klepon-highlight { color: #166534; }
+.pulotijo-theme .klepon-card-info-label { color: #166534; }
+.pulotijo-theme .klepon-card-funfact { background: #f0fdf4; border-color: #86efac; }
+.pulotijo-theme .klepon-card-funfact-title { color: #14532d; }
+.pulotijo-theme .klepon-card-sparkle { color: #4ade80; }
+
+/* Keukarah (Merah Muda) */
+.keukarah-theme .klepon-card-title { color: #be185d; }
+.keukarah-theme .klepon-highlight { color: #be185d; }
+.keukarah-theme .klepon-card-info-label { color: #be185d; }
+.keukarah-theme .klepon-card-funfact { background: #fdf2f8; border-color: #f9a8d4; }
+.keukarah-theme .klepon-card-funfact-title { color: #9d174d; }
+.keukarah-theme .klepon-card-sparkle { color: #f472b6; }
+
+/* Bungong Kayee (Putih Krem) */
+.bungongkayee-theme .klepon-card-title { color: #8b7355; }
+.bungongkayee-theme .klepon-highlight { color: #8b7355; }
+.bungongkayee-theme .klepon-card-info-label { color: #8b7355; }
+.bungongkayee-theme .klepon-card-funfact { background: #fafaf9; border-color: #e7e5e4; }
+.bungongkayee-theme .klepon-card-funfact-title { color: #57534e; }
+.bungongkayee-theme .klepon-card-sparkle { color: #d6d3d1; }
+
+/* Meuseukat (Kuning) */
+.meuseukat-theme .klepon-card-title { color: #a16207; }
+.meuseukat-theme .klepon-highlight { color: #a16207; }
+.meuseukat-theme .klepon-card-info-label { color: #a16207; }
+.meuseukat-theme .klepon-card-funfact { background: #fefce8; border-color: #fde047; }
+.meuseukat-theme .klepon-card-funfact-title { color: #854d0e; }
+.meuseukat-theme .klepon-card-sparkle { color: #facc15; }
+
+/* Kue Adee (Coklat Muda) */
+.kueadee-theme .klepon-card-title { color: #9c6644; }
+.kueadee-theme .klepon-highlight { color: #9c6644; }
+.kueadee-theme .klepon-card-info-label { color: #9c6644; }
+.kueadee-theme .klepon-card-funfact { background: #f7ede2; border-color: #ddb892; }
+.kueadee-theme .klepon-card-funfact-title { color: #7f5539; }
+.kueadee-theme .klepon-card-sparkle { color: #b08968; }
+
+/* --- Maluku Snacks Themes --- */
+
+/* Koyabu (Oranye) */
+.koyabu-theme .klepon-card-title { color: #ea580c; }
+.koyabu-theme .klepon-highlight { color: #ea580c; }
+.koyabu-theme .klepon-card-info-label { color: #ea580c; }
+.koyabu-theme .klepon-card-funfact { background: #fff7ed; border-color: #fdba74; }
+.koyabu-theme .klepon-card-funfact-title { color: #c2410c; }
+.koyabu-theme .klepon-card-sparkle { color: #f97316; }
+
+/* Sagu Lempeng (Pink) */
+.sagulempeng-theme .klepon-card-title { color: #db2777; }
+.sagulempeng-theme .klepon-highlight { color: #db2777; }
+.sagulempeng-theme .klepon-card-info-label { color: #db2777; }
+.sagulempeng-theme .klepon-card-funfact { background: #fdf2f8; border-color: #f9a8d4; }
+.sagulempeng-theme .klepon-card-funfact-title { color: #9d174d; }
+.sagulempeng-theme .klepon-card-sparkle { color: #f472b6; }
+
+/* Sagu Gula (Coklat) */
+.sagugula-theme .klepon-card-title { color: #78350f; }
+.sagugula-theme .klepon-highlight { color: #78350f; }
+.sagugula-theme .klepon-card-info-label { color: #78350f; }
+.sagugula-theme .klepon-card-funfact { background: #fffcf0; border-color: #d2b48c; }
+.sagugula-theme .klepon-card-funfact-title { color: #431407; }
+.sagugula-theme .klepon-card-sparkle { color: #92400e; }
+
+/* Talam Sagu Bakar (Krem) */
+.talamsagubakar-theme .klepon-card-title { color: #8b7355; }
+.talamsagubakar-theme .klepon-highlight { color: #8b7355; }
+.talamsagubakar-theme .klepon-card-info-label { color: #8b7355; }
+.talamsagubakar-theme .klepon-card-funfact { background: #fafaf9; border-color: #e7e5e4; }
+.talamsagubakar-theme .klepon-card-funfact-title { color: #57534e; }
+.talamsagubakar-theme .klepon-card-sparkle { color: #d6d3d1; }
+
+/* Asida (Coklat Kehitaman) */
+.asida-theme .klepon-card-title { color: #2d1a12; }
+.asida-theme .klepon-highlight { color: #2d1a12; }
+.asida-theme .klepon-card-info-label { color: #2d1a12; }
+.asida-theme .klepon-card-funfact { background: #f5f5f4; border-color: #a8a29e; }
+.asida-theme .klepon-card-funfact-title { color: #1c1917; }
+.asida-theme .klepon-card-sparkle { color: #44403c; }
+
+/* Kue Bagea (Coklat Krem) */
+.kuebagea-theme .klepon-card-title { color: #9c6644; }
+.kuebagea-theme .klepon-highlight { color: #9c6644; }
+.kuebagea-theme .klepon-card-info-label { color: #9c6644; }
+.kuebagea-theme .klepon-card-funfact { background: #f7ede2; border-color: #ddb892; }
+.kuebagea-theme .klepon-card-funfact-title { color: #7f5539; }
+.kuebagea-theme .klepon-card-sparkle { color: #b08968; }
+
+/* Pisang Asar (Kuning) */
+.pisangasar-theme .klepon-card-title { color: #a16207; }
+.pisangasar-theme .klepon-highlight { color: #a16207; }
+.pisangasar-theme .klepon-card-info-label { color: #a16207; }
+.pisangasar-theme .klepon-card-funfact { background: #fefce8; border-color: #fde047; }
+.pisangasar-theme .klepon-card-funfact-title { color: #854d0e; }
+.pisangasar-theme .klepon-card-sparkle { color: #facc15; }
+
 
