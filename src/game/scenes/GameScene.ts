@@ -24,6 +24,7 @@ export class GameScene extends Phaser.Scene {
   private dropIndicator: Phaser.GameObjects.Graphics | null = null;
   private previewSprite: Phaser.GameObjects.Sprite | null = null;
   private dangerLine: Phaser.GameObjects.Graphics | null = null;
+  private dangerTimers: Map<number, number> = new Map(); // bodyId -> timestamp when first entered danger zone
   private pointerX = 0;
 
   private currentRegion: string = 'jogja';
@@ -393,20 +394,45 @@ export class GameScene extends Phaser.Scene {
     if (this.gameOver || !this.matter.world.enabled || !this.canDrop) return;
     if (Date.now() - this.lastDropTime < 2500) return;
 
+    const DANGER_THRESHOLD_MS = 3000; // item must be above danger line for 3 seconds to trigger game over
+    const now = Date.now();
+
+    // Track which body IDs are currently in danger
+    const inDangerNow = new Set<number>();
+
     for (const item of this.activeItems) {
       if (!item.active || !item.body) continue;
       const body = item.body as MatterJS.BodyType;
-
       const speed = Math.sqrt(body.velocity.x ** 2 + body.velocity.y ** 2);
 
-      if (speed < 0.2 && body.position.y < this.dangerLineY) {
-        if (body.position.y <= this.spawnY + 5) continue;
+      // Skip items that are still very close to the spawn (just dropped)
+      if (body.position.y <= this.spawnY + 5) continue;
 
-        this.gameOver = true;
-        this.canDrop = false;
-        this.matter.world.pause();
-        EventBus.emit('game-over');
-        return;
+      if (speed < 0.2 && body.position.y < this.dangerLineY) {
+        inDangerNow.add(body.id);
+
+        if (!this.dangerTimers.has(body.id)) {
+          // First frame this body enters the danger zone
+          this.dangerTimers.set(body.id, now);
+        } else {
+          const enteredAt = this.dangerTimers.get(body.id)!;
+          if (now - enteredAt >= DANGER_THRESHOLD_MS) {
+            // Has been in danger zone continuously for 3+ seconds
+            this.gameOver = true;
+            this.canDrop = false;
+            this.matter.world.pause();
+            this.dangerTimers.clear();
+            EventBus.emit('game-over');
+            return;
+          }
+        }
+      }
+    }
+
+    // Clear timers for bodies that are no longer in danger
+    for (const id of this.dangerTimers.keys()) {
+      if (!inDangerNow.has(id)) {
+        this.dangerTimers.delete(id);
       }
     }
   }

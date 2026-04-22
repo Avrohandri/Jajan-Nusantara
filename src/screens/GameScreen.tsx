@@ -22,7 +22,6 @@ export function GameScreen() {
     resetGame,
     setScreen,
     endSession,
-    snacks,
     highestTier,
     seenTiers,
     activeRegion,
@@ -82,8 +81,8 @@ export function GameScreen() {
     setHasSeenInstructions();
   };
 
-  // Find highest snack name
-  const highestSnack = snacks.find(s => s.tier === highestTier);
+  // Get highest food name directly from config (region-aware, does not depend on Firestore snacks)
+  const highestFoodName = currentConfig[highestTier]?.name ?? null;
 
   return (
     <div className="screen game-screen">
@@ -171,8 +170,8 @@ export function GameScreen() {
           <div className="game-over-content">
             <h2>Permainan Selesai! 🎉</h2>
             <p>Skor Akhir: <strong>{score}</strong></p>
-            {highestSnack && (
-              <p>Jajanan Tertinggi: {highestSnack.emoji} {highestSnack.name}</p>
+            {highestFoodName && (
+              <p>Jajanan Tertinggi: {highestFoodName}</p>
             )}
             <br />
             <Button variant="primary" size="lg" fullWidth onClick={handleEndGame}>
