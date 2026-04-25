@@ -44,7 +44,7 @@ export const JOGJA_FOOD_CONFIG: FoodItem[] = [
   },
   {
     tier: 4, name: "04_Bakpia", textureKey: "04_Bakpia", color: 0xD4A373,
-    colliderType: "circle", colliderOptions: { radius: 42 }, displaySize: { width: 82, height: 92 },
+    colliderType: "circle", colliderOptions: { radius: 42 }, displaySize: { width: 82, height: 85 },
     mergeScore: 50, nextTier: 5, funFact: "Bakpia — Kue dengan kejutan manis di dalamnya!"
   },
   {
@@ -115,7 +115,7 @@ export const ACEH_FOOD_CONFIG: FoodItem[] = [
   {
     tier: 0, name: "Samaloyang", textureKey: "00_samaloyang", color: 0xFF8C00,
     colliderType: "circle", colliderOptions: { radius: 23 }, displaySize: { width: 47, height: 47 },
-    mergeScore: 10, nextTier: 1, funFact: "Samaloyang: Kue Aceh Barat, dimasak pakai cetakan besi."
+    mergeScore: 10, nextTier: 1, funFact: "Samaloyang: Kue Aceh Barat, digoreng menggunakan cetakan besi."
   },
   {
     tier: 1, name: "Timphan", textureKey: "01_timphan", color: 0x3CB371,
@@ -129,7 +129,7 @@ export const ACEH_FOOD_CONFIG: FoodItem[] = [
         { x: -32, y: -12 },  // kiri atas
       ]
     }, displaySize: { width: 80, height: 80 },
-    mergeScore: 20, nextTier: 2, funFact: "Timphan: Sajian hari besar, isi pisang/kelapa manis."
+    mergeScore: 20, nextTier: 2, funFact: "Timphan: Sajian hari besar, isian pisang/kelapa manis."
   },
   {
     tier: 2, name: "Pulut Ijo", textureKey: "02_pulot ijo", color: 0x32CD32,
