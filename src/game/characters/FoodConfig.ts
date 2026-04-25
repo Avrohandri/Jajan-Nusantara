@@ -44,7 +44,7 @@ export const JOGJA_FOOD_CONFIG: FoodItem[] = [
   },
   {
     tier: 4, name: "04_Bakpia", textureKey: "04_Bakpia", color: 0xD4A373,
-    colliderType: "circle", colliderOptions: { radius: 42 }, displaySize: { width: 82, height: 85 },
+    colliderType: "circle", colliderOptions: { radius: 42 }, displaySize: { width: 82, height: 87 },
     mergeScore: 50, nextTier: 5, funFact: "Bakpia — Kue dengan kejutan manis di dalamnya!"
   },
   {
