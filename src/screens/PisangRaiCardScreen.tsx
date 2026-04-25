@@ -53,7 +53,7 @@ export function PisangRaiCardScreen() {
         {/* About Box */}
         <div className="klepon-card-about-box">
           <p className="klepon-card-about-text">
-            Pisang rai adalah pisang yang dibungkus adonan tepung lalu direbus. Disajikan dengan <span className="klepon-highlight">kelapa parut</span> dan <span className="klepon-highlight">gula merah</span> yang manis.
+            Pisang rai adalah pisang yang dibungkus adonan tepung lalu dikukus. Disajikan dengan <span className="klepon-highlight">kelapa parut</span> dan <span className="klepon-highlight">gula merah</span> yang manis.
           </p>
         </div>
 

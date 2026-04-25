@@ -6,7 +6,7 @@ interface Props {
 
 const KLEPON_COUNT = 3;
 
-export function StepBoiling({ onComplete }: Props) {
+export function StepSteaming({ onComplete }: Props) {
   const [inPan, setInPan] = useState<boolean[]>(Array(KLEPON_COUNT).fill(false));
   const [boiling, setBoiling] = useState(false);
   const [done, setDone] = useState(false);
@@ -24,7 +24,7 @@ export function StepBoiling({ onComplete }: Props) {
     if (allIn && !boilingStartedRef.current) {
       boilingStartedRef.current = true;
       setBoiling(true);
-      // Start bubble animation
+      // Start bubble animation (simulating steam/heat)
       bubbleInterval.current = setInterval(() => {
         setBubbles(prev => {
           const newBubble = { id: bubbleIdRef.current++, x: 20 + Math.random() * 60 };
@@ -107,10 +107,10 @@ export function StepBoiling({ onComplete }: Props) {
   return (
     <div className="klepon-step-content">
       <p className="klepon-instruction">
-        Drag klepon ke dalam panci perebus! 🫕
+        Drag klepon ke dalam pengukus! 🫕
       </p>
 
-      {/* Kompor & Panci */}
+      {/* Kompor & Panci/Pengukus */}
       <div className="boiling-scene">
         <div className="stove-area">
 
@@ -175,7 +175,7 @@ export function StepBoiling({ onComplete }: Props) {
       </div>
 
       {boiling && !done && (
-        <p className="boiling-status">💧 Merebus... tunggu sebentar!</p>
+        <p className="boiling-status">💧 Mengukus... tunggu sebentar!</p>
       )}
       {done && (
         <p className="boiling-status" style={{ color: '#7CAD58' }}>✅ Klepon matang!</p>

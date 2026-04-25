@@ -2,7 +2,7 @@ import { useGameStore } from '../store/gameStore';
 import { StepIngredients } from '../features/klepon/StepIngredients';
 import { StepMixing } from '../features/klepon/StepMixing';
 import { StepShaping } from '../features/klepon/StepShaping';
-import { StepBoiling } from '../features/klepon/StepBoiling';
+import { StepSteaming } from '../features/klepon/StepSteaming';
 import { StepCoating } from '../features/klepon/StepCoating';
 import backButtonImg from '../assets/universal/back button.png';
 
@@ -10,7 +10,7 @@ const STEPS = [
   { label: '🌾 Pilih Bahan',    desc: 'Pilih bahan yang tepat'   },
   { label: '🥄 Aduk Adonan',    desc: 'Campur hingga merata'      },
   { label: 'Bentuk Klepon',  desc: 'Bulatkan & isi gula merah' },
-  { label: 'Rebus Klepon',   desc: 'Rebus hingga matang'       },
+  { label: 'Kukus Klepon',   desc: 'Kukus hingga matang'       },
   { label: 'Taburi Kelapa',  desc: 'Balut dengan kelapa parut' },
 ];
 
@@ -101,7 +101,7 @@ export function KleponMiniGameScreen() {
           <div className="klepon-generic-body">
             {kleponStep === 1 && <StepMixing   onComplete={advanceKleponStep} />}
             {kleponStep === 2 && <StepShaping  onComplete={advanceKleponStep} />}
-            {kleponStep === 3 && <StepBoiling  onComplete={advanceKleponStep} />}
+            {kleponStep === 3 && <StepSteaming  onComplete={advanceKleponStep} />}
             {kleponStep === 4 && <StepCoating  onComplete={advanceKleponStep} />}
           </div>
         </div>

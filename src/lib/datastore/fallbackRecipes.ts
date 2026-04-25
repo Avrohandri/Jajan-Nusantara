@@ -7,7 +7,7 @@ export const fallbackRecipes: RecipeData[] = [
       { stepNumber: 1, instruction: 'Campurkan tepung ketan dengan air daun pandan', emoji: '🌿' },
       { stepNumber: 2, instruction: 'Ambil adonan, isi dengan gula merah', emoji: '🟤' },
       { stepNumber: 3, instruction: 'Bulatkan adonan dengan tangan', emoji: '🟢' },
-      { stepNumber: 4, instruction: 'Rebus dalam air mendidih hingga mengapung', emoji: '♨️' },
+      { stepNumber: 4, instruction: 'Kukus hingga matang dan mengapung', emoji: '♨️' },
       { stepNumber: 5, instruction: 'Gulingkan di kelapa parut segar', emoji: '🥥' },
     ],
   },
