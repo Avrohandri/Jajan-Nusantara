@@ -8,7 +8,7 @@ export function ProgressScreen() {
     setScreen,
     loadProfile,
     totalSessions,
-    bestScore,
+    totalBestScore,
     totalMerges,
     totalQuizzesCorrect,
     totalQuizzesAnswered,
@@ -44,7 +44,7 @@ export function ProgressScreen() {
           <p className="stat-number">{totalSessions}</p>
         </Card>
         <Card title="Skor Terbaik">
-          <p className="stat-number">{bestScore}</p>
+          <p className="stat-number">{totalBestScore}</p>
         </Card>
         <Card title="Total Merge">
           <p className="stat-number">{totalMerges}</p>
