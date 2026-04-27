@@ -29,6 +29,14 @@ function usernameToEmail(username: string): string {
   return `${username.toLowerCase().trim()}@sukikuliner.game`;
 }
 
+/**
+ * Buat password konsisten berdasarkan username untuk keperluan passwordless login.
+ * Minimal 6 karakter.
+ */
+function getPasswordForUsername(username: string): string {
+  return `SukiPass#${username.toLowerCase().trim()}`;
+}
+
 export function isFirebaseConfigured(): boolean {
   return Boolean(firebaseConfig.apiKey && firebaseConfig.projectId);
 }
@@ -49,12 +57,13 @@ export function initFirebase() {
 }
 
 /**
- * Daftarkan user baru dengan username + password.
+ * Daftarkan user baru dengan username saja (menggunakan password hardcode).
  * @returns uid jika berhasil, atau melempar Error dengan pesan user-friendly
  */
-export async function registerWithUsername(username: string, password: string): Promise<string> {
+export async function registerWithUsername(username: string): Promise<string> {
   if (!auth) throw new Error('Firebase belum diinisialisasi.');
   const email = usernameToEmail(username);
+  const password = getPasswordForUsername(username);
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     return cred.user.uid;
@@ -72,19 +81,20 @@ export async function registerWithUsername(username: string, password: string): 
 }
 
 /**
- * Login dengan username + password.
+ * Login dengan username saja.
  * @returns uid jika berhasil, atau melempar Error dengan pesan user-friendly
  */
-export async function loginWithUsername(username: string, password: string): Promise<string> {
+export async function loginWithUsername(username: string): Promise<string> {
   if (!auth) throw new Error('Firebase belum diinisialisasi.');
   const email = usernameToEmail(username);
+  const password = getPasswordForUsername(username);
   try {
     const cred = await signInWithEmailAndPassword(auth, email, password);
     return cred.user.uid;
   } catch (e: unknown) {
     const code = (e as { code?: string }).code;
     if (code === 'auth/user-not-found' || code === 'auth/wrong-password' || code === 'auth/invalid-credential') {
-      throw new Error('Username atau password salah.');
+      throw new Error('Username tidak ditemukan.');
     }
     console.error('[Firebase] Login gagal:', e);
     throw new Error('Gagal masuk. Coba lagi.');

@@ -6,7 +6,6 @@ export function LoginScreen() {
   const { register, login, authError, authLoading, setAuthError } = useGameStore();
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
 
   const errorMessage =
     authError === 'USERNAME_TAKEN'
@@ -15,7 +14,7 @@ export function LoginScreen() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username.trim() || !password) return;
+    if (!username.trim()) return;
     setAuthError(null);
 
     if (mode === 'register') {
@@ -23,13 +22,9 @@ export function LoginScreen() {
         setAuthError('Username minimal 3 karakter.');
         return;
       }
-      if (password.length < 6) {
-        setAuthError('Password minimal 6 karakter.');
-        return;
-      }
-      await register(username.trim(), password);
+      await register(username.trim());
     } else {
-      await login(username.trim(), password);
+      await login(username.trim());
     }
     // Jika berhasil, store otomatis set isLoggedIn → App.tsx render MainMenu
   };
@@ -38,7 +33,6 @@ export function LoginScreen() {
     setMode(m => (m === 'login' ? 'register' : 'login'));
     setAuthError(null);
     setUsername('');
-    setPassword('');
   };
 
   return (
@@ -79,22 +73,6 @@ export function LoginScreen() {
             />
           </div>
 
-          <div className="login-field">
-            <label htmlFor="login-password" className="login-label">
-              Password
-            </label>
-            <input
-              id="login-password"
-              type="password"
-              className="login-input"
-              placeholder={mode === 'register' ? 'Minimal 6 karakter...' : 'Masukkan password...'}
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              disabled={authLoading}
-              autoComplete="new-password"
-            />
-          </div>
-
           {/* Error notification */}
           {errorMessage && (
             <div className="login-error" role="alert">
@@ -105,7 +83,7 @@ export function LoginScreen() {
           <button
             type="submit"
             className="login-submit-btn"
-            disabled={authLoading || !username.trim() || !password}
+            disabled={authLoading || !username.trim()}
             id="btn-login-submit"
           >
             {authLoading ? (

@@ -114,8 +114,8 @@ interface GameStore {
   authError: string | null;
   authLoading: boolean;
   setUserId: (uid: string) => void;
-  register: (username: string, password: string) => Promise<void>;
-  login: (username: string, password: string) => Promise<void>;
+  register: (username: string) => Promise<void>;
+  login: (username: string) => Promise<void>;
   logout: () => Promise<void>;
   setAuthError: (msg: string | null) => void;
   setProfileIcon: (icon: string) => Promise<void>;
@@ -331,7 +331,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     await updateProfileIcon(userId, username, icon);
   },
 
-  register: async (username, password) => {
+  register: async (username) => {
     set({ authLoading: true, authError: null });
     try {
       // Cek dulu apakah username sudah dipakai
@@ -340,7 +340,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         set({ authError: 'USERNAME_TAKEN', authLoading: false });
         return;
       }
-      const uid = await registerWithUsername(username, password);
+      const uid = await registerWithUsername(username);
       // Simpan mapping username → userId
       await saveUsername(uid, username);
       // Buat profil default
@@ -363,10 +363,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
 
-  login: async (username, password) => {
+  login: async (username) => {
     set({ authLoading: true, authError: null });
     try {
-      const uid = await loginWithUsername(username, password);
+      const uid = await loginWithUsername(username);
       const profile = await getProfile(uid);
       if (!profile) {
         set({ authError: 'Profil tidak ditemukan.', authLoading: false });

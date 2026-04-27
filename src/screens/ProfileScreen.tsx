@@ -59,8 +59,12 @@ export function ProfileScreen() {
   };
 
   return (
-    <div className="profile-screen">
-      {/* Header */}
+    <div className="profile-screen" style={{ position: 'relative', minHeight: '100vh' }}>
+      <div className="leaderboard-pedia-bg"></div>
+      <div className="leaderboard-pedia-overlay"></div>
+      
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        {/* Header */}
       <div className="profile-header">
         <button
           type="button"
@@ -71,7 +75,7 @@ export function ProfileScreen() {
         >
           <img src={backButtonImg} alt="Back" className="map-back-icon-img" />
         </button>
-        <h1 className="profile-title">Profil Pemain</h1>
+        <h1 className="profile-title">{username}</h1>
       </div>
 
       {/* Profile card */}
@@ -88,7 +92,6 @@ export function ProfileScreen() {
           </button>
         </div>
 
-        <div className="profile-username">{username}</div>
 
         {/* Island progress row */}
         <div className="profile-islands">
@@ -164,6 +167,7 @@ export function ProfileScreen() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
