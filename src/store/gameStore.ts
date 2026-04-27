@@ -1,6 +1,33 @@
 import { create } from 'zustand';
-import type { SnackData, QuizData, RecipeData, UserSession, ScreenName } from '../types';
-import { fetchSnacks, fetchQuizzes, fetchRecipes, saveSession, saveProfile, getProfile, getSessions } from '../lib/db';
+import type { SnackData, QuizData, RecipeData, UserSession, ScreenName, IslandProgress, RegionBestScores, UserProfile } from '../types';
+import {
+  fetchSnacks,
+  fetchQuizzes,
+  fetchRecipes,
+  saveSession,
+  getProfile,
+  getSessions,
+  createProfile,
+  saveUsername,
+  checkUsernameExists,
+  updateIslandProgress,
+  updateProfileIcon,
+} from '../lib/db';
+import { registerWithUsername, loginWithUsername, logoutUser } from '../lib/firebase/config';
+
+const DEFAULT_ISLAND_PROGRESS: IslandProgress = {
+  jogja: false,
+  bali: false,
+  aceh: false,
+  maluku: false,
+};
+
+const DEFAULT_REGION_SCORES: RegionBestScores = {
+  jogja: 0,
+  bali: 0,
+  aceh: 0,
+  maluku: 0,
+};
 
 interface GameStore {
   // --- Screen ---
@@ -79,18 +106,33 @@ interface GameStore {
   advanceSamaloyangStep: () => void;
   resetSamaloyangGame: () => void;
 
-  // --- Player Profile ---
+  // --- Auth State ---
   userId: string;
+  username: string;
+  profileIcon: string;
+  isLoggedIn: boolean;
+  authError: string | null;
+  authLoading: boolean;
+  setUserId: (uid: string) => void;
+  register: (username: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  setAuthError: (msg: string | null) => void;
+  setProfileIcon: (icon: string) => Promise<void>;
+
+  // --- Player Profile ---
   totalSessions: number;
-  bestScore: number;
+  regionBestScores: RegionBestScores;
+  totalBestScore: number;
   totalMerges: number;
   totalQuizzesCorrect: number;
   totalQuizzesAnswered: number;
   unlockedRecipes: string[];
   sessions: UserSession[];
-  setUserId: (uid: string) => void;
+  islandProgress: IslandProgress;
   loadProfile: () => Promise<void>;
   endSession: (reason: 'board_full' | 'target_reached' | 'quit') => Promise<void>;
+  completeIsland: () => Promise<void>;
 
   // --- First Launch ---
   hasSeenInstructions: boolean;
@@ -107,7 +149,7 @@ interface GameStore {
 
 export const useGameStore = create<GameStore>((set, get) => ({
   // Screen
-  currentScreen: 'mainMenu',
+  currentScreen: 'login',
   setScreen: (screen) => set({ currentScreen: screen }),
   activeRegion: 'jogja',
   setActiveRegion: (region) => set({ activeRegion: region }),
@@ -170,31 +212,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
   triggerQuiz: () => {
     const state = get();
     const regionalQuizzes = state.quizzes.filter(q => q.region === state.activeRegion);
-    
-    // Debug log — remove after testing
-    console.log('[Quiz] triggerQuiz called', {
-      activeRegion: state.activeRegion,
-      totalQuizzes: state.quizzes.length,
-      regionalCount: regionalQuizzes.length,
-      currentIndex: state.currentQuizIndex,
-    });
-
-    if (regionalQuizzes.length === 0) {
-      console.warn('[Quiz] No quizzes found for region:', state.activeRegion, '— check that fallbackQuizzes has matching region values');
-      return false;
-    }
-    
-    // Stop if all quizzes for the region have been answered
-    if (state.currentQuizIndex >= regionalQuizzes.length) {
-      console.log('[Quiz] All quizzes exhausted for region:', state.activeRegion);
-      return false;
-    }
-
-    set({
-      showQuiz: true,
-      isPaused: true,
-      currentQuizIndex: state.currentQuizIndex,
-    });
+    if (regionalQuizzes.length === 0) return false;
+    if (state.currentQuizIndex >= regionalQuizzes.length) return false;
+    set({ showQuiz: true, isPaused: true, currentQuizIndex: state.currentQuizIndex });
     return true;
   },
   answerQuiz: (correct) => set(s => ({
@@ -210,25 +230,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
   cookingComplete: false,
   startCooking: (recipeName) => {
     const recipe = get().recipes.find(r => r.snackName === recipeName) || get().recipes[0] || null;
-    set({
-      currentRecipe: recipe,
-      cookingStep: 0,
-      cookingComplete: false,
-      currentScreen: 'cooking',
-    });
+    set({ currentRecipe: recipe, cookingStep: 0, cookingComplete: false, currentScreen: 'cooking' });
   },
   advanceCookingStep: () => {
     const { currentRecipe, cookingStep } = get();
     if (!currentRecipe) return;
     if (cookingStep + 1 >= currentRecipe.steps.length) {
-      // Complete!
       const recipeName = currentRecipe.snackName;
       set(s => ({
         cookingComplete: true,
         cookingStep: cookingStep + 1,
-        unlockedRecipes: s.unlockedRecipes.includes(recipeName)
-          ? s.unlockedRecipes
-          : [...s.unlockedRecipes, recipeName],
+        unlockedRecipes: s.unlockedRecipes.includes(recipeName) ? s.unlockedRecipes : [...s.unlockedRecipes, recipeName],
       }));
     } else {
       set({ cookingStep: cookingStep + 1 });
@@ -243,13 +255,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   advanceKleponStep: () => set(s => {
     const nextStep = s.kleponStep + 1;
     if (nextStep >= 5) {
-      // All 5 steps done
       return {
         kleponComplete: true,
         kleponStep: nextStep,
-        unlockedRecipes: s.unlockedRecipes.includes('Klepon')
-          ? s.unlockedRecipes
-          : [...s.unlockedRecipes, 'Klepon'],
+        unlockedRecipes: s.unlockedRecipes.includes('Klepon') ? s.unlockedRecipes : [...s.unlockedRecipes, 'Klepon'],
       };
     }
     return { kleponStep: nextStep };
@@ -263,13 +272,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   advancePieSusuStep: () => set(s => {
     const nextStep = s.pieSusuStep + 1;
     if (nextStep >= 5) {
-      // All 5 steps done + completion screen
       return {
         pieSusuComplete: true,
         pieSusuStep: nextStep,
-        unlockedRecipes: s.unlockedRecipes.includes('Pie Susu')
-          ? s.unlockedRecipes
-          : [...s.unlockedRecipes, 'Pie Susu'],
+        unlockedRecipes: s.unlockedRecipes.includes('Pie Susu') ? s.unlockedRecipes : [...s.unlockedRecipes, 'Pie Susu'],
       };
     }
     return { pieSusuStep: nextStep };
@@ -283,13 +289,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   advancePisangAsarStep: () => set(s => {
     const nextStep = s.pisangAsarStep + 1;
     if (nextStep >= 5) {
-      // All 5 steps done + completion screen
       return {
         pisangAsarComplete: true,
         pisangAsarStep: nextStep,
-        unlockedRecipes: s.unlockedRecipes.includes('Pisang Asar')
-          ? s.unlockedRecipes
-          : [...s.unlockedRecipes, 'Pisang Asar'],
+        unlockedRecipes: s.unlockedRecipes.includes('Pisang Asar') ? s.unlockedRecipes : [...s.unlockedRecipes, 'Pisang Asar'],
       };
     }
     return { pisangAsarStep: nextStep };
@@ -303,50 +306,150 @@ export const useGameStore = create<GameStore>((set, get) => ({
   advanceSamaloyangStep: () => set(s => {
     const nextStep = s.samaloyangStep + 1;
     if (nextStep >= 4) {
-      // 4 steps done + completion screen
       return {
         samaloyangComplete: true,
         samaloyangStep: nextStep,
-        unlockedRecipes: s.unlockedRecipes.includes('Samaloyang')
-          ? s.unlockedRecipes
-          : [...s.unlockedRecipes, 'Samaloyang'],
+        unlockedRecipes: s.unlockedRecipes.includes('Samaloyang') ? s.unlockedRecipes : [...s.unlockedRecipes, 'Samaloyang'],
       };
     }
     return { samaloyangStep: nextStep };
   }),
   resetSamaloyangGame: () => set({ samaloyangStep: 0, samaloyangComplete: false }),
 
+  // Auth
+  userId: '',
+  username: '',
+  profileIcon: 'Klepon',
+  isLoggedIn: false,
+  authError: null,
+  authLoading: false,
+  setUserId: (uid) => set({ userId: uid }),
+  setAuthError: (msg) => set({ authError: msg }),
+  setProfileIcon: async (icon) => {
+    const { userId, username } = get();
+    set({ profileIcon: icon });
+    await updateProfileIcon(userId, username, icon);
+  },
+
+  register: async (username, password) => {
+    set({ authLoading: true, authError: null });
+    try {
+      // Cek dulu apakah username sudah dipakai
+      const taken = await checkUsernameExists(username);
+      if (taken) {
+        set({ authError: 'USERNAME_TAKEN', authLoading: false });
+        return;
+      }
+      const uid = await registerWithUsername(username, password);
+      // Simpan mapping username → userId
+      await saveUsername(uid, username);
+      // Buat profil default
+      await createProfile(uid, username);
+      // Load profil
+      set({
+        userId: uid,
+        username,
+        isLoggedIn: true,
+        currentScreen: 'mainMenu',
+        islandProgress: { ...DEFAULT_ISLAND_PROGRESS },
+        regionBestScores: { ...DEFAULT_REGION_SCORES },
+        totalBestScore: 0,
+        authLoading: false,
+        authError: null,
+      });
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Gagal mendaftar.';
+      set({ authError: msg, authLoading: false });
+    }
+  },
+
+  login: async (username, password) => {
+    set({ authLoading: true, authError: null });
+    try {
+      const uid = await loginWithUsername(username, password);
+      const profile = await getProfile(uid);
+      if (!profile) {
+        set({ authError: 'Profil tidak ditemukan.', authLoading: false });
+        return;
+      }
+      set({
+        userId: uid,
+        username: profile.username,
+        isLoggedIn: true,
+        currentScreen: 'mainMenu',
+        islandProgress: profile.islandProgress ?? { ...DEFAULT_ISLAND_PROGRESS },
+        regionBestScores: profile.regionBestScores ?? { ...DEFAULT_REGION_SCORES },
+        totalBestScore: profile.totalBestScore ?? 0,
+        totalSessions: profile.totalSessions ?? 0,
+        totalMerges: profile.totalMerges ?? 0,
+        totalQuizzesCorrect: profile.totalQuizzesCorrect ?? 0,
+        totalQuizzesAnswered: profile.totalQuizzesAnswered ?? 0,
+        unlockedRecipes: profile.unlockedRecipes ?? [],
+        authLoading: false,
+        authError: null,
+      });
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Gagal masuk.';
+      set({ authError: msg, authLoading: false });
+    }
+  },
+
+  logout: async () => {
+    await logoutUser();
+    set({
+      userId: '',
+      username: '',
+      isLoggedIn: false,
+      islandProgress: { ...DEFAULT_ISLAND_PROGRESS },
+      regionBestScores: { ...DEFAULT_REGION_SCORES },
+      totalBestScore: 0,
+      totalSessions: 0,
+      totalMerges: 0,
+      totalQuizzesCorrect: 0,
+      totalQuizzesAnswered: 0,
+      unlockedRecipes: [],
+      sessions: [],
+      currentScreen: 'login',
+    });
+  },
+
   // Profile
-  userId: 'local_player',
   totalSessions: 0,
-  bestScore: 0,
+  regionBestScores: { ...DEFAULT_REGION_SCORES },
+  totalBestScore: 0,
   totalMerges: 0,
   totalQuizzesCorrect: 0,
   totalQuizzesAnswered: 0,
   unlockedRecipes: [],
   sessions: [],
-  setUserId: (uid) => set({ userId: uid }),
+  islandProgress: { ...DEFAULT_ISLAND_PROGRESS },
+
   loadProfile: async () => {
     const { userId } = get();
+    if (!userId) return;
     const profile = await getProfile(userId);
     const sessions = await getSessions(userId);
     if (profile) {
       set({
-        totalSessions: profile.totalSessions || 0,
-        bestScore: profile.bestScore || 0,
-        totalMerges: profile.totalMerges || 0,
-        totalQuizzesCorrect: profile.totalQuizzesCorrect || 0,
-        totalQuizzesAnswered: profile.totalQuizzesAnswered || 0,
-        unlockedRecipes: profile.unlockedRecipes || [],
+        totalSessions: profile.totalSessions ?? 0,
+        regionBestScores: profile.regionBestScores ?? { ...DEFAULT_REGION_SCORES },
+        totalBestScore: profile.totalBestScore ?? 0,
+        totalMerges: profile.totalMerges ?? 0,
+        totalQuizzesCorrect: profile.totalQuizzesCorrect ?? 0,
+        totalQuizzesAnswered: profile.totalQuizzesAnswered ?? 0,
+        unlockedRecipes: profile.unlockedRecipes ?? [],
+        islandProgress: profile.islandProgress ?? { ...DEFAULT_ISLAND_PROGRESS },
+        username: profile.username ?? '',
       });
     }
     set({ sessions });
   },
+
   endSession: async (reason) => {
     const s = get();
     const session: UserSession = {
       sessionId: `s_${Date.now()}`,
-      startedAt: s.startTime || Date.now(),
+      startedAt: s.startTime ?? Date.now(),
       endedAt: Date.now(),
       score: s.score,
       merges: s.mergeCount,
@@ -354,34 +457,65 @@ export const useGameStore = create<GameStore>((set, get) => ({
       quizzesTriggered: s.quizzesTriggered,
       highestTier: s.highestTier,
       endReason: reason,
+      region: s.activeRegion,
     };
-    await saveSession(s.userId, session);
+    if (s.userId) await saveSession(s.userId, session);
 
     const newTotalSessions = s.totalSessions + 1;
-    const newBestScore = Math.max(s.bestScore, s.score);
     const newTotalMerges = s.totalMerges + s.mergeCount;
     const newTotalQuizzesCorrect = s.totalQuizzesCorrect + s.quizzesCorrect;
     const newTotalQuizzesAnswered = s.totalQuizzesAnswered + s.quizzesTriggered;
 
-    await saveProfile(s.userId, {
-      userId: s.userId,
-      displayName: 'Pemain',
-      totalSessions: newTotalSessions,
-      bestScore: newBestScore,
-      totalMerges: newTotalMerges,
-      totalQuizzesCorrect: newTotalQuizzesCorrect,
-      totalQuizzesAnswered: newTotalQuizzesAnswered,
-      unlockedRecipes: s.unlockedRecipes,
-      lastPlayedAt: Date.now(),
-    });
-
     set({
       totalSessions: newTotalSessions,
-      bestScore: newBestScore,
       totalMerges: newTotalMerges,
       totalQuizzesCorrect: newTotalQuizzesCorrect,
       totalQuizzesAnswered: newTotalQuizzesAnswered,
       sessions: [session, ...s.sessions].slice(0, 20),
+    });
+  },
+
+  /** 
+   * Dipanggil dari ResultScreen ketika player berhasil menyelesaikan Drop & Merge.
+   * Menandai pulau saat ini sebagai selesai dan update skor + leaderboard.
+   */
+  completeIsland: async () => {
+    const s = get();
+    const region = s.activeRegion as keyof IslandProgress;
+
+    // Buat partial profile yang dibutuhkan updateIslandProgress
+    const currentProfile: UserProfile = {
+      userId: s.userId,
+      username: s.username,
+      totalSessions: s.totalSessions,
+      regionBestScores: s.regionBestScores,
+      totalBestScore: s.totalBestScore,
+      totalMerges: s.totalMerges,
+      totalQuizzesCorrect: s.totalQuizzesCorrect,
+      totalQuizzesAnswered: s.totalQuizzesAnswered,
+      unlockedRecipes: s.unlockedRecipes,
+      islandProgress: s.islandProgress,
+      profileIcon: s.profileIcon ?? 'Klepon',
+      createdAt: Date.now(),
+      lastPlayedAt: Date.now(),
+    };
+
+    const { newRegionBestScores, newTotalBestScore } = await updateIslandProgress(
+      s.userId,
+      region,
+      s.score,
+      currentProfile,
+    );
+
+    const newIslandProgress: IslandProgress = {
+      ...s.islandProgress,
+      [region]: true,
+    };
+
+    set({
+      islandProgress: newIslandProgress,
+      regionBestScores: newRegionBestScores,
+      totalBestScore: newTotalBestScore,
     });
   },
 

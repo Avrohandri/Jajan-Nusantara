@@ -1,74 +1,76 @@
 import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
+import type { IslandProgress } from '../types';
 
 import levelSelectBg from '../assets/map/level_select_bg.png';
 import backButtonImg from '../assets/universal/back button.png';
 
-// ============================================================
-// KONFIGURASI PULAU — ubah sesuai kebutuhan Anda
-// ============================================================
-
 interface MapItem {
-  id: string;
-  unlocked: boolean;
+  id: keyof IslandProgress;
   column: 'left' | 'right';
   bottomPct: number;
-  /** Lebar pulau dalam px — ubah angka ini untuk resize tiap pulau */
   widthPx: number;
   offsetX?: string;
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║          UBAH UKURAN & POSISI TIAP PULAU DI SINI        ║
-// ╠══════════════════════════════════════════════════════════╣
-// ║  widthPx  → ukuran pulau dalam pixel                    ║
-// ║  bottomPct→ posisi vertikal (0=bawah, 100=atas)         ║
-// ║  column   → 'left' atau 'right'                         ║
-// ║  offsetX  → geser kiri/kanan tambahan, misal '-10px'    ║
-// ╚══════════════════════════════════════════════════════════╝
 const MAP_NODES: MapItem[] = [
-  //         ukuran    posisi vertikal
-  { id: 'jogja',  unlocked: true,  column: 'right', widthPx: 270, bottomPct: 0  },
-  { id: 'bali',   unlocked: true,  column: 'left',  widthPx: 275, bottomPct: 20 },
-  { id: 'aceh',   unlocked: true,  column: 'right', widthPx: 250, bottomPct: 42 },
-  { id: 'maluku', unlocked: true,  column: 'left',  widthPx: 260, bottomPct: 57 },
+  { id: 'jogja',  column: 'right', widthPx: 270, bottomPct: 0  },
+  { id: 'bali',   column: 'left',  widthPx: 275, bottomPct: 20 },
+  { id: 'aceh',   column: 'right', widthPx: 250, bottomPct: 42 },
+  { id: 'maluku', column: 'left',  widthPx: 260, bottomPct: 57 },
 ];
 
-// Posisi kolom kiri/kanan (% dari kiri layar)
 const COLUMN_POS = {
   left:  '21%',
   right: '77%',
 };
 
-function scaledWidth(node: MapItem): string {
-  return `${node.widthPx}px`;
+/** Sebuah pulau bisa dimainkan jika pulau sebelumnya sudah diselesaikan */
+function isUnlocked(id: keyof IslandProgress, progress: IslandProgress): boolean {
+  if (id === 'jogja') return true;
+  if (id === 'bali') return progress.jogja;
+  if (id === 'aceh') return progress.bali;
+  if (id === 'maluku') return progress.aceh;
+  return false;
 }
-// ============================================================
+
+const ISLAND_DISPLAY_NAMES: Record<string, string> = {
+  jogja:  'Jogja',
+  bali:   'Bali',
+  aceh:   'Aceh',
+  maluku: 'Maluku',
+};
+
+const LOCK_REQUIRES: Record<string, string> = {
+  bali:   'Selesaikan Jogja dulu!',
+  aceh:   'Selesaikan Bali dulu!',
+  maluku: 'Selesaikan Aceh dulu!',
+};
 
 export function MapSelectScreen() {
-  const { setScreen, resetGame } = useGameStore();
+  const { setScreen, resetGame, islandProgress } = useGameStore();
   const [toast, setToast] = useState<string | null>(null);
 
   const handleMapClick = (map: MapItem) => {
-    if (map.unlocked) {
+    const unlocked = isUnlocked(map.id, islandProgress);
+    if (unlocked) {
       useGameStore.getState().setActiveRegion(map.id);
       resetGame();
       setScreen('game');
     } else {
-      setToast('Segera Hadir!');
-      setTimeout(() => setToast(null), 1800);
+      const msg = LOCK_REQUIRES[map.id] ?? `Selesaikan pulau sebelumnya dulu!`;
+      setToast(msg);
+      setTimeout(() => setToast(null), 2000);
     }
   };
 
   return (
     <div className="screen map-select-screen">
-      {/* Background */}
       <div className="map-select-bg" aria-hidden>
         <img src={levelSelectBg} alt="" className="map-select-bg-img" />
       </div>
 
       <div className="map-select-content">
-        {/* Tombol kembali */}
         <button
           type="button"
           className="map-back-minimal"
@@ -79,37 +81,44 @@ export function MapSelectScreen() {
           <img src={backButtonImg} alt="Back" className="map-back-icon-img" />
         </button>
 
-        {/* Area jalur pulau */}
         <div className="map-island-path">
-          {MAP_NODES.map((map) => (
-            <IslandNode
-              key={map.id}
-              map={map}
-              columnPos={COLUMN_POS}
-              onClick={() => handleMapClick(map)}
-            />
-          ))}
+          {MAP_NODES.map((map) => {
+            const unlocked = isUnlocked(map.id, islandProgress);
+            const completed = islandProgress[map.id];
+            return (
+              <IslandNode
+                key={map.id}
+                map={map}
+                unlocked={unlocked}
+                completed={completed}
+                columnPos={COLUMN_POS}
+                displayName={ISLAND_DISPLAY_NAMES[map.id]}
+                onClick={() => handleMapClick(map)}
+              />
+            );
+          })}
         </div>
       </div>
 
       {toast && (
         <div className="map-toast" role="status">
-          {toast}
+          🔒 {toast}
         </div>
       )}
     </div>
   );
 }
 
-// ─── Sub-komponen ────────────────────────────────────────────
-
 interface IslandNodeProps {
   map: MapItem;
+  unlocked: boolean;
+  completed: boolean;
   columnPos: typeof COLUMN_POS;
+  displayName: string;
   onClick: () => void;
 }
 
-function IslandNode({ map, columnPos, onClick }: IslandNodeProps) {
+function IslandNode({ map, unlocked, completed, columnPos, displayName, onClick }: IslandNodeProps) {
   const centerX = map.column === 'left' ? columnPos.left : columnPos.right;
 
   return (
@@ -117,22 +126,23 @@ function IslandNode({ map, columnPos, onClick }: IslandNodeProps) {
       className={`map-island-slot map-island-slot--${map.column}`}
       style={{
         bottom: `${map.bottomPct}%`,
-        // Posisi horizontal: geser dari kiri, lalu koreksi dengan translateX
-        // agar pusat gambar tepat di centerX, bukan tepi kirinya.
         left: centerX,
         transform: `translateX(calc(-50% + ${map.offsetX ?? '0px'}))`,
       }}
     >
       <button
         type="button"
-        className={`map-island-btn ${
-          map.unlocked ? 'map-island-btn-unlocked' : 'map-island-btn-locked'
-        }`}
+        className={`map-island-btn ${unlocked ? 'map-island-btn-unlocked' : 'map-island-btn-locked'}`}
         onClick={onClick}
         id={`map-${map.id}`}
-        aria-label={map.id}
+        aria-label={displayName}
       >
-        <IslandFace mapId={map.id} locked={!map.unlocked} width={scaledWidth(map)} />
+        <IslandFace
+          mapId={map.id}
+          locked={!unlocked}
+          completed={completed}
+          width={`${map.widthPx}px`}
+        />
       </button>
     </div>
   );
@@ -141,10 +151,12 @@ function IslandNode({ map, columnPos, onClick }: IslandNodeProps) {
 function IslandFace({
   mapId,
   locked,
+  completed,
   width,
 }: {
   mapId: string;
   locked: boolean;
+  completed: boolean;
   width: string;
 }) {
   const [useFallback, setUseFallback] = useState(false);
@@ -170,6 +182,20 @@ function IslandFace({
           style={{ width, display: 'inline-block', minHeight: '80px' }}
           aria-hidden
         />
+      )}
+
+      {/* Lock overlay */}
+      {locked && (
+        <span className="map-island-lock-overlay" aria-hidden>
+          🔒
+        </span>
+      )}
+
+      {/* Completed badge */}
+      {completed && !locked && (
+        <span className="map-island-done-badge" aria-hidden>
+          ✅
+        </span>
       )}
     </span>
   );

@@ -9,15 +9,16 @@ import btnPlay from '../assets/menu/btn_play.png';
 // --- SLOT 3: Tombol Pengaturan ---
 import btnPengaturan from '../assets/menu/btn_pengaturan.png';
 
-// --- SLOT 4: Tombol Jajanpedia ---
 import btnJajanpedia from '../assets/menu/btn_jajanpedia.png';
 
-// --- SLOT 5: Tombol Keluar ---
-import btnKeluar from '../assets/menu/btn_keluar.png';
+// --- SLOT 5: Tombol Peringkat (Leaderboard) ---
+import btnPeringkat from '../assets/menu/btn_peringkat.png';
 
+import { getProfileIconData } from '../utils/profileIcons';
 
 export function MainMenuScreen() {
-  const { setScreen } = useGameStore();
+  const { setScreen, profileIcon } = useGameStore();
+  const iconData = getProfileIconData(profileIcon);
 
   return (
     <div className="main-menu-screen">
@@ -33,12 +34,18 @@ export function MainMenuScreen() {
 
         {/* Overlay content */}
         <div className="main-menu-overlay">
+
+          {/* Profile icon button — pojok kanan atas */}
           <button
-            className="uji-collider-btn"
-            onClick={() => setScreen('colliderTest')}
-            title="Uji Collider"
+            className="main-menu-profile-btn"
+            onClick={() => setScreen('profile')}
+            title="Profil"
+            id="btn-profile"
+            aria-label="Profil pemain"
           >
-            <span className="uji-icon">🧪</span>
+            <div className={`main-menu-profile-avatar ${iconData.bgClass}`}>
+              <img src={iconData.imagePath} alt={iconData.name} className="main-menu-profile-img" />
+            </div>
           </button>
 
           {/* Play button area - centered */}
@@ -57,20 +64,20 @@ export function MainMenuScreen() {
             </button>
           </div>
 
-          {/* Bottom buttons row */}
+          {/* Bottom buttons row: Leaderboard | Jajanpedia | Pengaturan */}
           <div className="main-menu-bottom-buttons">
-            {/* Tombol Pengaturan */}
+            {/* Tombol Leaderboard */}
             <button
-              className="main-menu-btn main-menu-btn-settings"
-              onClick={() => setScreen('settings')}
-              id="btn-settings"
+              className="main-menu-btn main-menu-btn-leaderboard"
+              onClick={() => setScreen('leaderboard')}
+              id="btn-leaderboard"
             >
-              {btnPengaturan ? (
-                <img src={btnPengaturan} alt="Pengaturan" className="menu-btn-img" />
+              {btnPeringkat ? (
+                <img src={btnPeringkat} alt="Peringkat" className="menu-btn-img" />
               ) : (
                 <>
-                  <span className="menu-btn-icon">⚙️</span>
-                  <span className="menu-btn-label">PENGATURAN</span>
+                  <span className="menu-btn-icon">🏆</span>
+                  <span className="menu-btn-label">PERINGKAT</span>
                 </>
               )}
             </button>
@@ -91,17 +98,18 @@ export function MainMenuScreen() {
               )}
             </button>
 
+            {/* Tombol Pengaturan */}
             <button
-              className="main-menu-btn main-menu-btn-exit"
-              onClick={() => {/* Belum berfungsi */ }}
-              id="btn-exit"
+              className="main-menu-btn main-menu-btn-settings"
+              onClick={() => setScreen('settings')}
+              id="btn-settings"
             >
-              {btnKeluar ? (
-                <img src={btnKeluar} alt="Keluar" className="menu-btn-img" />
+              {btnPengaturan ? (
+                <img src={btnPengaturan} alt="Pengaturan" className="menu-btn-img" />
               ) : (
                 <>
-                  <span className="menu-btn-icon">🚪</span>
-                  <span className="menu-btn-label">KELUAR</span>
+                  <span className="menu-btn-icon">⚙️</span>
+                  <span className="menu-btn-label">PENGATURAN</span>
                 </>
               )}
             </button>

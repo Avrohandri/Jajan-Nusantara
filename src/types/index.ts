@@ -41,24 +41,98 @@ export interface UserSession {
   quizzesTriggered: number;
   highestTier: number;
   endReason: 'board_full' | 'target_reached' | 'quit';
+  region?: string;
+}
+
+/** Progress per-island. true = sudah pernah menyelesaikan game di pulau itu */
+export interface IslandProgress {
+  jogja: boolean;
+  bali: boolean;
+  aceh: boolean;
+  maluku: boolean;
+}
+
+/** Skor terbaik per-pulau */
+export interface RegionBestScores {
+  jogja: number;
+  bali: number;
+  aceh: number;
+  maluku: number;
 }
 
 export interface UserProfile {
   userId: string;
-  displayName: string;
+  username: string;
   totalSessions: number;
-  bestScore: number;
+  /** Skor terbaik per-pulau */
+  regionBestScores: RegionBestScores;
+  /** Total dari semua skor terbaik per-pulau (untuk leaderboard) */
+  totalBestScore: number;
   totalMerges: number;
   totalQuizzesCorrect: number;
   totalQuizzesAnswered: number;
   unlockedRecipes: string[];
+  islandProgress: IslandProgress;
+  /** Icon profil — nama kuliner, misal 'Klepon', 'Pisang Asar', dll */
+  profileIcon: string;
   createdAt: number;
   lastPlayedAt: number;
 }
 
+export interface LeaderboardEntry {
+  userId: string;
+  username: string;
+  totalBestScore: number;
+  profileIcon: string;
+  rank: number;
+}
+
 // === App State Types ===
 
-export type ScreenName = 'home' | 'mainMenu' | 'mapSelect' | 'settings' | 'jajanpedia' | 'kleponCard' | 'cenilCard' | 'yangkoCard' | 'geplakCard' | 'bakpiaCard' | 'lemperCard' | 'tiwulAyuCard' | 'jadahTempeCard' | 'laklakCard' | 'kaliadremCard' | 'pieSusuCard' | 'jajeWalikCard' | 'benduCard' | 'jajeUliCard' | 'pisangRaiCard' | 'samaloyangCard' | 'timphanCard' | 'pulotIjoCard' | 'keukarahCard' | 'bungongKayeeCard' | 'meuseukatCard' | 'kueAdeeCard' | 'koyabuCard' | 'saguLempengCard' | 'sagugulaCard' | 'talamsaguBakarCard' | 'asidaCard' | 'kuebageaCard' | 'pisangasarCard' | 'game' | 'result' | 'cooking' | 'progress' | 'kleponGame' | 'pieSusuGame' | 'samaloyangGame' | 'pisangAsarGame' | 'colliderTest';
-
-
-
+export type ScreenName =
+  | 'home'
+  | 'login'
+  | 'mainMenu'
+  | 'mapSelect'
+  | 'settings'
+  | 'jajanpedia'
+  | 'leaderboard'
+  | 'profile'
+  | 'kleponCard'
+  | 'cenilCard'
+  | 'yangkoCard'
+  | 'geplakCard'
+  | 'bakpiaCard'
+  | 'lemperCard'
+  | 'tiwulAyuCard'
+  | 'jadahTempeCard'
+  | 'laklakCard'
+  | 'kaliadremCard'
+  | 'pieSusuCard'
+  | 'jajeWalikCard'
+  | 'benduCard'
+  | 'jajeUliCard'
+  | 'pisangRaiCard'
+  | 'samaloyangCard'
+  | 'timphanCard'
+  | 'pulotIjoCard'
+  | 'keukarahCard'
+  | 'bungongKayeeCard'
+  | 'meuseukatCard'
+  | 'kueAdeeCard'
+  | 'koyabuCard'
+  | 'saguLempengCard'
+  | 'sagugulaCard'
+  | 'talamsaguBakarCard'
+  | 'asidaCard'
+  | 'kuebageaCard'
+  | 'pisangasarCard'
+  | 'game'
+  | 'result'
+  | 'cooking'
+  | 'progress'
+  | 'kleponGame'
+  | 'pieSusuGame'
+  | 'samaloyangGame'
+  | 'pisangAsarGame'
+  | 'colliderTest';

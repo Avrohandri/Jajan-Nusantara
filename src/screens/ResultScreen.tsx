@@ -43,11 +43,10 @@ function randomBetween(a: number, b: number) {
 }
 
 export function ResultScreen() {
-  const { activeRegion, setScreen } = useGameStore();
-
+  const { activeRegion, setScreen, completeIsland, score } = useGameStore();
   const config = REGION_CONFIG[activeRegion] ?? REGION_CONFIG['jogja'];
 
-  /* Generate stable confetti pieces */
+  /* Stable confetti */
   const confettiRef = useRef(
     Array.from({ length: CONFETTI_COUNT }, (_, i) => ({
       id: i,
@@ -61,9 +60,11 @@ export function ResultScreen() {
     }))
   );
 
-  /* Scroll to top on mount */
+  /* Scroll to top + mark island complete on mount */
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Tandai pulau ini sebagai selesai dan update skor/leaderboard di Firestore
+    completeIsland();
   }, []);
 
   return (
@@ -106,11 +107,15 @@ export function ResultScreen() {
         </div>
       </div>
 
+      {/* Score badge */}
+      <div className="result-score-badge">
+        <span className="result-score-label">Skor</span>
+        <span className="result-score-value">{score.toLocaleString('id-ID')}</span>
+      </div>
+
       {/* Mascot image */}
       <div className="result-mascot-wrap">
-        {/* Glow ring */}
         <div className="result-mascot-glow" aria-hidden="true" />
-
         <img
           src={config.mascot}
           alt={`Maskot ${config.foodName} jempol`}
@@ -119,8 +124,6 @@ export function ResultScreen() {
             (e.currentTarget as HTMLImageElement).style.opacity = '0';
           }}
         />
-
-        {/* Side sparkles */}
         <span className="result-side-spark result-side-spark--left">✨</span>
         <span className="result-side-spark result-side-spark--right">⭐</span>
       </div>

@@ -1,19 +1,32 @@
 import { useEffect, useState } from 'react';
 import { useGameStore } from './store/gameStore';
-import { initFirebase, signInAnon, isFirebaseConfigured } from './lib/firebase/config';
+import { initFirebase, isFirebaseConfigured } from './lib/firebase/config';
+
+// Auth
+import { LoginScreen } from './screens/LoginScreen';
+import { ProfileScreen } from './screens/ProfileScreen';
+
+// Main screens
 import { MainMenuScreen } from './screens/MainMenuScreen';
 import { MapSelectScreen } from './screens/MapSelectScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
 import { GameScreen } from './screens/GameScreen';
 import { ResultScreen } from './screens/ResultScreen';
-import { CookingScreen } from './screens/CookingScreen'; // legacy, kept for fallback
+import { LeaderboardScreen } from './screens/LeaderboardScreen';
+
+// Cooking
+import { CookingScreen } from './screens/CookingScreen';
 import { KleponMiniGameScreen } from './screens/KleponMiniGameScreen';
 import { PieSusuMiniGameScreen } from './screens/PieSusuMiniGameScreen';
 import { SamaloyangMiniGameScreen } from './screens/SamaloyangMiniGameScreen';
 import { PisangAsarMiniGameScreen } from './screens/PisangAsarMiniGameScreen';
+
+// Other screens
 import { ProgressScreen } from './screens/ProgressScreen';
 import { ColliderTestScreen } from './screens/ColliderTestScreen';
 import { JajanpediaScreen } from './screens/JajanpediaScreen';
+
+// Jajanpedia cards
 import { KleponCardScreen } from './screens/KleponCardScreen';
 import { CenilCardScreen } from './screens/CenilCardScreen';
 import { YangkoCardScreen } from './screens/YangkoCardScreen';
@@ -45,15 +58,15 @@ import { KueBageaCardScreen } from './screens/KueBageaCardScreen';
 import { PisangAsarCardScreen } from './screens/PisangAsarCardScreen';
 
 export default function App() {
-  const { currentScreen, contentLoaded, loadContent, setUserId } = useGameStore();
+  const { currentScreen, isLoggedIn, contentLoaded, loadContent } = useGameStore();
   const [initializing, setInitializing] = useState(true);
 
   useEffect(() => {
     async function init() {
-      // Initialize Firebase (will silently skip if not configured)
+      // Initialize Firebase
       initFirebase();
 
-      // Force-clear stale quiz cache (old data without 'region' field)
+      // Force-clear stale quiz cache
       try {
         const raw = localStorage.getItem('kuliner_quizzes');
         if (raw) {
@@ -64,13 +77,7 @@ export default function App() {
         }
       } catch (_) {}
 
-      // Try anonymous login
-      if (isFirebaseConfigured()) {
-        const uid = await signInAnon();
-        if (uid) setUserId(uid);
-      }
-
-      // Load game content (from Firestore or fallback)
+      // Load game content
       await loadContent();
       setInitializing(false);
     }
@@ -96,13 +103,25 @@ export default function App() {
     );
   }
 
+  // Jika belum login, selalu tampilkan layar login
+  if (!isLoggedIn) {
+    return (
+      <div className="app-container">
+        <LoginScreen />
+      </div>
+    );
+  }
+
   const renderScreen = () => {
     switch (currentScreen) {
-      case 'mainMenu': return <MainMenuScreen />;
-      case 'home': return <MainMenuScreen />; // Redirect old 'home' to MainMenu
+      case 'login': return <LoginScreen />;
+      case 'mainMenu':
+      case 'home': return <MainMenuScreen />;
       case 'mapSelect': return <MapSelectScreen />;
       case 'settings': return <SettingsScreen />;
       case 'jajanpedia': return <JajanpediaScreen />;
+      case 'leaderboard': return <LeaderboardScreen />;
+      case 'profile': return <ProfileScreen />;
       case 'kleponCard': return <KleponCardScreen />;
       case 'cenilCard': return <CenilCardScreen />;
       case 'yangkoCard': return <YangkoCardScreen />;
@@ -134,7 +153,7 @@ export default function App() {
       case 'pisangasarCard': return <PisangAsarCardScreen />;
       case 'game': return <GameScreen />;
       case 'result': return <ResultScreen />;
-      case 'cooking': return <CookingScreen />; // legacy
+      case 'cooking': return <CookingScreen />;
       case 'kleponGame': return <KleponMiniGameScreen />;
       case 'pieSusuGame': return <PieSusuMiniGameScreen />;
       case 'samaloyangGame': return <SamaloyangMiniGameScreen />;
@@ -151,4 +170,3 @@ export default function App() {
     </div>
   );
 }
-
