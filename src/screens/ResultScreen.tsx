@@ -103,14 +103,8 @@ export function ResultScreen() {
       {/* Subtitle banner */}
       <div className="result-banner-wrap">
         <div className="result-banner">
-          <span>Kamu berhasil mencocokkan kuliner!</span>
+          <span>Kamu berhasil meraih skor {score.toLocaleString('id-ID')}!</span>
         </div>
-      </div>
-
-      {/* Score badge */}
-      <div className="result-score-badge">
-        <span className="result-score-label">Skor</span>
-        <span className="result-score-value">{score.toLocaleString('id-ID')}</span>
       </div>
 
       {/* Mascot image */}

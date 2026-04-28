@@ -394,6 +394,59 @@ body {
   margin-bottom: 12px;
 }
 
+/* Pause overlay — latar kayu */
+.pause-content-wood {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(340px, 88vw);
+}
+
+.pause-bg-img {
+  width: 100%;
+  display: block;
+  border-radius: 16px;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.45));
+}
+
+.pause-buttons-row {
+  position: absolute;
+  bottom: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 80%;
+}
+
+.pause-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.pause-action-btn img {
+  width: 100%;
+  max-width: 68px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
+}
+
+.pause-action-btn:active {
+  transform: scale(0.88);
+  filter: brightness(0.9);
+}
+
 /* ========== Instructions ========== */
 .instructions {
   text-align: left;
@@ -505,7 +558,7 @@ body {
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+    radial-gradient(circle, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
   background-size: 28px 28px;
   pointer-events: none;
 }
@@ -528,8 +581,15 @@ body {
 }
 
 @keyframes confettiFall {
-  0%   { transform: translateY(-20px) rotate(0deg); opacity: 0.9; }
-  100% { transform: translateY(110dvh) rotate(720deg); opacity: 0; }
+  0% {
+    transform: translateY(-20px) rotate(0deg);
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: translateY(110dvh) rotate(720deg);
+    opacity: 0;
+  }
 }
 
 /* --- Top decorations --- */
@@ -549,13 +609,32 @@ body {
   opacity: 0.9;
   animation: sparkleAnim 1.4s ease-in-out infinite alternate;
 }
-.result-sparkle--lg { font-size: 28px; animation-delay: 0s; }
-.result-sparkle--sm { font-size: 18px; animation-delay: 0.4s; }
-.result-sparkle--md { font-size: 22px; animation-delay: 0.2s; }
+
+.result-sparkle--lg {
+  font-size: 28px;
+  animation-delay: 0s;
+}
+
+.result-sparkle--sm {
+  font-size: 18px;
+  animation-delay: 0.4s;
+}
+
+.result-sparkle--md {
+  font-size: 22px;
+  animation-delay: 0.2s;
+}
 
 @keyframes sparkleAnim {
-  from { transform: scale(0.85) rotate(-10deg); opacity: 0.7; }
-  to   { transform: scale(1.15) rotate(10deg);  opacity: 1; }
+  from {
+    transform: scale(0.85) rotate(-10deg);
+    opacity: 0.7;
+  }
+
+  to {
+    transform: scale(1.15) rotate(10deg);
+    opacity: 1;
+  }
 }
 
 /* --- HEBAT! title --- */
@@ -573,14 +652,21 @@ body {
   line-height: 1;
   text-shadow:
     0 4px 0 #C4631F,
-    0 6px 12px rgba(0,0,0,0.25);
+    0 6px 12px rgba(0, 0, 0, 0.25);
   -webkit-text-stroke: 2px rgba(200, 90, 10, 0.6);
-  animation: hebatPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+  animation: hebatPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 @keyframes hebatPop {
-  from { transform: scale(0.4); opacity: 0; }
-  to   { transform: scale(1);   opacity: 1; }
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* --- Subtitle banner --- */
@@ -600,7 +686,7 @@ body {
   font-size: clamp(14px, 4.5vw, 17px);
   padding: 10px 28px;
   border-radius: 32px;
-  box-shadow: 0 4px 0 rgba(0,0,0,0.18), 0 1px 0 rgba(255,255,255,0.25) inset;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18), 0 1px 0 rgba(255, 255, 255, 0.25) inset;
   text-align: center;
   line-height: 1.35;
   max-width: 88%;
@@ -617,11 +703,13 @@ body {
   height: 0;
   border-style: solid;
 }
+
 .result-banner::before {
   left: 8px;
   border-width: 0 8px 8px 0;
   border-color: transparent #8B4000 transparent transparent;
 }
+
 .result-banner::after {
   right: 8px;
   border-width: 0 0 8px 8px;
@@ -644,13 +732,20 @@ body {
   position: absolute;
   inset: 12px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,200,0.55) 0%, rgba(255,180,50,0.15) 70%, transparent 100%);
+  background: radial-gradient(circle, rgba(255, 255, 200, 0.55) 0%, rgba(255, 180, 50, 0.15) 70%, transparent 100%);
   animation: glowPulse 2s ease-in-out infinite alternate;
 }
 
 @keyframes glowPulse {
-  from { transform: scale(0.92); opacity: 0.7; }
-  to   { transform: scale(1.08); opacity: 1; }
+  from {
+    transform: scale(0.92);
+    opacity: 0.7;
+  }
+
+  to {
+    transform: scale(1.08);
+    opacity: 1;
+  }
 }
 
 .result-mascot-img {
@@ -659,13 +754,18 @@ body {
   object-fit: contain;
   position: relative;
   z-index: 3;
-  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.22));
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.22));
   animation: mascotFloat 2.4s ease-in-out infinite alternate;
 }
 
 @keyframes mascotFloat {
-  from { transform: translateY(0px); }
-  to   { transform: translateY(-10px); }
+  from {
+    transform: translateY(0px);
+  }
+
+  to {
+    transform: translateY(-10px);
+  }
 }
 
 .result-side-spark {
@@ -674,20 +774,30 @@ body {
   z-index: 4;
   animation: sparkleAnim 1.6s ease-in-out infinite alternate;
 }
-.result-side-spark--left  { left: -4px;  top: 40px;  animation-delay: 0.3s; }
-.result-side-spark--right { right: -4px; bottom: 40px; animation-delay: 0.8s; }
+
+.result-side-spark--left {
+  left: -4px;
+  top: 40px;
+  animation-delay: 0.3s;
+}
+
+.result-side-spark--right {
+  right: -4px;
+  bottom: 40px;
+  animation-delay: 0.8s;
+}
 
 /* --- Info card --- */
 .result-info-card {
   position: relative;
   z-index: 2;
-  background: rgba(255,255,255,0.92);
-  border: 2.5px solid rgba(255,255,255,0.7);
+  background: rgba(255, 255, 255, 0.92);
+  border: 2.5px solid rgba(255, 255, 255, 0.7);
   border-radius: 20px;
   padding: 16px 24px 14px;
   text-align: center;
   width: 88%;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
   margin-top: 2px;
 }
 
@@ -737,7 +847,7 @@ body {
   border-radius: 50px;
   box-shadow:
     0 6px 0 #A84E10,
-    0 8px 20px rgba(0,0,0,0.2);
+    0 8px 20px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
   position: relative;
@@ -747,16 +857,18 @@ body {
 .result-lanjut-btn::after {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 50%;
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 50px 50px 0 0;
   pointer-events: none;
 }
 
 .result-lanjut-btn:active {
   transform: translateY(3px);
-  box-shadow: 0 3px 0 #A84E10, 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 3px 0 #A84E10, 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .result-lanjut-icon {
@@ -766,11 +878,11 @@ body {
 .result-back-btn {
   width: 100%;
   padding: 12px 20px;
-  background: rgba(255,255,255,0.22);
+  background: rgba(255, 255, 255, 0.22);
   color: #FFF;
   font-family: var(--font);
   font-size: 14px;
-  border: 2px solid rgba(255,255,255,0.5);
+  border: 2px solid rgba(255, 255, 255, 0.5);
   border-radius: 50px;
   cursor: pointer;
   transition: background 0.15s ease;
@@ -778,7 +890,7 @@ body {
 }
 
 .result-back-btn:active {
-  background: rgba(255,255,255,0.35);
+  background: rgba(255, 255, 255, 0.35);
 }
 
 /* Keep old classes for any legacy references */
@@ -1582,11 +1694,10 @@ body {
   background: rgba(255, 255, 255, 0.15);
 }
 
-/* Pause button — oranye dengan aksen putih */
+/* Pause button — transparan agar gambar terlihat */
 .screen.game-screen .pause-btn-top {
-  background: rgba(255, 255, 255, 0.22);
-  border-color: rgba(255, 230, 180, 0.6);
-  color: #FFFFFF;
+  background: transparent;
+  border: none;
 }
 
 /* === GAME CANVAS WRAPPER ===
@@ -2702,25 +2813,30 @@ body {
 
 /* Pause button in game HUD */
 .pause-btn-top {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  border: 2px solid var(--color-border);
-  background: var(--color-bg-card);
+  border: none;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
   cursor: pointer;
   transition: transform 0.15s;
   flex-shrink: 0;
-  font-family: var(--font);
-  font-weight: 800;
-  color: var(--color-text);
+  padding: 0;
+}
+
+.pause-btn-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
 }
 
 .pause-btn-top:active {
-  transform: scale(0.92);
+  transform: scale(0.88);
 }
 
 @keyframes error-shake {
@@ -3207,19 +3323,57 @@ body {
 .klepon-card-sparkle {
   position: absolute;
   font-size: 20px;
-  color: #5da832; /* More contrastive green */
+  color: #5da832;
+  /* More contrastive green */
   animation: sparklePulse 2s ease-in-out infinite;
   pointer-events: none;
   filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
 }
 
-.klepon-card-sparkle.top-left { top: 10px; left: 10px; animation-delay: 0s; }
-.klepon-card-sparkle.top-right { top: 15px; right: 10px; animation-delay: 0.7s; }
-.klepon-card-sparkle.top-center { top: -5px; left: 50%; transform: translateX(-50%); animation-delay: 1.2s; }
-.klepon-card-sparkle.bottom-left { bottom: 20px; left: 15px; animation-delay: 1.4s; }
-.klepon-card-sparkle.bottom-right { bottom: 15px; right: 15px; animation-delay: 0.3s; }
-.klepon-card-sparkle.mid-left { top: 50%; left: -5px; transform: translateY(-50%); animation-delay: 0.9s; }
-.klepon-card-sparkle.mid-right { top: 55%; right: -5px; transform: translateY(-50%); animation-delay: 1.6s; }
+.klepon-card-sparkle.top-left {
+  top: 10px;
+  left: 10px;
+  animation-delay: 0s;
+}
+
+.klepon-card-sparkle.top-right {
+  top: 15px;
+  right: 10px;
+  animation-delay: 0.7s;
+}
+
+.klepon-card-sparkle.top-center {
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 1.2s;
+}
+
+.klepon-card-sparkle.bottom-left {
+  bottom: 20px;
+  left: 15px;
+  animation-delay: 1.4s;
+}
+
+.klepon-card-sparkle.bottom-right {
+  bottom: 15px;
+  right: 15px;
+  animation-delay: 0.3s;
+}
+
+.klepon-card-sparkle.mid-left {
+  top: 50%;
+  left: -5px;
+  transform: translateY(-50%);
+  animation-delay: 0.9s;
+}
+
+.klepon-card-sparkle.mid-right {
+  top: 55%;
+  right: -5px;
+  transform: translateY(-50%);
+  animation-delay: 1.6s;
+}
 
 
 @keyframes sparklePulse {
@@ -3371,234 +3525,738 @@ body {
 /* --- Theme Color Modifiers --- */
 
 /* Cenil (Red) */
-.cenil-theme .klepon-card-title { color: #d63031; }
-.cenil-theme .klepon-highlight { color: #d63031; }
-.cenil-theme .klepon-card-info-label { color: #d63031; }
-.cenil-theme .klepon-card-funfact { background: #fee2e2; border-color: #f87171; }
-.cenil-theme .klepon-card-funfact-title { color: #b91c1c; }
-.cenil-theme .klepon-card-sparkle { color: #ff3e3e; }
+.cenil-theme .klepon-card-title {
+  color: #d63031;
+}
+
+.cenil-theme .klepon-highlight {
+  color: #d63031;
+}
+
+.cenil-theme .klepon-card-info-label {
+  color: #d63031;
+}
+
+.cenil-theme .klepon-card-funfact {
+  background: #fee2e2;
+  border-color: #f87171;
+}
+
+.cenil-theme .klepon-card-funfact-title {
+  color: #b91c1c;
+}
+
+.cenil-theme .klepon-card-sparkle {
+  color: #ff3e3e;
+}
 
 /* Yangko (Pink) */
-.yangko-theme .klepon-card-title { color: #db2777; }
-.yangko-theme .klepon-highlight { color: #db2777; }
-.yangko-theme .klepon-card-info-label { color: #db2777; }
-.yangko-theme .klepon-card-funfact { background: #fdf2f8; border-color: #f9a8d4; }
-.yangko-theme .klepon-card-funfact-title { color: #9d174d; }
-.yangko-theme .klepon-card-sparkle { color: #f472b6; }
+.yangko-theme .klepon-card-title {
+  color: #db2777;
+}
+
+.yangko-theme .klepon-highlight {
+  color: #db2777;
+}
+
+.yangko-theme .klepon-card-info-label {
+  color: #db2777;
+}
+
+.yangko-theme .klepon-card-funfact {
+  background: #fdf2f8;
+  border-color: #f9a8d4;
+}
+
+.yangko-theme .klepon-card-funfact-title {
+  color: #9d174d;
+}
+
+.yangko-theme .klepon-card-sparkle {
+  color: #f472b6;
+}
 
 /* Geplak (Yellow/Orange) */
-.geplak-theme .klepon-card-title { color: #d97706; }
-.geplak-theme .klepon-highlight { color: #d97706; }
-.geplak-theme .klepon-card-info-label { color: #d97706; }
-.geplak-theme .klepon-card-funfact { background: #fffbeb; border-color: #fcd34d; }
-.geplak-theme .klepon-card-funfact-title { color: #92400e; }
-.geplak-theme .klepon-card-sparkle { color: #fbbf24; }
+.geplak-theme .klepon-card-title {
+  color: #d97706;
+}
+
+.geplak-theme .klepon-highlight {
+  color: #d97706;
+}
+
+.geplak-theme .klepon-card-info-label {
+  color: #d97706;
+}
+
+.geplak-theme .klepon-card-funfact {
+  background: #fffbeb;
+  border-color: #fcd34d;
+}
+
+.geplak-theme .klepon-card-funfact-title {
+  color: #92400e;
+}
+
+.geplak-theme .klepon-card-sparkle {
+  color: #fbbf24;
+}
 
 /* Bakpia (Brown) */
-.bakpia-theme .klepon-card-title { color: #8b4513; }
-.bakpia-theme .klepon-highlight { color: #8b4513; }
-.bakpia-theme .klepon-card-info-label { color: #8b4513; }
-.bakpia-theme .klepon-card-funfact { background: #fef3c7; border-color: #d97706; }
-.bakpia-theme .klepon-card-funfact-title { color: #92400e; }
-.bakpia-theme .klepon-card-sparkle { color: #9a3412; }
+.bakpia-theme .klepon-card-title {
+  color: #8b4513;
+}
+
+.bakpia-theme .klepon-highlight {
+  color: #8b4513;
+}
+
+.bakpia-theme .klepon-card-info-label {
+  color: #8b4513;
+}
+
+.bakpia-theme .klepon-card-funfact {
+  background: #fef3c7;
+  border-color: #d97706;
+}
+
+.bakpia-theme .klepon-card-funfact-title {
+  color: #92400e;
+}
+
+.bakpia-theme .klepon-card-sparkle {
+  color: #9a3412;
+}
 
 /* Lemper (Light Green) */
-.lemper-theme .klepon-card-title { color: #166534; }
-.lemper-theme .klepon-highlight { color: #166534; }
-.lemper-theme .klepon-card-info-label { color: #166534; }
-.lemper-theme .klepon-card-funfact { background: #f0fdf4; border-color: #86efac; }
-.lemper-theme .klepon-card-funfact-title { color: #14532d; }
-.lemper-theme .klepon-card-sparkle { color: #4ade80; }
+.lemper-theme .klepon-card-title {
+  color: #166534;
+}
+
+.lemper-theme .klepon-highlight {
+  color: #166534;
+}
+
+.lemper-theme .klepon-card-info-label {
+  color: #166534;
+}
+
+.lemper-theme .klepon-card-funfact {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.lemper-theme .klepon-card-funfact-title {
+  color: #14532d;
+}
+
+.lemper-theme .klepon-card-sparkle {
+  color: #4ade80;
+}
 
 /* Tiwul Ayu (Yellowish-Brown) */
-.tiwulayu-theme .klepon-card-title { color: #9a3412; }
-.tiwulayu-theme .klepon-highlight { color: #9a3412; }
-.tiwulayu-theme .klepon-card-info-label { color: #9a3412; }
-.tiwulayu-theme .klepon-card-funfact { background: #fff7ed; border-color: #fdba74; }
-.tiwulayu-theme .klepon-card-funfact-title { color: #7c2d12; }
-.tiwulayu-theme .klepon-card-sparkle { color: #ea580c; }
+.tiwulayu-theme .klepon-card-title {
+  color: #9a3412;
+}
+
+.tiwulayu-theme .klepon-highlight {
+  color: #9a3412;
+}
+
+.tiwulayu-theme .klepon-card-info-label {
+  color: #9a3412;
+}
+
+.tiwulayu-theme .klepon-card-funfact {
+  background: #fff7ed;
+  border-color: #fdba74;
+}
+
+.tiwulayu-theme .klepon-card-funfact-title {
+  color: #7c2d12;
+}
+
+.tiwulayu-theme .klepon-card-sparkle {
+  color: #ea580c;
+}
 
 /* Jadah Tempe (Deep Brown) */
-.jadahtempe-theme .klepon-card-title { color: #431407; }
-.jadahtempe-theme .klepon-highlight { color: #431407; }
-.jadahtempe-theme .klepon-card-info-label { color: #431407; }
-.jadahtempe-theme .klepon-card-funfact { background: #fffcf0; border-color: #d2b48c; }
-.jadahtempe-theme .klepon-card-funfact-title { color: #3e2723; }
-.jadahtempe-theme .klepon-card-sparkle { color: #431407; }
+.jadahtempe-theme .klepon-card-title {
+  color: #431407;
+}
+
+.jadahtempe-theme .klepon-highlight {
+  color: #431407;
+}
+
+.jadahtempe-theme .klepon-card-info-label {
+  color: #431407;
+}
+
+.jadahtempe-theme .klepon-card-funfact {
+  background: #fffcf0;
+  border-color: #d2b48c;
+}
+
+.jadahtempe-theme .klepon-card-funfact-title {
+  color: #3e2723;
+}
+
+.jadahtempe-theme .klepon-card-sparkle {
+  color: #431407;
+}
 
 /* --- Bali Snacks Themes --- */
 
 /* Laklak (Hijau Tua) */
-.laklak-theme .klepon-card-title { color: #1b4d3e; }
-.laklak-theme .klepon-highlight { color: #1b4d3e; }
-.laklak-theme .klepon-card-info-label { color: #1b4d3e; }
-.laklak-theme .klepon-card-funfact { background: #e6f3ef; border-color: #3d8c7a; }
-.laklak-theme .klepon-card-funfact-title { color: #1b4d3e; }
-.laklak-theme .klepon-card-sparkle { color: #2d5a27; }
+.laklak-theme .klepon-card-title {
+  color: #1b4d3e;
+}
+
+.laklak-theme .klepon-highlight {
+  color: #1b4d3e;
+}
+
+.laklak-theme .klepon-card-info-label {
+  color: #1b4d3e;
+}
+
+.laklak-theme .klepon-card-funfact {
+  background: #e6f3ef;
+  border-color: #3d8c7a;
+}
+
+.laklak-theme .klepon-card-funfact-title {
+  color: #1b4d3e;
+}
+
+.laklak-theme .klepon-card-sparkle {
+  color: #2d5a27;
+}
 
 /* Kaliadrem (Coklat Tua) */
-.kaliadrem-theme .klepon-card-title { color: #3d2717; }
-.kaliadrem-theme .klepon-highlight { color: #3d2717; }
-.kaliadrem-theme .klepon-card-info-label { color: #3d2717; }
-.kaliadrem-theme .klepon-card-funfact { background: #efebe9; border-color: #8d6e63; }
-.kaliadrem-theme .klepon-card-funfact-title { color: #3d2717; }
-.kaliadrem-theme .klepon-card-sparkle { color: #5d4037; }
+.kaliadrem-theme .klepon-card-title {
+  color: #3d2717;
+}
+
+.kaliadrem-theme .klepon-highlight {
+  color: #3d2717;
+}
+
+.kaliadrem-theme .klepon-card-info-label {
+  color: #3d2717;
+}
+
+.kaliadrem-theme .klepon-card-funfact {
+  background: #efebe9;
+  border-color: #8d6e63;
+}
+
+.kaliadrem-theme .klepon-card-funfact-title {
+  color: #3d2717;
+}
+
+.kaliadrem-theme .klepon-card-sparkle {
+  color: #5d4037;
+}
 
 /* Pie Susu (Kuning) */
-.piesusu-theme .klepon-card-title { color: #eab308; }
-.piesusu-theme .klepon-highlight { color: #eab308; }
-.piesusu-theme .klepon-card-info-label { color: #eab308; }
-.piesusu-theme .klepon-card-funfact { background: #fefce8; border-color: #fde047; }
-.piesusu-theme .klepon-card-funfact-title { color: #854d0e; }
-.piesusu-theme .klepon-card-sparkle { color: #facc15; }
+.piesusu-theme .klepon-card-title {
+  color: #eab308;
+}
+
+.piesusu-theme .klepon-highlight {
+  color: #eab308;
+}
+
+.piesusu-theme .klepon-card-info-label {
+  color: #eab308;
+}
+
+.piesusu-theme .klepon-card-funfact {
+  background: #fefce8;
+  border-color: #fde047;
+}
+
+.piesusu-theme .klepon-card-funfact-title {
+  color: #854d0e;
+}
+
+.piesusu-theme .klepon-card-sparkle {
+  color: #facc15;
+}
 
 /* Jaje Walik (Coklat Muda) */
-.jajewalik-theme .klepon-card-title { color: #9c6644; }
-.jajewalik-theme .klepon-highlight { color: #9c6644; }
-.jajewalik-theme .klepon-card-info-label { color: #9c6644; }
-.jajewalik-theme .klepon-card-funfact { background: #f7ede2; border-color: #ddb892; }
-.jajewalik-theme .klepon-card-funfact-title { color: #7f5539; }
-.jajewalik-theme .klepon-card-sparkle { color: #b08968; }
+.jajewalik-theme .klepon-card-title {
+  color: #9c6644;
+}
+
+.jajewalik-theme .klepon-highlight {
+  color: #9c6644;
+}
+
+.jajewalik-theme .klepon-card-info-label {
+  color: #9c6644;
+}
+
+.jajewalik-theme .klepon-card-funfact {
+  background: #f7ede2;
+  border-color: #ddb892;
+}
+
+.jajewalik-theme .klepon-card-funfact-title {
+  color: #7f5539;
+}
+
+.jajewalik-theme .klepon-card-sparkle {
+  color: #b08968;
+}
 
 /* Bendu (Ungu) */
-.bendu-theme .klepon-card-title { color: #6b21a8; }
-.bendu-theme .klepon-highlight { color: #6b21a8; }
-.bendu-theme .klepon-card-info-label { color: #6b21a8; }
-.bendu-theme .klepon-card-funfact { background: #f5f3ff; border-color: #ddd6fe; }
-.bendu-theme .klepon-card-funfact-title { color: #5b21b6; }
-.bendu-theme .klepon-card-sparkle { color: #a78bfa; }
+.bendu-theme .klepon-card-title {
+  color: #6b21a8;
+}
+
+.bendu-theme .klepon-highlight {
+  color: #6b21a8;
+}
+
+.bendu-theme .klepon-card-info-label {
+  color: #6b21a8;
+}
+
+.bendu-theme .klepon-card-funfact {
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+}
+
+.bendu-theme .klepon-card-funfact-title {
+  color: #5b21b6;
+}
+
+.bendu-theme .klepon-card-sparkle {
+  color: #a78bfa;
+}
 
 /* Jaje Uli (Putih Krem) */
-.jajeuli-theme .klepon-card-title { color: #8b7355; }
-.jajeuli-theme .klepon-highlight { color: #8b7355; }
-.jajeuli-theme .klepon-card-info-label { color: #8b7355; }
-.jajeuli-theme .klepon-card-funfact { background: #fafaf9; border-color: #e7e5e4; }
-.jajeuli-theme .klepon-card-funfact-title { color: #57534e; }
-.jajeuli-theme .klepon-card-sparkle { color: #d6d3d1; }
+.jajeuli-theme .klepon-card-title {
+  color: #8b7355;
+}
+
+.jajeuli-theme .klepon-highlight {
+  color: #8b7355;
+}
+
+.jajeuli-theme .klepon-card-info-label {
+  color: #8b7355;
+}
+
+.jajeuli-theme .klepon-card-funfact {
+  background: #fafaf9;
+  border-color: #e7e5e4;
+}
+
+.jajeuli-theme .klepon-card-funfact-title {
+  color: #57534e;
+}
+
+.jajeuli-theme .klepon-card-sparkle {
+  color: #d6d3d1;
+}
 
 /* Pisang Rai (Kuning Krem) */
-.pisangrai-theme .klepon-card-title { color: #a16207; }
-.pisangrai-theme .klepon-highlight { color: #a16207; }
-.pisangrai-theme .klepon-card-info-label { color: #a16207; }
-.pisangrai-theme .klepon-card-funfact { background: #fefce8; border-color: #fef08a; }
-.pisangrai-theme .klepon-card-funfact-title { color: #713f12; }
-.pisangrai-theme .klepon-card-sparkle { color: #eab308; }
+.pisangrai-theme .klepon-card-title {
+  color: #a16207;
+}
+
+.pisangrai-theme .klepon-highlight {
+  color: #a16207;
+}
+
+.pisangrai-theme .klepon-card-info-label {
+  color: #a16207;
+}
+
+.pisangrai-theme .klepon-card-funfact {
+  background: #fefce8;
+  border-color: #fef08a;
+}
+
+.pisangrai-theme .klepon-card-funfact-title {
+  color: #713f12;
+}
+
+.pisangrai-theme .klepon-card-sparkle {
+  color: #eab308;
+}
 
 /* --- Aceh Snacks Themes --- */
 
 /* Samaloyang (Coklat Tua) */
-.samaloyang-theme .klepon-card-title { color: #3d2717; }
-.samaloyang-theme .klepon-highlight { color: #3d2717; }
-.samaloyang-theme .klepon-card-info-label { color: #3d2717; }
-.samaloyang-theme .klepon-card-funfact { background: #efebe9; border-color: #8d6e63; }
-.samaloyang-theme .klepon-card-funfact-title { color: #3d2717; }
-.samaloyang-theme .klepon-card-sparkle { color: #5d4037; }
+.samaloyang-theme .klepon-card-title {
+  color: #3d2717;
+}
+
+.samaloyang-theme .klepon-highlight {
+  color: #3d2717;
+}
+
+.samaloyang-theme .klepon-card-info-label {
+  color: #3d2717;
+}
+
+.samaloyang-theme .klepon-card-funfact {
+  background: #efebe9;
+  border-color: #8d6e63;
+}
+
+.samaloyang-theme .klepon-card-funfact-title {
+  color: #3d2717;
+}
+
+.samaloyang-theme .klepon-card-sparkle {
+  color: #5d4037;
+}
 
 /* Timphan (Hijau Daun Pisang) */
-.timphan-theme .klepon-card-title { color: #2d5a27; }
-.timphan-theme .klepon-highlight { color: #2d5a27; }
-.timphan-theme .klepon-card-info-label { color: #2d5a27; }
-.timphan-theme .klepon-card-funfact { background: #f0fdf4; border-color: #4ade80; }
-.timphan-theme .klepon-card-funfact-title { color: #166534; }
-.timphan-theme .klepon-card-sparkle { color: #22c55e; }
+.timphan-theme .klepon-card-title {
+  color: #2d5a27;
+}
+
+.timphan-theme .klepon-highlight {
+  color: #2d5a27;
+}
+
+.timphan-theme .klepon-card-info-label {
+  color: #2d5a27;
+}
+
+.timphan-theme .klepon-card-funfact {
+  background: #f0fdf4;
+  border-color: #4ade80;
+}
+
+.timphan-theme .klepon-card-funfact-title {
+  color: #166534;
+}
+
+.timphan-theme .klepon-card-sparkle {
+  color: #22c55e;
+}
 
 /* Pulot Ijo (Hijau Muda) */
-.pulotijo-theme .klepon-card-title { color: #166534; }
-.pulotijo-theme .klepon-highlight { color: #166534; }
-.pulotijo-theme .klepon-card-info-label { color: #166534; }
-.pulotijo-theme .klepon-card-funfact { background: #f0fdf4; border-color: #86efac; }
-.pulotijo-theme .klepon-card-funfact-title { color: #14532d; }
-.pulotijo-theme .klepon-card-sparkle { color: #4ade80; }
+.pulotijo-theme .klepon-card-title {
+  color: #166534;
+}
+
+.pulotijo-theme .klepon-highlight {
+  color: #166534;
+}
+
+.pulotijo-theme .klepon-card-info-label {
+  color: #166534;
+}
+
+.pulotijo-theme .klepon-card-funfact {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.pulotijo-theme .klepon-card-funfact-title {
+  color: #14532d;
+}
+
+.pulotijo-theme .klepon-card-sparkle {
+  color: #4ade80;
+}
 
 /* Keukarah (Merah Muda) */
-.keukarah-theme .klepon-card-title { color: #be185d; }
-.keukarah-theme .klepon-highlight { color: #be185d; }
-.keukarah-theme .klepon-card-info-label { color: #be185d; }
-.keukarah-theme .klepon-card-funfact { background: #fdf2f8; border-color: #f9a8d4; }
-.keukarah-theme .klepon-card-funfact-title { color: #9d174d; }
-.keukarah-theme .klepon-card-sparkle { color: #f472b6; }
+.keukarah-theme .klepon-card-title {
+  color: #be185d;
+}
+
+.keukarah-theme .klepon-highlight {
+  color: #be185d;
+}
+
+.keukarah-theme .klepon-card-info-label {
+  color: #be185d;
+}
+
+.keukarah-theme .klepon-card-funfact {
+  background: #fdf2f8;
+  border-color: #f9a8d4;
+}
+
+.keukarah-theme .klepon-card-funfact-title {
+  color: #9d174d;
+}
+
+.keukarah-theme .klepon-card-sparkle {
+  color: #f472b6;
+}
 
 /* Bungong Kayee (Putih Krem) */
-.bungongkayee-theme .klepon-card-title { color: #8b7355; }
-.bungongkayee-theme .klepon-highlight { color: #8b7355; }
-.bungongkayee-theme .klepon-card-info-label { color: #8b7355; }
-.bungongkayee-theme .klepon-card-funfact { background: #fafaf9; border-color: #e7e5e4; }
-.bungongkayee-theme .klepon-card-funfact-title { color: #57534e; }
-.bungongkayee-theme .klepon-card-sparkle { color: #d6d3d1; }
+.bungongkayee-theme .klepon-card-title {
+  color: #8b7355;
+}
+
+.bungongkayee-theme .klepon-highlight {
+  color: #8b7355;
+}
+
+.bungongkayee-theme .klepon-card-info-label {
+  color: #8b7355;
+}
+
+.bungongkayee-theme .klepon-card-funfact {
+  background: #fafaf9;
+  border-color: #e7e5e4;
+}
+
+.bungongkayee-theme .klepon-card-funfact-title {
+  color: #57534e;
+}
+
+.bungongkayee-theme .klepon-card-sparkle {
+  color: #d6d3d1;
+}
 
 /* Meuseukat (Kuning) */
-.meuseukat-theme .klepon-card-title { color: #a16207; }
-.meuseukat-theme .klepon-highlight { color: #a16207; }
-.meuseukat-theme .klepon-card-info-label { color: #a16207; }
-.meuseukat-theme .klepon-card-funfact { background: #fefce8; border-color: #fde047; }
-.meuseukat-theme .klepon-card-funfact-title { color: #854d0e; }
-.meuseukat-theme .klepon-card-sparkle { color: #facc15; }
+.meuseukat-theme .klepon-card-title {
+  color: #a16207;
+}
+
+.meuseukat-theme .klepon-highlight {
+  color: #a16207;
+}
+
+.meuseukat-theme .klepon-card-info-label {
+  color: #a16207;
+}
+
+.meuseukat-theme .klepon-card-funfact {
+  background: #fefce8;
+  border-color: #fde047;
+}
+
+.meuseukat-theme .klepon-card-funfact-title {
+  color: #854d0e;
+}
+
+.meuseukat-theme .klepon-card-sparkle {
+  color: #facc15;
+}
 
 /* Kue Adee (Coklat Muda) */
-.kueadee-theme .klepon-card-title { color: #9c6644; }
-.kueadee-theme .klepon-highlight { color: #9c6644; }
-.kueadee-theme .klepon-card-info-label { color: #9c6644; }
-.kueadee-theme .klepon-card-funfact { background: #f7ede2; border-color: #ddb892; }
-.kueadee-theme .klepon-card-funfact-title { color: #7f5539; }
-.kueadee-theme .klepon-card-sparkle { color: #b08968; }
+.kueadee-theme .klepon-card-title {
+  color: #9c6644;
+}
+
+.kueadee-theme .klepon-highlight {
+  color: #9c6644;
+}
+
+.kueadee-theme .klepon-card-info-label {
+  color: #9c6644;
+}
+
+.kueadee-theme .klepon-card-funfact {
+  background: #f7ede2;
+  border-color: #ddb892;
+}
+
+.kueadee-theme .klepon-card-funfact-title {
+  color: #7f5539;
+}
+
+.kueadee-theme .klepon-card-sparkle {
+  color: #b08968;
+}
 
 /* --- Maluku Snacks Themes --- */
 
 /* Koyabu (Oranye) */
-.koyabu-theme .klepon-card-title { color: #ea580c; }
-.koyabu-theme .klepon-highlight { color: #ea580c; }
-.koyabu-theme .klepon-card-info-label { color: #ea580c; }
-.koyabu-theme .klepon-card-funfact { background: #fff7ed; border-color: #fdba74; }
-.koyabu-theme .klepon-card-funfact-title { color: #c2410c; }
-.koyabu-theme .klepon-card-sparkle { color: #f97316; }
+.koyabu-theme .klepon-card-title {
+  color: #ea580c;
+}
+
+.koyabu-theme .klepon-highlight {
+  color: #ea580c;
+}
+
+.koyabu-theme .klepon-card-info-label {
+  color: #ea580c;
+}
+
+.koyabu-theme .klepon-card-funfact {
+  background: #fff7ed;
+  border-color: #fdba74;
+}
+
+.koyabu-theme .klepon-card-funfact-title {
+  color: #c2410c;
+}
+
+.koyabu-theme .klepon-card-sparkle {
+  color: #f97316;
+}
 
 /* Sagu Lempeng (Pink) */
-.sagulempeng-theme .klepon-card-title { color: #db2777; }
-.sagulempeng-theme .klepon-highlight { color: #db2777; }
-.sagulempeng-theme .klepon-card-info-label { color: #db2777; }
-.sagulempeng-theme .klepon-card-funfact { background: #fdf2f8; border-color: #f9a8d4; }
-.sagulempeng-theme .klepon-card-funfact-title { color: #9d174d; }
-.sagulempeng-theme .klepon-card-sparkle { color: #f472b6; }
+.sagulempeng-theme .klepon-card-title {
+  color: #db2777;
+}
+
+.sagulempeng-theme .klepon-highlight {
+  color: #db2777;
+}
+
+.sagulempeng-theme .klepon-card-info-label {
+  color: #db2777;
+}
+
+.sagulempeng-theme .klepon-card-funfact {
+  background: #fdf2f8;
+  border-color: #f9a8d4;
+}
+
+.sagulempeng-theme .klepon-card-funfact-title {
+  color: #9d174d;
+}
+
+.sagulempeng-theme .klepon-card-sparkle {
+  color: #f472b6;
+}
 
 /* Sagu Gula (Coklat) */
-.sagugula-theme .klepon-card-title { color: #78350f; }
-.sagugula-theme .klepon-highlight { color: #78350f; }
-.sagugula-theme .klepon-card-info-label { color: #78350f; }
-.sagugula-theme .klepon-card-funfact { background: #fffcf0; border-color: #d2b48c; }
-.sagugula-theme .klepon-card-funfact-title { color: #431407; }
-.sagugula-theme .klepon-card-sparkle { color: #92400e; }
+.sagugula-theme .klepon-card-title {
+  color: #78350f;
+}
+
+.sagugula-theme .klepon-highlight {
+  color: #78350f;
+}
+
+.sagugula-theme .klepon-card-info-label {
+  color: #78350f;
+}
+
+.sagugula-theme .klepon-card-funfact {
+  background: #fffcf0;
+  border-color: #d2b48c;
+}
+
+.sagugula-theme .klepon-card-funfact-title {
+  color: #431407;
+}
+
+.sagugula-theme .klepon-card-sparkle {
+  color: #92400e;
+}
 
 /* Talam Sagu Bakar (Krem) */
-.talamsagubakar-theme .klepon-card-title { color: #8b7355; }
-.talamsagubakar-theme .klepon-highlight { color: #8b7355; }
-.talamsagubakar-theme .klepon-card-info-label { color: #8b7355; }
-.talamsagubakar-theme .klepon-card-funfact { background: #fafaf9; border-color: #e7e5e4; }
-.talamsagubakar-theme .klepon-card-funfact-title { color: #57534e; }
-.talamsagubakar-theme .klepon-card-sparkle { color: #d6d3d1; }
+.talamsagubakar-theme .klepon-card-title {
+  color: #8b7355;
+}
+
+.talamsagubakar-theme .klepon-highlight {
+  color: #8b7355;
+}
+
+.talamsagubakar-theme .klepon-card-info-label {
+  color: #8b7355;
+}
+
+.talamsagubakar-theme .klepon-card-funfact {
+  background: #fafaf9;
+  border-color: #e7e5e4;
+}
+
+.talamsagubakar-theme .klepon-card-funfact-title {
+  color: #57534e;
+}
+
+.talamsagubakar-theme .klepon-card-sparkle {
+  color: #d6d3d1;
+}
 
 /* Asida (Coklat Kehitaman) */
-.asida-theme .klepon-card-title { color: #2d1a12; }
-.asida-theme .klepon-highlight { color: #2d1a12; }
-.asida-theme .klepon-card-info-label { color: #2d1a12; }
-.asida-theme .klepon-card-funfact { background: #f5f5f4; border-color: #a8a29e; }
-.asida-theme .klepon-card-funfact-title { color: #1c1917; }
-.asida-theme .klepon-card-sparkle { color: #44403c; }
+.asida-theme .klepon-card-title {
+  color: #2d1a12;
+}
+
+.asida-theme .klepon-highlight {
+  color: #2d1a12;
+}
+
+.asida-theme .klepon-card-info-label {
+  color: #2d1a12;
+}
+
+.asida-theme .klepon-card-funfact {
+  background: #f5f5f4;
+  border-color: #a8a29e;
+}
+
+.asida-theme .klepon-card-funfact-title {
+  color: #1c1917;
+}
+
+.asida-theme .klepon-card-sparkle {
+  color: #44403c;
+}
 
 /* Kue Bagea (Coklat Krem) */
-.kuebagea-theme .klepon-card-title { color: #9c6644; }
-.kuebagea-theme .klepon-highlight { color: #9c6644; }
-.kuebagea-theme .klepon-card-info-label { color: #9c6644; }
-.kuebagea-theme .klepon-card-funfact { background: #f7ede2; border-color: #ddb892; }
-.kuebagea-theme .klepon-card-funfact-title { color: #7f5539; }
-.kuebagea-theme .klepon-card-sparkle { color: #b08968; }
+.kuebagea-theme .klepon-card-title {
+  color: #9c6644;
+}
+
+.kuebagea-theme .klepon-highlight {
+  color: #9c6644;
+}
+
+.kuebagea-theme .klepon-card-info-label {
+  color: #9c6644;
+}
+
+.kuebagea-theme .klepon-card-funfact {
+  background: #f7ede2;
+  border-color: #ddb892;
+}
+
+.kuebagea-theme .klepon-card-funfact-title {
+  color: #7f5539;
+}
+
+.kuebagea-theme .klepon-card-sparkle {
+  color: #b08968;
+}
 
 /* Pisang Asar (Kuning) */
-.pisangasar-theme .klepon-card-title { color: #a16207; }
-.pisangasar-theme .klepon-highlight { color: #a16207; }
-.pisangasar-theme .klepon-card-info-label { color: #a16207; }
-.pisangasar-theme .klepon-card-funfact { background: #fefce8; border-color: #fde047; }
-.pisangasar-theme .klepon-card-funfact-title { color: #854d0e; }
-.pisangasar-theme .klepon-card-sparkle { color: #facc15; }
+.pisangasar-theme .klepon-card-title {
+  color: #a16207;
+}
+
+.pisangasar-theme .klepon-highlight {
+  color: #a16207;
+}
+
+.pisangasar-theme .klepon-card-info-label {
+  color: #a16207;
+}
+
+.pisangasar-theme .klepon-card-funfact {
+  background: #fefce8;
+  border-color: #fde047;
+}
+
+.pisangasar-theme .klepon-card-funfact-title {
+  color: #854d0e;
+}
+
+.pisangasar-theme .klepon-card-sparkle {
+  color: #facc15;
+}
 
 /* ========================================================
    LOGIN SCREEN
@@ -3639,7 +4297,7 @@ body {
   max-width: 360px;
   background: rgba(255, 248, 235, 0.96);
   border-radius: 24px;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.45), 0 2px 0 rgba(255,230,160,0.3);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45), 0 2px 0 rgba(255, 230, 160, 0.3);
   padding: 32px 28px 28px;
   display: flex;
   flex-direction: column;
@@ -3658,7 +4316,7 @@ body {
 .login-logo-emoji {
   font-size: 44px;
   line-height: 1;
-  filter: drop-shadow(0 3px 8px rgba(200,100,0,0.3));
+  filter: drop-shadow(0 3px 8px rgba(200, 100, 0, 0.3));
 }
 
 .login-title {
@@ -3698,7 +4356,7 @@ body {
   padding: 11px 14px;
   border-radius: 12px;
   border: 2px solid rgba(196, 167, 117, 0.55);
-  background: rgba(255,255,255,0.85);
+  background: rgba(255, 255, 255, 0.85);
   font-size: 15px;
   font-family: inherit;
   color: var(--color-text);
@@ -3740,7 +4398,7 @@ body {
   font-family: inherit;
   cursor: pointer;
   letter-spacing: 0.5px;
-  box-shadow: 0 4px 16px rgba(196, 99, 31, 0.4), 0 2px 0 rgba(0,0,0,0.15);
+  box-shadow: 0 4px 16px rgba(196, 99, 31, 0.4), 0 2px 0 rgba(0, 0, 0, 0.15);
   transition: transform 0.15s, box-shadow 0.15s;
   display: flex;
   align-items: center;
@@ -3772,16 +4430,31 @@ body {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.85);
+  background: rgba(255, 255, 255, 0.85);
   animation: loginDot 1.2s ease-in-out infinite;
 }
 
-.login-loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-.login-loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+.login-loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.login-loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
 
 @keyframes loginDot {
-  0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
-  40% { transform: scale(1.2); opacity: 1; }
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0.7);
+    opacity: 0.5;
+  }
+
+  40% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
 }
 
 .login-toggle {
@@ -3807,8 +4480,14 @@ body {
   transition: opacity 0.15s;
 }
 
-.login-toggle-btn:hover { opacity: 0.75; }
-.login-toggle-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.login-toggle-btn:hover {
+  opacity: 0.75;
+}
+
+.login-toggle-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 /* ========================================================
    MAIN MENU — USERNAME BADGE & LOGOUT
@@ -3825,7 +4504,7 @@ body {
   backdrop-filter: blur(6px);
   border-radius: 999px;
   padding: 5px 10px 5px 8px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
   border: 1.5px solid rgba(196, 167, 117, 0.5);
 }
 
@@ -3875,7 +4554,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 36px;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
   pointer-events: none;
 }
 
@@ -3884,7 +4563,7 @@ body {
   top: 4px;
   right: 4px;
   font-size: 22px;
-  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.4));
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.4));
   pointer-events: none;
 }
 
@@ -3969,7 +4648,7 @@ body {
   padding: 12px 14px;
   border-radius: 14px;
   background: rgba(255, 248, 235, 0.9);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   border: 1.5px solid rgba(196, 167, 117, 0.3);
 }
 
@@ -3987,7 +4666,7 @@ body {
 .leaderboard-row--me {
   border-color: var(--color-primary);
   background: rgba(255, 240, 200, 0.98);
-  box-shadow: 0 0 0 2.5px rgba(224, 122, 47, 0.45), 0 4px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 0 0 2.5px rgba(224, 122, 47, 0.45), 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 .lb-rank {
@@ -4040,7 +4719,7 @@ body {
   background: rgba(255, 248, 235, 0.9);
   border-radius: 16px;
   padding: 10px 28px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   border: 2px solid rgba(196, 167, 117, 0.4);
   margin: 0 auto;
   width: fit-content;
@@ -4073,7 +4752,7 @@ body {
   cursor: pointer;
   padding: 0;
   transition: transform 0.18s;
-  filter: drop-shadow(0 3px 10px rgba(0,0,0,0.35));
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.35));
 }
 
 .main-menu-profile-btn:hover {
@@ -4089,7 +4768,7 @@ body {
   border-radius: 50%;
   font-size: 26px;
   border: 3px solid rgba(255, 248, 235, 0.9);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* ========================================================
@@ -4100,8 +4779,8 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  border: 3px solid rgba(255,255,255,0.7);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  border: 3px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
   flex-shrink: 0;
 }
 
@@ -4144,7 +4823,7 @@ body {
   padding: 20px;
   background: rgba(255, 248, 235, 0.95);
   border-radius: 22px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
   border: 1.5px solid rgba(196, 167, 117, 0.35);
   display: flex;
   flex-direction: column;
@@ -4170,12 +4849,12 @@ body {
   font-family: inherit;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 3px 10px rgba(196,99,31,0.35);
+  box-shadow: 0 3px 10px rgba(196, 99, 31, 0.35);
 }
 
 .profile-change-icon-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 5px 15px rgba(196,99,31,0.45);
+  box-shadow: 0 5px 15px rgba(196, 99, 31, 0.45);
 }
 
 .profile-username {
@@ -4205,19 +4884,25 @@ body {
 }
 
 .profile-island-chip.done {
-  background: rgba(76,175,80,0.1);
-  border-color: rgba(76,175,80,0.35);
+  background: rgba(76, 175, 80, 0.1);
+  border-color: rgba(76, 175, 80, 0.35);
   color: #2E7D32;
 }
 
 .profile-island-chip.locked {
-  background: rgba(0,0,0,0.05);
-  border-color: rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
   color: #999;
 }
 
-.pchip-label { flex: 1; }
-.pchip-status { font-size: 16px; }
+.pchip-label {
+  flex: 1;
+}
+
+.pchip-status {
+  font-size: 16px;
+}
+
 .pchip-score {
   font-size: 14px;
   font-weight: 900;
@@ -4226,7 +4911,9 @@ body {
   text-align: right;
 }
 
-.profile-island-chip.locked .pchip-score { color: #bbb; }
+.profile-island-chip.locked .pchip-score {
+  color: #bbb;
+}
 
 /* Stats grid */
 .profile-stats {
@@ -4244,7 +4931,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.09);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.09);
   border: 1px solid rgba(196, 167, 117, 0.3);
 }
 
@@ -4260,7 +4947,9 @@ body {
   border-radius: 16px;
 }
 
-.pstat-icon { font-size: 18px; }
+.pstat-icon {
+  font-size: 18px;
+}
 
 .pstat-value {
   font-size: 14px;
@@ -4288,24 +4977,42 @@ body {
 }
 
 .pstat-total-score .pstat-label {
-  color: rgba(255,255,255,0.85);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 13px;
 }
 
 /* Background helpers for avatars */
-.bg-jogja { background: linear-gradient(135deg, #e1adff, #ba55d3); }
-.bg-bali { background: linear-gradient(135deg, #fcebb6, #f0ca4d); }
-.bg-aceh { background: linear-gradient(135deg, #b2fcae, #4caf50); }
-.bg-maluku { background: linear-gradient(135deg, #ffd3b6, #ff8a65); }
+.bg-jogja {
+  background: linear-gradient(135deg, #e1adff, #ba55d3);
+}
+
+.bg-bali {
+  background: linear-gradient(135deg, #fcebb6, #f0ca4d);
+}
+
+.bg-aceh {
+  background: linear-gradient(135deg, #b2fcae, #4caf50);
+}
+
+.bg-maluku {
+  background: linear-gradient(135deg, #ffd3b6, #ff8a65);
+}
 
 /* Avatar images */
-.main-menu-profile-img, .profile-avatar-img, .picker-emoji-img, .lb-avatar-img {
+.main-menu-profile-img,
+.profile-avatar-img,
+.picker-emoji-img,
+.lb-avatar-img {
   width: 90%;
   height: 90%;
   object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
 }
-.picker-emoji-bg, .lb-avatar, .main-menu-profile-avatar, .profile-avatar {
+
+.picker-emoji-bg,
+.lb-avatar,
+.main-menu-profile-avatar,
+.profile-avatar {
   background-color: #E07A2F;
 }
 
@@ -4315,7 +5022,7 @@ body {
 .profile-picker-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(20,10,0,0.6);
+  background: rgba(20, 10, 0, 0.6);
   backdrop-filter: blur(3px);
   z-index: 100;
   display: flex;
@@ -4327,7 +5034,8 @@ body {
 .profile-picker-modal {
   width: 100%;
   max-width: 480px;
-  height: 95dvh; /* Mentok ke atas */
+  height: 95dvh;
+  /* Mentok ke atas */
   max-height: 100dvh;
   background: rgba(255, 248, 235, 0.98);
   border-radius: 24px 24px 0 0;
@@ -4335,7 +5043,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  box-shadow: 0 -8px 30px rgba(0,0,0,0.3);
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.3);
   overflow-y: auto;
 }
 
@@ -4343,17 +5051,20 @@ body {
 .profile-picker-modal::-webkit-scrollbar {
   width: 8px;
 }
+
 .profile-picker-modal::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.05); 
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 4px;
   margin: 16px 0;
 }
+
 .profile-picker-modal::-webkit-scrollbar-thumb {
-  background: rgba(196, 99, 31, 0.4); 
+  background: rgba(196, 99, 31, 0.4);
   border-radius: 4px;
 }
+
 .profile-picker-modal::-webkit-scrollbar-thumb:hover {
-  background: rgba(196, 99, 31, 0.6); 
+  background: rgba(196, 99, 31, 0.6);
 }
 
 .picker-header {
@@ -4370,7 +5081,7 @@ body {
 }
 
 .picker-close-btn {
-  background: rgba(0,0,0,0.07);
+  background: rgba(0, 0, 0, 0.07);
   border: none;
   width: 34px;
   height: 34px;
@@ -4383,7 +5094,9 @@ body {
   transition: background 0.15s;
 }
 
-.picker-close-btn:hover { background: rgba(0,0,0,0.14); }
+.picker-close-btn:hover {
+  background: rgba(0, 0, 0, 0.14);
+}
 
 .picker-grid {
   display: grid;
@@ -4406,16 +5119,19 @@ body {
 }
 
 .picker-item:hover {
-  background: rgba(224,122,47,0.08);
+  background: rgba(224, 122, 47, 0.08);
   transform: scale(1.06);
 }
 
 .picker-item--selected {
   border-color: var(--color-primary);
-  background: rgba(224,122,47,0.12);
+  background: rgba(224, 122, 47, 0.12);
 }
 
-.picker-item:disabled { opacity: 0.55; cursor: not-allowed; }
+.picker-item:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
 
 .picker-emoji-bg {
   display: flex;
@@ -4425,8 +5141,8 @@ body {
   height: 44px;
   border-radius: 50%;
   font-size: 22px;
-  border: 2px solid rgba(255,255,255,0.6);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   overflow: hidden;
 }
 
@@ -4478,7 +5194,7 @@ body {
   max-width: 250px;
   width: 75%;
   object-fit: contain;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
   margin-top: 10px;
 
 }
@@ -4493,7 +5209,7 @@ body {
   background: rgba(255, 248, 235, 0.96);
   border-radius: 18px;
   padding: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   border: 2px solid rgba(196, 167, 117, 0.5);
 }
 
@@ -4515,7 +5231,8 @@ body {
 }
 
 .leaderboard-row--header span {
-  color: #c4631f; /* Warna oranye tua/cokelat agar terlihat */
+  color: #c4631f;
+  /* Warna oranye tua/cokelat agar terlihat */
   font-weight: 900;
   text-transform: uppercase;
   font-size: 13px;
@@ -4527,7 +5244,7 @@ body {
 }
 
 .leaderboard-screen--pedia .leaderboard-legend-text {
-  color: rgba(255,245,225,0.75);
+  color: rgba(255, 245, 225, 0.75);
 }
 
 /* Avatar in leaderboard rows */
@@ -4536,14 +5253,16 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.6);
-  box-shadow: 0 1px 5px rgba(0,0,0,0.18);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.18);
   flex-shrink: 0;
 }
 
-.lb-avatar-col { width: 38px; }
+.lb-avatar-col {
+  width: 38px;
+}
 
 /* Update leaderboard row grid to 4 columns */
 .leaderboard-row {
   grid-template-columns: 48px 38px 1fr auto;
-}
+}

@@ -76,6 +76,10 @@ export function GameScreen() {
     setScreen('result');
   };
 
+  const handleGoToMainMenu = () => {
+    setScreen('mainMenu');
+  };
+
   const dismissInstructions = () => {
     setShowInstructions(false);
     setHasSeenInstructions();
@@ -89,8 +93,8 @@ export function GameScreen() {
       {/* HUD */}
       <div className="game-hud">
         <div className="hud-left">
-          <button onClick={handlePause} className="pause-btn-top">
-            ❚❚
+          <button onClick={handlePause} className="pause-btn-top" aria-label="Pause">
+            <img src="/src/assets/universal/pause_btn.png" alt="Pause" className="pause-btn-img" />
           </button>
           <div className="hud-stat">
             <span className="hud-label">Skor</span>
@@ -168,10 +172,9 @@ export function GameScreen() {
       {isGameOver && !showQuiz && (
         <div className="game-over-overlay">
           <div className="game-over-content">
-            <h2>Permainan Selesai! 🎉</h2>
-            <p>Skor Akhir: <strong>{score}</strong></p>
+            <h2>Kamu berhasil meraih skor {score}! 🏆</h2>
             {highestFoodName && (
-              <p>Jajanan Tertinggi: {highestFoodName}</p>
+              <p style={{fontSize: '14px', color: 'var(--color-text-light)'}}>Jajanan Tertinggi: {highestFoodName}</p>
             )}
             <br />
             <Button variant="primary" size="lg" fullWidth onClick={handleEndGame}>
@@ -188,12 +191,41 @@ export function GameScreen() {
       {/* Pause Overlay */}
       {isPaused && !showQuiz && !isGameOver && (
         <div className="pause-overlay">
-          <div className="pause-content">
-            <h2>⏸️ Dijeda</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px' }}>
-              <Button variant="primary" onClick={handleResume}>▶️ Lanjutkan</Button>
-              <Button variant="danger" onClick={handleRestart}>🔄 Ulang</Button>
-              <Button variant="accent" onClick={handleEndGame}>🏁 Selesai</Button>
+          {/* Debug finish moved here */}
+          <button 
+            onClick={handleEndGame}
+            style={{
+              position: 'absolute',
+              top: '20px',
+              right: '20px',
+              fontSize: '10px',
+              background: 'rgba(0,0,0,0.5)',
+              color: 'white',
+              border: '1px solid rgba(255,255,255,0.3)',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              zIndex: 100
+            }}
+          >
+            DEBUG FINISH
+          </button>
+          <div className="pause-content-wood">
+            <img
+              src="/src/assets/universal/latar_pause.png"
+              alt="Pause Background"
+              className="pause-bg-img"
+            />
+            <div className="pause-buttons-row">
+              <button className="pause-action-btn" onClick={handleGoToMainMenu} aria-label="Home">
+                <img src="/src/assets/universal/home_btn.png" alt="Home" />
+              </button>
+              <button className="pause-action-btn" onClick={handleResume} aria-label="Lanjutkan">
+                <img src="/src/assets/universal/continue_btn.png" alt="Lanjutkan" />
+              </button>
+              <button className="pause-action-btn" onClick={handleRestart} aria-label="Ulang">
+                <img src="/src/assets/universal/restart_btn.png" alt="Ulang" />
+              </button>
             </div>
           </div>
         </div>
