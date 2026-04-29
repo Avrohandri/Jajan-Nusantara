@@ -222,12 +222,24 @@ export class GameScene extends Phaser.Scene {
             const configNext = this.currentConfig[nextTier];
             const pts = configNext ? configNext.mergeScore : 10;
             const nm = configNext ? configNext.name : 'Unknown';
+            const isMaxTier = configNext ? configNext.nextTier === null : false;
 
             this.time.delayedCall(50, () => {
               this.spawnFood(nextTier, midX, midY);
               EventBus.emit('on-merge', { tier: nextTier, points: pts, name: nm });
               // Emit food-revealed saat kuliner baru muncul hasil merge
               EventBus.emit('food-revealed', { tier: nextTier });
+
+              // Jika hasil merge adalah kuliner TERTINGGI, emit event kemenangan
+              if (isMaxTier) {
+                this.gameOver = true; // Blok drop baru
+                this.canDrop = false;
+                // Beri sedikit jeda agar animasi kuliner spawn terlihat sebelum transisi
+                this.time.delayedCall(800, () => {
+                  if (this.matter?.world) this.matter.world.pause();
+                  EventBus.emit('max-tier-reached', { name: nm, tier: nextTier });
+                });
+              }
             });
           } else {
             EventBus.emit('on-merge', { tier, points: 200, name: configA.name });

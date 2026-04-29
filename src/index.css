@@ -1721,7 +1721,7 @@ body {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 6px;
   margin-top: 4px;
   padding: 8px 12px;
@@ -5266,3 +5266,39 @@ body {
 .leaderboard-row {
   grid-template-columns: 48px 38px 1fr auto;
 }
+
+/* ============================================================
+   WIN FLASH — Transisi kilat putih ke ResultScreen
+   ============================================================ */
+
+@keyframes winFlash {
+  0%   { opacity: 0; }
+  30%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* Overlay oren yang "membakar" layar sebelum berpindah ke scene hasil */
+.game-win-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 300;
+  background: #F4933A;
+  animation: winFlash 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
+}
+
+/* ============================================================
+   RESULT SCREEN — Animasi masuk yang menarik
+   ============================================================ */
+
+@keyframes resultScreenEnter {
+  0%   { opacity: 0; transform: scale(1.06) translateY(18px); }
+  60%  { opacity: 1; transform: scale(0.99) translateY(-4px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Terapkan ke wrapper result screen agar seluruh halaman masuk dengan smooth */
+.result-hebat-screen {
+  animation: resultScreenEnter 0.65s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+

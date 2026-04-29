@@ -4,6 +4,8 @@ import { createGameConfig } from './config';
 import { EventBus } from './EventBus';
 import { useGameStore } from '../store/gameStore';
 
+const SFX_SRC = '/assets/musik/BUBBLE POP SOUND EFFECT.mp3';
+
 interface PhaserGameProps {
   width: number;
   height: number;
@@ -42,6 +44,44 @@ export function PhaserGame({ width, height }: PhaserGameProps) {
 
   const mergesSinceQuizRef = useRef(0);
 
+  // ─── SFX via Web Audio API (paling andal untuk game) ──────────────────────
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const sfxBufferRef = useRef<AudioBuffer | null>(null);
+
+  useEffect(() => {
+    // Buat AudioContext & decode file SFX satu kali
+    const ctx = new AudioContext();
+    audioCtxRef.current = ctx;
+
+    fetch(SFX_SRC)
+      .then(r => r.arrayBuffer())
+      .then(buf => ctx.decodeAudioData(buf))
+      .then(decoded => {
+        sfxBufferRef.current = decoded;
+      })
+      .catch(() => {});
+
+    return () => {
+      ctx.close();
+    };
+  }, []);
+
+  const playMergeSfx = () => {
+    const { isSfxOn } = useGameStore.getState();
+    if (!isSfxOn || !audioCtxRef.current || !sfxBufferRef.current) return;
+
+    // Resume context jika di-suspend oleh kebijakan autoplay browser
+    if (audioCtxRef.current.state === 'suspended') {
+      audioCtxRef.current.resume();
+    }
+
+    // BufferSource baru setiap panggil — murah, instant, bisa overlap
+    const source = audioCtxRef.current.createBufferSource();
+    source.buffer = sfxBufferRef.current;
+    source.connect(audioCtxRef.current.destination);
+    source.start(0);
+  };
+
   // Listen for game events
   useEffect(() => {
     const handleMerge = (data: unknown) => {
@@ -50,6 +90,9 @@ export function PhaserGame({ width, height }: PhaserGameProps) {
       store.addScore(points);
       store.incrementMerge(tier);
       mergesSinceQuizRef.current++;
+
+      // Putar SFX bubble pop saat merge
+      playMergeSfx();
 
       // Trigger quiz every 6 merges (6, 12, 18, etc.)
       if (mergesSinceQuizRef.current >= 6) {

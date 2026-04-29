@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useGameStore } from './store/gameStore';
 import { initFirebase, isFirebaseConfigured } from './lib/firebase/config';
+import { useAudio } from './hooks/useAudio';
 
 // Auth
 import { LoginScreen } from './screens/LoginScreen';
@@ -60,6 +61,9 @@ import { PisangAsarCardScreen } from './screens/PisangAsarCardScreen';
 export default function App() {
   const { currentScreen, isLoggedIn, contentLoaded, loadContent } = useGameStore();
   const [initializing, setInitializing] = useState(true);
+
+  // 🎵 Global audio manager — BGM loop + SFX drop/merge
+  useAudio();
 
   useEffect(() => {
     async function init() {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { PhaserGame } from '../game/PhaserGame';
 import { EventBus } from '../game/EventBus';
@@ -33,12 +33,14 @@ export function GameScreen() {
   const [nextItem, setNextItem] = useState<SnackData | null>(null);
   const [showInstructions, setShowInstructions] = useState(!hasSeenInstructions);
 
-  // Get game canvas dimensions (mobile-first portrait) - Calculate ONCE on mount to prevent game engine restart
+  // State untuk flash-transisi ke ResultScreen
+  const [transitioning, setTransitioning] = useState(false);
+  const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const [gameWidth] = useState(() => Math.min(360, window.innerWidth - 32));
   const [gameHeight] = useState(() => Math.min(560, window.innerHeight - 200));
 
   useEffect(() => {
-    // Reset game state when entering
     resetGame();
 
     const handleNextItem = (data: unknown) => {
@@ -50,11 +52,32 @@ export function GameScreen() {
     };
 
     EventBus.on('next-item', handleNextItem);
-
     return () => {
       EventBus.off('next-item', handleNextItem);
     };
   }, [resetGame]);
+
+  // Saat kuliner tertinggi terbentuk → flash putih → ResultScreen
+  useEffect(() => {
+    const handleMaxTier = async () => {
+      // Beri 600ms agar kuliner hasil merge sempat terlihat muncul
+      transitionTimerRef.current = setTimeout(async () => {
+        setTransitioning(true); // Mulai animasi flash/fade
+
+        // Setelah 700ms (animasi flash selesai) → pindah ke result
+        transitionTimerRef.current = setTimeout(async () => {
+          await endSession('target_reached');
+          setScreen('result');
+        }, 700);
+      }, 600);
+    };
+
+    EventBus.on('max-tier-reached', handleMaxTier);
+    return () => {
+      EventBus.off('max-tier-reached', handleMaxTier);
+      if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
+    };
+  }, [endSession, setScreen]);
 
   const handlePause = () => {
     setPaused(true);
@@ -85,7 +108,6 @@ export function GameScreen() {
     setHasSeenInstructions();
   };
 
-  // Get highest food name directly from config (region-aware, does not depend on Firestore snacks)
   const highestFoodName = currentConfig[highestTier]?.name ?? null;
 
   return (
@@ -109,12 +131,9 @@ export function GameScreen() {
           {nextItem && (
             <div className="hud-next">
               <span className="hud-label">Berikutnya</span>
-              <div
-                className="next-preview"
-                style={{ background: 'none' }}
-              >
-                <img 
-                  src={`/assets/${assetFolder}/${currentConfig[nextItem.tier]?.textureKey || currentConfig[0].textureKey}.png`} 
+              <div className="next-preview" style={{ background: 'none' }}>
+                <img
+                  src={`/assets/${assetFolder}/${currentConfig[nextItem.tier]?.textureKey || currentConfig[0].textureKey}.png`}
                   alt="Next hint"
                   style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                 />
@@ -125,7 +144,7 @@ export function GameScreen() {
       </div>
 
       {/* Game Canvas */}
-      <div 
+      <div
         className="game-canvas-wrapper"
         style={{ width: gameWidth, height: gameHeight, flex: 'none', backgroundImage: `url('/${activeRegion}BG.png')` }}
       >
@@ -137,14 +156,11 @@ export function GameScreen() {
         {currentConfig.map((item) => {
           const isUnlocked = seenTiers.includes(item.tier);
           return (
-            <div 
-              key={item.tier} 
-              className={`progress-food ${isUnlocked ? 'unlocked' : 'locked'}`}
-            >
+            <div key={item.tier} className={`progress-food ${isUnlocked ? 'unlocked' : 'locked'}`}>
               {isUnlocked ? (
                 <img src={`/assets/${assetFolder}/${item.textureKey}.png`} alt={item.name} />
               ) : (
-                <span style={{color: '#8B7355', fontWeight: 'bold'}}>?</span>
+                <span style={{ color: '#8B7355', fontWeight: 'bold' }}>?</span>
               )}
             </div>
           );
@@ -174,13 +190,13 @@ export function GameScreen() {
           <div className="game-over-content">
             <h2>Kamu berhasil meraih skor {score}! 🏆</h2>
             {highestFoodName && (
-              <p style={{fontSize: '14px', color: 'var(--color-text-light)'}}>Jajanan Tertinggi: {highestFoodName}</p>
+              <p style={{ fontSize: '14px', color: 'var(--color-text-light)' }}>Jajanan Tertinggi: {highestFoodName}</p>
             )}
             <br />
             <Button variant="primary" size="lg" fullWidth onClick={handleEndGame}>
               📊 Lihat Hasil
             </Button>
-            <div style={{marginTop: 8}}></div>
+            <div style={{ marginTop: 8 }} />
             <Button variant="danger" size="lg" fullWidth onClick={handleRestart}>
               🔄 Ulang Bermain
             </Button>
@@ -191,31 +207,19 @@ export function GameScreen() {
       {/* Pause Overlay */}
       {isPaused && !showQuiz && !isGameOver && (
         <div className="pause-overlay">
-          {/* Debug finish moved here */}
-          <button 
+          <button
             onClick={handleEndGame}
             style={{
-              position: 'absolute',
-              top: '20px',
-              right: '20px',
-              fontSize: '10px',
-              background: 'rgba(0,0,0,0.5)',
-              color: 'white',
-              border: '1px solid rgba(255,255,255,0.3)',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              zIndex: 100
+              position: 'absolute', top: '20px', right: '20px',
+              fontSize: '10px', background: 'rgba(0,0,0,0.5)',
+              color: 'white', border: '1px solid rgba(255,255,255,0.3)',
+              padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', zIndex: 100
             }}
           >
             DEBUG FINISH
           </button>
           <div className="pause-content-wood">
-            <img
-              src="/src/assets/universal/latar_pause.png"
-              alt="Pause Background"
-              className="pause-bg-img"
-            />
+            <img src="/src/assets/universal/latar_pause.png" alt="Pause Background" className="pause-bg-img" />
             <div className="pause-buttons-row">
               <button className="pause-action-btn" onClick={handleGoToMainMenu} aria-label="Home">
                 <img src="/src/assets/universal/home_btn.png" alt="Home" />
@@ -230,6 +234,9 @@ export function GameScreen() {
           </div>
         </div>
       )}
+
+      {/* Flash transisi putih saat kuliner tertinggi tercapai */}
+      {transitioning && <div className="game-win-flash" aria-hidden="true" />}
 
       {/* NPC Notification Overlay */}
       <NpcNotification />
