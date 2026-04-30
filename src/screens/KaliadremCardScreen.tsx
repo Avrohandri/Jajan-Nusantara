@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import kaliadremImg from '../assets/pedia/kaliadrem.png';
 
 export function KaliadremCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function KaliadremCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_bali/01_kaliadrem.png" alt="Kaliadrem Mascot" className="klepon-card-mascot" />
+          <img src={kaliadremImg} alt="Kaliadrem Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

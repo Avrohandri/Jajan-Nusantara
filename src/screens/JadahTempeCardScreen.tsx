@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import jadahTempeImg from '../assets/pedia/jadah tempe.png';
 
 export function JadahTempeCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function JadahTempeCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_jogja/07_JadahTempe.png" alt="Jadah Tempe Mascot" className="klepon-card-mascot" />
+          <img src={jadahTempeImg} alt="Jadah Tempe Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

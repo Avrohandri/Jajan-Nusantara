@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import saguGulaImg from '../assets/pedia/sagu gula.png';
 
 export function SaguGulaCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function SaguGulaCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_maluku/02_sagu gula.png" alt="Sagu Gula Mascot" className="klepon-card-mascot" />
+          <img src={saguGulaImg} alt="Sagu Gula Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import kleponImg from '../assets/pedia/klepon.png';
 
 export function KleponCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function KleponCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_jogja/00_Klepon.png" alt="Klepon Mascot" className="klepon-card-mascot" />
+          <img src={kleponImg} alt="Klepon Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

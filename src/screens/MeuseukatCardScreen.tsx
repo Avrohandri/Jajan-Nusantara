@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import meuseukatImg from '../assets/pedia/meuseukat.png';
 
 export function MeuseukatCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function MeuseukatCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_aceh/05_meuseukat.png" alt="Meuseukat Mascot" className="klepon-card-mascot" />
+          <img src={meuseukatImg} alt="Meuseukat Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

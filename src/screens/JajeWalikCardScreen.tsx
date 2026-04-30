@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import jajeWalikImg from '../assets/pedia/jaje walik.png';
 
 export function JajeWalikCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function JajeWalikCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_bali/03_jaje walik.png" alt="Jaje Walik Mascot" className="klepon-card-mascot" />
+          <img src={jajeWalikImg} alt="Jaje Walik Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

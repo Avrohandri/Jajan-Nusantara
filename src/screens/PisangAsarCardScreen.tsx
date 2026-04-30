@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import pisangAsarImg from '../assets/pedia/pisang asar.png';
 
 export function PisangAsarCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function PisangAsarCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_maluku/06_pisang asar.png" alt="Pisang Asar Mascot" className="klepon-card-mascot" />
+          <img src={pisangAsarImg} alt="Pisang Asar Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

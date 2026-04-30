@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import pulotIjoImg from '../assets/pedia/pulot ijo.png';
 
 export function PulotIjoCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function PulotIjoCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_aceh/02_pulot ijo.png" alt="Pulot Ijo Mascot" className="klepon-card-mascot" />
+          <img src={pulotIjoImg} alt="Pulot Ijo Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

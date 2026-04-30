@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import tiwulAyuImg from '../assets/pedia/tiwul ayu.png';
 
 export function TiwulAyuCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function TiwulAyuCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_jogja/06_TiwulAyu.png" alt="Tiwul Ayu Mascot" className="klepon-card-mascot" />
+          <img src={tiwulAyuImg} alt="Tiwul Ayu Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

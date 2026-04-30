@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import lemperImg from '../assets/pedia/lemper.png';
 
 export function LemperCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function LemperCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_jogja/05_Lemper.png" alt="Lemper Mascot" className="klepon-card-mascot" />
+          <img src={lemperImg} alt="Lemper Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

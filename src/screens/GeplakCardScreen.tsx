@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import geplakImg from '../assets/pedia/geplak.png';
 
 export function GeplakCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function GeplakCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_jogja/03_Geplak.png" alt="Geplak Mascot" className="klepon-card-mascot" />
+          <img src={geplakImg} alt="Geplak Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import pieSusuImg from '../assets/pedia/pie susu.png';
 
 export function PieSusuCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function PieSusuCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_bali/02_pie susu.png" alt="Pie Susu Mascot" className="klepon-card-mascot" />
+          <img src={pieSusuImg} alt="Pie Susu Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

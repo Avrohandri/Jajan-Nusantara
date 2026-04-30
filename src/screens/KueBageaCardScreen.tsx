@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import kueBageaImg from '../assets/pedia/kue bagea.png';
 
 export function KueBageaCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function KueBageaCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_maluku/05_kue bagea.png" alt="Kue Bagea Mascot" className="klepon-card-mascot" />
+          <img src={kueBageaImg} alt="Kue Bagea Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

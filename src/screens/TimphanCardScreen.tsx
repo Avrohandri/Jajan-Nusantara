@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import timphanImg from '../assets/pedia/timphan.png';
 
 export function TimphanCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function TimphanCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_aceh/01_timphan.png" alt="Timphan Mascot" className="klepon-card-mascot" />
+          <img src={timphanImg} alt="Timphan Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

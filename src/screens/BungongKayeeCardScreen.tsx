@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import bungongKayeeImg from '../assets/pedia/bungong kayee.png';
 
 export function BungongKayeeCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function BungongKayeeCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_aceh/04_bungong kayee.png" alt="Bungong Kayee Mascot" className="klepon-card-mascot" />
+          <img src={bungongKayeeImg} alt="Bungong Kayee Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}

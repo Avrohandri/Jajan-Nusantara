@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
 import pediaBg from '../assets/pedia/pedia_bg.png';
+import samaloyangImg from '../assets/pedia/samaloyang.png';
 
 export function SamaloyangCardScreen() {
   const { setScreen } = useGameStore();
@@ -40,7 +41,7 @@ export function SamaloyangCardScreen() {
           <div className="klepon-card-sparkle bottom-right">✦</div>
           <div className="klepon-card-sparkle mid-left">✦</div>
           <div className="klepon-card-sparkle mid-right">✦</div>
-          <img src="/assets/foods_aceh/00_samaloyang.png" alt="Samaloyang Mascot" className="klepon-card-mascot" />
+          <img src={samaloyangImg} alt="Samaloyang Mascot" className="klepon-card-mascot" />
         </div>
 
         {/* Tagline */}
