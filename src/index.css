@@ -4560,9 +4560,9 @@ body {
 
 .map-island-done-badge {
   position: absolute;
-  top: 4px;
-  right: 4px;
-  font-size: 22px;
+  bottom: 10%;
+  right: 15%;
+  font-size: 24px;
   filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.4));
   pointer-events: none;
 }
