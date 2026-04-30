@@ -375,6 +375,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({
         userId: uid,
         username: profile.username,
+        profileIcon: profile.profileIcon ?? 'Klepon',
         isLoggedIn: true,
         currentScreen: 'mainMenu',
         islandProgress: profile.islandProgress ?? { ...DEFAULT_ISLAND_PROGRESS },
