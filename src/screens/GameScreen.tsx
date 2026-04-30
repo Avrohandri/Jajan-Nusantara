@@ -8,6 +8,11 @@ import { Button } from '../components/Button';
 import { NpcNotification } from '../components/NpcNotification';
 import type { SnackData } from '../types';
 import { REGION_FOOD_CONFIGS } from '../game/characters/FoodConfig';
+import pauseBtnImg from '../assets/universal/pause_btn.png';
+import latarapauseImg from '../assets/universal/latar_pause.png';
+import homeBtnImg from '../assets/universal/home_btn.png';
+import continueBtnImg from '../assets/universal/continue_btn.png';
+import restartBtnImg from '../assets/universal/restart_btn.png';
 
 export function GameScreen() {
   const {
@@ -116,7 +121,7 @@ export function GameScreen() {
       <div className="game-hud">
         <div className="hud-left">
           <button onClick={handlePause} className="pause-btn-top" aria-label="Pause">
-            <img src="/src/assets/universal/pause_btn.png" alt="Pause" className="pause-btn-img" />
+            <img src={pauseBtnImg} alt="Pause" className="pause-btn-img" />
           </button>
           <div className="hud-stat">
             <span className="hud-label">Skor</span>
@@ -219,16 +224,16 @@ export function GameScreen() {
             DEBUG FINISH
           </button>
           <div className="pause-content-wood">
-            <img src="/src/assets/universal/latar_pause.png" alt="Pause Background" className="pause-bg-img" />
+            <img src={latarapauseImg} alt="Pause Background" className="pause-bg-img" />
             <div className="pause-buttons-row">
               <button className="pause-action-btn" onClick={handleGoToMainMenu} aria-label="Home">
-                <img src="/src/assets/universal/home_btn.png" alt="Home" />
+                <img src={homeBtnImg} alt="Home" />
               </button>
               <button className="pause-action-btn" onClick={handleResume} aria-label="Lanjutkan">
-                <img src="/src/assets/universal/continue_btn.png" alt="Lanjutkan" />
+                <img src={continueBtnImg} alt="Lanjutkan" />
               </button>
               <button className="pause-action-btn" onClick={handleRestart} aria-label="Ulang">
-                <img src="/src/assets/universal/restart_btn.png" alt="Ulang" />
+                <img src={restartBtnImg} alt="Ulang" />
               </button>
             </div>
           </div>
