@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StepIngredientSelection } from '../features/pisangasar/StepIngredientSelection';
 import { StepCutBanana } from '../features/pisangasar/StepCutBanana';
@@ -15,12 +16,19 @@ const STEPS = [
 ];
 
 export function PisangAsarMiniGameScreen() {
-  const { pisangAsarStep, pisangAsarComplete, advancePisangAsarStep, resetPisangAsarGame, setScreen } = useGameStore();
+  const { pisangAsarStep, pisangAsarComplete, advancePisangAsarStep, resetPisangAsarGame, setScreen, awardStarsForRegion } = useGameStore();
 
   const handleBack = () => {
     resetPisangAsarGame();
     setScreen('mainMenu');
   };
+
+  // Award stars saat pisang asar selesai
+  useEffect(() => {
+    if (pisangAsarComplete) {
+      awardStarsForRegion('maluku');
+    }
+  }, [pisangAsarComplete]);
 
   /* ── Complete screen ── */
   if (pisangAsarComplete) {

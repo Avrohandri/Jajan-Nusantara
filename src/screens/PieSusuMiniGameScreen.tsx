@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StepDoughMixing } from '../features/pieSusu/StepDoughMixing';
 import { StepShapingMold } from '../features/pieSusu/StepShapingMold';
@@ -15,12 +16,19 @@ const STEPS = [
 ];
 
 export function PieSusuMiniGameScreen() {
-  const { pieSusuStep, pieSusuComplete, advancePieSusuStep, resetPieSusuGame, setScreen } = useGameStore();
+  const { pieSusuStep, pieSusuComplete, advancePieSusuStep, resetPieSusuGame, setScreen, awardStarsForRegion } = useGameStore();
 
   const handleBack = () => {
     resetPieSusuGame();
     setScreen('mainMenu');
   };
+
+  // Award stars saat pie susu selesai
+  useEffect(() => {
+    if (pieSusuComplete) {
+      awardStarsForRegion('bali');
+    }
+  }, [pieSusuComplete]);
 
   /* ── Complete screen ── */
   if (pieSusuComplete) {

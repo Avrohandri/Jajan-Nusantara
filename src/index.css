@@ -4545,6 +4545,8 @@ body {
 .map-island-face {
   position: relative;
   display: inline-block;
+  overflow: visible;
+  padding-bottom: 0;
 }
 
 .map-island-lock-overlay {
@@ -4558,13 +4560,43 @@ body {
   pointer-events: none;
 }
 
-.map-island-done-badge {
+.map-island-stars {
   position: absolute;
-  bottom: 10%;
-  right: 15%;
-  font-size: 24px;
-  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.4));
+  /* Atur nilai bottom ini untuk menaikkan/menurunkan bintang */
+  /* Positif = naik, Negatif = turun */
+  bottom: 8px; 
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
+  z-index: 10;
+}
+
+.map-star-img {
+  /* Atur ukuran bintang di sini */
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
+  animation: starPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.map-star-img:nth-child(1) { animation-delay: 0.05s; }
+.map-star-img:nth-child(2) { animation-delay: 0.15s; }
+.map-star-img:nth-child(3) { animation-delay: 0.25s; }
+
+@keyframes starPop {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* ========================================================

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StepIngredients } from '../features/klepon/StepIngredients';
 import { StepMixing } from '../features/klepon/StepMixing';
@@ -15,12 +16,19 @@ const STEPS = [
 ];
 
 export function KleponMiniGameScreen() {
-  const { kleponStep, kleponComplete, advanceKleponStep, resetKleponGame, setScreen } = useGameStore();
+  const { kleponStep, kleponComplete, advanceKleponStep, resetKleponGame, setScreen, awardStarsForRegion } = useGameStore();
 
   const handleBack = () => {
     resetKleponGame();
     setScreen('mainMenu');
   };
+
+  // Award stars saat klepon selesai
+  useEffect(() => {
+    if (kleponComplete) {
+      awardStarsForRegion('jogja');
+    }
+  }, [kleponComplete]);
 
   /* ── Complete screen ── */
   if (kleponComplete) {

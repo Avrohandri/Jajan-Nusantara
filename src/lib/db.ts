@@ -15,7 +15,7 @@ import { getDb, isFirebaseConfigured } from './firebase/config';
 import { fallbackSnacks } from './datastore/fallbackSnacks';
 import { fallbackQuizzes } from './datastore/fallbackQuizzes';
 import { fallbackRecipes } from './datastore/fallbackRecipes';
-import type { SnackData, QuizData, RecipeData, UserProfile, UserSession, IslandProgress, RegionBestScores, LeaderboardEntry } from '../types';
+import type { SnackData, QuizData, RecipeData, UserProfile, UserSession, IslandProgress, IslandStars, IslandMerges, RegionBestScores, LeaderboardEntry } from '../types';
 
 // ========== Konstanta LocalStorage ==========
 const LS_SNACKS = 'kuliner_snacks';
@@ -296,4 +296,29 @@ export async function getSessions(userId: string): Promise<UserSession[]> {
     }
   }
   return [];
+}
+
+/** Simpan data bintang (islandStars) dan merge count per pulau ke Firestore / localStorage */
+export async function saveIslandStars(
+  userId: string,
+  islandStars: IslandStars,
+  islandMerges: IslandMerges,
+): Promise<void> {
+  if (isFirebaseConfigured()) {
+    try {
+      const db = getDb()!;
+      await updateDoc(doc(db, 'users', userId), {
+        islandStars,
+        islandMerges,
+        lastPlayedAt: Date.now(),
+      });
+      return;
+    } catch (e) {
+      console.warn('[DB] Gagal simpan island stars:', e);
+    }
+  }
+  // Fallback: simpan ke localStorage
+  const existing = localStorage.getItem('kuliner_profile_v2');
+  const current = existing ? JSON.parse(existing) : {};
+  localStorage.setItem('kuliner_profile_v2', JSON.stringify({ ...current, islandStars, islandMerges }));
 }

@@ -52,6 +52,22 @@ export interface IslandProgress {
   maluku: boolean;
 }
 
+/** Bintang per-island. 0 = belum, 1/2/3 = jumlah bintang dari mini game */
+export interface IslandStars {
+  jogja: 0 | 1 | 2 | 3;
+  bali: 0 | 1 | 2 | 3;
+  aceh: 0 | 1 | 2 | 3;
+  maluku: 0 | 1 | 2 | 3;
+}
+
+/** Merge count saat menyelesaikan drop-and-merge per pulau (untuk hitung bintang) */
+export interface IslandMerges {
+  jogja: number;
+  bali: number;
+  aceh: number;
+  maluku: number;
+}
+
 /** Skor terbaik per-pulau */
 export interface RegionBestScores {
   jogja: number;
@@ -73,6 +89,10 @@ export interface UserProfile {
   totalQuizzesAnswered: number;
   unlockedRecipes: string[];
   islandProgress: IslandProgress;
+  /** Bintang per pulau — 0=belum, 1/2/3 sesuai performa merge */
+  islandStars?: IslandStars;
+  /** Jumlah merge terbaik per pulau saat selesai Drop & Merge */
+  islandMerges?: IslandMerges;
   /** Icon profil — nama kuliner, misal 'Klepon', 'Pisang Asar', dll */
   profileIcon: string;
   createdAt: number;

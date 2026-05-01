@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { SnackData, QuizData, RecipeData, UserSession, ScreenName, IslandProgress, RegionBestScores, UserProfile } from '../types';
+import type { SnackData, QuizData, RecipeData, UserSession, ScreenName, IslandProgress, IslandStars, IslandMerges, RegionBestScores, UserProfile } from '../types';
 import {
   fetchSnacks,
   fetchQuizzes,
@@ -12,6 +12,7 @@ import {
   checkUsernameExists,
   updateIslandProgress,
   updateProfileIcon,
+  saveProfile,
 } from '../lib/db';
 import { registerWithUsername, loginWithUsername, logoutUser } from '../lib/firebase/config';
 
@@ -20,6 +21,20 @@ const DEFAULT_ISLAND_PROGRESS: IslandProgress = {
   bali: false,
   aceh: false,
   maluku: false,
+};
+
+const DEFAULT_ISLAND_STARS: IslandStars = {
+  jogja: 0,
+  bali: 0,
+  aceh: 0,
+  maluku: 0,
+};
+
+const DEFAULT_ISLAND_MERGES: IslandMerges = {
+  jogja: 0,
+  bali: 0,
+  aceh: 0,
+  maluku: 0,
 };
 
 const DEFAULT_REGION_SCORES: RegionBestScores = {
@@ -130,9 +145,12 @@ interface GameStore {
   unlockedRecipes: string[];
   sessions: UserSession[];
   islandProgress: IslandProgress;
+  islandStars: IslandStars;
+  islandMerges: IslandMerges;
   loadProfile: () => Promise<void>;
   endSession: (reason: 'board_full' | 'target_reached' | 'quit') => Promise<void>;
   completeIsland: () => Promise<void>;
+  awardStarsForRegion: (region: string) => Promise<void>;
 
   // --- First Launch ---
   hasSeenInstructions: boolean;
@@ -233,17 +251,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ currentRecipe: recipe, cookingStep: 0, cookingComplete: false, currentScreen: 'cooking' });
   },
   advanceCookingStep: () => {
-    const { currentRecipe, cookingStep } = get();
-    if (!currentRecipe) return;
-    if (cookingStep + 1 >= currentRecipe.steps.length) {
-      const recipeName = currentRecipe.snackName;
-      set(s => ({
+    const s = get();
+    if (!s.currentRecipe) return;
+    if (s.cookingStep + 1 >= s.currentRecipe.steps.length) {
+      const recipeName = s.currentRecipe.snackName;
+      const isNew = !s.unlockedRecipes.includes(recipeName);
+      const newUnlocked = isNew ? [...s.unlockedRecipes, recipeName] : s.unlockedRecipes;
+      set({
         cookingComplete: true,
-        cookingStep: cookingStep + 1,
-        unlockedRecipes: s.unlockedRecipes.includes(recipeName) ? s.unlockedRecipes : [...s.unlockedRecipes, recipeName],
-      }));
+        cookingStep: s.cookingStep + 1,
+        unlockedRecipes: newUnlocked,
+      });
+      if (isNew && s.userId) {
+        saveProfile(s.userId, { unlockedRecipes: newUnlocked });
+      }
     } else {
-      set({ cookingStep: cookingStep + 1 });
+      set({ cookingStep: s.cookingStep + 1 });
     }
   },
   resetCooking: () => set({ currentRecipe: null, cookingStep: 0, cookingComplete: false }),
@@ -252,68 +275,96 @@ export const useGameStore = create<GameStore>((set, get) => ({
   kleponStep: 0,
   kleponComplete: false,
   startKleponGame: () => set({ kleponStep: 0, kleponComplete: false, currentScreen: 'kleponGame' }),
-  advanceKleponStep: () => set(s => {
+  advanceKleponStep: () => {
+    const s = get();
     const nextStep = s.kleponStep + 1;
     if (nextStep >= 5) {
-      return {
+      const isNew = !s.unlockedRecipes.includes('Klepon');
+      const newUnlocked = isNew ? [...s.unlockedRecipes, 'Klepon'] : s.unlockedRecipes;
+      set({
         kleponComplete: true,
         kleponStep: nextStep,
-        unlockedRecipes: s.unlockedRecipes.includes('Klepon') ? s.unlockedRecipes : [...s.unlockedRecipes, 'Klepon'],
-      };
+        unlockedRecipes: newUnlocked,
+      });
+      if (isNew && s.userId) {
+        saveProfile(s.userId, { unlockedRecipes: newUnlocked });
+      }
+    } else {
+      set({ kleponStep: nextStep });
     }
-    return { kleponStep: nextStep };
-  }),
+  },
   resetKleponGame: () => set({ kleponStep: 0, kleponComplete: false }),
 
   // Pie Susu Mini-Game
   pieSusuStep: 0,
   pieSusuComplete: false,
   startPieSusuGame: () => set({ pieSusuStep: 0, pieSusuComplete: false, currentScreen: 'pieSusuGame' }),
-  advancePieSusuStep: () => set(s => {
+  advancePieSusuStep: () => {
+    const s = get();
     const nextStep = s.pieSusuStep + 1;
     if (nextStep >= 5) {
-      return {
+      const isNew = !s.unlockedRecipes.includes('Pie Susu');
+      const newUnlocked = isNew ? [...s.unlockedRecipes, 'Pie Susu'] : s.unlockedRecipes;
+      set({
         pieSusuComplete: true,
         pieSusuStep: nextStep,
-        unlockedRecipes: s.unlockedRecipes.includes('Pie Susu') ? s.unlockedRecipes : [...s.unlockedRecipes, 'Pie Susu'],
-      };
+        unlockedRecipes: newUnlocked,
+      });
+      if (isNew && s.userId) {
+        saveProfile(s.userId, { unlockedRecipes: newUnlocked });
+      }
+    } else {
+      set({ pieSusuStep: nextStep });
     }
-    return { pieSusuStep: nextStep };
-  }),
+  },
   resetPieSusuGame: () => set({ pieSusuStep: 0, pieSusuComplete: false }),
 
   // Pisang Asar Mini-Game
   pisangAsarStep: 0,
   pisangAsarComplete: false,
   startPisangAsarGame: () => set({ pisangAsarStep: 0, pisangAsarComplete: false, currentScreen: 'pisangAsarGame' }),
-  advancePisangAsarStep: () => set(s => {
+  advancePisangAsarStep: () => {
+    const s = get();
     const nextStep = s.pisangAsarStep + 1;
     if (nextStep >= 5) {
-      return {
+      const isNew = !s.unlockedRecipes.includes('Pisang Asar');
+      const newUnlocked = isNew ? [...s.unlockedRecipes, 'Pisang Asar'] : s.unlockedRecipes;
+      set({
         pisangAsarComplete: true,
         pisangAsarStep: nextStep,
-        unlockedRecipes: s.unlockedRecipes.includes('Pisang Asar') ? s.unlockedRecipes : [...s.unlockedRecipes, 'Pisang Asar'],
-      };
+        unlockedRecipes: newUnlocked,
+      });
+      if (isNew && s.userId) {
+        saveProfile(s.userId, { unlockedRecipes: newUnlocked });
+      }
+    } else {
+      set({ pisangAsarStep: nextStep });
     }
-    return { pisangAsarStep: nextStep };
-  }),
+  },
   resetPisangAsarGame: () => set({ pisangAsarStep: 0, pisangAsarComplete: false }),
 
   // Samaloyang Mini-Game
   samaloyangStep: 0,
   samaloyangComplete: false,
   startSamaloyangGame: () => set({ samaloyangStep: 0, samaloyangComplete: false, currentScreen: 'samaloyangGame' }),
-  advanceSamaloyangStep: () => set(s => {
+  advanceSamaloyangStep: () => {
+    const s = get();
     const nextStep = s.samaloyangStep + 1;
     if (nextStep >= 4) {
-      return {
+      const isNew = !s.unlockedRecipes.includes('Samaloyang');
+      const newUnlocked = isNew ? [...s.unlockedRecipes, 'Samaloyang'] : s.unlockedRecipes;
+      set({
         samaloyangComplete: true,
         samaloyangStep: nextStep,
-        unlockedRecipes: s.unlockedRecipes.includes('Samaloyang') ? s.unlockedRecipes : [...s.unlockedRecipes, 'Samaloyang'],
-      };
+        unlockedRecipes: newUnlocked,
+      });
+      if (isNew && s.userId) {
+        saveProfile(s.userId, { unlockedRecipes: newUnlocked });
+      }
+    } else {
+      set({ samaloyangStep: nextStep });
     }
-    return { samaloyangStep: nextStep };
-  }),
+  },
   resetSamaloyangGame: () => set({ samaloyangStep: 0, samaloyangComplete: false }),
 
   // Auth
@@ -379,6 +430,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         isLoggedIn: true,
         currentScreen: 'mainMenu',
         islandProgress: profile.islandProgress ?? { ...DEFAULT_ISLAND_PROGRESS },
+        islandStars: (profile.islandStars ?? { ...DEFAULT_ISLAND_STARS }) as IslandStars,
+        islandMerges: profile.islandMerges ?? { ...DEFAULT_ISLAND_MERGES },
         regionBestScores: profile.regionBestScores ?? { ...DEFAULT_REGION_SCORES },
         totalBestScore: profile.totalBestScore ?? 0,
         totalSessions: profile.totalSessions ?? 0,
@@ -424,6 +477,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   unlockedRecipes: [],
   sessions: [],
   islandProgress: { ...DEFAULT_ISLAND_PROGRESS },
+  islandStars: { ...DEFAULT_ISLAND_STARS },
+  islandMerges: { ...DEFAULT_ISLAND_MERGES },
 
   loadProfile: async () => {
     const { userId } = get();
@@ -440,6 +495,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         totalQuizzesAnswered: profile.totalQuizzesAnswered ?? 0,
         unlockedRecipes: profile.unlockedRecipes ?? [],
         islandProgress: profile.islandProgress ?? { ...DEFAULT_ISLAND_PROGRESS },
+        islandStars: (profile.islandStars ?? { ...DEFAULT_ISLAND_STARS }) as IslandStars,
+        islandMerges: profile.islandMerges ?? { ...DEFAULT_ISLAND_MERGES },
         username: profile.username ?? '',
       });
     }
@@ -474,6 +531,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
       totalQuizzesAnswered: newTotalQuizzesAnswered,
       sessions: [session, ...s.sessions].slice(0, 20),
     });
+
+    if (s.userId) {
+      await saveProfile(s.userId, {
+        totalSessions: newTotalSessions,
+        totalMerges: newTotalMerges,
+        totalQuizzesCorrect: newTotalQuizzesCorrect,
+        totalQuizzesAnswered: newTotalQuizzesAnswered,
+      });
+    }
   },
 
   /** 
@@ -496,9 +562,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
       totalQuizzesAnswered: s.totalQuizzesAnswered,
       unlockedRecipes: s.unlockedRecipes,
       islandProgress: s.islandProgress,
+      islandStars: s.islandStars,
+      islandMerges: s.islandMerges,
       profileIcon: s.profileIcon ?? 'Klepon',
       createdAt: Date.now(),
       lastPlayedAt: Date.now(),
+    };
+
+    // Simpan merge count saat selesai untuk hitung bintang nanti
+    const newIslandMerges: IslandMerges = {
+      ...s.islandMerges,
+      [region]: s.mergeCount,
     };
 
     const { newRegionBestScores, newTotalBestScore } = await updateIslandProgress(
@@ -515,9 +589,41 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       islandProgress: newIslandProgress,
+      islandMerges: newIslandMerges,
       regionBestScores: newRegionBestScores,
       totalBestScore: newTotalBestScore,
     });
+  },
+
+  /**
+   * Dihitung & disimpan setelah player menyelesaikan mini game memasak.
+   * Bintang 3 ≤ 30 merge, bintang 2 ≤ 40 merge, bintang 1 ≥ 41 merge.
+   */
+  awardStarsForRegion: async (region: string) => {
+    const s = get();
+    const key = region as keyof IslandStars;
+    const merges = s.islandMerges[key] ?? 0;
+
+    const earned: 1 | 2 | 3 =
+      merges <= 30 ? 3 :
+      merges <= 40 ? 2 : 1;
+
+    // Hanya update jika bintang baru lebih baik
+    const currentStars = s.islandStars[key] as 0 | 1 | 2 | 3;
+    if (earned <= currentStars) return;
+
+    const newIslandStars: IslandStars = {
+      ...s.islandStars,
+      [key]: earned,
+    };
+
+    set({ islandStars: newIslandStars });
+
+    // Persist ke Firestore / localStorage
+    if (s.userId) {
+      const { saveIslandStars } = await import('../lib/db');
+      await saveIslandStars(s.userId, newIslandStars, s.islandMerges);
+    }
   },
 
   // First launch

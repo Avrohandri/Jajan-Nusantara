@@ -4,6 +4,8 @@ import type { IslandProgress } from '../types';
 
 import levelSelectBg from '../assets/map/level_select_bg.png';
 import backButtonImg from '../assets/universal/back button.png';
+import starIsiImg from '../assets/universal/star_isi.png';
+import starKosongImg from '../assets/universal/star_kosong.png';
 
 interface MapItem {
   id: keyof IslandProgress;
@@ -48,7 +50,7 @@ const LOCK_REQUIRES: Record<string, string> = {
 };
 
 export function MapSelectScreen() {
-  const { setScreen, resetGame, islandProgress } = useGameStore();
+  const { setScreen, resetGame, islandProgress, islandStars } = useGameStore();
   const [toast, setToast] = useState<string | null>(null);
 
   const handleMapClick = (map: MapItem) => {
@@ -85,12 +87,14 @@ export function MapSelectScreen() {
           {MAP_NODES.map((map) => {
             const unlocked = isUnlocked(map.id, islandProgress);
             const completed = islandProgress[map.id];
+            const stars = islandStars[map.id] ?? 0;
             return (
               <IslandNode
                 key={map.id}
                 map={map}
                 unlocked={unlocked}
                 completed={completed}
+                stars={stars}
                 columnPos={COLUMN_POS}
                 displayName={ISLAND_DISPLAY_NAMES[map.id]}
                 onClick={() => handleMapClick(map)}
@@ -113,12 +117,13 @@ interface IslandNodeProps {
   map: MapItem;
   unlocked: boolean;
   completed: boolean;
+  stars: 0 | 1 | 2 | 3;
   columnPos: typeof COLUMN_POS;
   displayName: string;
   onClick: () => void;
 }
 
-function IslandNode({ map, unlocked, completed, columnPos, displayName, onClick }: IslandNodeProps) {
+function IslandNode({ map, unlocked, completed, stars, columnPos, displayName, onClick }: IslandNodeProps) {
   const centerX = map.column === 'left' ? columnPos.left : columnPos.right;
 
   return (
@@ -141,6 +146,7 @@ function IslandNode({ map, unlocked, completed, columnPos, displayName, onClick 
           mapId={map.id}
           locked={!unlocked}
           completed={completed}
+          stars={stars}
           width={`${map.widthPx}px`}
         />
       </button>
@@ -152,11 +158,13 @@ function IslandFace({
   mapId,
   locked,
   completed,
+  stars,
   width,
 }: {
   mapId: string;
   locked: boolean;
   completed: boolean;
+  stars: 0 | 1 | 2 | 3;
   width: string;
 }) {
   const [useFallback, setUseFallback] = useState(false);
@@ -191,11 +199,18 @@ function IslandFace({
         </span>
       )}
 
-      {/* Completed badge */}
-      {completed && !locked && (
-        <span className="map-island-done-badge" aria-hidden>
-          ✅
-        </span>
+      {/* Star rating - tampil di bawah pulau jika sudah dibuka */}
+      {!locked && (
+        <div className="map-island-stars" aria-label={`${stars} bintang`}>
+          {[1, 2, 3].map((i) => (
+            <img
+              key={i}
+              src={i <= stars ? starIsiImg : starKosongImg}
+              alt={i <= stars ? 'bintang terisi' : 'bintang kosong'}
+              className="map-star-img"
+            />
+          ))}
+        </div>
       )}
     </span>
   );

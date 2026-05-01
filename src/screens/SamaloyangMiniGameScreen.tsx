@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StepMatchIngredients } from '../features/samaloyang/StepMatchIngredients';
 import { StepDoughMixing } from '../features/samaloyang/StepDoughMixing';
@@ -13,12 +14,19 @@ const STEPS = [
 ];
 
 export function SamaloyangMiniGameScreen() {
-  const { samaloyangStep, samaloyangComplete, resetSamaloyangGame, advanceSamaloyangStep, setScreen } = useGameStore();
+  const { samaloyangStep, samaloyangComplete, resetSamaloyangGame, advanceSamaloyangStep, setScreen, awardStarsForRegion } = useGameStore();
 
   const handleBack = () => {
     resetSamaloyangGame();
     setScreen('mainMenu');
   };
+
+  // Award stars saat samaloyang selesai
+  useEffect(() => {
+    if (samaloyangComplete) {
+      awardStarsForRegion('aceh');
+    }
+  }, [samaloyangComplete]);
 
   /* ── Complete screen ── */
   if (samaloyangComplete) {
