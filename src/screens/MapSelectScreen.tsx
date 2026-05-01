@@ -86,14 +86,12 @@ export function MapSelectScreen() {
         <div className="map-island-path">
           {MAP_NODES.map((map) => {
             const unlocked = isUnlocked(map.id, islandProgress);
-            const completed = islandProgress[map.id];
             const stars = islandStars[map.id] ?? 0;
             return (
               <IslandNode
                 key={map.id}
                 map={map}
                 unlocked={unlocked}
-                completed={completed}
                 stars={stars}
                 columnPos={COLUMN_POS}
                 displayName={ISLAND_DISPLAY_NAMES[map.id]}
@@ -116,14 +114,13 @@ export function MapSelectScreen() {
 interface IslandNodeProps {
   map: MapItem;
   unlocked: boolean;
-  completed: boolean;
   stars: 0 | 1 | 2 | 3;
   columnPos: typeof COLUMN_POS;
   displayName: string;
   onClick: () => void;
 }
 
-function IslandNode({ map, unlocked, completed, stars, columnPos, displayName, onClick }: IslandNodeProps) {
+function IslandNode({ map, unlocked, stars, columnPos, displayName, onClick }: IslandNodeProps) {
   const centerX = map.column === 'left' ? columnPos.left : columnPos.right;
 
   return (
@@ -145,7 +142,6 @@ function IslandNode({ map, unlocked, completed, stars, columnPos, displayName, o
         <IslandFace
           mapId={map.id}
           locked={!unlocked}
-          completed={completed}
           stars={stars}
           width={`${map.widthPx}px`}
         />
@@ -157,13 +153,11 @@ function IslandNode({ map, unlocked, completed, stars, columnPos, displayName, o
 function IslandFace({
   mapId,
   locked,
-  completed,
   stars,
   width,
 }: {
   mapId: string;
   locked: boolean;
-  completed: boolean;
   stars: 0 | 1 | 2 | 3;
   width: string;
 }) {
