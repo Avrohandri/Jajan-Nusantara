@@ -44,8 +44,16 @@ export interface UserSession {
   region?: string;
 }
 
-/** Progress per-island. true = sudah pernah menyelesaikan game di pulau itu */
+/** Progress per-island. true = sudah pernah menyelesaikan game drop-and-merge di pulau itu */
 export interface IslandProgress {
+  jogja: boolean;
+  bali: boolean;
+  aceh: boolean;
+  maluku: boolean;
+}
+
+/** Cooking completion per-island. true = mini game memasak sudah diselesaikan */
+export interface IslandCookingComplete {
   jogja: boolean;
   bali: boolean;
   aceh: boolean;
@@ -89,7 +97,9 @@ export interface UserProfile {
   totalQuizzesAnswered: number;
   unlockedRecipes: string[];
   islandProgress: IslandProgress;
-  /** Bintang per pulau — 0=belum, 1/2/3 sesuai performa merge */
+  /** true = mini game memasak sudah diselesaikan (syarat unlock pulau berikutnya) */
+  islandCookingComplete?: IslandCookingComplete;
+  /** Bintang per pulau — 0=belum, 1/2/3 sesuai performa skor */
   islandStars?: IslandStars;
   /** Jumlah merge terbaik per pulau saat selesai Drop & Merge */
   islandMerges?: IslandMerges;

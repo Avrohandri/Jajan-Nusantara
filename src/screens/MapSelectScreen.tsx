@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
-import type { IslandProgress } from '../types';
+import type { IslandCookingComplete } from '../types';
 
 import levelSelectBg from '../assets/map/level_select_bg.png';
 import backButtonImg from '../assets/universal/back button.png';
@@ -27,12 +27,12 @@ const COLUMN_POS = {
   right: '77%',
 };
 
-/** Sebuah pulau bisa dimainkan jika pulau sebelumnya sudah diselesaikan */
-function isUnlocked(id: keyof IslandProgress, progress: IslandProgress): boolean {
-  if (id === 'jogja') return true;
-  if (id === 'bali') return progress.jogja;
-  if (id === 'aceh') return progress.bali;
-  if (id === 'maluku') return progress.aceh;
+/** Pulau bisa dimainkan jika minigame memasak pulau sebelumnya sudah diselesaikan */
+function isUnlocked(id: keyof IslandCookingComplete, cooking: IslandCookingComplete): boolean {
+  if (id === 'jogja') return true;        // pulau pertama selalu terbuka
+  if (id === 'bali')   return cooking.jogja;
+  if (id === 'aceh')   return cooking.bali;
+  if (id === 'maluku') return cooking.aceh;
   return false;
 }
 
@@ -50,19 +50,19 @@ const LOCK_REQUIRES: Record<string, string> = {
 };
 
 export function MapSelectScreen() {
-  const { setScreen, resetGame, islandProgress, islandStars } = useGameStore();
+  const { setScreen, resetGame, islandCookingComplete, islandStars } = useGameStore();
   const [toast, setToast] = useState<string | null>(null);
 
   const handleMapClick = (map: MapItem) => {
-    const unlocked = isUnlocked(map.id, islandProgress);
+    const unlocked = isUnlocked(map.id, islandCookingComplete);
     if (unlocked) {
       useGameStore.getState().setActiveRegion(map.id);
       resetGame();
       setScreen('game');
     } else {
-      const msg = LOCK_REQUIRES[map.id] ?? `Selesaikan pulau sebelumnya dulu!`;
+      const msg = LOCK_REQUIRES[map.id] ?? `Selesaikan minigame memasak pulau sebelumnya dulu!`;
       setToast(msg);
-      setTimeout(() => setToast(null), 2000);
+      setTimeout(() => setToast(null), 2500);
     }
   };
 
@@ -85,7 +85,7 @@ export function MapSelectScreen() {
 
         <div className="map-island-path">
           {MAP_NODES.map((map) => {
-            const unlocked = isUnlocked(map.id, islandProgress);
+            const unlocked = isUnlocked(map.id, islandCookingComplete);
             const stars = islandStars[map.id] ?? 0;
             return (
               <IslandNode

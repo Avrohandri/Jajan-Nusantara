@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { calculateStars, STAR_THRESHOLDS } from '../config/starThresholds';
 
 /* Map each region to its mascot image and cooking action */
 const REGION_CONFIG: Record<string, {
@@ -42,9 +43,30 @@ function randomBetween(a: number, b: number) {
   return a + Math.random() * (b - a);
 }
 
+/* Komponen bintang — menampilkan 3 ikon bintang, aktif sesuai jumlah earned */
+function StarDisplay({ earned }: { earned: 0 | 1 | 2 | 3 }) {
+  return (
+    <div className="result-stars-row" aria-label={`${earned} dari 3 bintang`}>
+      {[1, 2, 3].map((n) => (
+        <span
+          key={n}
+          className={`result-star-icon ${n <= earned ? 'result-star-icon--filled' : 'result-star-icon--empty'}`}
+          style={{ animationDelay: `${(n - 1) * 0.12}s` }}
+        >
+          ★
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export function ResultScreen() {
-  const { activeRegion, setScreen, completeIsland, score } = useGameStore();
+  const { activeRegion, completeIsland, score } = useGameStore();
   const config = REGION_CONFIG[activeRegion] ?? REGION_CONFIG['jogja'];
+
+  /* Hitung bintang dari skor sesi ini */
+  const earned: 0 | 1 | 2 | 3 = calculateStars(activeRegion, score);
+  const threshold = STAR_THRESHOLDS[activeRegion];
 
   /* Stable confetti */
   const confettiRef = useRef(
@@ -122,6 +144,18 @@ export function ResultScreen() {
         <span className="result-side-spark result-side-spark--right">⭐</span>
       </div>
 
+      {/* Star rating */}
+      <div className="result-star-section">
+        <StarDisplay earned={earned} />
+        {threshold && (
+          <div className="result-star-hint">
+            <span>⭐ &gt;= {threshold.star1.toLocaleString('id-ID')}</span>
+            <span>⭐⭐ &gt;= {threshold.star2.toLocaleString('id-ID')}</span>
+            <span>⭐⭐⭐ &gt;= {threshold.star3.toLocaleString('id-ID')}</span>
+          </div>
+        )}
+      </div>
+
       {/* Info card */}
       <div className="result-info-card">
         <p className="result-info-main">Sekarang saatnya kita memasak!</p>
@@ -135,13 +169,6 @@ export function ResultScreen() {
           onClick={config.cookAction}
         >
           LANJUT MEMASAK
-        </button>
-
-        <button
-          className="result-back-btn"
-          onClick={() => setScreen('mainMenu')}
-        >
-          Kembali ke Menu
         </button>
       </div>
     </div>

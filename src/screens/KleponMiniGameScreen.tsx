@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StepIngredients } from '../features/klepon/StepIngredients';
 import { StepMixing } from '../features/klepon/StepMixing';
 import { StepShaping } from '../features/klepon/StepShaping';
 import { StepSteaming } from '../features/klepon/StepSteaming';
 import { StepCoating } from '../features/klepon/StepCoating';
+import { MiniGameBackConfirm } from '../components/MiniGameBackConfirm';
 import backButtonImg from '../assets/universal/back button.png';
 
 const STEPS = [
@@ -16,17 +17,20 @@ const STEPS = [
 ];
 
 export function KleponMiniGameScreen() {
-  const { kleponStep, kleponComplete, advanceKleponStep, resetKleponGame, setScreen, awardStarsForRegion } = useGameStore();
+  const { kleponStep, kleponComplete, advanceKleponStep, resetKleponGame, setScreen, awardStarsForRegion, completeMinigameCooking } = useGameStore();
+  const [showBackConfirm, setShowBackConfirm] = useState(false);
 
-  const handleBack = () => {
+  const handleBack = () => setShowBackConfirm(true);
+  const handleConfirmBack = () => {
     resetKleponGame();
     setScreen('mainMenu');
   };
 
-  // Award stars saat klepon selesai
+  // Award stars + unlock pulau berikutnya saat klepon selesai
   useEffect(() => {
     if (kleponComplete) {
       awardStarsForRegion('jogja');
+      completeMinigameCooking('jogja');
     }
   }, [kleponComplete]);
 
@@ -113,6 +117,15 @@ export function KleponMiniGameScreen() {
             {kleponStep === 4 && <StepCoating  onComplete={advanceKleponStep} />}
           </div>
         </div>
+      )}
+
+      {/* Back confirm dialog */}
+      {showBackConfirm && (
+        <MiniGameBackConfirm
+          foodName="Klepon"
+          onConfirm={handleConfirmBack}
+          onCancel={() => setShowBackConfirm(false)}
+        />
       )}
     </div>
   );

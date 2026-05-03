@@ -8,117 +8,160 @@ type NotificationData = { foodName: string; funFact: string; region: string; tex
 export function NpcNotification() {
   const [queue, setQueue] = useState<NotificationData[]>([]);
   const [activeItem, setActiveItem] = useState<NotificationData | null>(null);
-  
+
   // Track tiers we've already shown the NPC for in this session
   const notifiedTiers = useRef(new Set<number>());
 
+  // Ref for the auto-dismiss timer so we can pause/resume it
+  const timerRef = useRef<number | null>(null);
+  const remainingRef = useRef<number>(0);   // ms remaining when paused
+  const startedAtRef = useRef<number>(0);   // timestamp when timer last started
+
+  /** Start or resume the dismiss countdown */
+  const startTimer = (ms: number) => {
+    if (timerRef.current !== null) return; // already running
+    startedAtRef.current = performance.now();
+    timerRef.current = window.setTimeout(() => {
+      timerRef.current = null;
+      remainingRef.current = 0;
+      setActiveItem(null);
+    }, ms);
+  };
+
+  /** Pause the dismiss countdown */
+  const pauseTimer = () => {
+    if (timerRef.current === null) return;
+    window.clearTimeout(timerRef.current);
+    timerRef.current = null;
+    const elapsed = performance.now() - startedAtRef.current;
+    remainingRef.current = Math.max(0, remainingRef.current - elapsed);
+  };
+
+  /** Resume the dismiss countdown with whatever time was left */
+  const resumeTimer = () => {
+    if (remainingRef.current > 0) {
+      startTimer(remainingRef.current);
+    }
+  };
+
+  // ── Subscribe to EventBus ──────────────────────────────────────────
   useEffect(() => {
     const handleCheckUnlock = (tier: number) => {
-      // 1. Check if we already notified for this tier
       if (notifiedTiers.current.has(tier)) return;
 
-      // 2. Check region
       const state = useGameStore.getState();
       const currentRegion = state.activeRegion || 'jogja';
-      
-      // 3. Find config for this tier
+
       const configList = REGION_FOOD_CONFIGS_RAW[currentRegion];
       if (!configList) return;
-      
+
       const foodConfig = configList.find((c) => c.tier === tier);
-      
+
       if (foodConfig) {
-        // Mark as notified
         notifiedTiers.current.add(tier);
 
-        // Clean name up
         let cleanName = foodConfig.name;
-        if (cleanName.match(/^\d{2}_/)) {
-          cleanName = cleanName.substring(3);
-        }
-        // "JadahTempe" -> "Jadah Tempe"
+        if (cleanName.match(/^\d{2}_/)) cleanName = cleanName.substring(3);
         cleanName = cleanName.replace(/([A-Z])/g, ' $1').trim();
-        
-        console.log(`NPC showing for ${cleanName} (tier ${tier}) in ${currentRegion}: "${foodConfig.funFact}"`);
-        
-        // Clean up funFact: remove everything before the first " — ", " - ", or ":"
-        let displayFact = foodConfig.funFact || "Jajanan tradisional yang sangat lezat!";
+
+        let displayFact = foodConfig.funFact || 'Jajanan tradisional yang sangat lezat!';
         const separators = [' — ', ' - ', ': '];
-        
         for (const sep of separators) {
           if (displayFact.includes(sep)) {
             displayFact = displayFact.split(sep).slice(1).join(sep).trim();
             break;
           }
         }
-        
-        // Add to queue instead of displaying immediately
-        setQueue(prev => [...prev, { foodName: cleanName, funFact: displayFact, region: currentRegion, textureKey: foodConfig.textureKey }]);
+
+        setQueue(prev => [
+          ...prev,
+          { foodName: cleanName, funFact: displayFact, region: currentRegion, textureKey: foodConfig.textureKey },
+        ]);
       }
     };
 
-    // Hanya terpicu saat kuliner benar-benar muncul di papan (drop atau hasil merge)
     const onFoodRevealed = (data: unknown) => handleCheckUnlock((data as any).tier);
-    // Restart session clears the cache
     const onRestart = () => notifiedTiers.current.clear();
 
     EventBus.on('food-revealed', onFoodRevealed);
     EventBus.on('restart-game', onRestart);
-    
+
     return () => {
       EventBus.off('food-revealed', onFoodRevealed);
       EventBus.off('restart-game', onRestart);
     };
   }, []);
 
-  // Effect to process the queue sequentially
+  // ── Process queue sequentially ────────────────────────────────────
   useEffect(() => {
     if (!activeItem && queue.length > 0) {
-      // Pop the first item from queue and show it
       setActiveItem(queue[0]);
       setQueue(prev => prev.slice(1));
     }
   }, [activeItem, queue]);
 
-  // Effect to handle the animation timeout
+  // ── Start the dismiss timer when a new item becomes active ────────
   useEffect(() => {
-    let timeoutId: number;
-    if (activeItem) {
-      // Tunggu sesuai durasi animasi CSS secara presisi (bali=kiri=3s, jogja=kanan=3.5s)
-      const waitTime = activeItem.region === 'bali' ? 3000 : 3500;
-      timeoutId = window.setTimeout(() => {
-        setActiveItem(null);
-      }, waitTime);
+    if (!activeItem) return;
+
+    const waitTime = activeItem.region === 'bali' ? 3000 : 3500;
+    remainingRef.current = waitTime;
+
+    // Only start immediately if quiz is NOT currently showing
+    const { showQuiz } = useGameStore.getState();
+    if (!showQuiz) {
+      startTimer(waitTime);
     }
+
     return () => {
-      if (timeoutId) window.clearTimeout(timeoutId);
+      if (timerRef.current !== null) {
+        window.clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeItem]);
+
+  // ── Freeze / unfreeze timer when quiz opens / closes ─────────────
+  const showQuiz = useGameStore((s) => s.showQuiz);
+
+  useEffect(() => {
+    if (!activeItem) return;
+    if (showQuiz) {
+      pauseTimer();
+    } else {
+      resumeTimer();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showQuiz]);
 
   if (!activeItem) return null;
 
-  // Configuration based on region
   const isLeftSide = activeItem.region === 'bali' || activeItem.region === 'maluku';
   const npcAsset = `/assets/NPC/npc_${activeItem.region}.png`;
-  const wrapperClass = isLeftSide ? 'npc-notification-wrapper npc-slide-left' : 'npc-notification-wrapper npc-slide-right';
+  const wrapperClass = isLeftSide
+    ? 'npc-notification-wrapper npc-slide-left'
+    : 'npc-notification-wrapper npc-slide-right';
   const bubbleClass = isLeftSide ? 'npc-bubble bubble-left' : 'npc-bubble bubble-right';
 
   return (
     <div key={activeItem.foodName} className={wrapperClass}>
-      {/* If Left side (Bali), show NPC first, then bubble */}
       {isLeftSide && <img src={npcAsset} alt="NPC" className="npc-image" />}
-      
+
       <div className={bubbleClass}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-          <img src={`/assets/foods_${activeItem.region}/${activeItem.textureKey}.png`} alt={activeItem.foodName} style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
+          <img
+            src={`/assets/foods_${activeItem.region}/${activeItem.textureKey}.png`}
+            alt={activeItem.foodName}
+            style={{ width: '28px', height: '28px', objectFit: 'contain' }}
+          />
           <div style={{ color: '#8b4513', fontWeight: '800', fontSize: '15px' }}>
             {activeItem.foodName}
           </div>
         </div>
         <span>{activeItem.funFact}</span>
       </div>
-      
-      {/* If Right side (Jogja), show bubble first, then NPC */}
+
       {!isLeftSide && <img src={npcAsset} alt="NPC" className="npc-image" />}
     </div>
   );

@@ -1,8 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { EventBus } from '../../game/EventBus';
-import { Modal } from '../../components/Modal';
-import { Button } from '../../components/Button';
 
 /** Fisher-Yates shuffle — returns new array */
 function shuffleArray<T>(arr: T[]): T[] {
@@ -21,12 +19,9 @@ export function QuizModal() {
 
   // Filter quizzes by region
   const regionalQuizzes = quizzes.filter(q => q.region === activeRegion);
-  // Fallback to all quizzes if none match region (safeguard)
   const validQuizzes = regionalQuizzes.length > 0 ? regionalQuizzes : quizzes;
   const quiz = validQuizzes[currentQuizIndex % validQuizzes.length];
 
-  // Shuffle options once per quiz (stable while user is answering).
-  // Returns { shuffledOptions, shuffledCorrectIndex }
   const { shuffledOptions, shuffledCorrectIndex } = useMemo(() => {
     if (!quiz) return { shuffledOptions: [], shuffledCorrectIndex: 0 };
     const correctAnswer = quiz.options[quiz.correctAnswerIndex];
@@ -42,8 +37,7 @@ export function QuizModal() {
     if (answered) return;
     setSelectedAnswer(index);
     setAnswered(true);
-    const isCorrect = index === shuffledCorrectIndex;
-    answerQuiz(isCorrect);
+    answerQuiz(index === shuffledCorrectIndex);
   };
 
   const handleClose = () => {
@@ -53,49 +47,93 @@ export function QuizModal() {
     EventBus.emit('resume-game');
   };
 
+  const isCorrect = answered && selectedAnswer === shuffledCorrectIndex;
+
+  // Answer letter labels
+  const letters = ['A', 'B', 'C', 'D'];
+
   return (
-    <Modal isOpen={true} title="🧠 Kuis Kuliner!">
-      <p className="quiz-question">{quiz.question}</p>
+    <div className="quiz-overlay">
+      <div className="quiz-card">
 
-      <div className="quiz-options">
-        {shuffledOptions.map((option, index) => {
-          let optionClass = 'quiz-option';
-          if (answered) {
-            if (index === shuffledCorrectIndex) {
-              optionClass += ' quiz-correct';
-            } else if (index === selectedAnswer) {
-              optionClass += ' quiz-wrong';
-            }
-          } else if (index === selectedAnswer) {
-            optionClass += ' quiz-selected';
-          }
-
-          return (
-            <button
-              key={option}
-              className={optionClass}
-              onClick={() => handleAnswer(index)}
-              disabled={answered}
-            >
-              {option}
-            </button>
-          );
-        })}
-      </div>
-
-      {answered && (
-        <div className="quiz-result">
-          {selectedAnswer === shuffledCorrectIndex ? (
-            <p className="quiz-result-correct">✅ Benar! +50 poin</p>
-          ) : (
-            <p className="quiz-result-wrong">❌ Kurang tepat!</p>
-          )}
-          <p className="quiz-explanation">{quiz.explanation}</p>
-          <Button variant="primary" fullWidth onClick={handleClose}>
-            Lanjut Bermain ▶️
-          </Button>
+        {/* Header */}
+        <div className="quiz-card-header">
+          <div className="quiz-header-deco" aria-hidden="true">🍜</div>
+          <div className="quiz-header-center">
+            <span className="quiz-badge">KUIS KULINER</span>
+            <span className="quiz-header-sub">Uji pengetahuanmu! 🧠</span>
+          </div>
+          <div className="quiz-header-deco" aria-hidden="true">🍡</div>
         </div>
-      )}
-    </Modal>
+
+        {/* Divider wave */}
+        <div className="quiz-wave-divider" aria-hidden="true">
+          <svg viewBox="0 0 360 18" preserveAspectRatio="none">
+            <path d="M0,10 C60,18 120,2 180,10 C240,18 300,2 360,10 L360,18 L0,18 Z" fill="#FFF7ED"/>
+          </svg>
+        </div>
+
+        {/* Question */}
+        <div className="quiz-body">
+          <p className="quiz-question-new">{quiz.question}</p>
+
+          {/* Options */}
+          <div className="quiz-options-new">
+            {shuffledOptions.map((option, index) => {
+              let cls = 'quiz-option-new';
+              if (answered) {
+                if (index === shuffledCorrectIndex) cls += ' quiz-opt-correct';
+                else if (index === selectedAnswer) cls += ' quiz-opt-wrong';
+                else cls += ' quiz-opt-dimmed';
+              } else if (index === selectedAnswer) {
+                cls += ' quiz-opt-selected';
+              }
+
+              return (
+                <button
+                  key={option}
+                  className={cls}
+                  onClick={() => handleAnswer(index)}
+                  disabled={answered}
+                >
+                  <span className="quiz-opt-letter">{letters[index]}</span>
+                  <span className="quiz-opt-text">{option}</span>
+                  {answered && index === shuffledCorrectIndex && (
+                    <span className="quiz-opt-icon">✓</span>
+                  )}
+                  {answered && index === selectedAnswer && index !== shuffledCorrectIndex && (
+                    <span className="quiz-opt-icon">✗</span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Result feedback */}
+          {answered && (
+            <div className={`quiz-feedback ${isCorrect ? 'quiz-feedback--correct' : 'quiz-feedback--wrong'}`}>
+              <div className="quiz-feedback-top">
+                <span className="quiz-feedback-emoji">{isCorrect ? '🎉' : '💡'}</span>
+                <p className="quiz-feedback-title">
+                  {isCorrect ? `Benar! +50 poin` : 'Hampir tepat!'}
+                </p>
+              </div>
+              <p className="quiz-explanation-new">{quiz.explanation}</p>
+              <button className="quiz-continue-btn" onClick={handleClose}>
+                <span>Lanjut Bermain</span>
+                <span className="quiz-continue-arrow">▶</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Decorative dots */}
+        <div className="quiz-dots" aria-hidden="true">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <span key={i} className="quiz-dot" style={{ animationDelay: `${i * 0.15}s` }} />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

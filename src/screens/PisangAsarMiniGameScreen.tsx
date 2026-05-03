@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StepIngredientSelection } from '../features/pisangasar/StepIngredientSelection';
 import { StepCutBanana } from '../features/pisangasar/StepCutBanana';
 import { StepMixTopping } from '../features/pisangasar/StepMixTopping';
 import { StepSpreadTopping } from '../features/pisangasar/StepSpreadTopping';
 import { StepBakeOven } from '../features/pisangasar/StepBakeOven';
+import { MiniGameBackConfirm } from '../components/MiniGameBackConfirm';
 import backButtonImg from '../assets/universal/back button.png';
 
 const STEPS = [
@@ -16,17 +17,20 @@ const STEPS = [
 ];
 
 export function PisangAsarMiniGameScreen() {
-  const { pisangAsarStep, pisangAsarComplete, advancePisangAsarStep, resetPisangAsarGame, setScreen, awardStarsForRegion } = useGameStore();
+  const { pisangAsarStep, pisangAsarComplete, advancePisangAsarStep, resetPisangAsarGame, setScreen, awardStarsForRegion, completeMinigameCooking } = useGameStore();
+  const [showBackConfirm, setShowBackConfirm] = useState(false);
 
-  const handleBack = () => {
+  const handleBack = () => setShowBackConfirm(true);
+  const handleConfirmBack = () => {
     resetPisangAsarGame();
     setScreen('mainMenu');
   };
 
-  // Award stars saat pisang asar selesai
+  // Award stars + unlock pulau berikutnya saat pisang asar selesai
   useEffect(() => {
     if (pisangAsarComplete) {
       awardStarsForRegion('maluku');
+      completeMinigameCooking('maluku');
     }
   }, [pisangAsarComplete]);
 
@@ -109,6 +113,15 @@ export function PisangAsarMiniGameScreen() {
           {pisangAsarStep === 4 && <StepBakeOven onComplete={advancePisangAsarStep} />}
         </div>
       </div>
+
+      {/* Back confirm dialog */}
+      {showBackConfirm && (
+        <MiniGameBackConfirm
+          foodName="Pisang Asar"
+          onConfirm={handleConfirmBack}
+          onCancel={() => setShowBackConfirm(false)}
+        />
+      )}
     </div>
   );
 }

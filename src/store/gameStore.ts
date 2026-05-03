@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import type { SnackData, QuizData, RecipeData, UserSession, ScreenName, IslandProgress, IslandStars, IslandMerges, RegionBestScores, UserProfile } from '../types';
+import type { SnackData, QuizData, RecipeData, UserSession, ScreenName, IslandProgress, IslandCookingComplete, IslandStars, IslandMerges, RegionBestScores, UserProfile } from '../types';
+import { calculateStars } from '../config/starThresholds';
 import {
   fetchSnacks,
   fetchQuizzes,
@@ -17,6 +18,13 @@ import {
 import { registerWithUsername, loginWithUsername, logoutUser } from '../lib/firebase/config';
 
 const DEFAULT_ISLAND_PROGRESS: IslandProgress = {
+  jogja: false,
+  bali: false,
+  aceh: false,
+  maluku: false,
+};
+
+const DEFAULT_ISLAND_COOKING: IslandCookingComplete = {
   jogja: false,
   bali: false,
   aceh: false,
@@ -145,11 +153,15 @@ interface GameStore {
   unlockedRecipes: string[];
   sessions: UserSession[];
   islandProgress: IslandProgress;
+  /** true = mini game memasak sudah diselesaikan — dipakai untuk unlock pulau berikutnya */
+  islandCookingComplete: IslandCookingComplete;
   islandStars: IslandStars;
   islandMerges: IslandMerges;
   loadProfile: () => Promise<void>;
   endSession: (reason: 'board_full' | 'target_reached' | 'quit') => Promise<void>;
   completeIsland: () => Promise<void>;
+  /** Dipanggil dari setiap MiniGameScreen saat cooking selesai */
+  completeMinigameCooking: (region: string) => Promise<void>;
   awardStarsForRegion: (region: string) => Promise<void>;
 
   // --- First Launch ---
@@ -430,6 +442,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         isLoggedIn: true,
         currentScreen: 'mainMenu',
         islandProgress: profile.islandProgress ?? { ...DEFAULT_ISLAND_PROGRESS },
+        islandCookingComplete: (profile.islandCookingComplete ?? { ...DEFAULT_ISLAND_COOKING }) as IslandCookingComplete,
         islandStars: (profile.islandStars ?? { ...DEFAULT_ISLAND_STARS }) as IslandStars,
         islandMerges: profile.islandMerges ?? { ...DEFAULT_ISLAND_MERGES },
         regionBestScores: profile.regionBestScores ?? { ...DEFAULT_REGION_SCORES },
@@ -477,6 +490,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   unlockedRecipes: [],
   sessions: [],
   islandProgress: { ...DEFAULT_ISLAND_PROGRESS },
+  islandCookingComplete: { ...DEFAULT_ISLAND_COOKING },
   islandStars: { ...DEFAULT_ISLAND_STARS },
   islandMerges: { ...DEFAULT_ISLAND_MERGES },
 
@@ -495,6 +509,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         totalQuizzesAnswered: profile.totalQuizzesAnswered ?? 0,
         unlockedRecipes: profile.unlockedRecipes ?? [],
         islandProgress: profile.islandProgress ?? { ...DEFAULT_ISLAND_PROGRESS },
+        islandCookingComplete: (profile.islandCookingComplete ?? { ...DEFAULT_ISLAND_COOKING }) as IslandCookingComplete,
         islandStars: (profile.islandStars ?? { ...DEFAULT_ISLAND_STARS }) as IslandStars,
         islandMerges: profile.islandMerges ?? { ...DEFAULT_ISLAND_MERGES },
         username: profile.username ?? '',
@@ -597,18 +612,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   /**
    * Dihitung & disimpan setelah player menyelesaikan mini game memasak.
-   * Bintang 3 ≤ 30 merge, bintang 2 ≤ 40 merge, bintang 1 ≥ 41 merge.
+   * Bintang dihitung dari SKOR pemain di Drop & Merge berdasarkan threshold
+   * yang bisa diatur manual di: src/config/starThresholds.ts
    */
   awardStarsForRegion: async (region: string) => {
     const s = get();
     const key = region as keyof IslandStars;
-    const merges = s.islandMerges[key] ?? 0;
 
-    const earned: 1 | 2 | 3 =
-      merges <= 30 ? 3 :
-      merges <= 40 ? 2 : 1;
+    // Ambil skor terbaik region ini (sudah disimpan oleh completeIsland)
+    const score = s.regionBestScores[key] ?? s.score;
 
-    // Hanya update jika bintang baru lebih baik
+    // Hitung bintang berdasarkan skor dan threshold per-pulau
+    const earned = calculateStars(region, score);
+
+    // Tidak ada bintang jika skor terlalu rendah
+    if (earned === 0) return;
+
+    // Hanya update jika bintang baru lebih baik dari sebelumnya
     const currentStars = s.islandStars[key] as 0 | 1 | 2 | 3;
     if (earned <= currentStars) return;
 
@@ -623,6 +643,30 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (s.userId) {
       const { saveIslandStars } = await import('../lib/db');
       await saveIslandStars(s.userId, newIslandStars, s.islandMerges);
+    }
+  },
+
+  /**
+   * Dipanggil ketika player menyelesaikan mini game memasak suatu pulau.
+   * Menandai pulau sebagai FULLY COMPLETE sehingga pulau berikutnya terbuka di peta.
+   */
+  completeMinigameCooking: async (region: string) => {
+    const s = get();
+    const key = region as keyof IslandCookingComplete;
+
+    // Sudah selesai sebelumnya — tidak perlu update
+    if (s.islandCookingComplete[key]) return;
+
+    const newCooking: IslandCookingComplete = {
+      ...s.islandCookingComplete,
+      [key]: true,
+    };
+
+    set({ islandCookingComplete: newCooking });
+
+    // Persist ke Firestore
+    if (s.userId) {
+      await saveProfile(s.userId, { islandCookingComplete: newCooking } as any);
     }
   },
 

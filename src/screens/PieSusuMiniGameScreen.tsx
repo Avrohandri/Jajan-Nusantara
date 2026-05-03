@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StepDoughMixing } from '../features/pieSusu/StepDoughMixing';
 import { StepShapingMold } from '../features/pieSusu/StepShapingMold';
 import { StepPouringFilling } from '../features/pieSusu/StepPouringFilling';
 import { StepBakingOven } from '../features/pieSusu/StepBakingOven';
 import { StepPieIngredients } from '../features/pieSusu/StepPieIngredients';
+import { MiniGameBackConfirm } from '../components/MiniGameBackConfirm';
 import backButtonImg from '../assets/universal/back button.png';
 
 const STEPS = [
@@ -16,17 +17,20 @@ const STEPS = [
 ];
 
 export function PieSusuMiniGameScreen() {
-  const { pieSusuStep, pieSusuComplete, advancePieSusuStep, resetPieSusuGame, setScreen, awardStarsForRegion } = useGameStore();
+  const { pieSusuStep, pieSusuComplete, advancePieSusuStep, resetPieSusuGame, setScreen, awardStarsForRegion, completeMinigameCooking } = useGameStore();
+  const [showBackConfirm, setShowBackConfirm] = useState(false);
 
-  const handleBack = () => {
+  const handleBack = () => setShowBackConfirm(true);
+  const handleConfirmBack = () => {
     resetPieSusuGame();
     setScreen('mainMenu');
   };
 
-  // Award stars saat pie susu selesai
+  // Award stars + unlock pulau berikutnya saat pie susu selesai
   useEffect(() => {
     if (pieSusuComplete) {
       awardStarsForRegion('bali');
+      completeMinigameCooking('bali');
     }
   }, [pieSusuComplete]);
 
@@ -113,6 +117,15 @@ export function PieSusuMiniGameScreen() {
           {pieSusuStep === 4 && <StepBakingOven onComplete={advancePieSusuStep} />}
         </div>
       </div>
+
+      {/* Back confirm dialog */}
+      {showBackConfirm && (
+        <MiniGameBackConfirm
+          foodName="Pie Susu"
+          onConfirm={handleConfirmBack}
+          onCancel={() => setShowBackConfirm(false)}
+        />
+      )}
     </div>
   );
 }

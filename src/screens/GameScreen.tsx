@@ -41,6 +41,8 @@ export function GameScreen() {
   // State untuk flash-transisi ke ResultScreen
   const [transitioning, setTransitioning] = useState(false);
   const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Flag: max-tier sudah tercapai tapi masih menunggu quiz selesai
+  const pendingResultRef = useRef(false);
 
   const [gameWidth] = useState(() => Math.min(360, window.innerWidth - 32));
   const [gameHeight] = useState(() => Math.min(560, window.innerHeight - 200));
@@ -64,17 +66,23 @@ export function GameScreen() {
 
   // Saat kuliner tertinggi terbentuk → flash putih → ResultScreen
   useEffect(() => {
-    const handleMaxTier = async () => {
-      // Beri 600ms agar kuliner hasil merge sempat terlihat muncul
+    /** Jalankan animasi flash lalu pindah ke result */
+    const doTransition = async () => {
+      setTransitioning(true);
       transitionTimerRef.current = setTimeout(async () => {
-        setTransitioning(true); // Mulai animasi flash/fade
+        await endSession('target_reached');
+        setScreen('result');
+      }, 700);
+    };
 
-        // Setelah 700ms (animasi flash selesai) → pindah ke result
-        transitionTimerRef.current = setTimeout(async () => {
-          await endSession('target_reached');
-          setScreen('result');
-        }, 700);
-      }, 600);
+    const handleMaxTier = () => {
+      // Jika quiz sedang terbuka, tunda sampai quiz ditutup
+      if (useGameStore.getState().showQuiz) {
+        pendingResultRef.current = true;
+        return;
+      }
+      // Beri 600ms agar kuliner hasil merge sempat terlihat
+      transitionTimerRef.current = setTimeout(() => doTransition(), 600);
     };
 
     EventBus.on('max-tier-reached', handleMaxTier);
@@ -83,6 +91,23 @@ export function GameScreen() {
       if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
     };
   }, [endSession, setScreen]);
+
+  // Pantau showQuiz: jika ada pending result dan quiz baru ditutup → lanjut result
+  useEffect(() => {
+    if (!showQuiz && pendingResultRef.current) {
+      pendingResultRef.current = false;
+      const doTransition = async () => {
+        setTransitioning(true);
+        transitionTimerRef.current = setTimeout(async () => {
+          await endSession('target_reached');
+          setScreen('result');
+        }, 700);
+      };
+      // Beri 400ms setelah quiz tutup agar transisi terasa natural
+      transitionTimerRef.current = setTimeout(() => doTransition(), 400);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showQuiz]);
 
   const handlePause = () => {
     setPaused(true);

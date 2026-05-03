@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StepMatchIngredients } from '../features/samaloyang/StepMatchIngredients';
 import { StepDoughMixing } from '../features/samaloyang/StepDoughMixing';
 import { StepDippingMold } from '../features/samaloyang/StepDippingMold';
 import { StepFrying } from '../features/samaloyang/StepFrying';
+import { MiniGameBackConfirm } from '../components/MiniGameBackConfirm';
 import backButtonImg from '../assets/universal/back button.png';
 
 const STEPS = [
@@ -14,17 +15,20 @@ const STEPS = [
 ];
 
 export function SamaloyangMiniGameScreen() {
-  const { samaloyangStep, samaloyangComplete, resetSamaloyangGame, advanceSamaloyangStep, setScreen, awardStarsForRegion } = useGameStore();
+  const { samaloyangStep, samaloyangComplete, resetSamaloyangGame, advanceSamaloyangStep, setScreen, awardStarsForRegion, completeMinigameCooking } = useGameStore();
+  const [showBackConfirm, setShowBackConfirm] = useState(false);
 
-  const handleBack = () => {
+  const handleBack = () => setShowBackConfirm(true);
+  const handleConfirmBack = () => {
     resetSamaloyangGame();
     setScreen('mainMenu');
   };
 
-  // Award stars saat samaloyang selesai
+  // Award stars + unlock pulau berikutnya saat samaloyang selesai
   useEffect(() => {
     if (samaloyangComplete) {
       awardStarsForRegion('aceh');
+      completeMinigameCooking('aceh');
     }
   }, [samaloyangComplete]);
 
@@ -112,6 +116,15 @@ export function SamaloyangMiniGameScreen() {
           {samaloyangStep === 3 && <StepFrying onComplete={advanceSamaloyangStep} />}
         </div>
       </div>
+
+      {/* Back confirm dialog */}
+      {showBackConfirm && (
+        <MiniGameBackConfirm
+          foodName="Samaloyang"
+          onConfirm={handleConfirmBack}
+          onCancel={() => setShowBackConfirm(false)}
+        />
+      )}
     </div>
   );
 }
