@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
-import type { IslandCookingComplete, IslandProgress, IslandStars } from '../types';
+import type { IslandCookingComplete, IslandProgress } from '../types';
 
 import levelSelectBg from '../assets/map/level_select_bg.png';
 import backButtonImg from '../assets/universal/back button.png';
