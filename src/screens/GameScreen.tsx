@@ -6,6 +6,7 @@ import { QuizModal } from '../features/quiz/QuizModal';
 import { Modal } from '../components/Modal';
 import { Button } from '../components/Button';
 import { NpcNotification } from '../components/NpcNotification';
+import { IslandPauseConfirm } from '../components/IslandPauseConfirm';
 import type { SnackData } from '../types';
 import { REGION_FOOD_CONFIGS } from '../game/characters/FoodConfig';
 import pauseBtnImg from '../assets/universal/pause_btn.png';
@@ -37,6 +38,7 @@ export function GameScreen() {
 
   const [nextItem, setNextItem] = useState<SnackData | null>(null);
   const [showInstructions, setShowInstructions] = useState(!hasSeenInstructions);
+  const [showHomeConfirm, setShowHomeConfirm] = useState(false);
 
   // State untuk flash-transisi ke ResultScreen
   const [transitioning, setTransitioning] = useState(false);
@@ -130,6 +132,11 @@ export function GameScreen() {
   };
 
   const handleGoToMainMenu = () => {
+    setShowHomeConfirm(true);
+  };
+
+  const handleConfirmHome = () => {
+    resetGame();
     setScreen('mainMenu');
   };
 
@@ -262,6 +269,14 @@ export function GameScreen() {
               </button>
             </div>
           </div>
+
+          {/* Home confirmation dialog */}
+          {showHomeConfirm && (
+            <IslandPauseConfirm
+              onConfirm={handleConfirmHome}
+              onCancel={() => setShowHomeConfirm(false)}
+            />
+          )}
         </div>
       )}
 
