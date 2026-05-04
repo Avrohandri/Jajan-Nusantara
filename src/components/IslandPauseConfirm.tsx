@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
  * IslandPauseConfirm
  * Dialog konfirmasi saat menekan tombol home di pause menu game utama (merge).
