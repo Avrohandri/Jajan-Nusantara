@@ -236,7 +236,7 @@ export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
   if (isFirebaseConfigured()) {
     try {
       const db = getDb()!;
-      const q = query(collection(db, 'leaderboard'), orderBy('totalBestScore', 'desc'), limit(10));
+      const q = query(collection(db, 'leaderboard'), orderBy('totalBestScore', 'desc'), limit(50));
       const snap = await getDocs(q);
       return snap.docs.map((d, i) => ({
         ...(d.data() as Omit<LeaderboardEntry, 'rank'>),

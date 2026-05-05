@@ -672,17 +672,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
 
-  // First launch
-  hasSeenInstructions: localStorage.getItem('kuliner_seen_instructions') === 'true',
-  setHasSeenInstructions: () => {
-    localStorage.setItem('kuliner_seen_instructions', 'true');
-    set({ hasSeenInstructions: true });
-  },
-  hasSeenJajanpediaInstructions: localStorage.getItem('kuliner_seen_jajanpedia_instructions') === 'true',
-  setHasSeenJajanpediaInstructions: () => {
-    localStorage.setItem('kuliner_seen_jajanpedia_instructions', 'true');
-    set({ hasSeenJajanpediaInstructions: true });
-  },
+  // First launch (session based)
+  hasSeenInstructions: false,
+  setHasSeenInstructions: () => set({ hasSeenInstructions: true }),
+  
+  hasSeenJajanpediaInstructions: false,
+  setHasSeenJajanpediaInstructions: () => set({ hasSeenJajanpediaInstructions: true }),
 
   // Settings
   soundEnabled: true,
