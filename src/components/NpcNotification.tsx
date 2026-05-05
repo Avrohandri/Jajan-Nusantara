@@ -122,26 +122,30 @@ export function NpcNotification() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeItem]);
 
-  // ── Freeze / unfreeze timer when quiz opens / closes ─────────────
+  // ── Freeze / unfreeze timer when quiz/pause opens ─────────────
   const showQuiz = useGameStore((s) => s.showQuiz);
+  const isPaused = useGameStore((s) => s.isPaused);
+  const shouldFreeze = showQuiz || isPaused;
 
   useEffect(() => {
     if (!activeItem) return;
-    if (showQuiz) {
+    if (shouldFreeze) {
       pauseTimer();
     } else {
       resumeTimer();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showQuiz]);
+  }, [shouldFreeze]);
 
   if (!activeItem) return null;
 
   const isLeftSide = activeItem.region === 'bali' || activeItem.region === 'maluku';
   const npcAsset = `/assets/NPC/npc_${activeItem.region}.png`;
-  const wrapperClass = isLeftSide
-    ? 'npc-notification-wrapper npc-slide-left'
-    : 'npc-notification-wrapper npc-slide-right';
+  const wrapperClass = [
+    'npc-notification-wrapper',
+    isLeftSide ? 'npc-slide-left' : 'npc-slide-right',
+    shouldFreeze ? 'npc-paused' : ''
+  ].join(' ');
   const bubbleClass = isLeftSide ? 'npc-bubble bubble-left' : 'npc-bubble bubble-right';
 
   return (

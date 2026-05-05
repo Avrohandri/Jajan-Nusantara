@@ -107,7 +107,7 @@ export function StepMixTopping({ onComplete }: Props) {
   return (
     <div className="klepon-step-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
       <p className="klepon-instruction" style={{ textAlign: 'center' }}>
-        Putar adonan topping searah jarum jam ↻<br />
+        Putar adonan taburan searah jarum jam ↻<br />
         <span style={{ fontSize: '13px', opacity: 0.7 }}>Campur telur 🥚, gula aren 🟤, kacang 🥜, margarin 🧈</span>
       </p>
 
@@ -210,7 +210,7 @@ export function StepMixTopping({ onComplete }: Props) {
         <span className="mixing-percent" style={{ fontSize: '24px', fontWeight: 'bold' }}>{Math.round(percent)}%</span>
         <br/>
         <span className="mixing-label">
-          {percent >= 100 ? '✅ Topping Pisang Asar siap!' : 'Aduk terus...'}
+          {percent >= 100 ? '✅ Taburan Pisang Asar siap!' : 'Aduk terus...'}
         </span>
       </div>
 

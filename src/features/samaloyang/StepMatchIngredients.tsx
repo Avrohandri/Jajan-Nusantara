@@ -223,7 +223,7 @@ export function StepMatchIngredients({ onComplete }: Props) {
                   transition: 'all 0.3s'
                 }}
               >
-                <img src={item.imgSrc} alt="ingredient" style={{ width: '60px', height: '60px', objectFit: 'contain', pointerEvents: 'none' }} />
+                <img src={item.imgSrc} alt="bahan" style={{ width: '60px', height: '60px', objectFit: 'contain', pointerEvents: 'none' }} />
               </div>
             );
           })}

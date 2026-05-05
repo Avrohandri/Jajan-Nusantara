@@ -125,7 +125,7 @@ export function ProfileScreen() {
         <div className="pstat-card">
           <div className="pstat-icon">⚡</div>
           <div className="pstat-value">{totalMerges}</div>
-          <div className="pstat-label">Total Merge</div>
+          <div className="pstat-label">Total Gabungan</div>
         </div>
         <div className="pstat-card">
           <div className="pstat-icon">🧠</div>

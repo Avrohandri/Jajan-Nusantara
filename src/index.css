@@ -3411,6 +3411,10 @@ body {
   gap: 12px;
 }
 
+.npc-paused {
+  animation-play-state: paused !important;
+}
+
 .npc-slide-left {
   left: -15px;
   animation: slide-in-out-left 3.5s ease-in-out forwards;

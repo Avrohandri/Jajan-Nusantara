@@ -52,11 +52,11 @@ export function KleponMiniGameScreen() {
               ketan berisi gula merah dan dibalut kelapa parut.
             </div>
           </div>
-          <div className="mgbc-actions" style={{ marginTop: '14px', gap: '8px' }}>
-            <button className="mgbc-btn mgbc-btn--cancel" onClick={() => setScreen('mapSelect')} style={{ width: '100%', padding: '12px 20px', fontSize: '17px' }}>
-              🗺️ Pilih Level
+          <div className="mgbc-actions" style={{ marginTop: '14px', gap: '10px', padding: '0 10px 22px' }}>
+            <button className="mgbc-btn mgbc-btn--cancel" onClick={() => setScreen('mapSelect')} style={{ width: '100%', padding: '15px 20px', fontSize: '18px' }}>
+              🗺️ Pilih Level Selanjutnya
             </button>
-            <button className="mgbc-btn mgbc-btn--confirm" onClick={() => setScreen('mainMenu')} style={{ width: '100%', padding: '12px 20px', fontSize: '17px', color: '#5D4037' }}>
+            <button className="mgbc-btn mgbc-btn--confirm" onClick={() => setScreen('mainMenu')} style={{ width: '100%', padding: '15px 20px', fontSize: '18px', color: '#5D4037' }}>
               🏠 Kembali ke Menu
             </button>
           </div>

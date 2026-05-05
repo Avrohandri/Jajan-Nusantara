@@ -189,7 +189,7 @@ export function StepIngredientSelection({ onComplete }: Props) {
         </div>
         {/* Instruction bar */}
         <div className="ing-instruction-bar">
-          Drag bahan yang benar ke dalam panci! 🍲
+          Seret bahan yang benar ke dalam panci! 🍲
         </div>
       </div>
 

@@ -73,7 +73,7 @@ export function MainMenuScreen() {
               id="btn-leaderboard"
             >
               {btnPeringkat ? (
-                <img src={btnPeringkat} alt="Peringkat" className="menu-btn-img" />
+                <img src={btnPeringkat} alt="Rank" className="menu-btn-img" />
               ) : (
                 <>
                   <span className="menu-btn-icon">🏆</span>

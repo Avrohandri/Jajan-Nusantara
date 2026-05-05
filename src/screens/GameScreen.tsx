@@ -160,7 +160,7 @@ export function GameScreen() {
             <span className="hud-value">{score}</span>
           </div>
           <div className="hud-stat">
-            <span className="hud-label">Merge</span>
+            <span className="hud-label">Gabungan</span>
             <span className="hud-value">{mergeCount}</span>
           </div>
         </div>
@@ -171,7 +171,7 @@ export function GameScreen() {
               <div className="next-preview" style={{ background: 'none' }}>
                 <img
                   src={`/assets/${assetFolder}/${currentConfig[nextItem.tier]?.textureKey || currentConfig[0].textureKey}.png`}
-                  alt="Next hint"
+                  alt="Petunjuk selanjutnya"
                   style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                 />
               </div>
@@ -209,7 +209,7 @@ export function GameScreen() {
         <div className="instructions">
           <p>1. <strong>Sentuh/klik</strong> di area atas untuk menjatuhkan jajanan</p>
           <p>2. <strong>Gabungkan</strong> dua jajanan yang sama untuk naik tier</p>
-          <p>3. Setiap <strong>6 merge</strong> akan muncul kuis budaya kuliner</p>
+          <p>3. Setiap <strong>6 gabungan</strong> akan muncul kuis budaya kuliner</p>
           <p>4. Permainan berakhir jika jajanan melewati garis merah</p>
           <p>5. Raih skor tertinggi!</p>
         </div>

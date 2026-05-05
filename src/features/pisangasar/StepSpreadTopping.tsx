@@ -107,7 +107,7 @@ export function StepSpreadTopping({ onComplete }: Props) {
   return (
     <div className="klepon-step-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px' }}>
       <p className="klepon-instruction" style={{ textAlign: 'center' }}>
-        {allTopped ? 'Semua pisang sudah diolesi topping! 🍌🟤' : 'Lumeri pisang 🍌 dengan adonan 🥣'}
+        {allTopped ? 'Semua pisang sudah diolesi taburan! 🍌🟤' : 'Lumeri pisang 🍌 dengan adonan 🥣'}
       </p>
 
       {/* The Topping Source */}
@@ -130,7 +130,7 @@ export function StepSpreadTopping({ onComplete }: Props) {
             display: 'flex', alignItems: 'center', justifyContent: 'center'
           }}
         >
-          <img src="/assets/pisang_asar/mangkok_adonan.png" alt="topping" style={{ width: '100%', height: '100%', objectFit: 'contain' }} onError={(e) => { e.currentTarget.outerHTML = '<span style="font-size:80px">🥣</span>'; }} />
+          <img src="/assets/pisang_asar/mangkok_adonan.png" alt="taburan" style={{ width: '100%', height: '100%', objectFit: 'contain' }} onError={(e) => { e.currentTarget.outerHTML = '<span style="font-size:80px">🥣</span>'; }} />
         </div>
       </div>
 

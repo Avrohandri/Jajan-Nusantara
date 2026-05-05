@@ -48,7 +48,7 @@ export function LeaderboardScreen() {
           aria-label="Kembali ke menu"
           id="btn-back-leaderboard"
         >
-          <img src={backButtonImg} alt="Back" className="map-back-icon-img" />
+          <img src={backButtonImg} alt="Kembali" className="map-back-icon-img" />
         </button>
         <img src={peringkatJudul} alt="Peringkat" className="leaderboard-judul-img" />
         <p className="leaderboard-subtitle">Total skor terbaik dari semua pulau</p>
@@ -59,13 +59,12 @@ export function LeaderboardScreen() {
         {loading ? (
           <div className="leaderboard-loading">
             <span className="loading-emoji">⏳</span>
-            <p>Memuat peringkat...</p>
+            <p>Memuat rank...</p>
           </div>
         ) : entries.length === 0 ? (
           <div className="leaderboard-empty">
             <span className="loading-emoji">🍡</span>
-            <p>Belum ada data peringkat.</p>
-            <p className="leaderboard-empty-sub">Mainkan Drop &amp; Merge untuk masuk leaderboard!</p>
+            <p className="leaderboard-empty-sub">Mainkan Jajanan Gabung untuk masuk rank!</p>
           </div>
         ) : (
           <div className="leaderboard-list">
@@ -73,7 +72,7 @@ export function LeaderboardScreen() {
             <div className="leaderboard-row leaderboard-row--header">
               <span className="lb-rank">Rank</span>
               <span className="lb-avatar-col" />
-              <span className="lb-name">Username</span>
+              <span className="lb-name">Nama Pengguna</span>
               <span className="lb-score">Skor</span>
             </div>
 

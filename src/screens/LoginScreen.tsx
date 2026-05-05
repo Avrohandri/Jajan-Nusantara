@@ -9,7 +9,7 @@ export function LoginScreen() {
 
   const errorMessage =
     authError === 'USERNAME_TAKEN'
-      ? 'Username sudah digunakan, pilih username lain.'
+      ? 'Nama pengguna sudah digunakan, pilih nama lain.'
       : authError;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,7 +19,7 @@ export function LoginScreen() {
 
     if (mode === 'register') {
       if (username.trim().length < 3) {
-        setAuthError('Username minimal 3 karakter.');
+        setAuthError('Nama pengguna minimal 3 karakter.');
         return;
       }
       await register(username.trim());
@@ -58,13 +58,13 @@ export function LoginScreen() {
         <form className="login-form" onSubmit={handleSubmit} autoComplete="off">
           <div className="login-field">
             <label htmlFor="login-username" className="login-label">
-              Username
+              Nama Pengguna
             </label>
             <input
               id="login-username"
               type="text"
               className="login-input"
-              placeholder="Masukkan username..."
+              placeholder="Masukkan nama pengguna..."
               value={username}
               onChange={e => setUsername(e.target.value)}
               disabled={authLoading}

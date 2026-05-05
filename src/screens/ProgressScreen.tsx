@@ -46,7 +46,7 @@ export function ProgressScreen() {
         <Card title="Skor Terbaik">
           <p className="stat-number">{totalBestScore}</p>
         </Card>
-        <Card title="Total Merge">
+        <Card title="Total Gabungan">
           <p className="stat-number">{totalMerges}</p>
         </Card>
         <Card title="Akurasi Kuis">
