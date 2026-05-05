@@ -173,15 +173,14 @@ export function JajanpediaScreen() {
       </div>
 
       {/* Instructions Overlay */}
-      <Modal isOpen={showInstructions} title="Buku Resep Nusantara 📖">
+      <Modal isOpen={showInstructions} title="Jajanpedia 📖">
         <div className="instructions">
-          <p>✨ Selamat datang di <strong>Jajanpedia</strong>! Tempat penyimpanan rahasia seluruh koleksi kuliner yang kamu temukan.</p>
-          <p>🏝️ Kuliner terbagi berdasarkan pulau asal. Jelajahi <strong>Jogja, Bali, Aceh, dan Maluku</strong> untuk melengkapinya!</p>
-          <p>🔓 Kumpulkan kuliner baru dengan cara memainkannya di setiap pulau yang tersedia.</p>
-          <p>🔍 <strong>Ketuk gambar kuliner</strong> untuk melihat resep, rincian informasi, dan fakta unik yang menarik!</p>
+          <p>🏝️ Koleksi kuliner unik dari <strong>4 Pulau</strong> besar.</p>
+          <p>🔓 Mainkan game di pulau untuk <strong>Membuka</strong> kuliner baru.</p>
+          <p>🔍 <strong>Ketuk</strong> jajanan untuk melihat fakta & resep rahasia!</p>
         </div>
         <Button variant="primary" fullWidth onClick={dismissInstructions}>
-          Buka Buku Resep! 📜
+          Mulai Eksplorasi! 🚀
         </Button>
       </Modal>
     </div>
