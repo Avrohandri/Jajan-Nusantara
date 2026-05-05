@@ -16,6 +16,7 @@ import { fallbackSnacks } from './datastore/fallbackSnacks';
 import { fallbackQuizzes } from './datastore/fallbackQuizzes';
 import { fallbackRecipes } from './datastore/fallbackRecipes';
 import type { SnackData, QuizData, RecipeData, UserProfile, UserSession, IslandProgress, IslandStars, IslandMerges, RegionBestScores, LeaderboardEntry } from '../types';
+import { PROFILE_ICONS } from '../utils/profileIcons';
 
 // ========== Konstanta LocalStorage ==========
 const LS_SNACKS = 'kuliner_snacks';
@@ -117,6 +118,7 @@ export async function createProfile(userId: string, username: string): Promise<v
   if (isFirebaseConfigured()) {
     try {
       const db = getDb()!;
+      const randomIcon = PROFILE_ICONS[Math.floor(Math.random() * PROFILE_ICONS.length)].name;
       const profile: UserProfile = {
         userId,
         username,
@@ -128,7 +130,7 @@ export async function createProfile(userId: string, username: string): Promise<v
         totalQuizzesAnswered: 0,
         unlockedRecipes: [],
         islandProgress: { ...DEFAULT_ISLAND_PROGRESS },
-        profileIcon: 'Klepon',
+        profileIcon: randomIcon,
         createdAt: Date.now(),
         lastPlayedAt: Date.now(),
       };
@@ -137,7 +139,7 @@ export async function createProfile(userId: string, username: string): Promise<v
         userId,
         username,
         totalBestScore: 0,
-        profileIcon: 'Klepon',
+        profileIcon: randomIcon,
       });
       return;
     } catch (e) {
