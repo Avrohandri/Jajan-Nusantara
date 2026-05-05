@@ -1,62 +1,72 @@
-import { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useGameStore } from './store/gameStore';
 import { initFirebase, isFirebaseConfigured } from './lib/firebase/config';
 import { useAudio } from './hooks/useAudio';
 
-// Auth
+// Auth & Loading (Keep static for fast initial load)
 import { LoginScreen } from './screens/LoginScreen';
-import { ProfileScreen } from './screens/ProfileScreen';
 
-// Main screens
-import { MainMenuScreen } from './screens/MainMenuScreen';
-import { MapSelectScreen } from './screens/MapSelectScreen';
-import { SettingsScreen } from './screens/SettingsScreen';
-import { GameScreen } from './screens/GameScreen';
-import { ResultScreen } from './screens/ResultScreen';
-import { LeaderboardScreen } from './screens/LeaderboardScreen';
+// Lazy loaded main screens
+const MainMenuScreen = React.lazy(() => import('./screens/MainMenuScreen').then(m => ({ default: m.MainMenuScreen })));
+const MapSelectScreen = React.lazy(() => import('./screens/MapSelectScreen').then(m => ({ default: m.MapSelectScreen })));
+const SettingsScreen = React.lazy(() => import('./screens/SettingsScreen').then(m => ({ default: m.SettingsScreen })));
+const GameScreen = React.lazy(() => import('./screens/GameScreen').then(m => ({ default: m.GameScreen })));
+const ResultScreen = React.lazy(() => import('./screens/ResultScreen').then(m => ({ default: m.ResultScreen })));
+const LeaderboardScreen = React.lazy(() => import('./screens/LeaderboardScreen').then(m => ({ default: m.LeaderboardScreen })));
+const ProfileScreen = React.lazy(() => import('./screens/ProfileScreen').then(m => ({ default: m.ProfileScreen })));
 
-// Cooking
-import { CookingScreen } from './screens/CookingScreen';
-import { KleponMiniGameScreen } from './screens/KleponMiniGameScreen';
-import { PieSusuMiniGameScreen } from './screens/PieSusuMiniGameScreen';
-import { SamaloyangMiniGameScreen } from './screens/SamaloyangMiniGameScreen';
-import { PisangAsarMiniGameScreen } from './screens/PisangAsarMiniGameScreen';
+// Lazy loaded cooking minigames
+const CookingScreen = React.lazy(() => import('./screens/CookingScreen').then(m => ({ default: m.CookingScreen })));
+const KleponMiniGameScreen = React.lazy(() => import('./screens/KleponMiniGameScreen').then(m => ({ default: m.KleponMiniGameScreen })));
+const PieSusuMiniGameScreen = React.lazy(() => import('./screens/PieSusuMiniGameScreen').then(m => ({ default: m.PieSusuMiniGameScreen })));
+const SamaloyangMiniGameScreen = React.lazy(() => import('./screens/SamaloyangMiniGameScreen').then(m => ({ default: m.SamaloyangMiniGameScreen })));
+const PisangAsarMiniGameScreen = React.lazy(() => import('./screens/PisangAsarMiniGameScreen').then(m => ({ default: m.PisangAsarMiniGameScreen })));
 
-// Other screens
-import { ProgressScreen } from './screens/ProgressScreen';
-import { ColliderTestScreen } from './screens/ColliderTestScreen';
-import { JajanpediaScreen } from './screens/JajanpediaScreen';
+// Other lazy screens
+const ProgressScreen = React.lazy(() => import('./screens/ProgressScreen').then(m => ({ default: m.ProgressScreen })));
+const ColliderTestScreen = React.lazy(() => import('./screens/ColliderTestScreen').then(m => ({ default: m.ColliderTestScreen })));
+const JajanpediaScreen = React.lazy(() => import('./screens/JajanpediaScreen').then(m => ({ default: m.JajanpediaScreen })));
 
-// Jajanpedia cards
-import { KleponCardScreen } from './screens/KleponCardScreen';
-import { CenilCardScreen } from './screens/CenilCardScreen';
-import { YangkoCardScreen } from './screens/YangkoCardScreen';
-import { GeplakCardScreen } from './screens/GeplakCardScreen';
-import { BakpiaCardScreen } from './screens/BakpiaCardScreen';
-import { LemperCardScreen } from './screens/LemperCardScreen';
-import { TiwulAyuCardScreen } from './screens/TiwulAyuCardScreen';
-import { JadahTempeCardScreen } from './screens/JadahTempeCardScreen';
-import { LaklakCardScreen } from './screens/LaklakCardScreen';
-import { KaliadremCardScreen } from './screens/KaliadremCardScreen';
-import { PieSusuCardScreen } from './screens/PieSusuCardScreen';
-import { JajeWalikCardScreen } from './screens/JajeWalikCardScreen';
-import { BenduCardScreen } from './screens/BenduCardScreen';
-import { JajeUliCardScreen } from './screens/JajeUliCardScreen';
-import { PisangRaiCardScreen } from './screens/PisangRaiCardScreen';
-import { SamaloyangCardScreen } from './screens/SamaloyangCardScreen';
-import { TimphanCardScreen } from './screens/TimphanCardScreen';
-import { PulotIjoCardScreen } from './screens/PulotIjoCardScreen';
-import { KeukarahCardScreen } from './screens/KeukarahCardScreen';
-import { BungongKayeeCardScreen } from './screens/BungongKayeeCardScreen';
-import { MeuseukatCardScreen } from './screens/MeuseukatCardScreen';
-import { KueAdeeCardScreen } from './screens/KueAdeeCardScreen';
-import { KoyabuCardScreen } from './screens/KoyabuCardScreen';
-import { SaguLempengCardScreen } from './screens/SaguLempengCardScreen';
-import { SaguGulaCardScreen } from './screens/SaguGulaCardScreen';
-import { TalamSaguBakarCardScreen } from './screens/TalamSaguBakarCardScreen';
-import { AsidaCardScreen } from './screens/AsidaCardScreen';
-import { KueBageaCardScreen } from './screens/KueBageaCardScreen';
-import { PisangAsarCardScreen } from './screens/PisangAsarCardScreen';
+// Lazy loaded Jajanpedia cards
+const KleponCardScreen = React.lazy(() => import('./screens/KleponCardScreen').then(m => ({ default: m.KleponCardScreen })));
+const CenilCardScreen = React.lazy(() => import('./screens/CenilCardScreen').then(m => ({ default: m.CenilCardScreen })));
+const YangkoCardScreen = React.lazy(() => import('./screens/YangkoCardScreen').then(m => ({ default: m.YangkoCardScreen })));
+const GeplakCardScreen = React.lazy(() => import('./screens/GeplakCardScreen').then(m => ({ default: m.GeplakCardScreen })));
+const BakpiaCardScreen = React.lazy(() => import('./screens/BakpiaCardScreen').then(m => ({ default: m.BakpiaCardScreen })));
+const LemperCardScreen = React.lazy(() => import('./screens/LemperCardScreen').then(m => ({ default: m.LemperCardScreen })));
+const TiwulAyuCardScreen = React.lazy(() => import('./screens/TiwulAyuCardScreen').then(m => ({ default: m.TiwulAyuCardScreen })));
+const JadahTempeCardScreen = React.lazy(() => import('./screens/JadahTempeCardScreen').then(m => ({ default: m.JadahTempeCardScreen })));
+const LaklakCardScreen = React.lazy(() => import('./screens/LaklakCardScreen').then(m => ({ default: m.LaklakCardScreen })));
+const KaliadremCardScreen = React.lazy(() => import('./screens/KaliadremCardScreen').then(m => ({ default: m.KaliadremCardScreen })));
+const PieSusuCardScreen = React.lazy(() => import('./screens/PieSusuCardScreen').then(m => ({ default: m.PieSusuCardScreen })));
+const JajeWalikCardScreen = React.lazy(() => import('./screens/JajeWalikCardScreen').then(m => ({ default: m.JajeWalikCardScreen })));
+const BenduCardScreen = React.lazy(() => import('./screens/BenduCardScreen').then(m => ({ default: m.BenduCardScreen })));
+const JajeUliCardScreen = React.lazy(() => import('./screens/JajeUliCardScreen').then(m => ({ default: m.JajeUliCardScreen })));
+const PisangRaiCardScreen = React.lazy(() => import('./screens/PisangRaiCardScreen').then(m => ({ default: m.PisangRaiCardScreen })));
+const SamaloyangCardScreen = React.lazy(() => import('./screens/SamaloyangCardScreen').then(m => ({ default: m.SamaloyangCardScreen })));
+const TimphanCardScreen = React.lazy(() => import('./screens/TimphanCardScreen').then(m => ({ default: m.TimphanCardScreen })));
+const PulotIjoCardScreen = React.lazy(() => import('./screens/PulotIjoCardScreen').then(m => ({ default: m.PulotIjoCardScreen })));
+const KeukarahCardScreen = React.lazy(() => import('./screens/KeukarahCardScreen').then(m => ({ default: m.KeukarahCardScreen })));
+const BungongKayeeCardScreen = React.lazy(() => import('./screens/BungongKayeeCardScreen').then(m => ({ default: m.BungongKayeeCardScreen })));
+const MeuseukatCardScreen = React.lazy(() => import('./screens/MeuseukatCardScreen').then(m => ({ default: m.MeuseukatCardScreen })));
+const KueAdeeCardScreen = React.lazy(() => import('./screens/KueAdeeCardScreen').then(m => ({ default: m.KueAdeeCardScreen })));
+const KoyabuCardScreen = React.lazy(() => import('./screens/KoyabuCardScreen').then(m => ({ default: m.KoyabuCardScreen })));
+const SaguLempengCardScreen = React.lazy(() => import('./screens/SaguLempengCardScreen').then(m => ({ default: m.SaguLempengCardScreen })));
+const SaguGulaCardScreen = React.lazy(() => import('./screens/SaguGulaCardScreen').then(m => ({ default: m.SaguGulaCardScreen })));
+const TalamSaguBakarCardScreen = React.lazy(() => import('./screens/TalamSaguBakarCardScreen').then(m => ({ default: m.TalamSaguBakarCardScreen })));
+const AsidaCardScreen = React.lazy(() => import('./screens/AsidaCardScreen').then(m => ({ default: m.AsidaCardScreen })));
+const KueBageaCardScreen = React.lazy(() => import('./screens/KueBageaCardScreen').then(m => ({ default: m.KueBageaCardScreen })));
+const PisangAsarCardScreen = React.lazy(() => import('./screens/PisangAsarCardScreen').then(m => ({ default: m.PisangAsarCardScreen })));
+
+// Loading Component
+const ScreenFallback = () => (
+  <div className="loading-screen" style={{ background: '#FFF8EE' }}>
+    <div className="loading-content">
+      <div className="loading-emoji">⏳</div>
+      <h2 style={{ color: '#8b4513' }}>Memuat...</h2>
+    </div>
+  </div>
+);
 
 export default function App() {
   const { currentScreen, isLoggedIn, contentLoaded, loadContent } = useGameStore();
@@ -170,7 +180,9 @@ export default function App() {
 
   return (
     <div className="app-container">
-      {renderScreen()}
+      <Suspense fallback={<ScreenFallback />}>
+        {renderScreen()}
+      </Suspense>
     </div>
   );
 }
