@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 
 interface Ingredient {
   id: string;
@@ -31,6 +31,14 @@ export function StepIngredients({ onComplete }: Props) {
   const bowlRef       = useRef<HTMLDivElement>(null);
   const ghostRef      = useRef<HTMLDivElement | null>(null);
   const shakeTimer    = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (ghostRef.current && document.body.contains(ghostRef.current)) {
+        document.body.removeChild(ghostRef.current);
+      }
+    };
+  }, []);
 
   const correctCount  = ingredients.filter(i => i.correct && i.dropped).length;
   const totalCorrect  = ingredients.filter(i => i.correct).length;

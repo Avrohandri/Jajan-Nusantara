@@ -51,13 +51,12 @@ export function PisangAsarMiniGameScreen() {
               🌴 Pisang Asar adalah camilan khas Maluku yang terbuat dari pisang yang dibakar dengan isian campuran kenari dan gula aren.
             </div>
           </div>
-          <div className="complete-actions">
-            <button className="btn btn-primary btn-lg btn-full" onClick={() => setScreen('mainMenu')}>
-              🏠 Kembali ke Menu
+          <div className="mgbc-actions" style={{ marginTop: '14px', gap: '8px' }}>
+            <button className="mgbc-btn mgbc-btn--cancel" onClick={() => setScreen('mapSelect')} style={{ width: '100%', padding: '12px 20px', fontSize: '17px' }}>
+              🗺️ Pilih Level
             </button>
-            <button className="btn btn-secondary btn-full"
-              onClick={() => { resetPisangAsarGame(); useGameStore.getState().startPisangAsarGame(); }}>
-              🔄 Main Lagi
+            <button className="mgbc-btn mgbc-btn--confirm" onClick={() => setScreen('mainMenu')} style={{ width: '100%', padding: '12px 20px', fontSize: '17px', color: '#5D4037' }}>
+              🏠 Kembali ke Menu
             </button>
           </div>
         </div>

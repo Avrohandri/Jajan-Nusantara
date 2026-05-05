@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface Props {
   onComplete: () => void;
@@ -13,6 +13,14 @@ export function StepSpreadTopping({ onComplete }: Props) {
   ]);
   const [draggingTopping, setDraggingTopping] = useState(false);
   const ghostRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (ghostRef.current && document.body.contains(ghostRef.current)) {
+        document.body.removeChild(ghostRef.current);
+      }
+    };
+  }, []);
 
   // Mouse Handlers
   const handleToppingDragStart = (e: React.DragEvent) => {

@@ -2315,7 +2315,7 @@ body {
 }
 
 .complete-subtitle {
-  font-size: 15px;
+  font-size: 18px;
   color: var(--color-text-light);
 }
 
@@ -2328,8 +2328,8 @@ body {
   background: #FFF3E0;
   border: 2px solid #FFE0B2;
   border-radius: var(--radius-lg);
-  padding: 14px 18px;
-  font-size: 13px;
+  padding: 16px 20px;
+  font-size: 15px;
   line-height: 1.6;
   color: var(--color-text);
 }
@@ -5796,10 +5796,10 @@ body {
 
 .mgbc-btn {
   width: 100%;
-  padding: 13px 20px;
+  padding: 15px 25px;
   border-radius: 50px;
   font-family: var(--font);
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 800;
   border: none;
   cursor: pointer;

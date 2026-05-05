@@ -51,13 +51,12 @@ export function SamaloyangMiniGameScreen() {
               📌 Samaloyang (Kembang Goyang) adalah kue tradisional khas Aceh berbentuk seperti bunga yang dibuat dengan cara dicetak dan digoyang-goyang di dalam minyak panas.
             </div>
           </div>
-          <div className="complete-actions">
-            <button className="btn btn-primary btn-lg btn-full" onClick={() => setScreen('mainMenu')}>
-              🏠 Kembali ke Menu
+          <div className="mgbc-actions" style={{ marginTop: '14px', gap: '8px' }}>
+            <button className="mgbc-btn mgbc-btn--cancel" onClick={() => setScreen('mapSelect')} style={{ width: '100%', padding: '12px 20px', fontSize: '17px' }}>
+              🗺️ Pilih Level
             </button>
-            <button className="btn btn-secondary btn-full"
-              onClick={() => { resetSamaloyangGame(); useGameStore.getState().startSamaloyangGame(); }}>
-              🔄 Main Lagi
+            <button className="mgbc-btn mgbc-btn--confirm" onClick={() => setScreen('mainMenu')} style={{ width: '100%', padding: '12px 20px', fontSize: '17px', color: '#5D4037' }}>
+              🏠 Kembali ke Menu
             </button>
           </div>
         </div>
