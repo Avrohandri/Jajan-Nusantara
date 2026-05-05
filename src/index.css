@@ -218,33 +218,100 @@ body {
 /* ========== Modal ========== */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgba(40, 20, 10, 0.85);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
-  padding: 16px;
+  z-index: 2000;
+  padding: 20px;
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-content {
-  background: var(--color-bg-card);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  max-width: 380px;
+  background: #FFF9F0;
+  background-image: 
+    radial-gradient(circle at 2px 2px, rgba(139, 69, 19, 0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+  border: 6px solid #8B4513;
+  border-radius: 24px;
+  padding: 32px 24px;
+  max-width: 360px;
   width: 100%;
   max-height: 85vh;
   overflow-y: auto;
+  position: relative;
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.6),
+    inset 0 0 60px rgba(139, 69, 19, 0.1);
+  animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalScaleUp {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Decorative corners */
+.modal-content::before {
+  content: '✨';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+.modal-content::after {
+  content: '✨';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 14px;
+  opacity: 0.6;
 }
 
 .modal-title {
-  font-size: 20px;
-  font-weight: 800;
-  margin-bottom: 16px;
+  font-size: 24px;
+  font-weight: 900;
+  color: #5D2E0A;
+  margin-bottom: 20px;
   text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* ========== Instructions ========== */
+.instructions {
+  margin-bottom: 24px;
+}
+
+.instructions p {
+  background: rgba(224, 122, 47, 0.1);
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #3D2B1F;
+  border-left: 4px solid var(--color-primary);
+  transition: transform 0.2s;
+}
+
+.instructions p:hover {
+  transform: translateX(4px);
+  background: rgba(224, 122, 47, 0.15);
+}
+
+.instructions strong {
+  color: var(--color-primary-dark);
 }
 
 /* ========== Home Screen ========== */
@@ -447,17 +514,7 @@ body {
   filter: brightness(0.9);
 }
 
-/* ========== Instructions ========== */
-.instructions {
-  text-align: left;
-  margin-bottom: 16px;
-}
 
-.instructions p {
-  margin-bottom: 10px;
-  font-size: 14px;
-  line-height: 1.6;
-}
 
 /* ========== Quiz (New Design) ========== */
 

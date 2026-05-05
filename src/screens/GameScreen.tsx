@@ -207,14 +207,14 @@ export function GameScreen() {
       {/* Instructions Overlay (first launch only) */}
       <Modal isOpen={showInstructions} title="Cara Bermain 🎮">
         <div className="instructions">
-          <p>1. <strong>Sentuh/klik</strong> di area atas untuk menjatuhkan jajanan</p>
-          <p>2. <strong>Gabungkan</strong> dua jajanan yang sama untuk naik tier</p>
-          <p>3. Setiap <strong>6 gabungan</strong> akan muncul kuis budaya kuliner</p>
-          <p>4. Permainan berakhir jika jajanan melewati garis merah</p>
-          <p>5. Raih skor tertinggi!</p>
+          <p>✨ <strong>Sentuh atau Klik</strong> di mana saja untuk menjatuhkan jajanan pilihanmu!</p>
+          <p>🤝 <strong>Gabungkan</strong> dua jajanan yang sama untuk mengubahnya menjadi kuliner yang lebih lezat!</p>
+          <p>🧠 Setiap <strong>6 gabungan</strong>, kamu akan ditantang dengan kuis seru seputar budaya kuliner.</p>
+          <p>⚠️ Hati-hati! Jangan sampai jajananmu menumpuk hingga melewati <strong>Garis Merah</strong>.</p>
+          <p>🏆 Jadilah ahli kuliner dengan meraih skor tertinggi di setiap pulau!</p>
         </div>
         <Button variant="primary" fullWidth onClick={dismissInstructions}>
-          Mengerti! 👍
+          Mulai Petualangan! 🚀
         </Button>
       </Modal>
 
