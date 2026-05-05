@@ -167,6 +167,8 @@ interface GameStore {
   // --- First Launch ---
   hasSeenInstructions: boolean;
   setHasSeenInstructions: () => void;
+  hasSeenJajanpediaInstructions: boolean;
+  setHasSeenJajanpediaInstructions: () => void;
 
   // --- Settings ---
   soundEnabled: boolean;
@@ -675,6 +677,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
   setHasSeenInstructions: () => {
     localStorage.setItem('kuliner_seen_instructions', 'true');
     set({ hasSeenInstructions: true });
+  },
+  hasSeenJajanpediaInstructions: localStorage.getItem('kuliner_seen_jajanpedia_instructions') === 'true',
+  setHasSeenJajanpediaInstructions: () => {
+    localStorage.setItem('kuliner_seen_jajanpedia_instructions', 'true');
+    set({ hasSeenJajanpediaInstructions: true });
   },
 
   // Settings

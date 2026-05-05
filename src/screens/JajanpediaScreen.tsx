@@ -3,6 +3,8 @@ import { useGameStore } from '../store/gameStore';
 import { REGION_FOOD_CONFIGS_RAW } from '../game/characters/FoodConfig';
 import pediaJudul from '../assets/pedia/pedia_judul.png';
 import backButtonImg from '../assets/universal/back button.png';
+import { Modal } from '../components/Modal';
+import { Button } from '../components/Button';
 
 const REGIONS = [
   { id: 'jogja', name: 'Jogja', folder: 'foods_jogja', icon: '🏯' },
@@ -50,10 +52,17 @@ const FOOD_CARD_SCREENS: Record<string, string> = {
 
 
 export function JajanpediaScreen() {
-  const { setScreen, jajanpediaRegionIndex: regionIndex, setJajanpediaRegionIndex: setRegionIndexStore } = useGameStore();
+  const { 
+    setScreen, 
+    jajanpediaRegionIndex: regionIndex, 
+    setJajanpediaRegionIndex: setRegionIndexStore,
+    hasSeenJajanpediaInstructions,
+    setHasSeenJajanpediaInstructions
+  } = useGameStore();
 
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [showInstructions, setShowInstructions] = useState(!hasSeenJajanpediaInstructions);
 
   const minSwipeDistance = 50;
 
@@ -86,6 +95,11 @@ export function JajanpediaScreen() {
   const nextRegion = () => {
     const nextIdx = regionIndex < REGIONS.length - 1 ? regionIndex + 1 : 0;
     setRegionIndexStore(nextIdx);
+  };
+
+  const dismissInstructions = () => {
+    setShowInstructions(false);
+    setHasSeenJajanpediaInstructions();
   };
 
   const currentRegion = REGIONS[regionIndex];
@@ -157,6 +171,19 @@ export function JajanpediaScreen() {
           </div>
         </div>
       </div>
+
+      {/* Instructions Overlay */}
+      <Modal isOpen={showInstructions} title="Selamat Datang di Jajanpedia! 📖">
+        <div className="instructions">
+          <p>Disini kamu bisa melihat semua koleksi kuliner nusantara yang ada di game ini!</p>
+          <p>1. Kuliner terbagi berdasarkan pulau (Jogja, Bali, Aceh, Maluku).</p>
+          <p>2. Kamu bisa membuka kuliner baru dengan memainkannya di pulau masing-masing.</p>
+          <p>3. <strong>Ketuk</strong> pada gambar kuliner untuk melihat rincian informasi dan fakta uniknya!</p>
+        </div>
+        <Button variant="primary" fullWidth onClick={dismissInstructions}>
+          Saya Mengerti! 👍
+        </Button>
+      </Modal>
     </div>
   );
 }
