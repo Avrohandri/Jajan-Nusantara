@@ -410,10 +410,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
       await saveUsername(uid, username);
       // Buat profil default
       await createProfile(uid, username);
+      const profile = await getProfile(uid);
       // Load profil
       set({
         userId: uid,
         username,
+        profileIcon: profile?.profileIcon ?? 'Klepon',
         isLoggedIn: true,
         currentScreen: 'mainMenu',
         islandProgress: { ...DEFAULT_ISLAND_PROGRESS },

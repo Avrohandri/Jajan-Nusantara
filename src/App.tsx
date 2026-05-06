@@ -91,14 +91,28 @@ export default function App() {
         }
       } catch (_) {}
 
-      // Load game content
-      await loadContent();
+      // Start loading game content in background!
+      loadContent();
       setInitializing(false);
     }
     init();
   }, []);
 
-  if (initializing || !contentLoaded) {
+  if (initializing) {
+    return <ScreenFallback />;
+  }
+
+  // Jika belum login, selalu tampilkan layar login
+  if (!isLoggedIn) {
+    return (
+      <div className="app-container">
+        <LoginScreen />
+      </div>
+    );
+  }
+
+  // Jika sudah login tapi konten game belum siap
+  if (!contentLoaded) {
     return (
       <div className="loading-screen">
         <div className="loading-content">
@@ -113,15 +127,6 @@ export default function App() {
             </p>
           )}
         </div>
-      </div>
-    );
-  }
-
-  // Jika belum login, selalu tampilkan layar login
-  if (!isLoggedIn) {
-    return (
-      <div className="app-container">
-        <LoginScreen />
       </div>
     );
   }
