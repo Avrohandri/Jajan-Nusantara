@@ -57,14 +57,29 @@ export function JajanpediaScreen() {
     jajanpediaRegionIndex: regionIndex, 
     setJajanpediaRegionIndex: setRegionIndexStore,
     hasSeenJajanpediaInstructions,
-    setHasSeenJajanpediaInstructions
+    setHasSeenJajanpediaInstructions,
+    islandCookingComplete
   } = useGameStore();
 
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [showInstructions, setShowInstructions] = useState(!hasSeenJajanpediaInstructions);
+  const [toast, setToast] = useState<string | null>(null);
 
   const minSwipeDistance = 50;
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2500);
+  };
+
+  const isRegionUnlocked = (id: string): boolean => {
+    if (id === 'jogja') return true;
+    if (id === 'bali') return islandCookingComplete.jogja;
+    if (id === 'aceh') return islandCookingComplete.bali;
+    if (id === 'maluku') return islandCookingComplete.aceh;
+    return false;
+  };
 
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
@@ -89,11 +104,21 @@ export function JajanpediaScreen() {
 
   const prevRegion = () => {
     const nextIdx = regionIndex > 0 ? regionIndex - 1 : REGIONS.length - 1;
+    const targetRegion = REGIONS[nextIdx];
+    if (!isRegionUnlocked(targetRegion.id)) {
+      showToast(`🔒 Selesaikan pulau sebelumnya untuk membuka Jajanpedia ${targetRegion.name}!`);
+      return;
+    }
     setRegionIndexStore(nextIdx);
   };
 
   const nextRegion = () => {
     const nextIdx = regionIndex < REGIONS.length - 1 ? regionIndex + 1 : 0;
+    const targetRegion = REGIONS[nextIdx];
+    if (!isRegionUnlocked(targetRegion.id)) {
+      showToast(`🔒 Selesaikan pulau sebelumnya untuk membuka Jajanpedia ${targetRegion.name}!`);
+      return;
+    }
     setRegionIndexStore(nextIdx);
   };
 
@@ -183,6 +208,12 @@ export function JajanpediaScreen() {
           Mulai Eksplorasi! 🚀
         </Button>
       </Modal>
+
+      {toast && (
+        <div className="map-toast" role="status" style={{ zIndex: 9999 }}>
+          {toast}
+        </div>
+      )}
     </div>
   );
 }
