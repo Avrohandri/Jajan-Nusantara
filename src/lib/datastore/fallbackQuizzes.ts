@@ -8,7 +8,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Klepon berwarna apa?',
     options: ['Hijau', 'Merah', 'Biru', 'Putih'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Klepon berwarna hijau.'
+    explanation: 'Klepon berwarna hijau.'
   },
   {
     id: 'jogja_2',
@@ -16,7 +16,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Cenil terbuat dari apa?',
     options: ['Singkong', 'Beras', 'Jagung', 'Kentang'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Cenil terbuat dari singkong.'
+    explanation: 'Cenil terbuat dari singkong.'
   },
   {
     id: 'jogja_3',
@@ -24,7 +24,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Yangko adalah oleh-oleh dari kota?',
     options: ['Jogja', 'Bali', 'Aceh', 'Maluku'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Yangko adalah oleh-oleh dari Jogja.'
+    explanation: 'Yangko adalah oleh-oleh khas dari Jogja.'
   },
   {
     id: 'jogja_4',
@@ -32,7 +32,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Geplak dibuat dari apa?',
     options: ['Kelapa', 'Daging', 'Ikan', 'Sayur'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Geplak dibuat dari kelapa.'
+    explanation: 'Geplak dibuat dari kelapa.'
   },
   {
     id: 'jogja_5',
@@ -40,7 +40,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Bakpia berisi apa?',
     options: ['Isi manis', 'Air', 'Sayur', 'Garam'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Bakpia berisi isi manis.'
+    explanation: 'Bakpia berisi isian manis seperti kacang hijau atau cokelat.'
   },
   {
     id: 'jogja_6',
@@ -48,7 +48,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Lemper dibungkus dengan apa?',
     options: ['Daun pisang', 'Plastik', 'Kertas', 'Kain'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Lemper dibungkus dengan daun pisang.'
+    explanation: 'Lemper dibungkus dengan daun pisang.'
   },
   {
     id: 'jogja_7',
@@ -56,7 +56,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Tiwul dulu sebagai pengganti apa?',
     options: ['Nasi', 'Roti', 'Air', 'Sayur'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Tiwul dulu sebagai pengganti nasi.'
+    explanation: 'Tiwul dulu digunakan sebagai pengganti nasi.'
   },
   {
     id: 'jogja_8',
@@ -64,7 +64,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Jadah tempe berasal dari daerah dekat?',
     options: ['Gunung Merapi', 'Pantai', 'Danau', 'Sawah'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Jadah tempe berasal dari daerah dekat Gunung Merapi.'
+    explanation: 'Jadah tempe berasal dari daerah dekat Gunung Merapi.'
   },
 
   // BALI
@@ -74,7 +74,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Laklak berwarna apa?',
     options: ['Hijau', 'Merah', 'Biru', 'Putih'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Laklak berwarna hijau.'
+    explanation: 'Laklak berwarna hijau.'
   },
   {
     id: 'bali_2',
@@ -82,7 +82,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Kaliadrem bentuknya seperti?',
     options: ['Segitiga', 'Bulat', 'Kotak', 'Bintang'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Kaliadrem bentuknya seperti segitiga.'
+    explanation: 'Kaliadrem bentuknya seperti segitiga.'
   },
   {
     id: 'bali_3',
@@ -90,7 +90,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Pie susu berisi apa?',
     options: ['Susu', 'Air', 'Sayur', 'Daging'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Pie susu berisi susu.'
+    explanation: 'Pie susu berisi custard susu yang lembut.'
   },
   {
     id: 'bali_4',
@@ -98,7 +98,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Jaje walik dimasak dengan cara?',
     options: ['Dibalik', 'Direbus', 'Dikukus', 'Dijemur'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Jaje walik dimasak dengan cara dibalik.'
+    explanation: 'Jaje walik dimasak dengan cara dibalik.'
   },
   {
     id: 'bali_5',
@@ -106,7 +106,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Bendu biasanya ada di acara apa?',
     options: ['Upacara adat', 'Sekolah', 'Olahraga', 'Pasar'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Bendu biasanya ada di acara upacara adat.'
+    explanation: 'Bendu biasanya hadir dalam acara upacara adat.'
   },
   {
     id: 'bali_6',
@@ -114,7 +114,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Jaje uli terbuat dari apa?',
     options: ['Ketan', 'Jagung', 'Kentang', 'Beras'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Jaje uli terbuat dari ketan.'
+    explanation: 'Jaje uli terbuat dari ketan.'
   },
   {
     id: 'bali_7',
@@ -122,7 +122,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Pisang rai dibuat dari buah apa?',
     options: ['Pisang', 'Apel', 'Mangga', 'Jeruk'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Pisang rai dibuat dari buah pisang.'
+    explanation: 'Pisang rai dibuat dari buah pisang.'
   },
   {
     id: 'bali_8',
@@ -130,7 +130,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Pisang rai diberi taburan apa?',
     options: ['Kelapa', 'Keju', 'Coklat', 'Kacang'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Pisang rai diberi taburan kelapa.'
+    explanation: 'Pisang rai diberi taburan kelapa parut.'
   },
 
   // ACEH
@@ -140,7 +140,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Samaloyang dimasak dengan cara?',
     options: ['Digoreng', 'Dikukus', 'Direbus', 'Dipanggang'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Samaloyang dimasak dengan cara digoreng.'
+    explanation: 'Samaloyang dimasak dengan cara digoreng.'
   },
   {
     id: 'aceh_2',
@@ -148,7 +148,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Timphan biasanya berisi apa?',
     options: ['Pisang atau kelapa', 'Daging', 'Ikan', 'Sayur'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Timphan biasanya berisi pisang atau kelapa.'
+    explanation: 'Timphan biasanya berisi pisang atau kelapa.'
   },
   {
     id: 'aceh_3',
@@ -156,7 +156,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Pulut ijo berwarna apa?',
     options: ['Hijau', 'Merah', 'Kuning', 'Putih'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Pulut ijo berwarna hijau.'
+    explanation: 'Pulut ijo berwarna hijau.'
   },
   {
     id: 'aceh_4',
@@ -164,7 +164,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Keukarah disebut juga kue apa?',
     options: ['Kue jaring', 'Kue bola', 'Kue kotak', 'Kue daun'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Keukarah disebut juga kue jaring.'
+    explanation: 'Keukarah disebut juga kue jaring.'
   },
   {
     id: 'aceh_5',
@@ -172,7 +172,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Bungong kayee bentuknya seperti?',
     options: ['Bunga', 'Bintang', 'Daun', 'Hati'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Bungong kayee bentuknya seperti bunga.'
+    explanation: 'Bungong kayee bentuknya seperti bunga.'
   },
   {
     id: 'aceh_6',
@@ -180,7 +180,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Meuseukat terbuat dari buah apa?',
     options: ['Nanas', 'Apel', 'Mangga', 'Jeruk'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Meuseukat terbuat dari buah nanas.'
+    explanation: 'Meuseukat terbuat dari buah nanas.'
   },
   {
     id: 'aceh_7',
@@ -188,7 +188,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Kue adee dimasak dengan cara?',
     options: ['Dipanggang', 'Digoreng', 'Direbus', 'Dikukus'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Kue adee dimasak dengan cara dipanggang.'
+    explanation: 'Kue adee dimasak dengan cara dipanggang.'
   },
   {
     id: 'aceh_8',
@@ -196,7 +196,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Kue adee rasanya?',
     options: ['Manis', 'Pedas', 'Asin', 'Pahit'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Kue adee rasanya manis.'
+    explanation: 'Kue adee rasanya manis.'
   },
 
   // MALUKU
@@ -206,7 +206,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Koyabu terbuat dari apa?',
     options: ['Sagu', 'Beras', 'Jagung', 'Kentang'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Koyabu terbuat dari sagu.'
+    explanation: 'Koyabu terbuat dari sagu.'
   },
   {
     id: 'maluku_2',
@@ -214,7 +214,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Sagu lempeng biasanya dimakan dengan cara?',
     options: ['Dicelup teh', 'Dimakan dengan nasi', 'Digoreng lagi', 'Dikukus'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Sagu lempeng biasanya dimakan dengan cara dicelup teh.'
+    explanation: 'Sagu lempeng biasanya dimakan dengan cara dicelup ke dalam teh.'
   },
   {
     id: 'maluku_3',
@@ -222,7 +222,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Sagu gula rasanya?',
     options: ['Manis', 'Asin', 'Pedas', 'Pahit'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Sagu gula rasanya manis.'
+    explanation: 'Sagu gula rasanya manis.'
   },
   {
     id: 'maluku_4',
@@ -230,7 +230,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Talam sagu bakar dimasak dengan cara?',
     options: ['Dipanggang', 'Direbus', 'Dikukus', 'Digoreng'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Talam sagu bakar dimasak dengan cara dipanggang.'
+    explanation: 'Talam sagu bakar dimasak dengan cara dipanggang.'
   },
   {
     id: 'maluku_5',
@@ -238,7 +238,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Asida adalah makanan seperti?',
     options: ['Bubur', 'Roti', 'Kue kering', 'Sup'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Asida adalah makanan seperti bubur.'
+    explanation: 'Asida adalah makanan bertekstur seperti bubur.'
   },
   {
     id: 'maluku_6',
@@ -246,7 +246,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Kue bagea teksturnya?',
     options: ['Keras', 'Lembut', 'Cair', 'Kenyal'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Kue bagea teksturnya keras.'
+    explanation: 'Kue bagea bertekstur keras dan renyah.'
   },
   {
     id: 'maluku_7',
@@ -254,7 +254,7 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Pisang asar dimasak dengan cara?',
     options: ['Dibakar', 'Direbus', 'Dikukus', 'Digoreng'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Pisang asar dimasak dengan cara dibakar.'
+    explanation: 'Pisang asar dimasak dengan cara dibakar.'
   },
   {
     id: 'maluku_8',
@@ -262,6 +262,6 @@ export const fallbackQuizzes: QuizData[] = [
     question: 'Pisang asar biasanya diberi?',
     options: ['Saus manis', 'Garam', 'Sambal', 'Cuka'],
     correctAnswerIndex: 0,
-    explanation: 'Benar! Pisang asar biasanya diberi saus manis.'
+    explanation: 'Pisang asar biasanya diberi saus manis.'
   }
 ];

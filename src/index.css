@@ -742,8 +742,8 @@ body {
 }
 
 .quiz-feedback--wrong {
-  background: linear-gradient(135deg, #FFF3E0, #FFF8E1);
-  border: 2px solid #FFE082;
+  background: linear-gradient(135deg, #FFEBEE, #FFF3E0);
+  border: 2px solid #EF9A9A;
 }
 
 .quiz-feedback-top {
@@ -771,6 +771,23 @@ body {
   line-height: 1.55;
   margin-bottom: 12px;
   font-style: italic;
+}
+
+.quiz-correct-answer-hint {
+  font-family: var(--font);
+  font-size: 12.5px;
+  color: #2E7D32;
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  line-height: 1.45;
+}
+
+.quiz-correct-answer-hint strong {
+  font-weight: 800;
+  color: #1B5E20;
 }
 
 /* Continue button */

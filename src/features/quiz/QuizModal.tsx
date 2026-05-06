@@ -113,11 +113,16 @@ export function QuizModal() {
           {answered && (
             <div className={`quiz-feedback ${isCorrect ? 'quiz-feedback--correct' : 'quiz-feedback--wrong'}`}>
               <div className="quiz-feedback-top">
-                <span className="quiz-feedback-emoji">{isCorrect ? '🎉' : '💡'}</span>
+                <span className="quiz-feedback-emoji">{isCorrect ? '🎉' : '❌'}</span>
                 <p className="quiz-feedback-title">
-                  {isCorrect ? `Benar! +50 poin` : 'Hampir tepat!'}
+                  {isCorrect ? `Benar! +50 poin` : 'Salah!'}
                 </p>
               </div>
+              {!isCorrect && (
+                <p className="quiz-correct-answer-hint">
+                  ✅ Jawaban benar: <strong>{shuffledOptions[shuffledCorrectIndex]}</strong>
+                </p>
+              )}
               <p className="quiz-explanation-new">{quiz.explanation}</p>
               <button className="quiz-continue-btn" onClick={handleClose}>
                 <span>Lanjut Bermain</span>
