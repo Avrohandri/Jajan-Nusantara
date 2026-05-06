@@ -104,7 +104,7 @@ export function NpcNotification() {
   useEffect(() => {
     if (!activeItem) return;
 
-    const waitTime = activeItem.region === 'bali' ? 3000 : 3500;
+    const waitTime = 5000;
     remainingRef.current = waitTime;
 
     // Only start immediately if quiz is NOT currently showing
@@ -146,24 +146,30 @@ export function NpcNotification() {
     isLeftSide ? 'npc-slide-left' : 'npc-slide-right',
     shouldFreeze ? 'npc-paused' : ''
   ].join(' ');
-  const bubbleClass = isLeftSide ? 'npc-bubble bubble-left' : 'npc-bubble bubble-right';
+
+  const dismissDuration = '5s';
 
   return (
     <div key={activeItem.foodName} className={wrapperClass}>
       {isLeftSide && <img src={npcAsset} alt="NPC" className="npc-image" />}
 
-      <div className={bubbleClass}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+      <div className="npc-card">
+        <div className="npc-card-header">
           <img
             src={`/assets/foods_${activeItem.region}/${activeItem.textureKey}.png`}
             alt={activeItem.foodName}
-            style={{ width: '28px', height: '28px', objectFit: 'contain' }}
+            className="npc-food-icon"
           />
-          <div style={{ color: '#8b4513', fontWeight: '800', fontSize: '15px' }}>
-            {activeItem.foodName}
-          </div>
+          <span className="npc-food-name">{activeItem.foodName}</span>
+          <span className="npc-badge">Fun Fact! 🌟</span>
         </div>
-        <span>{activeItem.funFact}</span>
+        <p className="npc-fact-text">{activeItem.funFact}</p>
+        <div className="npc-progress-bar">
+          <div
+            className={`npc-progress-fill${shouldFreeze ? ' npc-progress-paused' : ''}`}
+            style={{ animationDuration: dismissDuration }}
+          />
+        </div>
       </div>
 
       {!isLeftSide && <img src={npcAsset} alt="NPC" className="npc-image" />}

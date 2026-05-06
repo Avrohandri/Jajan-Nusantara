@@ -3432,8 +3432,9 @@ body {
 }
 
 /* ========================================================
-   NPC NOTIFICATION
+   NPC NOTIFICATION — slide from sides, new card design
    ======================================================== */
+
 .npc-notification-wrapper {
   position: absolute;
   top: 50%;
@@ -3441,7 +3442,7 @@ body {
   z-index: 80;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .npc-paused {
@@ -3450,132 +3451,138 @@ body {
 
 .npc-slide-left {
   left: -15px;
-  animation: slide-in-out-left 3.5s ease-in-out forwards;
+  animation: slide-in-out-left 5.5s ease-in-out forwards;
 }
 
 .npc-slide-right {
-  right: -20px;
-  /* Mepet ke kanan, sedikit off screen untuk efek 'pop in' */
-  animation: slide-in-out-right 3.5s ease-in-out forwards;
+  right: -15px;
+  animation: slide-in-out-right 5.5s ease-in-out forwards;
 }
 
 .npc-image {
   width: 90px;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+  flex-shrink: 0;
 }
 
-.npc-image.flipped {
-  transform: scaleX(-1);
-}
-
-.npc-bubble {
-  max-width: 180px;
-  background: rgba(255, 255, 255, 0.95);
-  border: 4px solid #8b4513;
-  border-radius: 12px;
-  padding: 10px 12px;
-  font-size: 13px;
-  color: #3e2723;
+/* Main card */
+.npc-card {
+  max-width: 190px;
+  background: linear-gradient(145deg, #fffdf5, #fff8e8);
+  border: 3px solid #d47e24;
+  border-radius: 16px;
+  padding: 10px 12px 8px;
+  box-shadow:
+    0 -2px 0 #a85a00,
+    0 6px 20px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
   position: relative;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
-.npc-bubble strong {
-  color: #d47e24;
-  font-size: 14px;
-  display: block;
-  margin-bottom: 4px;
-}
-
-.npc-bubble.bubble-left::before {
+/* Decorative top stripe */
+.npc-card::before {
   content: '';
   position: absolute;
-  left: -12px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-width: 6px 12px 6px 0;
-  border-style: solid;
-  border-color: transparent #8b4513 transparent transparent;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #E07A2F, #f5b942, #E07A2F);
+  border-radius: 14px 14px 0 0;
 }
 
-.npc-bubble.bubble-left::after {
-  content: '';
-  position: absolute;
-  left: -6px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-width: 4px 8px 4px 0;
-  border-style: solid;
-  border-color: transparent #fff transparent transparent;
+/* Header row: food icon + name + badge */
+.npc-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
 }
 
-.npc-bubble.bubble-right::before {
-  content: '';
-  position: absolute;
-  right: -12px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-width: 6px 0 6px 12px;
-  border-style: solid;
-  border-color: transparent transparent transparent #8b4513;
+.npc-food-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
 }
 
-.npc-bubble.bubble-right::after {
-  content: '';
-  position: absolute;
-  right: -6px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-width: 4px 0 4px 8px;
-  border-style: solid;
-  border-color: transparent transparent transparent #fff;
+.npc-food-name {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 800;
+  color: #8b4513;
+  line-height: 1.1;
+  flex: 1;
+}
+
+.npc-badge {
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #E07A2F, #f5b942);
+  color: #fff;
+  font-family: var(--font);
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 99px;
+  box-shadow: 0 2px 4px rgba(224, 122, 47, 0.4);
+  white-space: nowrap;
+}
+
+/* Fun fact body */
+.npc-fact-text {
+  font-family: var(--font);
+  font-size: 11px;
+  color: #5a3010;
+  line-height: 1.45;
+  margin: 0 0 8px;
+}
+
+/* Auto-dismiss progress bar */
+.npc-progress-bar {
+  height: 4px;
+  background: rgba(139, 69, 19, 0.15);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.npc-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #E07A2F, #f5b942);
+  border-radius: 99px;
+  width: 100%;
+  animation: npc-shrink linear forwards;
+  transform-origin: left;
+}
+
+.npc-progress-paused {
+  animation-play-state: paused !important;
+}
+
+/* Progress bar shrink from full to nothing */
+@keyframes npc-shrink {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
 }
 
 @keyframes slide-in-out-left {
-  0% {
-    transform: translateX(-150%);
-    opacity: 0;
-  }
-
-  15% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-
-  85% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-
-  100% {
-    transform: translateX(-150%);
-    opacity: 0;
-  }
+  0%   { transform: translateX(-150%); opacity: 0; }
+  15%  { transform: translateX(0);     opacity: 1; }
+  85%  { transform: translateX(0);     opacity: 1; }
+  100% { transform: translateX(-150%); opacity: 0; }
 }
 
 @keyframes slide-in-out-right {
-  0% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-
-  15% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-
-  85% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-
-  100% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
+  0%   { transform: translateX(100%); opacity: 0; }
+  15%  { transform: translateX(0);    opacity: 1; }
+  85%  { transform: translateX(0);    opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
 }
+
 
 /* ========================================================
    KLEPON CARD SCREEN
