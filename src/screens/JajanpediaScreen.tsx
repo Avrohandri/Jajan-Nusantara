@@ -58,7 +58,7 @@ export function JajanpediaScreen() {
     setJajanpediaRegionIndex: setRegionIndexStore,
     hasSeenJajanpediaInstructions,
     setHasSeenJajanpediaInstructions,
-    islandCookingComplete
+    islandProgress
   } = useGameStore();
 
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -75,9 +75,9 @@ export function JajanpediaScreen() {
 
   const isRegionUnlocked = (id: string): boolean => {
     if (id === 'jogja') return true;
-    if (id === 'bali') return islandCookingComplete.jogja;
-    if (id === 'aceh') return islandCookingComplete.bali;
-    if (id === 'maluku') return islandCookingComplete.aceh;
+    if (id === 'bali') return islandProgress.jogja;
+    if (id === 'aceh') return islandProgress.bali;
+    if (id === 'maluku') return islandProgress.aceh;
     return false;
   };
 
