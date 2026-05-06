@@ -1851,31 +1851,36 @@ body {
 
 .map-toast {
   position: fixed;
-  bottom: max(24px, env(safe-area-inset-bottom, 24px));
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  padding: 12px 22px;
-  border-radius: var(--radius-xl);
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  width: max-content;
+  max-width: 85vw;
+  padding: 16px 24px;
+  border-radius: 20px;
   font-family: var(--font);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
-  color: #fff;
-  background: rgba(35, 45, 55, 0.92);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
-  animation: mapToastIn 0.25s ease;
+  color: #FFF8EE;
+  background: linear-gradient(135deg, rgba(224, 122, 47, 0.96), rgba(196, 99, 31, 0.96));
+  border: 3px solid rgba(255, 230, 180, 0.9);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  line-height: 1.4;
+  animation: mapToastInCenter 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   pointer-events: none;
 }
 
-@keyframes mapToastIn {
+@keyframes mapToastInCenter {
   from {
     opacity: 0;
-    transform: translateX(-50%) translateY(8px);
+    transform: translate(-50%, -40%) scale(0.9);
   }
 
   to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
