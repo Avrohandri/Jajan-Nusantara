@@ -28,7 +28,7 @@ export function GameScreen() {
     resetGame,
     setScreen,
     endSession,
-    highestTier,
+    highestTier: _highestTier,
     seenTiers,
     activeRegion,
   } = useGameStore();
@@ -60,9 +60,19 @@ export function GameScreen() {
       }
     };
 
+    // Saat board penuh (game over karena papan), langsung ke ResultScreen tanpa popup
+    const handleGameOver = async () => {
+      if (useGameStore.getState().isGameOver) return; // cegah double-trigger
+      useGameStore.getState().setGameOver();
+      await useGameStore.getState().endSession('board_full');
+      useGameStore.getState().setScreen('result');
+    };
+
     EventBus.on('next-item', handleNextItem);
+    EventBus.on('game-over', handleGameOver);
     return () => {
       EventBus.off('next-item', handleNextItem);
+      EventBus.off('game-over', handleGameOver);
     };
   }, [resetGame]);
 
@@ -145,8 +155,6 @@ export function GameScreen() {
     setHasSeenInstructions();
   };
 
-  const highestFoodName = currentConfig[highestTier]?.name ?? null;
-
   return (
     <div className="screen game-screen">
       {/* HUD */}
@@ -219,25 +227,7 @@ export function GameScreen() {
       {/* Quiz Modal */}
       {showQuiz && <QuizModal />}
 
-      {/* Game Over Overlay */}
-      {isGameOver && !showQuiz && (
-        <div className="game-over-overlay">
-          <div className="game-over-content">
-            <h2>Kamu berhasil meraih skor {score}! 🏆</h2>
-            {highestFoodName && (
-              <p style={{ fontSize: '14px', color: 'var(--color-text-light)' }}>Jajanan Tertinggi: {highestFoodName}</p>
-            )}
-            <br />
-            <Button variant="primary" size="lg" fullWidth onClick={handleEndGame}>
-              📊 Lihat Hasil
-            </Button>
-            <div style={{ marginTop: 8 }} />
-            <Button variant="danger" size="lg" fullWidth onClick={handleRestart}>
-              🔄 Ulang Bermain
-            </Button>
-          </div>
-        </div>
-      )}
+      {/* Game Over: langsung pindah ke ResultScreen via useEffect, tidak ada overlay popup */}
 
       {/* Pause Overlay */}
       {isPaused && !showQuiz && !isGameOver && (

@@ -104,16 +104,10 @@ export function PhaserGame({ width, height }: PhaserGameProps) {
       }
     };
 
-    const handleGameOver = () => {
-      useGameStore.getState().setGameOver();
-    };
-
     EventBus.on('on-merge', handleMerge);
-    EventBus.on('game-over', handleGameOver);
 
     return () => {
       EventBus.off('on-merge', handleMerge);
-      EventBus.off('game-over', handleGameOver);
     };
   }, []); // Empty deps: listener set up once, always reads fresh state via getState()
 
