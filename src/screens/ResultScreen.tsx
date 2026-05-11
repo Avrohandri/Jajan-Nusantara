@@ -2,38 +2,8 @@ import { useEffect, useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { calculateStars, STAR_THRESHOLDS } from '../config/starThresholds';
 
-/* Map each region to its mascot image and cooking action */
-const REGION_CONFIG: Record<string, {
-  mascot: string;
-  foodName: string;
-  cookAction: () => void;
-  cookLabel: string;
-}> = {
-  jogja: {
-    mascot: '/assets/result_mascots/jadahtempe_jempol.png',
-    foodName: 'Jadah Tempe',
-    cookAction: () => useGameStore.getState().startKleponGame(),
-    cookLabel: 'Memasak Klepon',
-  },
-  bali: {
-    mascot: '/assets/result_mascots/pisangrai_jempol.png',
-    foodName: 'Pisang Rai',
-    cookAction: () => useGameStore.getState().startPieSusuGame(),
-    cookLabel: 'Memasak Pie Susu',
-  },
-  aceh: {
-    mascot: '/assets/result_mascots/kue adee_jempol.png',
-    foodName: 'Kue Adee',
-    cookAction: () => useGameStore.getState().startSamaloyangGame(),
-    cookLabel: 'Memasak Samaloyang',
-  },
-  maluku: {
-    mascot: '/assets/result_mascots/pisang asar_jempol.png',
-    foodName: 'Pisang Asar',
-    cookAction: () => useGameStore.getState().startPisangAsarGame(),
-    cookLabel: 'Memasak Pisang Asar',
-  },
-};
+/* ── region config is built INSIDE the component so it always has
+   fresh references to store actions ── */
 
 /* Confetti particle data */
 const CONFETTI_COLORS = ['#FF6B35', '#FFD166', '#06D6A0', '#118AB2', '#EF476F', '#FFF'];
@@ -61,7 +31,40 @@ function StarDisplay({ earned }: { earned: 0 | 1 | 2 | 3 }) {
 }
 
 export function ResultScreen() {
-  const { activeRegion, completeIsland, score } = useGameStore();
+  const { activeRegion, completeIsland, score, startKleponGame, startPieSusuGame, startSamaloyangGame, startPisangAsarGame } = useGameStore();
+
+  const REGION_CONFIG: Record<string, {
+    mascot: string;
+    foodName: string;
+    cookAction: () => void;
+    cookLabel: string;
+  }> = {
+    jogja: {
+      mascot: '/assets/result_mascots/jadahtempe_jempol.png',
+      foodName: 'Jadah Tempe',
+      cookAction: startKleponGame,
+      cookLabel: 'Memasak Klepon',
+    },
+    bali: {
+      mascot: '/assets/result_mascots/pisangrai_jempol.png',
+      foodName: 'Pisang Rai',
+      cookAction: startPieSusuGame,
+      cookLabel: 'Memasak Pie Susu',
+    },
+    aceh: {
+      mascot: '/assets/result_mascots/kue adee_jempol.png',
+      foodName: 'Kue Adee',
+      cookAction: startSamaloyangGame,
+      cookLabel: 'Memasak Samaloyang',
+    },
+    maluku: {
+      mascot: '/assets/result_mascots/pisang asar_jempol.png',
+      foodName: 'Pisang Asar',
+      cookAction: startPisangAsarGame,
+      cookLabel: 'Memasak Pisang Asar',
+    },
+  };
+
   const config = REGION_CONFIG[activeRegion] ?? REGION_CONFIG['jogja'];
 
   /* Hitung bintang dari skor sesi ini */

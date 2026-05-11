@@ -288,7 +288,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // Klepon Mini-Game
   kleponStep: 0,
   kleponComplete: false,
-  startKleponGame: () => set({ kleponStep: 0, kleponComplete: false, currentScreen: 'kleponGame' }),
+  startKleponGame: () => {
+    set({ kleponStep: 0, kleponComplete: false });
+    setTimeout(() => set({ currentScreen: 'kleponGame' }), 0);
+  },
   advanceKleponStep: () => {
     const s = get();
     const nextStep = s.kleponStep + 1;
@@ -312,7 +315,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // Pie Susu Mini-Game
   pieSusuStep: 0,
   pieSusuComplete: false,
-  startPieSusuGame: () => set({ pieSusuStep: 0, pieSusuComplete: false, currentScreen: 'pieSusuGame' }),
+  startPieSusuGame: () => {
+    set({ pieSusuStep: 0, pieSusuComplete: false });
+    setTimeout(() => set({ currentScreen: 'pieSusuGame' }), 0);
+  },
   advancePieSusuStep: () => {
     const s = get();
     const nextStep = s.pieSusuStep + 1;
@@ -336,7 +342,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // Pisang Asar Mini-Game
   pisangAsarStep: 0,
   pisangAsarComplete: false,
-  startPisangAsarGame: () => set({ pisangAsarStep: 0, pisangAsarComplete: false, currentScreen: 'pisangAsarGame' }),
+  startPisangAsarGame: () => {
+    set({ pisangAsarStep: 0, pisangAsarComplete: false });
+    setTimeout(() => set({ currentScreen: 'pisangAsarGame' }), 0);
+  },
   advancePisangAsarStep: () => {
     const s = get();
     const nextStep = s.pisangAsarStep + 1;
@@ -360,7 +369,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // Samaloyang Mini-Game
   samaloyangStep: 0,
   samaloyangComplete: false,
-  startSamaloyangGame: () => set({ samaloyangStep: 0, samaloyangComplete: false, currentScreen: 'samaloyangGame' }),
+  startSamaloyangGame: () => {
+    set({ samaloyangStep: 0, samaloyangComplete: false });
+    setTimeout(() => set({ currentScreen: 'samaloyangGame' }), 0);
+  },
   advanceSamaloyangStep: () => {
     const s = get();
     const nextStep = s.samaloyangStep + 1;
