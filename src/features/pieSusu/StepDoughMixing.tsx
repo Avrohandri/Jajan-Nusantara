@@ -175,6 +175,28 @@ export function StepDoughMixing({ onComplete }: Props) {
           >
              <img src="/assets/pie_susu/adonan_putar.png" alt="dough" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </div>
+
+          {/* Rotation Hint Arrow */}
+          {!isStirring && percent < 100 && (
+            <img 
+              src="/assets/universal/rotation_arrow.png" 
+              alt="Rotate clockwise" 
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                width: '110px',
+                height: '110px',
+                marginTop: '-55px',
+                marginLeft: '-55px',
+                opacity: 0.8,
+                pointerEvents: 'none',
+                animation: 'spin 3s linear infinite',
+                zIndex: 20,
+                filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.5))'
+              }}
+            />
+          )}
         </div>
 
         {/* Rotating Spoon placed absolutely in the scene to float above everything */}

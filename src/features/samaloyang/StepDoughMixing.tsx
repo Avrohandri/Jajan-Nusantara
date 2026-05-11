@@ -154,6 +154,28 @@ export function StepDoughMixing({ onComplete }: Props) {
             draggable={false}
           />
 
+          {/* Rotation Hint Arrow */}
+          {!isStirring && percent < 100 && (
+            <img 
+              src="/assets/universal/rotation_arrow.png" 
+              alt="Rotate clockwise" 
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                width: '110px',
+                height: '110px',
+                marginTop: '-55px',
+                marginLeft: '-55px',
+                opacity: 0.8,
+                pointerEvents: 'none',
+                animation: 'spin 3s linear infinite',
+                zIndex: 20,
+                filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.5))'
+              }}
+            />
+          )}
+
           {/* Mixer Decoration */}
           <div className={`mixer-decoration mixer-left ${isStirring ? 'mixer-shaking' : ''}`}>🥄</div>
           <div className={`mixer-decoration mixer-right ${isStirring ? 'mixer-shaking' : ''}`}>🥄</div>
