@@ -211,6 +211,7 @@ export class GameScene extends Phaser.Scene {
             blendMode: 'NORMAL',
             tint: configA.color
           });
+          particles.setDepth(60);
           particles.explode(15);
           this.time.delayedCall(1000, () => particles.destroy());
 
