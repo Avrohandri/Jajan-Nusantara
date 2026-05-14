@@ -103,7 +103,7 @@ export function StepShaping({ onComplete }: Props) {
       {phase === 'tapping' && (
         <>
           <p className="klepon-instruction">
-            Tap untuk membentuk adonan menjadi bulat! 👆
+            Ketuk untuk membentuk adonan menjadi bulat! 👆
           </p>
           <div className="shaping-area" onClick={handleTap}>
             <img
@@ -122,7 +122,7 @@ export function StepShaping({ onComplete }: Props) {
                 <span key={i} className={`tap-dot ${i < tapCount ? 'tap-dot-filled' : ''}`} />
               ))}
             </div>
-            <span className="tap-hint">Tap {TAPS_NEEDED - tapCount}×</span>
+            <span className="tap-hint">Ketuk {TAPS_NEEDED - tapCount}×</span>
           </div>
         </>
       )}
@@ -130,7 +130,7 @@ export function StepShaping({ onComplete }: Props) {
       {(phase === 'filling' || phase === 'done') && (
         <>
           <p className="klepon-instruction">
-            Drag gula merah ke dalam setiap klepon!
+            Seret gula merah ke dalam setiap klepon!
           </p>
           <div className="sugar-source">
             <div

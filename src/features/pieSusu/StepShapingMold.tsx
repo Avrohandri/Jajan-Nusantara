@@ -27,7 +27,7 @@ export function StepShapingMold({ onComplete }: Props) {
   return (
     <div className="klepon-step-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
       <p className="klepon-instruction" style={{ textAlign: 'center' }}>
-        Tap adonan untuk memipihkannya ke loyang! 👆
+        Ketuk adonan untuk memipihkannya ke loyang! 👆
       </p>
 
       <div 
@@ -75,7 +75,7 @@ export function StepShapingMold({ onComplete }: Props) {
       </div>
       
       {tapCount < TAPS_NEEDED ? (
-        <span className="tap-hint" style={{ fontWeight: 'bold' }}>Tap {TAPS_NEEDED - tapCount}× lagi</span>
+        <span className="tap-hint" style={{ fontWeight: 'bold' }}>Ketuk {TAPS_NEEDED - tapCount}× lagi</span>
       ) : (
         <span className="tap-hint" style={{ fontWeight: 'bold', color: '#D4A373' }}>✅ Selesai berbentuk pai!</span>
       )}

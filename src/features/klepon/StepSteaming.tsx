@@ -107,7 +107,7 @@ export function StepSteaming({ onComplete }: Props) {
   return (
     <div className="klepon-step-content">
       <p className="klepon-instruction">
-        Drag klepon ke dalam pengukus! 🫕
+        Seret klepon ke dalam pengukus! 🫕
       </p>
 
       {/* Kompor & Panci/Pengukus */}

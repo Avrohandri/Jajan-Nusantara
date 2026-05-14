@@ -160,7 +160,7 @@ export function StepIngredients({ onComplete }: Props) {
 
         {/* Instruction bar */}
         <div className="ing-instruction-bar">
-          Drag bahan yang benar ke dalam mangkok! ☕
+          Seret bahan yang benar ke dalam mangkok! ☕
         </div>
 
 

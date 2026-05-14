@@ -97,7 +97,7 @@ export function StepBakingOven({ onComplete }: Props) {
   return (
     <div className="klepon-step-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
       <p className="klepon-instruction" style={{ textAlign: 'center' }}>
-        {isDone ? 'Panggang selesai! 🥧' : pieInOven ? 'Sedang memanggang...' : 'Drag pie ke dalam oven!'}
+        {isDone ? 'Panggang selesai! 🥧' : pieInOven ? 'Sedang memanggang...' : 'Seret pie ke dalam oven!'}
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '30px', alignItems: 'center', width: '100%' }}>
