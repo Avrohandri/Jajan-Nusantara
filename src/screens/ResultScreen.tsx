@@ -31,7 +31,7 @@ function StarDisplay({ earned }: { earned: 0 | 1 | 2 | 3 }) {
 }
 
 export function ResultScreen() {
-  const { activeRegion, completeIsland, score, startKleponGame, startPieSusuGame, startSamaloyangGame, startPisangAsarGame } = useGameStore();
+  const { activeRegion, completeIsland, score, setScreen } = useGameStore();
 
   const REGION_CONFIG: Record<string, {
     mascot: string;
@@ -42,25 +42,25 @@ export function ResultScreen() {
     jogja: {
       mascot: '/assets/result_mascots/jadahtempe_jempol.png',
       foodName: 'Jadah Tempe',
-      cookAction: startKleponGame,
+      cookAction: () => setScreen('cookingIntro'),
       cookLabel: 'Memasak Klepon',
     },
     bali: {
       mascot: '/assets/result_mascots/pisangrai_jempol.png',
       foodName: 'Pisang Rai',
-      cookAction: startPieSusuGame,
+      cookAction: () => setScreen('cookingIntro'),
       cookLabel: 'Memasak Pie Susu',
     },
     aceh: {
       mascot: '/assets/result_mascots/kue adee_jempol.png',
       foodName: 'Kue Adee',
-      cookAction: startSamaloyangGame,
+      cookAction: () => setScreen('cookingIntro'),
       cookLabel: 'Memasak Samaloyang',
     },
     maluku: {
       mascot: '/assets/result_mascots/pisang asar_jempol.png',
       foodName: 'Pisang Asar',
-      cookAction: startPisangAsarGame,
+      cookAction: () => setScreen('cookingIntro'),
       cookLabel: 'Memasak Pisang Asar',
     },
   };

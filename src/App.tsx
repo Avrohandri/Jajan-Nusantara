@@ -21,6 +21,7 @@ const KleponMiniGameScreen = React.lazy(() => import('./screens/KleponMiniGameSc
 const PieSusuMiniGameScreen = React.lazy(() => import('./screens/PieSusuMiniGameScreen').then(m => ({ default: m.PieSusuMiniGameScreen })));
 const SamaloyangMiniGameScreen = React.lazy(() => import('./screens/SamaloyangMiniGameScreen').then(m => ({ default: m.SamaloyangMiniGameScreen })));
 const PisangAsarMiniGameScreen = React.lazy(() => import('./screens/PisangAsarMiniGameScreen').then(m => ({ default: m.PisangAsarMiniGameScreen })));
+const CookingIntroScreen = React.lazy(() => import('./screens/CookingIntroScreen').then(m => ({ default: m.CookingIntroScreen })));
 
 // Other lazy screens
 const ProgressScreen = React.lazy(() => import('./screens/ProgressScreen').then(m => ({ default: m.ProgressScreen })));
@@ -177,6 +178,7 @@ export default function App() {
       case 'pieSusuGame': return <PieSusuMiniGameScreen />;
       case 'samaloyangGame': return <SamaloyangMiniGameScreen />;
       case 'pisangAsarGame': return <PisangAsarMiniGameScreen />;
+      case 'cookingIntro': return <CookingIntroScreen />;
       case 'progress': return <ProgressScreen />;
       case 'colliderTest': return <ColliderTestScreen />;
       default: return <MainMenuScreen />;

@@ -165,4 +165,5 @@ export type ScreenName =
   | 'pieSusuGame'
   | 'samaloyangGame'
   | 'pisangAsarGame'
+  | 'cookingIntro'
   | 'colliderTest';

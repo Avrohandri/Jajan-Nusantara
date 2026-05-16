@@ -289,8 +289,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   kleponStep: 0,
   kleponComplete: false,
   startKleponGame: () => {
-    set({ kleponStep: 0, kleponComplete: false });
-    setTimeout(() => set({ currentScreen: 'kleponGame' }), 0);
+    set({ kleponStep: 0, kleponComplete: false, currentScreen: 'kleponGame' });
   },
   advanceKleponStep: () => {
     const s = get();
@@ -316,8 +315,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   pieSusuStep: 0,
   pieSusuComplete: false,
   startPieSusuGame: () => {
-    set({ pieSusuStep: 0, pieSusuComplete: false });
-    setTimeout(() => set({ currentScreen: 'pieSusuGame' }), 0);
+    set({ pieSusuStep: 0, pieSusuComplete: false, currentScreen: 'pieSusuGame' });
   },
   advancePieSusuStep: () => {
     const s = get();
@@ -343,8 +341,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   pisangAsarStep: 0,
   pisangAsarComplete: false,
   startPisangAsarGame: () => {
-    set({ pisangAsarStep: 0, pisangAsarComplete: false });
-    setTimeout(() => set({ currentScreen: 'pisangAsarGame' }), 0);
+    set({ pisangAsarStep: 0, pisangAsarComplete: false, currentScreen: 'pisangAsarGame' });
   },
   advancePisangAsarStep: () => {
     const s = get();
@@ -370,8 +367,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   samaloyangStep: 0,
   samaloyangComplete: false,
   startSamaloyangGame: () => {
-    set({ samaloyangStep: 0, samaloyangComplete: false });
-    setTimeout(() => set({ currentScreen: 'samaloyangGame' }), 0);
+    set({ samaloyangStep: 0, samaloyangComplete: false, currentScreen: 'samaloyangGame' });
   },
   advanceSamaloyangStep: () => {
     const s = get();
