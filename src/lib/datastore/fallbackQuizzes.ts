@@ -37,10 +37,10 @@ export const fallbackQuizzes: QuizData[] = [
   {
     id: 'jogja_5',
     region: 'jogja',
-    question: 'Bakpia berisi apa?',
-    options: ['Isi manis', 'Air', 'Sayur', 'Garam'],
+    question: 'Bakpia biasanya dimasak menggunakan apa?',
+    options: ['Oven', 'Kukusan', 'Wajan', 'Panci'],
     correctAnswerIndex: 0,
-    explanation: 'Bakpia berisi isian manis seperti kacang hijau atau cokelat.'
+    explanation: 'Bakpia biasanya dimasak menggunakan oven.'
   },
   {
     id: 'jogja_6',
@@ -87,10 +87,10 @@ export const fallbackQuizzes: QuizData[] = [
   {
     id: 'bali_3',
     region: 'bali',
-    question: 'Pie susu berisi apa?',
-    options: ['Susu', 'Air', 'Sayur', 'Daging'],
+    question: 'Pie susu biasanya berbentuk apa?',
+    options: ['Bulat', 'Segitiga', 'Kotak', 'Bintang'],
     correctAnswerIndex: 0,
-    explanation: 'Pie susu berisi custard susu yang lembut.'
+    explanation: 'Pie susu biasanya berbentuk bulat.'
   },
   {
     id: 'bali_4',
@@ -103,10 +103,10 @@ export const fallbackQuizzes: QuizData[] = [
   {
     id: 'bali_5',
     region: 'bali',
-    question: 'Bendu biasanya ada di acara apa?',
-    options: ['Upacara adat', 'Sekolah', 'Olahraga', 'Pasar'],
+    question: 'Bendu biasanya dibungkus menggunakan apa?',
+    options: ['Daun pisang', 'Plastik', 'Kertas', 'Kain'],
     correctAnswerIndex: 0,
-    explanation: 'Bendu biasanya hadir dalam acara upacara adat.'
+    explanation: 'Bendu biasanya dibungkus menggunakan daun pisang.'
   },
   {
     id: 'bali_6',
@@ -119,10 +119,10 @@ export const fallbackQuizzes: QuizData[] = [
   {
     id: 'bali_7',
     region: 'bali',
-    question: 'Pisang rai dibuat dari buah apa?',
-    options: ['Pisang', 'Apel', 'Mangga', 'Jeruk'],
+    question: 'Pisang rai memiliki rasa apa?',
+    options: ['Manis', 'Pedas', 'Asin', 'Pahit'],
     correctAnswerIndex: 0,
-    explanation: 'Pisang rai dibuat dari buah pisang.'
+    explanation: 'Pisang rai memiliki rasa manis.'
   },
   {
     id: 'bali_8',
