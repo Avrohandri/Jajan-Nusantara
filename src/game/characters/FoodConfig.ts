@@ -45,7 +45,7 @@ export const JOGJA_FOOD_CONFIG: FoodItem[] = [
   {
     tier: 4, name: "04_Bakpia", textureKey: "04_Bakpia", color: 0xD4A373,
     colliderType: "circle", colliderOptions: { radius: 42 }, displaySize: { width: 82, height: 87 },
-    mergeScore: 50, nextTier: 5, funFact: "Bakpia — Kue dengan kejutan manis di dalamnya!"
+    mergeScore: 50, nextTier: 5, funFact: "Bakpia — Tahukah kamu? Kuliner legendaris ini dimasak dengan cara dipanggang dalam oven tradisional!"
   },
   {
     tier: 5, name: "05_Lemper", textureKey: "05_Lemper", color: 0x2E8B57,
@@ -78,7 +78,7 @@ export const BALI_FOOD_CONFIG: FoodItem[] = [
   {
     tier: 2, name: "Pie Susu", textureKey: "02_pie susu", color: 0xFFC72C,
     colliderType: "circle", colliderOptions: { radius: 37 }, displaySize: { width: 82, height: 82 },
-    mergeScore: 30, nextTier: 3, funFact: "Pie Susu: Oleh-oleh hits Bali dengan isian susu lumer!"
+    mergeScore: 30, nextTier: 3, funFact: "Pie Susu — Berbentuk bulat pipih dengan pinggiran renyah dan custard susu lembut di tengahnya!"
   },
   {
     tier: 3, name: "Jaje Walik", textureKey: "03_jaje walik", color: 0xB57B3F,
@@ -88,7 +88,7 @@ export const BALI_FOOD_CONFIG: FoodItem[] = [
   {
     tier: 4, name: "Bendu", textureKey: "04_bendu", color: 0xE8A0CE,
     colliderType: "rectangle", colliderOptions: { width: 62, height: 104, chamferRadius: 27 }, displaySize: { width: 94, height: 109 },
-    mergeScore: 50, nextTier: 5, funFact: "Bendu: Kue ketan yang wajib ada di upacara adat!"
+    mergeScore: 50, nextTier: 5, funFact: "Bendu — Dibungkus dengan daun pisang segar untuk menjaga kelembapan adonan ketannya!"
   },
   {
     tier: 5, name: "Jaje Uli", textureKey: "05_jaje uli", color: 0x932026,
@@ -107,7 +107,7 @@ export const BALI_FOOD_CONFIG: FoodItem[] = [
         { x: -55, y: -13 },  // tengah kiri
       ]
     }, displaySize: { width: 150, height: 120 },
-    mergeScore: 80, nextTier: null, funFact: "Pisang Rai: Pisang berkemul tepung beras & taburan kelapa!"
+    mergeScore: 80, nextTier: null, funFact: "Pisang Rai — Memiliki rasa yang sangat manis dan gurih, berpadu sempurna dengan parutan kelapa!"
   }
 ];
 
