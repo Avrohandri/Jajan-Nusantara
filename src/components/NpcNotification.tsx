@@ -139,6 +139,13 @@ export function NpcNotification() {
 
   if (!activeItem) return null;
 
+  /** Split on **...** markers and return bold spans for marked segments */
+  function parseBold(text: string): React.ReactNode[] {
+    return text.split('**').map((part, i) =>
+      i % 2 === 1 ? <strong key={i}>{part}</strong> : part
+    );
+  }
+
   const isLeftSide = activeItem.region === 'bali' || activeItem.region === 'maluku';
   const npcAsset = `/assets/NPC/npc_${activeItem.region}.png`;
   const wrapperClass = [
@@ -163,7 +170,7 @@ export function NpcNotification() {
           <span className="npc-food-name">{activeItem.foodName}</span>
           <span className="npc-badge">Fun Fact! 🌟</span>
         </div>
-        <p className="npc-fact-text">{activeItem.funFact}</p>
+        <p className="npc-fact-text">{parseBold(activeItem.funFact)}</p>
         <div className="npc-progress-bar">
           <div
             className={`npc-progress-fill${shouldFreeze ? ' npc-progress-paused' : ''}`}
