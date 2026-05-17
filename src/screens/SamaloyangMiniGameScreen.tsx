@@ -48,7 +48,7 @@ export function SamaloyangMiniGameScreen() {
           </p>
           <div className="complete-facts">
             <div className="fact-bubble">
-              📌 Samaloyang (Kembang Goyang) adalah kue tradisional khas Aceh berbentuk seperti bunga yang dibuat dengan cara dicetak dan digoyang-goyang di dalam minyak panas.
+              📌 Samaloyang adalah kue kembang goyang khas Aceh berbentuk bunga renyah yang digoreng dengan cara digoyang.
             </div>
           </div>
           <div className="mgbc-actions" style={{ marginTop: '14px', gap: '10px', padding: '0 10px 22px' }}>
