@@ -3559,6 +3559,12 @@ body {
   margin: 0 0 8px;
 }
 
+.npc-fact-text strong {
+  color: #C4631F;
+  font-weight: 900;
+  font-size: 12px;
+}
+
 /* Auto-dismiss progress bar */
 .npc-progress-bar {
   height: 4px;
