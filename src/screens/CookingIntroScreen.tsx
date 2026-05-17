@@ -124,7 +124,6 @@ export function CookingIntroScreen() {
           <div className="ci-header-inner">
             <span className="ci-badge">🍳 MINIGAME SELANJUTNYA</span>
             <h1 className="ci-title">Saatnya Memasak!</h1>
-            <p className="ci-subtitle">Pilih kuliner yang akan kamu masak</p>
           </div>
           <div className="ci-header-sparkle ci-sparkle--right">✦</div>
         </div>
@@ -148,18 +147,18 @@ export function CookingIntroScreen() {
                   <span className="ci-region-label">{food.regionLabel}</span>
                 </div>
 
-                {/* Images — cartoon + real stacked */}
+                {/* Images — real (big) + cartoon thumbnail (small) */}
                 <div className="ci-images-wrap">
-                  <img
-                    src={food.cartoonImg}
-                    alt={`Kartun ${food.name}`}
-                    className="ci-cartoon-img"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-                  />
                   <img
                     src={food.realImg}
                     alt={`Foto asli ${food.name}`}
                     className="ci-real-img"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                  />
+                  <img
+                    src={food.cartoonImg}
+                    alt={`Kartun ${food.name}`}
+                    className="ci-cartoon-img"
                     onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                   />
                 </div>
@@ -181,13 +180,7 @@ export function CookingIntroScreen() {
           })}
         </div>
 
-        {/* ── Info line ── */}
-        <div className="ci-info-row">
-          <span className="ci-info-icon">🍽️</span>
-          <span className="ci-info-text">
-            Kamu akan memasak <strong>{currentFood.name}</strong> khas {currentFood.regionLabel}!
-          </span>
-        </div>
+
 
         {/* ── Action button ── */}
         <button className="ci-start-btn" onClick={handleStart}>

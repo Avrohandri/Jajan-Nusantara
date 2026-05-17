@@ -5947,7 +5947,7 @@ body {
   position: relative;
   z-index: 310;
   width: 100%;
-  max-width: 400px;
+  max-width: 480px;
   background: linear-gradient(160deg, #FFF8EE 0%, #FFE8CC 50%, #FFF0DC 100%);
   border: 3px solid #C4631F;
   border-radius: 28px;
@@ -6013,10 +6013,10 @@ body {
   backdrop-filter: blur(4px);
   color: #FFF;
   font-family: var(--font);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 1.5px;
-  padding: 3px 10px;
+  padding: 4px 12px;
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.4);
   text-transform: uppercase;
@@ -6024,7 +6024,7 @@ body {
 
 .ci-title {
   font-family: var(--font);
-  font-size: 22px;
+  font-size: 28px;
   font-weight: 900;
   color: #FFF;
   text-shadow: 0 2px 8px rgba(0,0,0,0.3);
@@ -6043,18 +6043,18 @@ body {
 .ci-foods-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  padding: 14px 14px 8px;
+  gap: 12px;
+  padding: 16px 16px 10px;
 }
 
 .ci-food-card {
   position: relative;
   border-radius: 18px;
-  padding: 10px 8px 8px;
+  padding: 12px 10px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: default;
@@ -6103,11 +6103,11 @@ body {
   justify-content: center;
 }
 
-.ci-region-flag { font-size: 12px; }
+.ci-region-flag { font-size: 14px; }
 
 .ci-region-label {
   font-family: var(--font);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   color: #5D2E0A;
   letter-spacing: 0.3px;
@@ -6115,35 +6115,41 @@ body {
 
 .ci-images-wrap {
   position: relative;
-  width: 72px;
-  height: 72px;
+  width: 96px;
+  height: 96px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.ci-cartoon-img {
+/* ci-real-img is now the BIG main image */
+.ci-real-img {
   position: absolute;
-  width: 68px;
-  height: 68px;
-  object-fit: contain;
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 2px solid #FFF;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
   filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2));
   animation: ciCartoonBob 3s ease-in-out infinite alternate;
 }
 
 @keyframes ciCartoonBob {
   from { transform: translateY(0); }
-  to   { transform: translateY(-4px); }
+  to   { transform: translateY(-5px); }
 }
 
-.ci-real-img {
+/* ci-cartoon-img is now the SMALL thumbnail overlay */
+.ci-cartoon-img {
   position: absolute;
   bottom: -4px;
-  right: -8px;
-  width: 30px;
-  height: 30px;
-  object-fit: cover;
+  right: -10px;
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
   border-radius: 50%;
+  background: rgba(255,255,255,0.9);
   border: 2px solid #FFF;
   box-shadow: 0 2px 6px rgba(0,0,0,0.25);
   z-index: 2;
@@ -6151,7 +6157,7 @@ body {
 
 .ci-food-name {
   font-family: var(--font);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 800;
   color: #3D2B1F;
   text-align: center;
@@ -6160,7 +6166,7 @@ body {
 
 .ci-food-desc {
   font-family: var(--font);
-  font-size: 8.5px;
+  font-size: 11px;
   color: #6D4C41;
   text-align: center;
   line-height: 1.4;
@@ -6171,10 +6177,10 @@ body {
   background: linear-gradient(135deg, var(--card-color, #E07A2F), var(--card-accent, #C4631F));
   color: #FFF;
   font-family: var(--font);
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 1px;
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
@@ -6206,17 +6212,17 @@ body {
 }
 
 .ci-start-btn {
-  margin: 12px 14px 16px;
+  margin: 12px 14px 18px;
   width: calc(100% - 28px);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 16px 20px;
+  padding: 18px 20px;
   background: linear-gradient(135deg, #C4631F 0%, #E07A2F 50%, #FF9A3C 100%);
   color: #FFF;
   font-family: var(--font);
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 900;
   letter-spacing: 0.5px;
   border: none;
