@@ -5,6 +5,12 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
+    // Target modern browser agar output lebih ringan
+    target: 'es2020',
+    // Pisahkan CSS per chunk agar tidak semua CSS diload sekaligus
+    cssCodeSplit: true,
+    // Kompres lebih agresif (Vite 8 pakai oxc, bukan esbuild)
+    minify: 'oxc',
     rollupOptions: {
       output: {
         manualChunks(id) {
@@ -21,3 +27,4 @@ export default defineConfig({
     chunkSizeWarningLimit: 600
   }
 })
+

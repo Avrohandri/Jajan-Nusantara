@@ -18,7 +18,7 @@
   --radius-lg: 16px;
   --radius-xl: 24px;
 
-  --font: 'Lilita One', cursive;
+  --font: 'Lilita One', 'Arial Rounded MT Bold', Arial, sans-serif;
 }
 
 /* ========== Reset ========== */
