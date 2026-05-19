@@ -7,6 +7,7 @@ import { StepSteaming } from '../features/klepon/StepSteaming';
 import { StepCoating } from '../features/klepon/StepCoating';
 import { MiniGameBackConfirm } from '../components/MiniGameBackConfirm';
 import backButtonImg from '../assets/universal/back button.png';
+import { usePreloadImages } from '../hooks/usePreloadImages';
 
 const STEPS = [
   { label: '🌾 Pilih Bahan',    desc: 'Pilih bahan yang tepat'   },
@@ -17,6 +18,14 @@ const STEPS = [
 ];
 
 export function KleponMiniGameScreen() {
+  usePreloadImages([
+    '/assets/klepon/adonan_bolong.png',
+    '/assets/klepon/adonan_isi.png',
+    '/assets/klepon/adonan_bundar.png',
+    '/assets/klepon/adonan_kelapa.png',
+    '/assets/klepon/kukusan_tutup.png',
+  ]);
+
   const { kleponStep, kleponComplete, advanceKleponStep, resetKleponGame, setScreen, awardStarsForRegion, completeMinigameCooking } = useGameStore();
   const [showBackConfirm, setShowBackConfirm] = useState(false);
 

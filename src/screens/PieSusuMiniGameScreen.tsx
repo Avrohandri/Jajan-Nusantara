@@ -7,6 +7,7 @@ import { StepBakingOven } from '../features/pieSusu/StepBakingOven';
 import { StepPieIngredients } from '../features/pieSusu/StepPieIngredients';
 import { MiniGameBackConfirm } from '../components/MiniGameBackConfirm';
 import backButtonImg from '../assets/universal/back button.png';
+import { usePreloadImages } from '../hooks/usePreloadImages';
 
 const STEPS = [
   { label: 'Pilih Bahan',    desc: 'Pilih bahan untuk Pie Susu' },
@@ -17,6 +18,16 @@ const STEPS = [
 ];
 
 export function PieSusuMiniGameScreen() {
+  usePreloadImages([
+    '/assets/pie_susu/ing_adonan 1.png',
+    '/assets/pie_susu/ing_adonan 2.png',
+    '/assets/pie_susu/ing_adonan jadi.png',
+    '/assets/pie_susu/ing_adonan susu.png',
+    '/assets/pie_susu/oven_tutup.png',
+    '/assets/pie_susu/oven_buka.png',
+    '/assets/pie_susu/oven_jadi.png',
+  ]);
+
   const { pieSusuStep, pieSusuComplete, advancePieSusuStep, resetPieSusuGame, setScreen, awardStarsForRegion, completeMinigameCooking } = useGameStore();
   const [showBackConfirm, setShowBackConfirm] = useState(false);
 

@@ -6,6 +6,7 @@ import { StepDippingMold } from '../features/samaloyang/StepDippingMold';
 import { StepFrying } from '../features/samaloyang/StepFrying';
 import { MiniGameBackConfirm } from '../components/MiniGameBackConfirm';
 import backButtonImg from '../assets/universal/back button.png';
+import { usePreloadImages } from '../hooks/usePreloadImages';
 
 const STEPS = [
   { label: 'Kumpulkan Bahan', desc: 'Cocokkan tulisan dengan gambar bahan!' },
@@ -15,6 +16,12 @@ const STEPS = [
 ];
 
 export function SamaloyangMiniGameScreen() {
+  usePreloadImages([
+    '/assets/samaloyang/cetakan_berisi.png',
+    '/assets/samaloyang/samaloyang_mold.png',
+    '/assets/samaloyang/wajan.png',
+  ]);
+
   const { samaloyangStep, samaloyangComplete, resetSamaloyangGame, advanceSamaloyangStep, setScreen, awardStarsForRegion, completeMinigameCooking } = useGameStore();
   const [showBackConfirm, setShowBackConfirm] = useState(false);
 

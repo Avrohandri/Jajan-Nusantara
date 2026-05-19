@@ -7,6 +7,7 @@ import { StepSpreadTopping } from '../features/pisangasar/StepSpreadTopping';
 import { StepBakeOven } from '../features/pisangasar/StepBakeOven';
 import { MiniGameBackConfirm } from '../components/MiniGameBackConfirm';
 import backButtonImg from '../assets/universal/back button.png';
+import { usePreloadImages } from '../hooks/usePreloadImages';
 
 const STEPS = [
   { label: '', desc: '' },
@@ -17,6 +18,14 @@ const STEPS = [
 ];
 
 export function PisangAsarMiniGameScreen() {
+  usePreloadImages([
+    '/assets/pisang_asar/pisang_terpotong.png',
+    '/assets/pisang_asar/pisang_utuh.png',
+    '/assets/pisang_asar/pisang_tray.png',
+    '/assets/pisang_asar/pisang_topping.png',
+    '/assets/pisang_asar/pisang_siap.png',
+  ]);
+
   const { pisangAsarStep, pisangAsarComplete, advancePisangAsarStep, resetPisangAsarGame, setScreen, awardStarsForRegion, completeMinigameCooking } = useGameStore();
   const [showBackConfirm, setShowBackConfirm] = useState(false);
 
