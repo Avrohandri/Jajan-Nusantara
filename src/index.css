@@ -2669,6 +2669,17 @@ body {
   user-select: none;
 }
 
+/* Memperbesar area sentuh / putar adonan melebihi batas gambar mangkok (sekitar 20%) */
+.mixing-bowl-container::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  right: -20%;
+  bottom: -20%;
+  z-index: 10;
+}
+
 .bowl-stirring {
   cursor: grabbing;
 }

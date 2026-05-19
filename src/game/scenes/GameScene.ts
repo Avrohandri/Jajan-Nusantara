@@ -236,7 +236,7 @@ export class GameScene extends Phaser.Scene {
                 this.gameOver = true; // Blok drop baru
                 this.canDrop = false;
                 // Beri sedikit jeda agar animasi kuliner spawn terlihat sebelum transisi
-                this.time.delayedCall(800, () => {
+                this.time.delayedCall(1500, () => {
                   if (this.matter?.world) this.matter.world.pause();
                   EventBus.emit('max-tier-reached', { name: nm, tier: nextTier });
                 });

@@ -156,6 +156,9 @@ export function StepDoughMixing({ onComplete }: Props) {
           onMouseDown={onMouseDown}
           onTouchStart={onTouchStart}
         >
+          {/* Expanded Touch Area (20% larger than bowl) */}
+          <div style={{ position: 'absolute', top: '-20%', left: '-20%', right: '-20%', bottom: '-20%', zIndex: 10, touchAction: 'none' }} />
+
           {/* Mangkok Image (Background) */}
           <img src="/assets/pie_susu/mangkok_aduk.png" alt="bowl" style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'contain', zIndex: 0, pointerEvents: 'none' }} />
 
