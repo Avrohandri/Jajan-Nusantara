@@ -407,19 +407,33 @@ export const useGameStore = create<GameStore>((set, get) => ({
   register: async (username) => {
     set({ authLoading: true, authError: null });
     try {
-      // Cek dulu apakah username sudah dipakai
+      // Cek dulu apakah username sudah dipakai di Firestore
       const taken = await checkUsernameExists(username);
       if (taken) {
         set({ authError: 'USERNAME_TAKEN', authLoading: false });
         return;
       }
-      const uid = await registerWithUsername(username);
+
+      let uid: string;
+      try {
+        uid = await registerWithUsername(username);
+      } catch (authErr: unknown) {
+        const authMsg = authErr instanceof Error ? authErr.message : '';
+        if (authMsg.startsWith('AUTH_EXISTS_UID:')) {
+          // Akun Firebase Auth masih ada tapi data Firestore sudah dihapus.
+          // Gunakan uid yang sama dan rekonstruksi profil baru.
+          uid = authMsg.replace('AUTH_EXISTS_UID:', '');
+        } else {
+          throw authErr; // USERNAME_TAKEN atau error lainnya
+        }
+      }
+
       // Simpan mapping username → userId
       await saveUsername(uid, username);
-      // Buat profil default
+      // Buat profil default (akan overwrite jika sudah ada)
       await createProfile(uid, username);
       const profile = await getProfile(uid);
-      // Load profil
+
       set({
         userId: uid,
         username,

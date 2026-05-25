@@ -70,7 +70,19 @@ export async function registerWithUsername(username: string): Promise<string> {
   } catch (e: unknown) {
     const code = (e as { code?: string }).code;
     if (code === 'auth/email-already-in-use') {
-      throw new Error('USERNAME_TAKEN');
+      // Akun Auth masih ada (mungkin datanya dihapus dari Firestore).
+      // Coba login dengan kredensial yang sama untuk mendapat uid.
+      try {
+        const existingCred = await signInWithEmailAndPassword(auth, email, password);
+        // Lempar kode khusus agar pemanggil tahu uid-nya (untuk rekonstruksi profil)
+        throw new Error(`AUTH_EXISTS_UID:${existingCred.user.uid}`);
+      } catch (loginErr: unknown) {
+        const loginMsg = loginErr instanceof Error ? loginErr.message : '';
+        // Teruskan error khusus AUTH_EXISTS_UID ke pemanggil
+        if (loginMsg.startsWith('AUTH_EXISTS_UID:')) throw loginErr;
+        // Login juga gagal (password berbeda → benar-benar milik orang lain)
+        throw new Error('USERNAME_TAKEN');
+      }
     }
     if (code === 'auth/weak-password') {
       throw new Error('Password terlalu lemah (minimal 6 karakter).');
