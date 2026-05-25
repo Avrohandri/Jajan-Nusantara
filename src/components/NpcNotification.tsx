@@ -100,6 +100,13 @@ export function NpcNotification() {
     }
   }, [activeItem, queue]);
 
+  // ── Broadcast ukuran antrian ke GameScene via EventBus ───────────
+  useEffect(() => {
+    // Total notifikasi yang belum ditampilkan = antrian + yang sedang aktif
+    const total = queue.length + (activeItem ? 1 : 0);
+    EventBus.emit('npc-queue-size', total);
+  }, [queue, activeItem]);
+
   // ── Start the dismiss timer when a new item becomes active ────────
   useEffect(() => {
     if (!activeItem) return;

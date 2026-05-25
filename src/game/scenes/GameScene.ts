@@ -6,7 +6,8 @@ import { useGameStore } from '../../store/gameStore';
 import type { SnackData } from '../../types';
 
 const WALL_THICKNESS = 30;
-const DROP_COOLDOWN = 700; // ms — cegah spam click
+const DROP_COOLDOWN_BASE = 500;  // ms saat tidak ada notifikasi antri
+const DROP_COOLDOWN_MAX  = 2200; // ms maksimum saat antrian penuh
 
 export class GameScene extends Phaser.Scene {
   private debugMode: boolean = false;
@@ -28,6 +29,10 @@ export class GameScene extends Phaser.Scene {
   private pointerX = 0;
   /** Set berisi key "idA_idB" untuk mencegah satu collision dihitung merge berkali-kali */
   private pendingMerges: Set<string> = new Set();
+  /** Ukuran antrian notifikasi NPC — digunakan untuk memperlambat drop saat banyak notif */
+  private npcQueueSize = 0;
+  /** Timestamp saat game di-pause — dipakai untuk offset dangerTimers agar tidak bug saat alt-tab */
+  private pausedAt = 0;
 
   private currentRegion: string = 'jogja';
   private currentConfig: FoodItem[] = [];
@@ -62,6 +67,8 @@ export class GameScene extends Phaser.Scene {
     this.canDrop = true;
     this.lastDropTime = 0;
     this.pendingMerges.clear();
+    this.npcQueueSize = 0;
+    this.pausedAt = 0;
   }
 
   create() {
@@ -138,11 +145,22 @@ export class GameScene extends Phaser.Scene {
 
     const onPause = () => {
       if (this.matter?.world) this.matter.world.pause();
+      // Catat kapan mulai pause agar dangerTimers bisa di-offset saat resume
+      this.pausedAt = Date.now();
     };
 
     const onResume = () => {
       if (this.matter?.world && !this.gameOver) {
         this.matter.world.resume();
+      }
+      // Offset semua dangerTimers sebesar durasi pause
+      // sehingga 3-detik countdown tidak menghitung waktu saat tab tidak aktif / quiz terbuka
+      if (this.pausedAt > 0) {
+        const pauseDuration = Date.now() - this.pausedAt;
+        for (const [id, enteredAt] of this.dangerTimers.entries()) {
+          this.dangerTimers.set(id, enteredAt + pauseDuration);
+        }
+        this.pausedAt = 0;
       }
     };
 
@@ -164,11 +182,18 @@ export class GameScene extends Phaser.Scene {
     EventBus.on('resume-game', onResume);
     EventBus.on('restart-game', onRestart);
 
+    // Dengarkan perubahan ukuran antrian NPC untuk menyesuaikan cooldown drop
+    const onNpcQueueSize = (size: unknown) => {
+      this.npcQueueSize = typeof size === 'number' ? size : 0;
+    };
+    EventBus.on('npc-queue-size', onNpcQueueSize);
+
     this.events.once('destroy', () => {
       EventBus.off('set-snacks', onSetSnacks);
       EventBus.off('pause-game', onPause);
       EventBus.off('resume-game', onResume);
       EventBus.off('restart-game', onRestart);
+      EventBus.off('npc-queue-size', onNpcQueueSize);
     });
 
     this.input.keyboard?.on('keydown-D', () => {
@@ -395,6 +420,20 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
+  /** Hitung cooldown drop saat ini berdasarkan antrian notifikasi NPC.
+   *  0 notif  = 500 ms  (normal)
+   *  1 notif  = 1100 ms (sedikit melambat)
+   *  2 notif  = 1600 ms (lebih lambat)
+   *  ≥3 notif = 2200 ms (maksimum — beri waktu player membaca)
+   */
+  private getDropCooldown(): number {
+    const q = this.npcQueueSize;
+    if (q <= 0) return DROP_COOLDOWN_BASE;
+    if (q === 1) return 1100;
+    if (q === 2) return 1600;
+    return DROP_COOLDOWN_MAX;
+  }
+
   private dropSnack(x: number) {
     const droppedTier = this.nextTier;
     this.spawnFood(droppedTier, x, this.spawnY);
@@ -410,7 +449,8 @@ export class GameScene extends Phaser.Scene {
       this.previewSprite.setAlpha(0.25); // redup saat cooldown
     }
 
-    this.time.delayedCall(DROP_COOLDOWN, () => {
+    const cooldown = this.getDropCooldown();
+    this.time.delayedCall(cooldown, () => {
       this.canDrop = true;
       if (this.previewSprite) {
         this.previewSprite.setAlpha(0.6); // kembali normal
