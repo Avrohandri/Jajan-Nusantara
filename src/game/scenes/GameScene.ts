@@ -366,7 +366,7 @@ export class GameScene extends Phaser.Scene {
 
       if (this.previewSprite) {
         this.previewSprite.setX(this.pointerX);
-        this.previewSprite.setVisible(this.canDrop && !this.gameOver);
+        this.previewSprite.setVisible(!this.gameOver);
       }
     }
 
@@ -443,10 +443,16 @@ export class GameScene extends Phaser.Scene {
 
     this.lastDropTime = Date.now();
     this.canDrop = false;
-    // Preview redup saat cooldown berjalan — feedback visual untuk player
+
+    // Preview redup (dan abu-abu jika ada antrian NPC) saat cooldown berjalan
     if (this.previewSprite) {
       this.previewSprite.setVisible(true);
-      this.previewSprite.setAlpha(0.25); // redup saat cooldown
+      if (this.npcQueueSize > 0) {
+        this.previewSprite.setTint(0x555555); // warna abu-abu/gelap
+        this.previewSprite.setAlpha(0.4); // sedikit lebih jelas dari 0.25 agar warna terlihat
+      } else {
+        this.previewSprite.setAlpha(0.25); // redup normal
+      }
     }
 
     const cooldown = this.getDropCooldown();
@@ -454,6 +460,7 @@ export class GameScene extends Phaser.Scene {
       this.canDrop = true;
       if (this.previewSprite) {
         this.previewSprite.setAlpha(0.6); // kembali normal
+        this.previewSprite.clearTint();
       }
     });
 
