@@ -6,7 +6,7 @@ import { useGameStore } from '../../store/gameStore';
 import type { SnackData } from '../../types';
 
 const WALL_THICKNESS = 30;
-const DROP_COOLDOWN = 500; // ms
+const DROP_COOLDOWN = 700; // ms — cegah spam click
 
 export class GameScene extends Phaser.Scene {
   private debugMode: boolean = false;
@@ -26,6 +26,8 @@ export class GameScene extends Phaser.Scene {
   private dangerLine: Phaser.GameObjects.Graphics | null = null;
   private dangerTimers: Map<number, number> = new Map(); // bodyId -> timestamp when first entered danger zone
   private pointerX = 0;
+  /** Set berisi key "idA_idB" untuk mencegah satu collision dihitung merge berkali-kali */
+  private pendingMerges: Set<string> = new Set();
 
   private currentRegion: string = 'jogja';
   private currentConfig: FoodItem[] = [];
@@ -59,6 +61,7 @@ export class GameScene extends Phaser.Scene {
     this.gameOver = false;
     this.canDrop = true;
     this.lastDropTime = 0;
+    this.pendingMerges.clear();
   }
 
   create() {
@@ -146,6 +149,8 @@ export class GameScene extends Phaser.Scene {
     const onRestart = () => {
       this.activeItems.forEach(item => item.destroy());
       this.activeItems = [];
+      this.pendingMerges.clear();
+      this.dangerTimers.clear();
       this.gameOver = false;
       this.canDrop = true;
       this.isFirstDrop = true; // Reset agar klepon muncul lagi pertama kali
@@ -188,6 +193,12 @@ export class GameScene extends Phaser.Scene {
         if (!objA || !objB) continue;
         if (!objA.active || !objB.active) continue;
 
+        // Dedup guard — cegah collision yang sama diproses lebih dari sekali
+        const pairKey = bodyA.id < bodyB.id
+          ? `${bodyA.id}_${bodyB.id}`
+          : `${bodyB.id}_${bodyA.id}`;
+        if (this.pendingMerges.has(pairKey)) continue;
+
         const configA = this.currentConfig.find(f => f.name === bodyA.label);
         if (!configA) continue;
 
@@ -196,6 +207,9 @@ export class GameScene extends Phaser.Scene {
 
           const midX = (bodyA.position.x + bodyB.position.x) / 2;
           const midY = (bodyA.position.y + bodyB.position.y) / 2;
+
+          // Tandai pair ini sedang diproses agar tidak double-merge
+          this.pendingMerges.add(pairKey);
 
           this.removeItem(objA);
           this.removeItem(objB);
@@ -231,6 +245,11 @@ export class GameScene extends Phaser.Scene {
               // Emit food-revealed saat kuliner baru muncul hasil merge
               EventBus.emit('food-revealed', { tier: nextTier });
 
+              // Hapus dari pending setelah spawn selesai
+              this.time.delayedCall(200, () => {
+                this.pendingMerges.delete(pairKey);
+              });
+
               // Jika hasil merge adalah kuliner TERTINGGI, emit event kemenangan
               if (isMaxTier) {
                 this.gameOver = true; // Blok drop baru
@@ -244,13 +263,16 @@ export class GameScene extends Phaser.Scene {
             });
           } else {
             EventBus.emit('on-merge', { tier, points: 200, name: configA.name });
+            this.time.delayedCall(200, () => {
+              this.pendingMerges.delete(pairKey);
+            });
           }
         }
       }
     };
 
+    // Hanya gunakan collisionstart — collisionactive menyebabkan merge dihitung ratusan kali
     this.matter.world.on('collisionstart', handleMergeCollision);
-    this.matter.world.on('collisionactive', handleMergeCollision);
 
     this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
       const margin = WALL_THICKNESS + Math.round(30 * this.scaleFactor);
@@ -382,11 +404,17 @@ export class GameScene extends Phaser.Scene {
 
     this.lastDropTime = Date.now();
     this.canDrop = false;
-    if (this.previewSprite) this.previewSprite.setVisible(false);
+    // Preview redup saat cooldown berjalan — feedback visual untuk player
+    if (this.previewSprite) {
+      this.previewSprite.setVisible(true);
+      this.previewSprite.setAlpha(0.25); // redup saat cooldown
+    }
 
     this.time.delayedCall(DROP_COOLDOWN, () => {
       this.canDrop = true;
-      if (this.previewSprite) this.previewSprite.setVisible(true);
+      if (this.previewSprite) {
+        this.previewSprite.setAlpha(0.6); // kembali normal
+      }
     });
 
     this.pickNextTier();

@@ -45,6 +45,8 @@ export function GameScreen() {
   const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Flag: max-tier sudah tercapai tapi masih menunggu quiz selesai
   const pendingResultRef = useRef(false);
+  // Guard: cegah doTransition dipanggil lebih dari sekali
+  const hasTransitionedRef = useRef(false);
 
   const [gameWidth] = useState(() => Math.min(360, window.innerWidth - 32));
   const [gameHeight] = useState(() => Math.min(560, window.innerHeight - 200));
@@ -78,8 +80,10 @@ export function GameScreen() {
 
   // Saat kuliner tertinggi terbentuk → flash putih → ResultScreen
   useEffect(() => {
-    /** Jalankan animasi flash lalu pindah ke result */
+    /** Jalankan animasi flash lalu pindah ke result — hanya sekali */
     const doTransition = async () => {
+      if (hasTransitionedRef.current) return; // guard double-call
+      hasTransitionedRef.current = true;
       setTransitioning(true);
       transitionTimerRef.current = setTimeout(async () => {
         await endSession('target_reached');
@@ -107,8 +111,11 @@ export function GameScreen() {
   // Pantau showQuiz: jika ada pending result dan quiz baru ditutup → lanjut result
   useEffect(() => {
     if (!showQuiz && pendingResultRef.current) {
-      pendingResultRef.current = false;
+      pendingResultRef.current = false; // reset segera agar tidak double-trigger
+      if (hasTransitionedRef.current) return; // sudah transisi, abaikan
       const doTransition = async () => {
+        if (hasTransitionedRef.current) return;
+        hasTransitionedRef.current = true;
         setTransitioning(true);
         transitionTimerRef.current = setTimeout(async () => {
           await endSession('target_reached');
