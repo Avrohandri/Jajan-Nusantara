@@ -312,7 +312,7 @@ export class GameScene extends Phaser.Scene {
       if (this.gameOver || !this.canDrop) return;
 
       const now = Date.now();
-      if (now - this.lastDropTime < DROP_COOLDOWN) return;
+      if (now - this.lastDropTime < this.getDropCooldown()) return;
 
       this.dropSnack(this.pointerX);
     });
