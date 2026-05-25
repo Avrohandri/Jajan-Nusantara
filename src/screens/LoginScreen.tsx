@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import menuBackground from '../assets/menu/background.png';
+import { useGlobalPreload } from '../hooks/useGlobalPreload';
 
 export function LoginScreen() {
   const { register, login, authError, authLoading, setAuthError } = useGameStore();
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [username, setUsername] = useState('');
+
+  // Preload semua aset game di background saat halaman login tampil
+  const { progress, done } = useGlobalPreload();
 
   const errorMessage =
     authError === 'USERNAME_TAKEN'
@@ -125,6 +129,21 @@ export function LoginScreen() {
               </button>
             </>
           )}
+        </div>
+
+        {/* Asset preload progress bar */}
+        <div className="login-preload">
+          <div className="login-preload-bar-wrap">
+            <div
+              className="login-preload-bar-fill"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <p className="login-preload-label">
+            {done
+              ? '✅ Game siap dimainkan!'
+              : `⏳ Memuat aset game… ${progress}%`}
+          </p>
         </div>
       </div>
     </div>
