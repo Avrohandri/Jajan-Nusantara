@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { useSfx } from '../hooks/useSfx';
 
 // Pedia (real-photo style) images — from src/assets/pedia (imported as module)
 import kleponPedia from '../assets/pedia/klepon.png';
@@ -72,10 +73,12 @@ function FloatingParticle({ style }: { style: React.CSSProperties }) {
 
 export function CookingIntroScreen() {
   const { activeRegion, startKleponGame, startPieSusuGame, startSamaloyangGame, startPisangAsarGame } = useGameStore();
+  const { playButtonClick } = useSfx();
 
   const currentFood = FOODS.find(f => f.region === activeRegion) ?? FOODS[0];
 
   function handleStart() {
+    playButtonClick();
     switch (activeRegion) {
       case 'jogja':   startKleponGame();      break;
       case 'bali':    startPieSusuGame();     break;

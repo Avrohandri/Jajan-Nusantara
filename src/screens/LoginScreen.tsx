@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import menuBackground from '../assets/menu/background.png';
 import { useGlobalPreload } from '../hooks/useGlobalPreload';
+import { useSfx } from '../hooks/useSfx';
 
 export function LoginScreen() {
   const { register, login, authError, authLoading, setAuthError } = useGameStore();
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [username, setUsername] = useState('');
+  const { playButtonClick } = useSfx();
 
   // Preload semua aset game di background saat halaman login tampil
   const { progress, done } = useGlobalPreload();
@@ -18,6 +20,7 @@ export function LoginScreen() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    playButtonClick();
     if (!username.trim()) return;
     setAuthError(null);
 
@@ -34,6 +37,7 @@ export function LoginScreen() {
   };
 
   const switchMode = () => {
+    playButtonClick();
     setMode(m => (m === 'login' ? 'register' : 'login'));
     setAuthError(null);
     setUsername('');

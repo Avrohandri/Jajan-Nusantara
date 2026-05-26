@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StepIngredientSelection } from '../features/pisangasar/StepIngredientSelection';
 import { StepCutBanana } from '../features/pisangasar/StepCutBanana';
@@ -8,6 +8,7 @@ import { StepBakeOven } from '../features/pisangasar/StepBakeOven';
 import { MiniGameBackConfirm } from '../components/MiniGameBackConfirm';
 import backButtonImg from '../assets/universal/back button.png';
 import { usePreloadImages } from '../hooks/usePreloadImages';
+import { useSfx } from '../hooks/useSfx';
 
 const STEPS = [
   { label: '', desc: '' },
@@ -28,9 +29,17 @@ export function PisangAsarMiniGameScreen() {
 
   const { pisangAsarStep, pisangAsarComplete, advancePisangAsarStep, resetPisangAsarGame, setScreen, awardStarsForRegion, completeMinigameCooking } = useGameStore();
   const [showBackConfirm, setShowBackConfirm] = useState(false);
+  const { playButtonClick, playStepComplete } = useSfx();
 
-  const handleBack = () => setShowBackConfirm(true);
+  // Wrapper: putar SFX step selesai sebelum advance
+  const handleStepComplete = useCallback(() => {
+    playStepComplete();
+    advancePisangAsarStep();
+  }, [playStepComplete, advancePisangAsarStep]);
+
+  const handleBack = () => { playButtonClick(); setShowBackConfirm(true); };
   const handleConfirmBack = () => {
+    playButtonClick();
     resetPisangAsarGame();
     setScreen('mainMenu');
   };
@@ -61,10 +70,10 @@ export function PisangAsarMiniGameScreen() {
             </div>
           </div>
           <div className="mgbc-actions" style={{ marginTop: '14px', gap: '10px', padding: '0 10px 22px' }}>
-            <button className="mgbc-btn mgbc-btn--cancel" onClick={() => setScreen('mapSelect')} style={{ width: '100%', padding: '15px 20px', fontSize: '18px' }}>
+            <button className="mgbc-btn mgbc-btn--cancel" onClick={() => { playButtonClick(); setScreen('mapSelect'); }} style={{ width: '100%', padding: '15px 20px', fontSize: '18px' }}>
               🗺️ Pilih Level Selanjutnya
             </button>
-            <button className="mgbc-btn mgbc-btn--confirm" onClick={() => setScreen('mainMenu')} style={{ width: '100%', padding: '15px 20px', fontSize: '18px', color: '#5D4037' }}>
+            <button className="mgbc-btn mgbc-btn--confirm" onClick={() => { playButtonClick(); setScreen('mainMenu'); }} style={{ width: '100%', padding: '15px 20px', fontSize: '18px', color: '#5D4037' }}>
               🏠 Kembali ke Menu
             </button>
           </div>
@@ -114,11 +123,11 @@ export function PisangAsarMiniGameScreen() {
           </div>
         )}
         <div className="klepon-generic-body" style={{ minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {pisangAsarStep === 0 && <StepIngredientSelection onComplete={advancePisangAsarStep} />}
-          {pisangAsarStep === 1 && <StepCutBanana onComplete={advancePisangAsarStep} />}
-          {pisangAsarStep === 2 && <StepMixTopping onComplete={advancePisangAsarStep} />}
-          {pisangAsarStep === 3 && <StepSpreadTopping onComplete={advancePisangAsarStep} />}
-          {pisangAsarStep === 4 && <StepBakeOven onComplete={advancePisangAsarStep} />}
+          {pisangAsarStep === 0 && <StepIngredientSelection onComplete={handleStepComplete} />}
+          {pisangAsarStep === 1 && <StepCutBanana onComplete={handleStepComplete} />}
+          {pisangAsarStep === 2 && <StepMixTopping onComplete={handleStepComplete} />}
+          {pisangAsarStep === 3 && <StepSpreadTopping onComplete={handleStepComplete} />}
+          {pisangAsarStep === 4 && <StepBakeOven onComplete={handleStepComplete} />}
         </div>
       </div>
 

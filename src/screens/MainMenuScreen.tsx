@@ -1,4 +1,5 @@
 import { useGameStore } from '../store/gameStore';
+import { useSfx } from '../hooks/useSfx';
 
 // --- SLOT 1: Background utama ---
 import menuBackground from '../assets/menu/background.png';
@@ -18,6 +19,7 @@ import { getProfileIconData } from '../utils/profileIcons';
 
 export function MainMenuScreen() {
   const { setScreen, profileIcon } = useGameStore();
+  const { playButtonClick } = useSfx();
   const iconData = getProfileIconData(profileIcon);
 
   return (
@@ -38,7 +40,7 @@ export function MainMenuScreen() {
           {/* Profile icon button — pojok kanan atas */}
           <button
             className="main-menu-profile-btn"
-            onClick={() => setScreen('profile')}
+            onClick={() => { playButtonClick(); setScreen('profile'); }}
             title="Profil"
             id="btn-profile"
             aria-label="Profil pemain"
@@ -52,7 +54,7 @@ export function MainMenuScreen() {
           <div className="main-menu-play-area">
             <button
               className="main-menu-play-btn"
-              onClick={() => setScreen('mapSelect')}
+              onClick={() => { playButtonClick(); setScreen('mapSelect'); }}
               aria-label="Play"
               id="btn-play"
             >
@@ -69,7 +71,7 @@ export function MainMenuScreen() {
             {/* Tombol Leaderboard */}
             <button
               className="main-menu-btn main-menu-btn-leaderboard"
-              onClick={() => setScreen('leaderboard')}
+              onClick={() => { playButtonClick(); setScreen('leaderboard'); }}
               id="btn-leaderboard"
             >
               {btnPeringkat ? (
@@ -85,7 +87,7 @@ export function MainMenuScreen() {
             {/* Tombol Jajanpedia */}
             <button
               className="main-menu-btn main-menu-btn-jajanpedia"
-              onClick={() => setScreen('jajanpedia')}
+              onClick={() => { playButtonClick(); setScreen('jajanpedia'); }}
               id="btn-jajanpedia"
             >
               {btnJajanpedia ? (
@@ -101,7 +103,7 @@ export function MainMenuScreen() {
             {/* Tombol Pengaturan */}
             <button
               className="main-menu-btn main-menu-btn-settings"
-              onClick={() => setScreen('settings')}
+              onClick={() => { playButtonClick(); setScreen('settings'); }}
               id="btn-settings"
             >
               {btnPengaturan ? (

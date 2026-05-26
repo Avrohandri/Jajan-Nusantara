@@ -4,6 +4,7 @@ import { getLeaderboard } from '../lib/db';
 import type { LeaderboardEntry } from '../types';
 import backButtonImg from '../assets/universal/back button.png';
 import peringkatJudul from '../assets/pedia/peringkat_judul.png';
+import { useSfx } from '../hooks/useSfx';
 
 const MEDAL_EMOJI = ['🥇', '🥈', '🥉'];
 
@@ -25,6 +26,7 @@ export function LeaderboardScreen() {
   const { setScreen, userId } = useGameStore();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const { playButtonClick } = useSfx();
 
   useEffect(() => {
     getLeaderboard().then(data => {
@@ -44,7 +46,7 @@ export function LeaderboardScreen() {
         <button
           type="button"
           className="map-back-minimal"
-          onClick={() => setScreen('mainMenu')}
+          onClick={() => { playButtonClick(); setScreen('mainMenu'); }}
           aria-label="Kembali ke menu"
           id="btn-back-leaderboard"
         >

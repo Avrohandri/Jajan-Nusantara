@@ -1,10 +1,12 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
+import { useSfx } from '../hooks/useSfx';
 import pediaBg from '../assets/pedia/pedia_bg.png';
 import keukarahImg from '../assets/pedia/keukarah.png';
 
 export function KeukarahCardScreen() {
   const { setScreen } = useGameStore();
+  const { playButtonClick } = useSfx();
 
   return (
     <div
@@ -18,7 +20,7 @@ export function KeukarahCardScreen() {
       {/* Back Button */}
       <button
         className="klepon-card-back-btn"
-        onClick={() => setScreen('jajanpedia')}
+        onClick={() => { playButtonClick(); setScreen('jajanpedia'); }}
         title="Kembali ke Jajanpedia"
       >
         <img src={backButtonImg} alt="Back" className="klepon-card-back-icon" />

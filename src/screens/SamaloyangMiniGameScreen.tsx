@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StepMatchIngredients } from '../features/samaloyang/StepMatchIngredients';
 import { StepDoughMixing } from '../features/samaloyang/StepDoughMixing';
@@ -7,6 +7,7 @@ import { StepFrying } from '../features/samaloyang/StepFrying';
 import { MiniGameBackConfirm } from '../components/MiniGameBackConfirm';
 import backButtonImg from '../assets/universal/back button.png';
 import { usePreloadImages } from '../hooks/usePreloadImages';
+import { useSfx } from '../hooks/useSfx';
 
 const STEPS = [
   { label: 'Kumpulkan Bahan', desc: 'Cocokkan tulisan dengan gambar bahan!' },
@@ -24,9 +25,17 @@ export function SamaloyangMiniGameScreen() {
 
   const { samaloyangStep, samaloyangComplete, resetSamaloyangGame, advanceSamaloyangStep, setScreen, awardStarsForRegion, completeMinigameCooking } = useGameStore();
   const [showBackConfirm, setShowBackConfirm] = useState(false);
+  const { playButtonClick, playStepComplete } = useSfx();
 
-  const handleBack = () => setShowBackConfirm(true);
+  // Wrapper: putar SFX step selesai sebelum advance
+  const handleStepComplete = useCallback(() => {
+    playStepComplete();
+    advanceSamaloyangStep();
+  }, [playStepComplete, advanceSamaloyangStep]);
+
+  const handleBack = () => { playButtonClick(); setShowBackConfirm(true); };
   const handleConfirmBack = () => {
+    playButtonClick();
     resetSamaloyangGame();
     setScreen('mainMenu');
   };
@@ -59,10 +68,10 @@ export function SamaloyangMiniGameScreen() {
             </div>
           </div>
           <div className="mgbc-actions" style={{ marginTop: '14px', gap: '10px', padding: '0 10px 22px' }}>
-            <button className="mgbc-btn mgbc-btn--cancel" onClick={() => setScreen('mapSelect')} style={{ width: '100%', padding: '15px 20px', fontSize: '18px' }}>
+            <button className="mgbc-btn mgbc-btn--cancel" onClick={() => { playButtonClick(); setScreen('mapSelect'); }} style={{ width: '100%', padding: '15px 20px', fontSize: '18px' }}>
               🗺️ Pilih Level Selanjutnya
             </button>
-            <button className="mgbc-btn mgbc-btn--confirm" onClick={() => setScreen('mainMenu')} style={{ width: '100%', padding: '15px 20px', fontSize: '18px', color: '#5D4037' }}>
+            <button className="mgbc-btn mgbc-btn--confirm" onClick={() => { playButtonClick(); setScreen('mainMenu'); }} style={{ width: '100%', padding: '15px 20px', fontSize: '18px', color: '#5D4037' }}>
               🏠 Kembali ke Menu
             </button>
           </div>
@@ -116,10 +125,10 @@ export function SamaloyangMiniGameScreen() {
           <p className="klepon-generic-desc">{STEPS[samaloyangStep]?.desc}</p>
         </div>
         <div className="klepon-generic-body" style={{ minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {samaloyangStep === 0 && <StepMatchIngredients onComplete={advanceSamaloyangStep} />}
-          {samaloyangStep === 1 && <StepDoughMixing onComplete={advanceSamaloyangStep} />}
-          {samaloyangStep === 2 && <StepDippingMold onComplete={advanceSamaloyangStep} />}
-          {samaloyangStep === 3 && <StepFrying onComplete={advanceSamaloyangStep} />}
+          {samaloyangStep === 0 && <StepMatchIngredients onComplete={handleStepComplete} />}
+          {samaloyangStep === 1 && <StepDoughMixing onComplete={handleStepComplete} />}
+          {samaloyangStep === 2 && <StepDippingMold onComplete={handleStepComplete} />}
+          {samaloyangStep === 3 && <StepFrying onComplete={handleStepComplete} />}
         </div>
       </div>
 

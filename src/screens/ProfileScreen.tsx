@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import type { IslandProgress } from '../types';
 import backButtonImg from '../assets/universal/back button.png';
+import { useSfx } from '../hooks/useSfx';
 
 import { PROFILE_ICONS, getProfileIconData } from '../utils/profileIcons';
 
@@ -44,6 +45,7 @@ export function ProfileScreen() {
 
   const [showIconPicker, setShowIconPicker] = useState(false);
   const [saving, setSaving] = useState(false);
+  const { playButtonClick } = useSfx();
 
   const quizAccuracy = totalQuizzesAnswered > 0
     ? Math.round((totalQuizzesCorrect / totalQuizzesAnswered) * 100)
@@ -52,6 +54,7 @@ export function ProfileScreen() {
   const completedIslands = REGION_ORDER.filter(r => islandProgress[r]).length;
 
   const handlePickIcon = async (name: string) => {
+    playButtonClick();
     setSaving(true);
     await setProfileIcon(name);
     setSaving(false);
@@ -69,7 +72,7 @@ export function ProfileScreen() {
         <button
           type="button"
           className="map-back-minimal"
-          onClick={() => setScreen('mainMenu')}
+          onClick={() => { playButtonClick(); setScreen('mainMenu'); }}
           aria-label="Kembali"
           id="btn-back-profile"
         >
@@ -85,7 +88,7 @@ export function ProfileScreen() {
           <ProfileIconAvatar icon={profileIcon} size={90} />
           <button
             className="profile-change-icon-btn"
-            onClick={() => setShowIconPicker(true)}
+            onClick={() => { playButtonClick(); setShowIconPicker(true); }}
             id="btn-change-icon"
           >
             ✏️ Ganti Ikon
@@ -145,7 +148,7 @@ export function ProfileScreen() {
           <div className="profile-picker-modal" onClick={e => e.stopPropagation()}>
             <div className="picker-header">
               <h2 className="picker-title">Pilih Ikon Kulinermu</h2>
-              <button className="picker-close-btn" onClick={() => setShowIconPicker(false)}>✕</button>
+              <button className="picker-close-btn" onClick={() => { playButtonClick(); setShowIconPicker(false); }}>✕</button>
             </div>
             <div className="picker-grid">
               {PROFILE_ICONS.map(ic => (

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { calculateStars, STAR_THRESHOLDS } from '../config/starThresholds';
+import { useSfx } from '../hooks/useSfx';
 
 /* ── region config is built INSIDE the component so it always has
    fresh references to store actions ── */
@@ -32,6 +33,7 @@ function StarDisplay({ earned }: { earned: 0 | 1 | 2 | 3 }) {
 
 export function ResultScreen() {
   const { activeRegion, completeIsland, score, setScreen } = useGameStore();
+  const { playButtonClick } = useSfx();
 
   const REGION_CONFIG: Record<string, {
     mascot: string;
@@ -169,7 +171,7 @@ export function ResultScreen() {
       <div className="result-actions-wrap">
         <button
           className="result-lanjut-btn"
-          onClick={config.cookAction}
+          onClick={() => { playButtonClick(); config.cookAction(); }}
         >
           LANJUT MEMASAK
         </button>

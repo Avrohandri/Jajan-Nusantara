@@ -5,6 +5,7 @@ import pediaJudul from '../assets/pedia/pedia_judul.png';
 import backButtonImg from '../assets/universal/back button.png';
 import { Modal } from '../components/Modal';
 import { Button } from '../components/Button';
+import { useSfx } from '../hooks/useSfx';
 
 const REGIONS = [
   { id: 'jogja', name: 'Jogja', folder: 'foods_jogja', icon: '🏯' },
@@ -65,6 +66,7 @@ export function JajanpediaScreen() {
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [showInstructions, setShowInstructions] = useState(!hasSeenJajanpediaInstructions);
   const [toast, setToast] = useState<string | null>(null);
+  const { playButtonClick } = useSfx();
 
   const minSwipeDistance = 50;
 
@@ -123,6 +125,7 @@ export function JajanpediaScreen() {
   };
 
   const dismissInstructions = () => {
+    playButtonClick();
     setShowInstructions(false);
     setHasSeenJajanpediaInstructions();
   };
@@ -136,7 +139,7 @@ export function JajanpediaScreen() {
         {/* Back Button */}
         <button 
           className="jajan-back-btn" 
-          onClick={() => setScreen('mainMenu')}
+          onClick={() => { playButtonClick(); setScreen('mainMenu'); }}
           title="Kembali ke Menu Utama"
         >
           <img src={backButtonImg} alt="Back" className="jajan-back-icon-img" />
@@ -155,11 +158,11 @@ export function JajanpediaScreen() {
           <div className="jajanpedia-board-wrapper">
             <div className="jajanpedia-board">
               <div className="jajanpedia-board-header">
-                <button className="jajanpedia-arrow-btn" onClick={(e) => { e.stopPropagation(); prevRegion(); }}>
+                <button className="jajanpedia-arrow-btn" onClick={(e) => { e.stopPropagation(); playButtonClick(); prevRegion(); }}>
                   ◀
                 </button>
                 <h2 className="jajanpedia-board-title">Jajanan dari {currentRegion.name}</h2>
-                <button className="jajanpedia-arrow-btn" onClick={(e) => { e.stopPropagation(); nextRegion(); }}>
+                <button className="jajanpedia-arrow-btn" onClick={(e) => { e.stopPropagation(); playButtonClick(); nextRegion(); }}>
                   ▶
                 </button>
               </div>
@@ -180,7 +183,7 @@ export function JajanpediaScreen() {
                     <div
                       key={index}
                       className={`jajan-card${targetScreen ? ' jajan-card-clickable' : ''}`}
-                      onClick={targetScreen ? () => setScreen(targetScreen as any) : undefined}
+                      onClick={targetScreen ? () => { playButtonClick(); setScreen(targetScreen as any); } : undefined}
                     >
                       <div className="jajan-card-img-wrapper">
                         <img src={imgPath} alt={cleanName} className="jajan-card-img" />

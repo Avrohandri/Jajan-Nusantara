@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StepDoughMixing } from '../features/pieSusu/StepDoughMixing';
 import { StepShapingMold } from '../features/pieSusu/StepShapingMold';
@@ -8,6 +8,7 @@ import { StepPieIngredients } from '../features/pieSusu/StepPieIngredients';
 import { MiniGameBackConfirm } from '../components/MiniGameBackConfirm';
 import backButtonImg from '../assets/universal/back button.png';
 import { usePreloadImages } from '../hooks/usePreloadImages';
+import { useSfx } from '../hooks/useSfx';
 
 const STEPS = [
   { label: 'Pilih Bahan',    desc: 'Pilih bahan untuk Pie Susu' },
@@ -30,9 +31,17 @@ export function PieSusuMiniGameScreen() {
 
   const { pieSusuStep, pieSusuComplete, advancePieSusuStep, resetPieSusuGame, setScreen, awardStarsForRegion, completeMinigameCooking } = useGameStore();
   const [showBackConfirm, setShowBackConfirm] = useState(false);
+  const { playButtonClick, playStepComplete } = useSfx();
 
-  const handleBack = () => setShowBackConfirm(true);
+  // Wrapper: putar SFX step selesai sebelum advance
+  const handleStepComplete = useCallback(() => {
+    playStepComplete();
+    advancePieSusuStep();
+  }, [playStepComplete, advancePieSusuStep]);
+
+  const handleBack = () => { playButtonClick(); setShowBackConfirm(true); };
   const handleConfirmBack = () => {
+    playButtonClick();
     resetPieSusuGame();
     setScreen('mainMenu');
   };
@@ -68,10 +77,10 @@ export function PieSusuMiniGameScreen() {
             </div>
           </div>
           <div className="mgbc-actions" style={{ marginTop: '14px', gap: '10px', padding: '0 10px 22px' }}>
-            <button className="mgbc-btn mgbc-btn--cancel" onClick={() => setScreen('mapSelect')} style={{ width: '100%', padding: '15px 20px', fontSize: '18px' }}>
+            <button className="mgbc-btn mgbc-btn--cancel" onClick={() => { playButtonClick(); setScreen('mapSelect'); }} style={{ width: '100%', padding: '15px 20px', fontSize: '18px' }}>
               🗺️ Pilih Level Selanjutnya
             </button>
-            <button className="mgbc-btn mgbc-btn--confirm" onClick={() => setScreen('mainMenu')} style={{ width: '100%', padding: '15px 20px', fontSize: '18px', color: '#5D4037' }}>
+            <button className="mgbc-btn mgbc-btn--confirm" onClick={() => { playButtonClick(); setScreen('mainMenu'); }} style={{ width: '100%', padding: '15px 20px', fontSize: '18px', color: '#5D4037' }}>
               🏠 Kembali ke Menu
             </button>
           </div>
@@ -120,11 +129,11 @@ export function PieSusuMiniGameScreen() {
           <p className="klepon-generic-desc">{STEPS[pieSusuStep]?.desc}</p>
         </div>
         <div className="klepon-generic-body" style={{ minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {pieSusuStep === 0 && <StepPieIngredients onComplete={advancePieSusuStep} />}
-          {pieSusuStep === 1 && <StepDoughMixing onComplete={advancePieSusuStep} />}
-          {pieSusuStep === 2 && <StepShapingMold onComplete={advancePieSusuStep} />}
-          {pieSusuStep === 3 && <StepPouringFilling onComplete={advancePieSusuStep} />}
-          {pieSusuStep === 4 && <StepBakingOven onComplete={advancePieSusuStep} />}
+          {pieSusuStep === 0 && <StepPieIngredients onComplete={handleStepComplete} />}
+          {pieSusuStep === 1 && <StepDoughMixing onComplete={handleStepComplete} />}
+          {pieSusuStep === 2 && <StepShapingMold onComplete={handleStepComplete} />}
+          {pieSusuStep === 3 && <StepPouringFilling onComplete={handleStepComplete} />}
+          {pieSusuStep === 4 && <StepBakingOven onComplete={handleStepComplete} />}
         </div>
       </div>
 

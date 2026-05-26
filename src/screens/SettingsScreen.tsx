@@ -1,15 +1,17 @@
 import { useGameStore } from '../store/gameStore';
 import backButtonImg from '../assets/universal/back button.png';
+import { useSfx } from '../hooks/useSfx';
 
 export function SettingsScreen() {
   const { setScreen, isMusicOn, isSfxOn, toggleMusic, toggleSfx } = useGameStore();
+  const { playButtonClick } = useSfx();
 
   return (
     <div className="screen settings-screen">
       {/* Back button */}
       <button
         className="back-btn"
-        onClick={() => setScreen('mainMenu')}
+        onClick={() => { playButtonClick(); setScreen('mainMenu'); }}
         id="btn-back-settings"
       >
         <img src={backButtonImg} alt="Back" className="settings-back-icon-img" />
@@ -30,7 +32,7 @@ export function SettingsScreen() {
           </div>
           <button
             className={`toggle-btn ${isMusicOn ? 'toggle-on' : 'toggle-off'}`}
-            onClick={toggleMusic}
+            onClick={() => { playButtonClick(); toggleMusic(); }}
             aria-label="Toggle Musik"
           >
             <span className="toggle-knob" />
@@ -45,7 +47,7 @@ export function SettingsScreen() {
           </div>
           <button
             className={`toggle-btn ${isSfxOn ? 'toggle-on' : 'toggle-off'}`}
-            onClick={toggleSfx}
+            onClick={() => { playButtonClick(); toggleSfx(); }}
             aria-label="Toggle Efek Suara"
           >
             <span className="toggle-knob" />

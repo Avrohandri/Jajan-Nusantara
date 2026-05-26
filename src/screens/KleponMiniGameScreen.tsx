@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StepIngredients } from '../features/klepon/StepIngredients';
 import { StepMixing } from '../features/klepon/StepMixing';
@@ -8,6 +8,7 @@ import { StepCoating } from '../features/klepon/StepCoating';
 import { MiniGameBackConfirm } from '../components/MiniGameBackConfirm';
 import backButtonImg from '../assets/universal/back button.png';
 import { usePreloadImages } from '../hooks/usePreloadImages';
+import { useSfx } from '../hooks/useSfx';
 
 const STEPS = [
   { label: '🌾 Pilih Bahan',    desc: 'Pilih bahan yang tepat'   },
@@ -28,9 +29,17 @@ export function KleponMiniGameScreen() {
 
   const { kleponStep, kleponComplete, advanceKleponStep, resetKleponGame, setScreen, awardStarsForRegion, completeMinigameCooking } = useGameStore();
   const [showBackConfirm, setShowBackConfirm] = useState(false);
+  const { playButtonClick, playStepComplete } = useSfx();
 
-  const handleBack = () => setShowBackConfirm(true);
+  // Wrapper: putar SFX step selesai sebelum advance
+  const handleStepComplete = useCallback(() => {
+    playStepComplete();
+    advanceKleponStep();
+  }, [playStepComplete, advanceKleponStep]);
+
+  const handleBack = () => { playButtonClick(); setShowBackConfirm(true); };
   const handleConfirmBack = () => {
+    playButtonClick();
     resetKleponGame();
     setScreen('mainMenu');
   };
@@ -62,10 +71,10 @@ export function KleponMiniGameScreen() {
             </div>
           </div>
           <div className="mgbc-actions" style={{ marginTop: '14px', gap: '10px', padding: '0 10px 22px' }}>
-            <button className="mgbc-btn mgbc-btn--cancel" onClick={() => setScreen('mapSelect')} style={{ width: '100%', padding: '15px 20px', fontSize: '18px' }}>
+            <button className="mgbc-btn mgbc-btn--cancel" onClick={() => { playButtonClick(); setScreen('mapSelect'); }} style={{ width: '100%', padding: '15px 20px', fontSize: '18px' }}>
               🗺️ Pilih Level Selanjutnya
             </button>
-            <button className="mgbc-btn mgbc-btn--confirm" onClick={() => setScreen('mainMenu')} style={{ width: '100%', padding: '15px 20px', fontSize: '18px', color: '#5D4037' }}>
+            <button className="mgbc-btn mgbc-btn--confirm" onClick={() => { playButtonClick(); setScreen('mainMenu'); }} style={{ width: '100%', padding: '15px 20px', fontSize: '18px', color: '#5D4037' }}>
               🏠 Kembali ke Menu
             </button>
           </div>
@@ -109,7 +118,7 @@ export function KleponMiniGameScreen() {
 
       {/* ── Step content ── */}
       {/* Step 0 owns its own layout (matches kitchen reference) */}
-      {kleponStep === 0 && <StepIngredients onComplete={advanceKleponStep} />}
+      {kleponStep === 0 && <StepIngredients onComplete={handleStepComplete} />}
 
       {/* Steps 1-4: generic card wrapper */}
       {kleponStep > 0 && (
@@ -119,10 +128,10 @@ export function KleponMiniGameScreen() {
             <p className="klepon-generic-desc">{STEPS[kleponStep].desc}</p>
           </div>
           <div className="klepon-generic-body">
-            {kleponStep === 1 && <StepMixing   onComplete={advanceKleponStep} />}
-            {kleponStep === 2 && <StepShaping  onComplete={advanceKleponStep} />}
-            {kleponStep === 3 && <StepSteaming  onComplete={advanceKleponStep} />}
-            {kleponStep === 4 && <StepCoating  onComplete={advanceKleponStep} />}
+            {kleponStep === 1 && <StepMixing   onComplete={handleStepComplete} />}
+            {kleponStep === 2 && <StepShaping  onComplete={handleStepComplete} />}
+            {kleponStep === 3 && <StepSteaming  onComplete={handleStepComplete} />}
+            {kleponStep === 4 && <StepCoating  onComplete={handleStepComplete} />}
           </div>
         </div>
       )}

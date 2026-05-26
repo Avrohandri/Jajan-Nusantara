@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import type { IslandCookingComplete, IslandProgress } from '../types';
+import { useSfx } from '../hooks/useSfx';
 
 import levelSelectBg from '../assets/map/level_select_bg.png';
 import backButtonImg from '../assets/universal/back button.png';
@@ -52,8 +53,10 @@ const LOCK_REQUIRES: Record<string, string> = {
 export function MapSelectScreen() {
   const { setScreen, resetGame, islandCookingComplete, islandStars } = useGameStore();
   const [toast, setToast] = useState<string | null>(null);
+  const { playButtonClick } = useSfx();
 
   const handleMapClick = (map: MapItem) => {
+    playButtonClick();
     const unlocked = isUnlocked(map.id, islandCookingComplete);
     if (unlocked) {
       useGameStore.getState().setActiveRegion(map.id);
@@ -76,7 +79,7 @@ export function MapSelectScreen() {
         <button
           type="button"
           className="map-back-minimal"
-          onClick={() => setScreen('mainMenu')}
+          onClick={() => { playButtonClick(); setScreen('mainMenu'); }}
           id="btn-back-map"
           aria-label="Kembali ke menu"
         >

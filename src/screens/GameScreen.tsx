@@ -14,6 +14,7 @@ import latarapauseImg from '../assets/universal/latar_pause.png';
 import homeBtnImg from '../assets/universal/home_btn.png';
 import continueBtnImg from '../assets/universal/continue_btn.png';
 import restartBtnImg from '../assets/universal/restart_btn.png';
+import { useSfx } from '../hooks/useSfx';
 
 export function GameScreen() {
   const {
@@ -32,6 +33,7 @@ export function GameScreen() {
     seenTiers,
     activeRegion,
   } = useGameStore();
+  const { playButtonClick } = useSfx();
 
   const currentConfig = REGION_FOOD_CONFIGS[activeRegion] || REGION_FOOD_CONFIGS['jogja'];
   const assetFolder = `foods_${activeRegion}`;
@@ -129,35 +131,42 @@ export function GameScreen() {
   }, [showQuiz]);
 
   const handlePause = () => {
+    playButtonClick();
     setPaused(true);
     EventBus.emit('pause-game');
   };
 
   const handleResume = () => {
+    playButtonClick();
     setPaused(false);
     EventBus.emit('resume-game');
   };
 
   const handleRestart = () => {
+    playButtonClick();
     resetGame();
     EventBus.emit('restart-game');
   };
 
   const handleEndGame = async () => {
+    playButtonClick();
     await endSession(isGameOver ? 'board_full' : 'quit');
     setScreen('result');
   };
 
   const handleGoToMainMenu = () => {
+    playButtonClick();
     setShowHomeConfirm(true);
   };
 
   const handleConfirmHome = () => {
+    playButtonClick();
     resetGame();
     setScreen('mainMenu');
   };
 
   const dismissInstructions = () => {
+    playButtonClick();
     setShowInstructions(false);
     setHasSeenInstructions();
   };
