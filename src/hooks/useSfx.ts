@@ -2,9 +2,9 @@
  * useSfx — SFX manager hook (Web Audio API)
  *
  * Menyediakan tiga fungsi SFX:
- *  - playButtonClick()  : SFX universal saat tombol ditekan         — volume 120%
+ *  - playButtonClick()  : SFX universal saat tombol ditekan         — volume 145%
  *  - playStepComplete() : SFX saat step minigame memasak selesai    — volume 110%
- *  - playDropSfx()      : SFX saat kuliner dijatuhkan di drop&merge — volume 120%
+ *  - playDropSfx()      : SFX saat kuliner dijatuhkan di drop&merge — volume 145%
  *                         (sama dengan button click, alias dari playButtonClick)
  *
  * File SFX ditempatkan di:
@@ -109,14 +109,14 @@ export function useSfx() {
   isSfxOnRef.current = isSfxOn;
 
   /**
-   * Putar SFX klik tombol — volume 120%.
+   * Putar SFX klik tombol — volume 145%.
    * Juga dipakai sebagai SFX drop kuliner di permainan.
    */
   const playButtonClick = useCallback(() => {
     if (!isSfxOnRef.current) return;
     const buffer = getBuffer('button');
     if (buffer) {
-      playAudioBuffer(buffer, 1.2);          // 120% via GainNode
+      playAudioBuffer(buffer, 1.45);          // 145% via GainNode
     } else {
       // Fallback: HTMLAudio (dikap 1.0, plus trigger load buffer)
       try {
