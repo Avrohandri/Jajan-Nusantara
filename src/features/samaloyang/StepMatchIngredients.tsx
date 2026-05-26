@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Props {
   onComplete: () => void;
@@ -12,6 +13,7 @@ const ITEMS = [
 ];
 
 export function StepMatchIngredients({ onComplete }: Props) {
+  const { playButtonClick } = useSfx();
   const [complete, setComplete] = useState(false);
   const [matches, setMatches] = useState<Record<string, string>>({});
 
@@ -81,6 +83,7 @@ export function StepMatchIngredients({ onComplete }: Props) {
   // Pointer interactions
   const handlePointerDown = (id: string, e: React.PointerEvent) => {
     if (matches[id]) return; // already matched
+    playButtonClick();
     e.currentTarget.setPointerCapture(e.pointerId);
     setDraggingLabelId(id);
     

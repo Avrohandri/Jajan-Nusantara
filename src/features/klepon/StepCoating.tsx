@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Props {
   onComplete: () => void;
@@ -7,6 +8,7 @@ interface Props {
 const KLEPON_COUNT = 3;
 
 export function StepCoating({ onComplete }: Props) {
+  const { playButtonClick } = useSfx();
   const [coated, setCoated] = useState<boolean[]>(Array(KLEPON_COUNT).fill(false));
   const [dragging, setDragging] = useState(false);
   const ghostRef = useRef<HTMLDivElement | null>(null);
@@ -24,6 +26,7 @@ export function StepCoating({ onComplete }: Props) {
 
   // Mouse drag from coconut source
   const handleDragStart = (e: React.DragEvent) => {
+    playButtonClick();
     setDragging(true);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('coconut', '1');
@@ -39,6 +42,7 @@ export function StepCoating({ onComplete }: Props) {
 
   // Touch drag
   const handleTouchStart = (e: React.TouchEvent) => {
+    playButtonClick();
     const touch = e.touches[0];
     setDragging(true);
     const ghost = document.createElement('div');

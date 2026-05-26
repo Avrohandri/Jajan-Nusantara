@@ -1,16 +1,19 @@
 import { useState, useRef } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Props {
   onComplete: () => void;
 }
 
 export function StepDippingMold({ onComplete }: Props) {
+  const { playButtonClick } = useSfx();
   const [moldCoated, setMoldCoated] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const ghostRef = useRef<HTMLImageElement | null>(null);
 
   // Desktop Drag
   const handleDragStart = () => {
+    playButtonClick();
     setTimeout(() => setIsDragging(true), 0);
   };
   const handleDragOver = (e: React.DragEvent) => e.preventDefault();
@@ -27,6 +30,7 @@ export function StepDippingMold({ onComplete }: Props) {
     // Mobile Touch
   const handleTouchStart = (e: React.TouchEvent) => {
     if (moldCoated) return;
+    playButtonClick();
     setIsDragging(true);
     const touch = e.touches[0];
 

@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Props {
   onComplete: () => void;
 }
 
 export function StepBakingOven({ onComplete }: Props) {
+  const { playButtonClick } = useSfx();
   const [pieInOven, setPieInOven] = useState(false);
   const [bakingProgress, setBakingProgress] = useState(0);
   const [isDone, setIsDone] = useState(false);
@@ -30,6 +32,7 @@ export function StepBakingOven({ onComplete }: Props) {
 
   // Mouse Drag Events
   const handlePieDragStart = (e: React.DragEvent) => {
+    playButtonClick();
     setTimeout(() => setDraggingPie(true), 0);
     e.dataTransfer.effectAllowed = 'move';
   };
@@ -45,6 +48,7 @@ export function StepBakingOven({ onComplete }: Props) {
   // Touch Events
   const handlePieTouchStart = (e: React.TouchEvent) => {
     if (pieInOven) return;
+    playButtonClick();
     const touch = e.touches[0];
     setDraggingPie(true);
     

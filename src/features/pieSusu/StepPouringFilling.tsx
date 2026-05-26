@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Props {
   onComplete: () => void;
 }
 
 export function StepPouringFilling({ onComplete }: Props) {
+  const { playButtonClick } = useSfx();
   const [isFilled, setIsFilled] = useState(false);
   const [isHolding, setIsHolding] = useState(false);
   const [pourProgress, setPourProgress] = useState(0);
 
   const startHolding = () => {
     if (isFilled) return;
+    playButtonClick();
     setIsHolding(true);
   };
   

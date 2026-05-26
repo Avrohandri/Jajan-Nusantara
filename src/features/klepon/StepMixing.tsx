@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Props {
   onComplete: () => void;
@@ -7,6 +8,7 @@ interface Props {
 const REQUIRED_DEGREES = 1440; // 4 full clockwise rotations
 
 export function StepMixing({ onComplete }: Props) {
+  const { playButtonClick } = useSfx();
   const [totalDegrees, setTotalDegrees] = useState(0);
   const [isStirring, setIsStirring] = useState(false);
   const [whirlAngle, setWhirlAngle] = useState(0);
@@ -52,6 +54,7 @@ export function StepMixing({ onComplete }: Props) {
 
   // Mouse events
   const onMouseDown = (e: React.MouseEvent) => {
+    playButtonClick();
     isPressingRef.current = true;
     lastAngleRef.current = getAngle(e.clientX, e.clientY);
     setIsStirring(true);
@@ -70,6 +73,7 @@ export function StepMixing({ onComplete }: Props) {
 
   // Touch events
   const onTouchStart = (e: React.TouchEvent) => {
+    playButtonClick();
     isPressingRef.current = true;
     const t = e.touches[0];
     lastAngleRef.current = getAngle(t.clientX, t.clientY);

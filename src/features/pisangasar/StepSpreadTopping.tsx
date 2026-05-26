@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Props {
   onComplete: () => void;
 }
 
 export function StepSpreadTopping({ onComplete }: Props) {
+  const { playButtonClick } = useSfx();
   const [bananas, setBananas] = useState([
     { id: 1, topped: false },
     { id: 2, topped: false },
@@ -24,6 +26,7 @@ export function StepSpreadTopping({ onComplete }: Props) {
 
   // Mouse Handlers
   const handleToppingDragStart = (e: React.DragEvent) => {
+    playButtonClick();
     setTimeout(() => setDraggingTopping(true), 0);
     e.dataTransfer.effectAllowed = 'move';
   };
@@ -39,6 +42,7 @@ export function StepSpreadTopping({ onComplete }: Props) {
 
   // Touch Handlers
   const handleToppingTouchStart = (e: React.TouchEvent) => {
+    playButtonClick();
     const touch = e.touches[0];
     setDraggingTopping(true);
 

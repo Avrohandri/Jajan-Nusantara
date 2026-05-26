@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Props {
   onComplete: () => void;
@@ -6,6 +7,7 @@ interface Props {
 
 export function StepCutBanana({ onComplete }: Props) {
   // We need 4 bananas
+  const { playButtonClick } = useSfx();
   const [bananas, setBananas] = useState([
     { id: 1, cut: false },
     { id: 2, cut: false },
@@ -17,6 +19,7 @@ export function StepCutBanana({ onComplete }: Props) {
   const completedRef = useRef(false);
 
   const handleCut = (id: number) => {
+    playButtonClick();
     setBananas(prev => {
       const nextBananas = prev.map(b => b.id === id ? { ...b, cut: true } : b);
       

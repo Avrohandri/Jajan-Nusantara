@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Props {
   onComplete: () => void;
@@ -8,6 +9,7 @@ const TAPS_NEEDED = 3;
 const KLEPON_COUNT = 3;
 
 export function StepShaping({ onComplete }: Props) {
+  const { playButtonClick } = useSfx();
   const [tapCount, setTapCount] = useState(0);
   const [sugarDropped, setSugarDropped] = useState<boolean[]>(Array(KLEPON_COUNT).fill(false));
   const [draggingSugar, setDraggingSugar] = useState(false);
@@ -26,6 +28,7 @@ export function StepShaping({ onComplete }: Props) {
 
   const handleTap = () => {
     if (phase !== 'tapping') return;
+    playButtonClick();
     const next = tapCount + 1;
     setTapCount(next);
     if (next >= TAPS_NEEDED) {
@@ -36,6 +39,7 @@ export function StepShaping({ onComplete }: Props) {
   // Mouse drag sugar
   const handleSugarDragStart = (e: React.DragEvent) => {
     // Delay setting dragging state so browser can capture full-opacity drag ghost
+    playButtonClick();
     setTimeout(() => setDraggingSugar(true), 0);
     e.dataTransfer.effectAllowed = 'move';
   };
@@ -59,6 +63,7 @@ export function StepShaping({ onComplete }: Props) {
 
   // Touch support for sugar drag
   const handleSugarTouchStart = (e: React.TouchEvent) => {
+    playButtonClick();
     const touch = e.touches[0];
     setDraggingSugar(true);
     const ghost = document.createElement('div');

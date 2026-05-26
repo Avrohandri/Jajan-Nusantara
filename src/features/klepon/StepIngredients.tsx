@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Ingredient {
   id: string;
@@ -23,6 +24,7 @@ interface Props {
 }
 
 export function StepIngredients({ onComplete }: Props) {
+  const { playButtonClick } = useSfx();
   const [ingredients, setIngredients] = useState(INITIAL_INGREDIENTS);
   const [bowlState, setBowlState]     = useState<'idle' | 'correct' | 'wrong'>('idle');
   const [draggingId, setDraggingId]   = useState<string | null>(null);
@@ -67,6 +69,7 @@ export function StepIngredients({ onComplete }: Props) {
 
   /* ─── mouse drag ─── */
   const onDragStart = (e: React.DragEvent, id: string) => {
+    playButtonClick();
     setDraggingId(id);
     e.dataTransfer.effectAllowed = 'move';
   };
@@ -82,6 +85,7 @@ export function StepIngredients({ onComplete }: Props) {
   const touchIngId = useRef<string | null>(null);
 
   const onTouchStart = (e: React.TouchEvent, id: string) => {
+    playButtonClick();
     touchIngId.current = id;
     const touch = e.touches[0];
     const ing = ingredients.find(i => i.id === id);

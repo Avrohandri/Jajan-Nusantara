@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Props {
   onComplete: () => void;
@@ -7,6 +8,7 @@ interface Props {
 const KLEPON_COUNT = 3;
 
 export function StepSteaming({ onComplete }: Props) {
+  const { playButtonClick } = useSfx();
   const [inPan, setInPan] = useState<boolean[]>(Array(KLEPON_COUNT).fill(false));
   const [boiling, setBoiling] = useState(false);
   const [done, setDone] = useState(false);
@@ -53,6 +55,7 @@ export function StepSteaming({ onComplete }: Props) {
 
   // Mouse drag
   const handleDragStart = (e: React.DragEvent, idx: number) => {
+    playButtonClick();
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('kleponIdx', String(idx));
   };
@@ -67,6 +70,7 @@ export function StepSteaming({ onComplete }: Props) {
 
   // Touch drag
   const handleTouchStart = (e: React.TouchEvent, idx: number) => {
+    playButtonClick();
     const touch = e.touches[0];
     const ghost = document.createElement('div');
     ghost.style.cssText = `position:fixed;left:${touch.clientX - 45}px;top:${touch.clientY - 45}px;width:90px;height:90px;pointer-events:none;z-index:999;filter:drop-shadow(0 6px 12px rgba(0,0,0,0.3))`;

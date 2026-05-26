@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Props {
   onComplete: () => void;
@@ -7,10 +8,12 @@ interface Props {
 const TAPS_NEEDED = 2;
 
 export function StepShapingMold({ onComplete }: Props) {
+  const { playButtonClick } = useSfx();
   const [tapCount, setTapCount] = useState(0);
 
   const handleTap = () => {
     if (tapCount >= TAPS_NEEDED) return;
+    playButtonClick();
     const next = tapCount + 1;
     setTapCount(next);
     

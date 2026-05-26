@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Props {
   onComplete: () => void;
 }
 
 export function StepFrying({ onComplete }: Props) {
+  const { playButtonClick } = useSfx();
   const [isDone, setIsDone] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isDipped, setIsDipped] = useState(false);
@@ -72,6 +74,7 @@ export function StepFrying({ onComplete }: Props) {
   // Event handlers
   const handlePointerDown = (e: React.PointerEvent) => {
     e.currentTarget.setPointerCapture(e.pointerId);
+    playButtonClick();
     startDrag(e.clientX, e.clientY);
   };
   const handlePointerMove = (e: React.PointerEvent) => {

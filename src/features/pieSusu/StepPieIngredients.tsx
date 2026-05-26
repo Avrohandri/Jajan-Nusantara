@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useSfx } from '../../hooks/useSfx';
 
 interface Ingredient {
   id: string;
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export function StepPieIngredients({ onComplete }: Props) {
+  const { playButtonClick } = useSfx();
   const [shuffledIngs, setShuffledIngs] = useState<Ingredient[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [dragX, setDragX] = useState(0);
@@ -37,6 +39,7 @@ export function StepPieIngredients({ onComplete }: Props) {
   }, []);
 
   const handlePointerDown = (e: React.PointerEvent) => {
+    playButtonClick();
     setIsDragging(true);
     startX.current = e.clientX;
     setFeedback(null);
