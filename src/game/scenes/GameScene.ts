@@ -467,6 +467,8 @@ export class GameScene extends Phaser.Scene {
     this.pickNextTier();
     this.updatePreview();
     EventBus.emit('on-drop');
+    // Kirim sinyal ke React agar memutar SFX drop (Web Audio harus dipanggil dari React)
+    EventBus.emit('drop-sfx');
   }
 
   private removeItem(item: Phaser.Physics.Matter.Sprite) {

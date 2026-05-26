@@ -33,7 +33,7 @@ export function GameScreen() {
     seenTiers,
     activeRegion,
   } = useGameStore();
-  const { playButtonClick } = useSfx();
+  const { playButtonClick, playDropSfx } = useSfx();
 
   const currentConfig = REGION_FOOD_CONFIGS[activeRegion] || REGION_FOOD_CONFIGS['jogja'];
   const assetFolder = `foods_${activeRegion}`;
@@ -79,6 +79,15 @@ export function GameScreen() {
       EventBus.off('game-over', handleGameOver);
     };
   }, [resetGame]);
+
+  // SFX saat player menjatuhkan kuliner di drop & merge
+  useEffect(() => {
+    const handleDropSfx = () => playDropSfx();
+    EventBus.on('drop-sfx', handleDropSfx);
+    return () => {
+      EventBus.off('drop-sfx', handleDropSfx);
+    };
+  }, [playDropSfx]);
 
   // Saat kuliner tertinggi terbentuk → flash putih → ResultScreen
   useEffect(() => {
