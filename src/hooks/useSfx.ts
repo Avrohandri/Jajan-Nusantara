@@ -12,14 +12,12 @@
  *     ├── button_click.mp3    ← SFX tombol universal & drop kuliner
  *     └── step_complete.mp3   ← SFX step minigame selesai
  *
- * Semua SFX tunduk pada toggle isSfxOn dari gameStore (Setting Suara).
+ * ─── Prioritas buffer ────────────────────────────────────────────────────────
+ * 1. Buffer yang sudah di-decode oleh useGlobalPreload (window.__sfxBuffers)
+ * 2. Buffer internal _buffers yang di-decode oleh hook ini sendiri
+ * 3. Fallback HTMLAudioElement jika Web Audio belum siap
  *
- * Volume MELEBIHI 1.0 dimungkinkan dengan Web Audio API GainNode.
- * HTMLAudioElement.volume dibatasi 0–1, namun GainNode.gain.value bisa > 1.
- *
- * Cara pakai:
- *   const { playButtonClick, playStepComplete, playDropSfx } = useSfx();
- *   <button onClick={() => { playButtonClick(); doSomething(); }} />
+ * Volume melebihi 1.0 dimungkinkan dengan GainNode (HTMLAudio max 1.0).
  */
 
 import { useCallback, useRef } from 'react';
@@ -28,94 +26,83 @@ import { useGameStore } from '../store/gameStore';
 const SFX_BUTTON = '/assets/sfx/button_click.mp3';
 const SFX_STEP   = '/assets/sfx/step_complete.mp3';
 
-// ── Web Audio API context — dibuat sekali di module level ─────────────────────
+// ── Internal AudioContext & buffer cache ──────────────────────────────────────
 let _audioCtx: AudioContext | null = null;
 
 function getAudioCtx(): AudioContext {
   if (!_audioCtx) {
     _audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
   }
-  // Resume jika suspended (autoplay policy browser)
   if (_audioCtx.state === 'suspended') {
     _audioCtx.resume().catch(() => {});
   }
   return _audioCtx;
 }
 
-// ── Cache decoded buffer ───────────────────────────────────────────────────────
-const _buffers: Record<string, AudioBuffer | null> = {
+/** Buffer lokal — di-populate oleh loadOwnBuffer() jika preload global belum ada */
+const _ownBuffers: { button: AudioBuffer | null; step: AudioBuffer | null } = {
   button: null,
   step: null,
 };
 
-async function loadBuffer(key: 'button' | 'step', url: string): Promise<AudioBuffer | null> {
-  if (_buffers[key]) return _buffers[key];
+async function loadOwnBuffer(key: 'button' | 'step', url: string): Promise<void> {
+  if (_ownBuffers[key]) return;
   try {
     const ctx = getAudioCtx();
     const res = await fetch(url);
-    if (!res.ok) return null;
-    const arrayBuffer = await res.arrayBuffer();
-    const decoded = await ctx.decodeAudioData(arrayBuffer);
-    _buffers[key] = decoded;
-    return decoded;
+    if (!res.ok) return;
+    const ab = await res.arrayBuffer();
+    _ownBuffers[key] = await ctx.decodeAudioData(ab);
   } catch {
-    return null;
+    // file belum ada / gagal — diabaikan
   }
 }
 
-// Preload kedua buffer di background saat module pertama kali di-import
-if (typeof window !== 'undefined') {
-  // Delay kecil agar AudioContext tidak dibuat sebelum ada interaksi user
-  setTimeout(() => {
-    loadBuffer('button', SFX_BUTTON).catch(() => {});
-    loadBuffer('step', SFX_STEP).catch(() => {});
-  }, 500);
+/** Ambil buffer: prioritaskan cache preload global, lalu internal */
+function getBuffer(key: 'button' | 'step'): AudioBuffer | null {
+  const global = (window as any).__sfxBuffers;
+  if (global && global[key]) return global[key];
+  return _ownBuffers[key];
 }
 
-/**
- * Putar buffer dengan gain (volume) tertentu.
- * gain > 1.0 = lebih keras dari normal (120% = 1.2, 110% = 1.1)
- */
-function playBuffer(buffer: AudioBuffer, gain: number) {
+/** Putar AudioBuffer dengan gain tertentu (bisa > 1.0) */
+function playAudioBuffer(buffer: AudioBuffer, gain: number) {
   try {
     const ctx = getAudioCtx();
     const source = ctx.createBufferSource();
     source.buffer = buffer;
-
     const gainNode = ctx.createGain();
     gainNode.gain.value = gain;
-
     source.connect(gainNode);
     gainNode.connect(ctx.destination);
     source.start(0);
   } catch {
-    // Gagal senyap
+    // senyap
   }
 }
 
-/**
- * Fallback HTMLAudioElement — dipakai saat Web Audio belum berhasil decode buffer
- */
+// ── Fallback HTMLAudioElement (jika Web Audio belum siap) ─────────────────────
 let _fallbackBtn: HTMLAudioElement | null = null;
 let _fallbackStep: HTMLAudioElement | null = null;
 
 function getFallbackBtn(): HTMLAudioElement {
-  if (!_fallbackBtn) {
-    _fallbackBtn = new Audio(SFX_BUTTON);
-    _fallbackBtn.preload = 'auto';
-  }
+  if (!_fallbackBtn) { _fallbackBtn = new Audio(SFX_BUTTON); _fallbackBtn.preload = 'auto'; }
   return _fallbackBtn;
 }
 function getFallbackStep(): HTMLAudioElement {
-  if (!_fallbackStep) {
-    _fallbackStep = new Audio(SFX_STEP);
-    _fallbackStep.preload = 'auto';
-  }
+  if (!_fallbackStep) { _fallbackStep = new Audio(SFX_STEP); _fallbackStep.preload = 'auto'; }
   return _fallbackStep;
 }
 
-// ── Hook ──────────────────────────────────────────────────────────────────────
+// ── Warm-up: load buffer sendiri jika useGlobalPreload belum jalan ─────────────
+if (typeof window !== 'undefined') {
+  setTimeout(() => {
+    loadOwnBuffer('button', SFX_BUTTON).catch(() => {});
+    loadOwnBuffer('step', SFX_STEP).catch(() => {});
+  }, 1000);
+}
 
+// ─────────────────────────────────────────────────────────────────────────────
 export function useSfx() {
   const isSfxOn = useGameStore(s => s.isSfxOn);
   const isSfxOnRef = useRef(isSfxOn);
@@ -127,18 +114,17 @@ export function useSfx() {
    */
   const playButtonClick = useCallback(() => {
     if (!isSfxOnRef.current) return;
-    if (_buffers.button) {
-      // Web Audio — bisa > 1.0
-      playBuffer(_buffers.button, 1.2);
+    const buffer = getBuffer('button');
+    if (buffer) {
+      playAudioBuffer(buffer, 1.2);          // 120% via GainNode
     } else {
-      // Fallback HTMLAudio (volume dikap 1.0)
+      // Fallback: HTMLAudio (dikap 1.0, plus trigger load buffer)
       try {
         const audio = getFallbackBtn();
         audio.currentTime = 0;
         audio.volume = 1.0;
         audio.play().catch(() => {});
-        // Coba load buffer untuk kali berikutnya
-        loadBuffer('button', SFX_BUTTON).catch(() => {});
+        loadOwnBuffer('button', SFX_BUTTON).catch(() => {});
       } catch { /* senyap */ }
     }
   }, []);
@@ -148,15 +134,16 @@ export function useSfx() {
    */
   const playStepComplete = useCallback(() => {
     if (!isSfxOnRef.current) return;
-    if (_buffers.step) {
-      playBuffer(_buffers.step, 1.1);
+    const buffer = getBuffer('step');
+    if (buffer) {
+      playAudioBuffer(buffer, 1.1);          // 110% via GainNode
     } else {
       try {
         const audio = getFallbackStep();
         audio.currentTime = 0;
         audio.volume = 1.0;
         audio.play().catch(() => {});
-        loadBuffer('step', SFX_STEP).catch(() => {});
+        loadOwnBuffer('step', SFX_STEP).catch(() => {});
       } catch { /* senyap */ }
     }
   }, []);
