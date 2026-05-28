@@ -104,13 +104,6 @@ export function LeaderboardScreen() {
           </div>
         )}
       </div>
-
-      {/* Legend */}
-      <div className="leaderboard-legend">
-        <p className="leaderboard-legend-text">
-          ⬆️ Total skor = skor terbaik Jogja + Bali + Aceh + Maluku
-        </p>
-      </div>
     </div>
   );
 }

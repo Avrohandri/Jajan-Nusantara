@@ -5198,16 +5198,6 @@ body {
   white-space: nowrap;
 }
 
-.leaderboard-legend {
-  margin-top: 8px;
-  padding: 0 16px;
-  text-align: center;
-}
-
-.leaderboard-legend-text {
-  font-size: 12px;
-  color: var(--color-text-light);
-}
 
 /* ========================================================
    RESULT SCREEN — SCORE BADGE
@@ -5739,14 +5729,6 @@ body {
   font-size: 13px;
 }
 
-.leaderboard-screen--pedia .leaderboard-legend {
-  position: relative;
-  z-index: 1;
-}
-
-.leaderboard-screen--pedia .leaderboard-legend-text {
-  color: rgba(255, 245, 225, 0.75);
-}
 
 /* Avatar in leaderboard rows */
 .lb-avatar {
