@@ -91,73 +91,86 @@ export function StepDippingMold({ onComplete }: Props) {
         {moldCoated ? 'Cetakan terisi adonan! ✨' : 'Tarik cetakan ke dalam mangkok adonan!'}
       </p>
 
-      {/* Container area */}
-      <div style={{ position: 'relative', width: '300px', height: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' }}>
-        
-        {/* Upper Zone: Mold Original Location */}
-        <div style={{ height: '200px', display: 'flex', alignItems: 'center' }}>
-          {!moldCoated && (
-            <img
-              src="/assets/samaloyang/samaloyang_mold.png"
-              alt="Cetakan Samaloyang"
-              draggable
-              onDragStart={handleDragStart}
-              onDragEnd={handleDragEnd}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              style={{
-                height: '200px', width: '120px', objectFit: 'contain',
-                cursor: 'grab',
-                touchAction: 'none',
-                opacity: isDragging ? 0.3 : 1,
-                transform: isDragging ? 'scale(0.95)' : 'scale(1)',
-                transition: 'transform 0.2s',
-                filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.3))'
-              }}
-            />
-          )}
-        </div>
+      {/* Container area — shared positioned container so z-index layering works */}
+      <div style={{ position: 'relative', width: '300px', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-        {/* Lower Zone: Dough Bowl Target */}
-        <div 
+        {/* MOLD — z-index 1 (behind bowl) */}
+        {!moldCoated && (
+          <img
+            src="/assets/samaloyang/samaloyang_mold.png"
+            alt="Cetakan Samaloyang"
+            draggable
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            style={{
+              position: 'absolute',
+              bottom: '60px',   /* Posisikan sehingga bagian bunga masuk ke dalam mangkok */
+              left: '50%',
+              transform: `translateX(-50%) ${isDragging ? 'scale(0.95)' : 'scale(1)'}`,
+              height: '260px', width: '120px', objectFit: 'contain',
+              cursor: 'grab',
+              touchAction: 'none',
+              opacity: isDragging ? 0.3 : 1,
+              transition: 'transform 0.2s, opacity 0.2s',
+              filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.3))',
+              zIndex: 1,   /* Di BELAKANG mangkok */
+            }}
+          />
+        )}
+
+        {/* BOWL — z-index 2 (di DEPAN mold, menutupi bagian bawah pencetak) */}
+        <div
           id="dough-bowl-target"
           onDragOver={handleDragOver}
           onDrop={handleDrop}
           style={{
-            position: 'relative',
+            position: 'absolute',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
             width: '240px', height: '160px',
-            background: '#F5DEB3', // Dough color representation inside
+            background: '#F5DEB3',
             borderRadius: '10px 10px 100px 100px',
-            border: '6px solid #B0BEC5', // Metal bowl border
+            border: '6px solid #B0BEC5',
             borderTopWidth: '12px',
             boxShadow: 'inset 0 -20px 40px rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.3)',
             display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-            overflow: 'visible' // Allow the mold to animate outside of the bowl upwards
+            overflow: 'hidden',  /* Sembunyikan apapun yang masuk ke dalam mangkok */
+            zIndex: 2,           /* Di DEPAN mold */
           }}
         >
-          {/* Inner Dough liquid representation */}
+          {/* Inner Dough liquid */}
           <div style={{
             position: 'absolute', top: '0px', left: '0px', right: '0px', height: '30px',
             background: 'rgba(245, 222, 179, 0.9)',
             borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)',
             boxShadow: 'inset 0 -5px 10px rgba(0,0,0,0.1)'
           }} />
-
-          {/* When mold is successfully dipped */}
-          {moldCoated && (
-            <div style={{ position: 'relative', marginTop: '-40px', animation: 'dipAndRise 2.5s ease-in-out forwards', zIndex: 10 }}>
-              <img
-                src="/assets/samaloyang/cetakan_berisi.png"
-                alt="Cetakan Berisi"
-                style={{
-                  height: '200px', width: '120px', objectFit: 'contain',
-                  filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))'
-                }}
-              />
-            </div>
-          )}
         </div>
+
+        {/* CETAKAN BERISI — animasi naik setelah dicelup, z-index 3 (paling depan saat naik) */}
+        {moldCoated && (
+          <div style={{
+            position: 'absolute',
+            bottom: '60px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            animation: 'dipAndRise 2.5s ease-in-out forwards',
+            zIndex: 3,
+          }}>
+            <img
+              src="/assets/samaloyang/cetakan_berisi.png"
+              alt="Cetakan Berisi"
+              style={{
+                height: '260px', width: '120px', objectFit: 'contain',
+                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))'
+              }}
+            />
+          </div>
+        )}
 
       </div>
     </div>
