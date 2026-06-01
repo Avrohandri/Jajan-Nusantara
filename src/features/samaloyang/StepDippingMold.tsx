@@ -83,7 +83,7 @@ export function StepDippingMold({ onComplete }: Props) {
             0%   { transform: translateX(-50%) translateY(0px); opacity: 1; }
             25%  { transform: translateX(-50%) translateY(120px); } /* Celup ke dalam mangkok */
             65%  { transform: translateX(-50%) translateY(120px); } /* Tahan di dalam */
-            100% { transform: translateX(-50%) translateY(-160px); } /* Angkat ke atas */
+            100% { transform: translateX(-50%) translateY(0px); }   /* Kembali ke posisi awal */
           }
         `}
       </style>
