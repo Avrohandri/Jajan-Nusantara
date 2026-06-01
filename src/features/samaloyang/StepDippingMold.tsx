@@ -80,10 +80,10 @@ export function StepDippingMold({ onComplete }: Props) {
       <style>
         {`
           @keyframes dipAndRise {
-            0% { transform: translateY(-60px); opacity: 1; }
-            20% { transform: translateY(40px); } /* Dip deeper */
-            60% { transform: translateY(40px); } /* Hold in dough */
-            100% { transform: translateY(-160px); } /* Pull up */
+            0%   { transform: translateY(0px); opacity: 1; }
+            25%  { transform: translateY(120px); } /* Celup ke dalam mangkok */
+            65%  { transform: translateY(120px); } /* Tahan di dalam */
+            100% { transform: translateY(-160px); } /* Angkat ke atas */
           }
         `}
       </style>
@@ -92,9 +92,30 @@ export function StepDippingMold({ onComplete }: Props) {
       </p>
 
       {/* Container area */}
-      <div style={{ position: 'relative', width: '300px', height: '400px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div style={{ position: 'relative', width: '300px', height: '420px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-        {/* Upper Zone: Mold — z-index 1 (di belakang mangkok) */}
+        {/* Cetakan animasi — z-index 1, di belakang mangkok */}
+        {moldCoated && (
+          <div style={{
+            position: 'absolute',
+            top: '10px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1,
+            animation: 'dipAndRise 2.5s ease-in-out forwards',
+          }}>
+            <img
+              src="/assets/samaloyang/cetakan_berisi.png"
+              alt="Cetakan Berisi"
+              style={{
+                height: '200px', width: '120px', objectFit: 'contain',
+                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))'
+              }}
+            />
+          </div>
+        )}
+
+        {/* Upper Zone: Mold draggable — z-index 1 (di belakang mangkok) */}
         <div style={{ position: 'relative', zIndex: 1, height: '220px', display: 'flex', alignItems: 'center' }}>
           {!moldCoated && (
             <img
@@ -119,7 +140,7 @@ export function StepDippingMold({ onComplete }: Props) {
           )}
         </div>
 
-        {/* Lower Zone: Dough Bowl — z-index 2 (di depan, menutupi ujung bawah pencetak) */}
+        {/* Lower Zone: Dough Bowl — z-index 2, lebih ke bawah dari cetakan */}
         <div
           id="dough-bowl-target"
           onDragOver={handleDragOver}
@@ -127,7 +148,7 @@ export function StepDippingMold({ onComplete }: Props) {
           style={{
             position: 'relative',
             zIndex: 2,
-            marginTop: '-40px', /* Tarik mangkok ke atas agar menutupi ujung bawah pencetak */
+            marginTop: '10px', /* Mangkok di bawah, tidak menutupi pencetak saat idle */
             width: '240px', height: '160px',
             background: '#F5DEB3',
             borderRadius: '10px 10px 100px 100px',
@@ -145,20 +166,6 @@ export function StepDippingMold({ onComplete }: Props) {
             borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)',
             boxShadow: 'inset 0 -5px 10px rgba(0,0,0,0.1)'
           }} />
-
-          {/* When mold is successfully dipped */}
-          {moldCoated && (
-            <div style={{ position: 'relative', marginTop: '-160px', animation: 'dipAndRise 2.5s ease-in-out forwards', zIndex: 10 }}>
-              <img
-                src="/assets/samaloyang/cetakan_berisi.png"
-                alt="Cetakan Berisi"
-                style={{
-                  height: '200px', width: '120px', objectFit: 'contain',
-                  filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))'
-                }}
-              />
-            </div>
-          )}
         </div>
 
       </div>
