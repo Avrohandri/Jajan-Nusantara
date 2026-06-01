@@ -80,10 +80,10 @@ export function StepDippingMold({ onComplete }: Props) {
       <style>
         {`
           @keyframes dipAndRise {
-            0%   { transform: translateY(0px); opacity: 1; }
-            25%  { transform: translateY(120px); } /* Celup ke dalam mangkok */
-            65%  { transform: translateY(120px); } /* Tahan di dalam */
-            100% { transform: translateY(-160px); } /* Angkat ke atas */
+            0%   { transform: translateX(-50%) translateY(0px); opacity: 1; }
+            25%  { transform: translateX(-50%) translateY(120px); } /* Celup ke dalam mangkok */
+            65%  { transform: translateX(-50%) translateY(120px); } /* Tahan di dalam */
+            100% { transform: translateX(-50%) translateY(-160px); } /* Angkat ke atas */
           }
         `}
       </style>
@@ -100,7 +100,6 @@ export function StepDippingMold({ onComplete }: Props) {
             position: 'absolute',
             top: '10px',
             left: '50%',
-            transform: 'translateX(-50%)',
             zIndex: 1,
             animation: 'dipAndRise 2.5s ease-in-out forwards',
           }}>
