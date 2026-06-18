@@ -72,7 +72,7 @@ export function LoginScreen() {
               id="login-username"
               type="text"
               className="login-input"
-              placeholder="Masukkan nama pengguna..."
+              placeholder="Masukkan namamu..."
               value={username}
               onChange={e => setUsername(e.target.value)}
               disabled={authLoading}
