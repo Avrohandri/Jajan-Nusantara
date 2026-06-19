@@ -81,7 +81,15 @@ export function NpcNotification() {
     };
 
     const onFoodRevealed = (data: unknown) => handleCheckUnlock((data as any).tier);
-    const onRestart = () => notifiedTiers.current.clear();
+    const onRestart = () => {
+      notifiedTiers.current.clear();
+      setQueue([]);
+      setActiveItem(null);
+      if (timerRef.current !== null) {
+        window.clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
 
     EventBus.on('food-revealed', onFoodRevealed);
     EventBus.on('restart-game', onRestart);
