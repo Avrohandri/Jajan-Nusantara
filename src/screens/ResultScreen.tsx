@@ -90,7 +90,7 @@ export function ResultScreen() {
   /* Scroll to top + mark island complete on mount */
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (useGameStore.getState().hasReachedTarget || !isGameOver) {
+    if (!isGameOver) {
       // Tandai pulau ini sebagai selesai dan update skor/leaderboard di Firestore
       completeIsland();
     }

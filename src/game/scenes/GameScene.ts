@@ -275,9 +275,15 @@ export class GameScene extends Phaser.Scene {
                 this.pendingMerges.delete(pairKey);
               });
 
-              // Jika hasil merge adalah kuliner TERTINGGI, emit event agar store mencatat target tercapai, tapi jangan akhiri game!
+              // Jika hasil merge adalah kuliner TERTINGGI, emit event kemenangan
               if (isMaxTier) {
-                EventBus.emit('max-tier-reached', { name: nm, tier: nextTier });
+                this.gameOver = true; // Blok drop baru
+                this.canDrop = false;
+                // Beri sedikit jeda agar animasi kuliner spawn terlihat sebelum transisi
+                this.time.delayedCall(1500, () => {
+                  if (this.matter?.world) this.matter.world.pause();
+                  EventBus.emit('max-tier-reached', { name: nm, tier: nextTier });
+                });
               }
             });
           } else {
