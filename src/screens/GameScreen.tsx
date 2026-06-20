@@ -268,6 +268,22 @@ export function GameScreen() {
           >
             DEBUG FINISH
           </button>
+          <button
+            onClick={async () => {
+              playButtonClick();
+              useGameStore.getState().setGameOver();
+              await endSession('board_full');
+              setScreen('result');
+            }}
+            style={{
+              position: 'absolute', top: '50px', right: '20px',
+              fontSize: '10px', background: 'rgba(255,0,0,0.5)',
+              color: 'white', border: '1px solid rgba(255,255,255,0.3)',
+              padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', zIndex: 100
+            }}
+          >
+            DEBUG GAME OVER
+          </button>
           <div className="pause-content-wood">
             <img src={latarapauseImg} alt="Pause Background" className="pause-bg-img" />
             <div className="pause-buttons-row">
