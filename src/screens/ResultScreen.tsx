@@ -109,17 +109,7 @@ export function ResultScreen() {
           </div>
         </div>
 
-        <div className="result-mascot-wrap">
-          <img
-            src={config.mascot}
-            alt={`Maskot ${config.foodName}`}
-            className="result-mascot-img"
-            style={{ filter: 'grayscale(80%) drop-shadow(0 10px 10px rgba(0,0,0,0.5))' }}
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).style.opacity = '0';
-            }}
-          />
-        </div>
+
 
         <div className="result-banner-wrap" style={{ marginTop: '20px' }}>
           <div className="result-banner" style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', fontSize: '1.2rem', padding: '12px 24px' }}>
