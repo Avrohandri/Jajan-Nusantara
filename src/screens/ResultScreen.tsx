@@ -96,7 +96,7 @@ export function ResultScreen() {
     }
   }, [isGameOver, completeIsland]);
 
-  if (isGameOver && !useGameStore.getState().hasReachedTarget) {
+  if (isGameOver) {
     return (
       <div className="result-hebat-screen" style={{ background: 'linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%)' }}>
         <div className="result-hebat-title-wrap" style={{ marginTop: '40px' }}>
