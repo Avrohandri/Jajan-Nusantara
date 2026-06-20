@@ -143,7 +143,7 @@ export function ResultScreen() {
           <button
             className="result-lanjut-btn"
             style={{ background: 'linear-gradient(180deg, #4ade80 0%, #16a34a 100%)', boxShadow: '0 6px 0 #15803d' }}
-            onClick={() => { playButtonClick(); resetGame(); setScreen('map'); }}
+            onClick={() => { playButtonClick(); resetGame(); setScreen('mapSelect'); }}
           >
             PILIH DAERAH
           </button>
