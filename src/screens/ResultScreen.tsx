@@ -32,7 +32,7 @@ function StarDisplay({ earned }: { earned: 0 | 1 | 2 | 3 }) {
 }
 
 export function ResultScreen() {
-  const { activeRegion, completeIsland, score, setScreen } = useGameStore();
+  const { activeRegion, completeIsland, score, setScreen, isGameOver, resetGame } = useGameStore();
   const { playButtonClick } = useSfx();
 
   const REGION_CONFIG: Record<string, {
@@ -90,9 +90,74 @@ export function ResultScreen() {
   /* Scroll to top + mark island complete on mount */
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Tandai pulau ini sebagai selesai dan update skor/leaderboard di Firestore
-    completeIsland();
-  }, []);
+    if (!isGameOver) {
+      // Tandai pulau ini sebagai selesai dan update skor/leaderboard di Firestore
+      completeIsland();
+    }
+  }, [isGameOver, completeIsland]);
+
+  if (isGameOver) {
+    return (
+      <div className="result-hebat-screen" style={{ background: 'linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%)' }}>
+        <div className="result-hebat-title-wrap" style={{ marginTop: '40px' }}>
+          <h1 className="result-hebat-title" style={{ color: '#ff4d4d', textShadow: '0px 4px 0px #b30000, 0px 8px 15px rgba(0,0,0,0.5)' }}>YAAH...</h1>
+        </div>
+        
+        <div className="result-banner-wrap">
+          <div className="result-banner" style={{ background: '#333', color: '#fff' }}>
+            <span>Wadah jajananmu sudah penuh!</span>
+          </div>
+        </div>
+
+        <div className="result-mascot-wrap">
+          <img
+            src={config.mascot}
+            alt={`Maskot ${config.foodName}`}
+            className="result-mascot-img"
+            style={{ filter: 'grayscale(80%) drop-shadow(0 10px 10px rgba(0,0,0,0.5))' }}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.opacity = '0';
+            }}
+          />
+        </div>
+
+        <div className="result-banner-wrap" style={{ marginTop: '20px' }}>
+          <div className="result-banner" style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', fontSize: '1.2rem', padding: '12px 24px' }}>
+            <span>Skor kamu: {score.toLocaleString('id-ID')}</span>
+          </div>
+        </div>
+
+        <div className="result-info-card" style={{ background: '#333', border: '3px solid #555' }}>
+          <p className="result-info-main" style={{ color: '#fff' }}>Jangan menyerah!</p>
+          <p className="result-info-sub" style={{ color: '#ccc' }}>Ayo coba lagi dan kumpulkan jajanan yang lebih besar.</p>
+        </div>
+
+        <div className="result-actions-wrap" style={{ flexDirection: 'column', gap: '12px', paddingBottom: '40px' }}>
+          <button
+            className="result-lanjut-btn"
+            style={{ background: 'linear-gradient(180deg, #ff6b35 0%, #cc4a1a 100%)', boxShadow: '0 6px 0 #993311' }}
+            onClick={() => { playButtonClick(); resetGame(); setScreen('game'); }}
+          >
+            MAIN LAGI
+          </button>
+          <button
+            className="result-lanjut-btn"
+            style={{ background: 'linear-gradient(180deg, #4ade80 0%, #16a34a 100%)', boxShadow: '0 6px 0 #15803d' }}
+            onClick={() => { playButtonClick(); resetGame(); setScreen('map'); }}
+          >
+            PILIH DAERAH
+          </button>
+          <button
+            className="result-lanjut-btn"
+            style={{ background: 'linear-gradient(180deg, #9ca3af 0%, #4b5563 100%)', boxShadow: '0 6px 0 #374151' }}
+            onClick={() => { playButtonClick(); resetGame(); setScreen('mainMenu'); }}
+          >
+            MENU UTAMA
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="result-hebat-screen">
