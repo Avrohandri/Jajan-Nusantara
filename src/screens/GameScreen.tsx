@@ -32,6 +32,7 @@ export function GameScreen() {
     highestTier: _highestTier,
     seenTiers,
     activeRegion,
+    setTargetReached,
   } = useGameStore();
   const { playButtonClick, playDropSfx } = useSfx();
 
@@ -42,13 +43,8 @@ export function GameScreen() {
   const [showInstructions, setShowInstructions] = useState(!hasSeenInstructions);
   const [showHomeConfirm, setShowHomeConfirm] = useState(false);
 
-  // State untuk flash-transisi ke ResultScreen
-  const [transitioning, setTransitioning] = useState(false);
-  const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // Flag: max-tier sudah tercapai tapi masih menunggu quiz selesai
-  const pendingResultRef = useRef(false);
-  // Guard: cegah doTransition dipanggil lebih dari sekali
-  const hasTransitionedRef = useRef(false);
+  // Guard: cegah endSession dipanggil lebih dari sekali
+  const hasEndedRef = useRef(false);
 
   const [gameWidth] = useState(() => Math.min(360, window.innerWidth - 32));
   const [gameHeight] = useState(() => Math.min(560, window.innerHeight - 200));
@@ -64,12 +60,17 @@ export function GameScreen() {
       }
     };
 
-    // Saat board penuh (game over karena papan), langsung ke ResultScreen tanpa popup
+    // Saat board penuh (game over karena papan), langsung ke ResultScreen
     const handleGameOver = async () => {
       if (useGameStore.getState().isGameOver) return; // cegah double-trigger
       useGameStore.getState().setGameOver();
-      await useGameStore.getState().endSession('board_full');
-      useGameStore.getState().setScreen('result');
+      
+      if (!hasEndedRef.current) {
+        hasEndedRef.current = true;
+        const reached = useGameStore.getState().hasReachedTarget;
+        await useGameStore.getState().endSession(reached ? 'target_reached' : 'board_full');
+        useGameStore.getState().setScreen('result');
+      }
     };
 
     EventBus.on('next-item', handleNextItem);
@@ -89,55 +90,18 @@ export function GameScreen() {
     };
   }, [playDropSfx]);
 
-  // Saat kuliner tertinggi terbentuk → flash putih → ResultScreen
+  // Saat kuliner tertinggi terbentuk, cukup catat state agar saat game over (papan penuh) dianggap MENANG
   useEffect(() => {
-    /** Jalankan animasi flash lalu pindah ke result — hanya sekali */
-    const doTransition = async () => {
-      if (hasTransitionedRef.current) return; // guard double-call
-      hasTransitionedRef.current = true;
-      setTransitioning(true);
-      transitionTimerRef.current = setTimeout(async () => {
-        await endSession('target_reached');
-        setScreen('result');
-      }, 700);
-    };
-
     const handleMaxTier = () => {
-      // Jika quiz sedang terbuka, tunda sampai quiz ditutup
-      if (useGameStore.getState().showQuiz) {
-        pendingResultRef.current = true;
-        return;
-      }
-      // Beri 600ms agar kuliner hasil merge sempat terlihat
-      transitionTimerRef.current = setTimeout(() => doTransition(), 600);
+      setTargetReached();
+      // Bisa tambahkan efek konfeti/sfx khusus kemenangan di tengah permainan jika mau
     };
 
     EventBus.on('max-tier-reached', handleMaxTier);
     return () => {
       EventBus.off('max-tier-reached', handleMaxTier);
-      if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
     };
-  }, [endSession, setScreen]);
-
-  // Pantau showQuiz: jika ada pending result dan quiz baru ditutup → lanjut result
-  useEffect(() => {
-    if (!showQuiz && pendingResultRef.current) {
-      pendingResultRef.current = false; // reset segera agar tidak double-trigger
-      if (hasTransitionedRef.current) return; // sudah transisi, abaikan
-      const doTransition = async () => {
-        if (hasTransitionedRef.current) return;
-        hasTransitionedRef.current = true;
-        setTransitioning(true);
-        transitionTimerRef.current = setTimeout(async () => {
-          await endSession('target_reached');
-          setScreen('result');
-        }, 700);
-      };
-      // Beri 400ms setelah quiz tutup agar transisi terasa natural
-      transitionTimerRef.current = setTimeout(() => doTransition(), 400);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showQuiz]);
+  }, [setTargetReached]);
 
   const handlePause = () => {
     playButtonClick();
@@ -159,8 +123,12 @@ export function GameScreen() {
 
   const handleEndGame = async () => {
     playButtonClick();
-    await endSession(isGameOver ? 'board_full' : 'quit');
-    setScreen('result');
+    if (!hasEndedRef.current) {
+      hasEndedRef.current = true;
+      const reached = useGameStore.getState().hasReachedTarget;
+      await endSession(reached ? 'target_reached' : 'quit');
+      setScreen('result');
+    }
   };
 
   const handleGoToMainMenu = () => {
@@ -272,8 +240,12 @@ export function GameScreen() {
             onClick={async () => {
               playButtonClick();
               useGameStore.getState().setGameOver();
-              await endSession('board_full');
-              setScreen('result');
+              if (!hasEndedRef.current) {
+                hasEndedRef.current = true;
+                const reached = useGameStore.getState().hasReachedTarget;
+                await endSession(reached ? 'target_reached' : 'board_full');
+                setScreen('result');
+              }
             }}
             style={{
               position: 'absolute', top: '50px', right: '20px',
@@ -309,8 +281,7 @@ export function GameScreen() {
         </div>
       )}
 
-      {/* Flash transisi putih saat kuliner tertinggi tercapai */}
-      {transitioning && <div className="game-win-flash" aria-hidden="true" />}
+
 
       {/* NPC Notification Overlay */}
       <NpcNotification />

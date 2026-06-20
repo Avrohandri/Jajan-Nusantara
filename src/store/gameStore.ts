@@ -75,6 +75,7 @@ interface GameStore {
   seenTiers: number[];
   isPaused: boolean;
   isGameOver: boolean;
+  hasReachedTarget: boolean;
   startTime: number | null;
 
   addScore: (points: number) => void;
@@ -82,6 +83,7 @@ interface GameStore {
   markTierSeen: (tier: number) => void;
   setPaused: (paused: boolean) => void;
   setGameOver: () => void;
+  setTargetReached: () => void;
   resetGame: () => void;
 
   // --- Quiz State ---
@@ -209,6 +211,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   seenTiers: [] as number[],
   isPaused: false,
   isGameOver: false,
+  hasReachedTarget: false,
   startTime: null,
 
   addScore: (points) => set(s => ({ score: s.score + points })),
@@ -222,6 +225,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   })),
   setPaused: (paused) => set({ isPaused: paused }),
   setGameOver: () => set({ isGameOver: true }),
+  setTargetReached: () => set({ hasReachedTarget: true }),
   resetGame: () => set({
     score: 0,
     mergeCount: 0,
@@ -229,6 +233,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     seenTiers: [],
     isPaused: false,
     isGameOver: false,
+    hasReachedTarget: false,
     startTime: Date.now(),
     showQuiz: false,
     quizzesCorrect: 0,

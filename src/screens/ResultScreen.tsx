@@ -90,13 +90,13 @@ export function ResultScreen() {
   /* Scroll to top + mark island complete on mount */
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (!isGameOver) {
+    if (useGameStore.getState().hasReachedTarget || !isGameOver) {
       // Tandai pulau ini sebagai selesai dan update skor/leaderboard di Firestore
       completeIsland();
     }
   }, [isGameOver, completeIsland]);
 
-  if (isGameOver) {
+  if (isGameOver && !useGameStore.getState().hasReachedTarget) {
     return (
       <div className="result-hebat-screen" style={{ background: 'linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%)' }}>
         <div className="result-hebat-title-wrap" style={{ marginTop: '40px' }}>
