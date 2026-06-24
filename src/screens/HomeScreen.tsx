@@ -6,13 +6,6 @@ export function HomeScreen() {
 
   return (
     <div className="screen home-screen">
-      {/* Wind breeze decoration */}
-      <div className="wind-breeze-container">
-        <div className="wind-line wind-line-1"></div>
-        <div className="wind-line wind-line-2"></div>
-        <div className="wind-line wind-line-3"></div>
-      </div>
-
       <div className="home-decoration">🍡🥟🍢🥮🍘</div>
       <h1 className="home-title">Kuliner Nusantara</h1>
       <p className="home-subtitle">Game Edukasi Jajanan Tradisional</p>
