@@ -34,6 +34,13 @@ export function MainMenuScreen() {
           />
         </div>
 
+        {/* Wind breeze decoration */}
+        <div className="wind-breeze-container">
+          <div className="wind-line wind-line-1"></div>
+          <div className="wind-line wind-line-2"></div>
+          <div className="wind-line wind-line-3"></div>
+        </div>
+
         {/* Overlay content */}
         <div className="main-menu-overlay">
 
