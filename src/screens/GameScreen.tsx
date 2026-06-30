@@ -266,7 +266,7 @@ export function GameScreen() {
               padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', zIndex: 100
             }}
           >
-            FINIS
+            FINISH
           </button>
           <button
             onClick={async () => {
