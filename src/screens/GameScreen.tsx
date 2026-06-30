@@ -266,7 +266,7 @@ export function GameScreen() {
               padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', zIndex: 100
             }}
           >
-            DEBUG FINISH
+            FINIS
           </button>
           <button
             onClick={async () => {
@@ -282,7 +282,7 @@ export function GameScreen() {
               padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', zIndex: 100
             }}
           >
-            DEBUG GAME OVER
+            GAME OVER
           </button>
           <div className="pause-content-wood">
             <img src={latarapauseImg} alt="Pause Background" className="pause-bg-img" />
