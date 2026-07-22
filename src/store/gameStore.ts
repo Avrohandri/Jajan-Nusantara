@@ -164,6 +164,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   jajanpediaRegionIndex: 0,
   setJajanpediaRegionIndex: (index) => set({ jajanpediaRegionIndex: index }),
 
+  snacks: [],
+  quizzes: [],
   contentLoaded: false,
   loadContent: async () => {
     const [snacks, quizzes] = await Promise.all([
