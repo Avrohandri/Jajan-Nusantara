@@ -1,10 +1,9 @@
 import { create } from 'zustand';
-import type { SnackData, QuizData, RecipeData, UserSession, ScreenName, IslandProgress, IslandCookingComplete, IslandStars, IslandMerges, RegionBestScores, UserProfile } from '../types';
+import type { SnackData, QuizData, UserSession, ScreenName, IslandProgress, IslandCookingComplete, IslandStars, IslandMerges, RegionBestScores, UserProfile } from '../types';
 import { calculateStars } from '../config/starThresholds';
 import {
   fetchSnacks,
   fetchQuizzes,
-  fetchRecipes,
   saveSession,
   getProfile,
   getSessions,
@@ -62,7 +61,6 @@ interface GameStore {
 
   snacks: SnackData[];
   quizzes: QuizData[];
-  recipes: RecipeData[];
   contentLoaded: boolean;
   loadContent: () => Promise<void>;
 
@@ -89,12 +87,6 @@ interface GameStore {
   answerQuiz: (correct: boolean) => void;
   closeQuiz: () => void;
 
-  currentRecipe: RecipeData | null;
-  cookingStep: number;
-  cookingComplete: boolean;
-  startCooking: (recipeName: string) => void;
-  advanceCookingStep: () => void;
-  resetCooking: () => void;
 
   kleponStep: number;
   kleponComplete: boolean;
@@ -172,17 +164,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
   jajanpediaRegionIndex: 0,
   setJajanpediaRegionIndex: (index) => set({ jajanpediaRegionIndex: index }),
 
-  snacks: [],
-  quizzes: [],
-  recipes: [],
   contentLoaded: false,
   loadContent: async () => {
-    const [snacks, quizzes, recipes] = await Promise.all([
+    const [snacks, quizzes] = await Promise.all([
       fetchSnacks(),
       fetchQuizzes(),
-      fetchRecipes(),
     ]);
-    set({ snacks, quizzes, recipes, contentLoaded: true });
+    set({ snacks, quizzes, contentLoaded: true });
   },
 
   score: 0,
@@ -237,33 +225,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   })),
   closeQuiz: () => set(s => ({ showQuiz: false, isPaused: false, currentQuizIndex: s.currentQuizIndex + 1 })),
 
-  currentRecipe: null,
-  cookingStep: 0,
-  cookingComplete: false,
-  startCooking: (recipeName) => {
-    const recipe = get().recipes.find(r => r.snackName === recipeName) || get().recipes[0] || null;
-    set({ currentRecipe: recipe, cookingStep: 0, cookingComplete: false, currentScreen: 'cooking' });
-  },
-  advanceCookingStep: () => {
-    const s = get();
-    if (!s.currentRecipe) return;
-    if (s.cookingStep + 1 >= s.currentRecipe.steps.length) {
-      const recipeName = s.currentRecipe.snackName;
-      const isNew = !s.unlockedRecipes.includes(recipeName);
-      const newUnlocked = isNew ? [...s.unlockedRecipes, recipeName] : s.unlockedRecipes;
-      set({
-        cookingComplete: true,
-        cookingStep: s.cookingStep + 1,
-        unlockedRecipes: newUnlocked,
-      });
-      if (isNew && s.userId) {
-        saveProfile(s.userId, { unlockedRecipes: newUnlocked });
-      }
-    } else {
-      set({ cookingStep: s.cookingStep + 1 });
-    }
-  },
-  resetCooking: () => set({ currentRecipe: null, cookingStep: 0, cookingComplete: false }),
 
   kleponStep: 0,
   kleponComplete: false,

@@ -17,16 +17,6 @@ export interface QuizData {
   region?: string;
 }
 
-export interface RecipeStep {
-  stepNumber: number;
-  instruction: string;
-  emoji: string;
-}
-
-export interface RecipeData {
-  snackName: string;
-  steps: RecipeStep[];
-}
 
 
 export interface UserSession {
@@ -106,7 +96,6 @@ export interface LeaderboardEntry {
 
 
 export type ScreenName =
-  | 'home'
   | 'login'
   | 'mainMenu'
   | 'mapSelect'
@@ -145,11 +134,8 @@ export type ScreenName =
   | 'pisangasarCard'
   | 'game'
   | 'result'
-  | 'cooking'
-  | 'progress'
   | 'kleponGame'
   | 'pieSusuGame'
   | 'samaloyangGame'
   | 'pisangAsarGame'
-  | 'cookingIntro'
-  | 'colliderTest';
+  | 'cookingIntro';

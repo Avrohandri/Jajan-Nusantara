@@ -14,12 +14,12 @@ import {
 import { getDb, isFirebaseConfigured } from './firebase/config';
 import { fallbackSnacks } from './datastore/fallbackSnacks';
 import { fallbackQuizzes } from './datastore/fallbackQuizzes';
-import { fallbackRecipes } from './datastore/fallbackRecipes';
-import type { SnackData, QuizData, RecipeData, UserProfile, UserSession, IslandProgress, IslandStars, IslandMerges, RegionBestScores, LeaderboardEntry } from '../types';
+
+import type { SnackData, QuizData, UserProfile, UserSession, IslandProgress, IslandStars, IslandMerges, RegionBestScores, LeaderboardEntry } from '../types';
 import { PROFILE_ICONS } from '../utils/profileIcons';
 
 const LS_SNACKS = 'kuliner_snacks';
-const LS_RECIPES = 'kuliner_recipes';
+
 const LS_PROFILE = 'kuliner_profile_v2';
 
 const DEFAULT_ISLAND_PROGRESS: IslandProgress = {
@@ -61,24 +61,6 @@ export async function fetchQuizzes(): Promise<QuizData[]> {
   return fallbackQuizzes;
 }
 
-export async function fetchRecipes(): Promise<RecipeData[]> {
-  if (isFirebaseConfigured()) {
-    try {
-      const db = getDb()!;
-      const snap = await getDocs(collection(db, 'recipes'));
-      const data = snap.docs.map(d => d.data() as RecipeData);
-      if (data.length > 0) {
-        localStorage.setItem(LS_RECIPES, JSON.stringify(data));
-        return data;
-      }
-    } catch (e) {
-      console.warn('[DB] Gagal ambil recipes dari Firestore:', e);
-    }
-  }
-  const cached = localStorage.getItem(LS_RECIPES);
-  if (cached) return JSON.parse(cached);
-  return fallbackRecipes;
-}
 
 
 export async function checkUsernameExists(username: string): Promise<boolean> {

@@ -2,7 +2,7 @@ import { collection, setDoc, doc } from 'firebase/firestore';
 import { getDb, isFirebaseConfigured } from './firebase/config';
 import { fallbackSnacks } from './datastore/fallbackSnacks';
 import { fallbackQuizzes } from './datastore/fallbackQuizzes';
-import { fallbackRecipes } from './datastore/fallbackRecipes';
+
 
 export async function seedFirestore() {
   if (!isFirebaseConfigured()) {
@@ -32,13 +32,6 @@ export async function seedFirestore() {
     }
     console.log('✅ Quizzes berhasil diunggah.');
 
-    console.log('📦 Mengunggah daftar Recipes...');
-    for (const recipe of fallbackRecipes) {
-      const safeId = recipe.snackName.toLowerCase().replace(/\s+/g, '_');
-      const docRef = doc(collection(db, 'recipes'), safeId);
-      await setDoc(docRef, recipe);
-    }
-    console.log('✅ Recipes berhasil diunggah.');
 
     console.log('🎉 SEMUA DATA BERHASIL DIUNGGAH KE FIRESTORE!');
     alert('Sukses! Semua data default berhasil diunggah ke Firestore.');

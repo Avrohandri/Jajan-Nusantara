@@ -16,7 +16,7 @@ const LeaderboardScreen = React.lazy(() => import('./screens/LeaderboardScreen')
 const ProfileScreen = React.lazy(() => import('./screens/ProfileScreen').then(m => ({ default: m.ProfileScreen })));
 
 
-const CookingScreen = React.lazy(() => import('./screens/CookingScreen').then(m => ({ default: m.CookingScreen })));
+
 const KleponMiniGameScreen = React.lazy(() => import('./screens/KleponMiniGameScreen').then(m => ({ default: m.KleponMiniGameScreen })));
 const PieSusuMiniGameScreen = React.lazy(() => import('./screens/PieSusuMiniGameScreen').then(m => ({ default: m.PieSusuMiniGameScreen })));
 const SamaloyangMiniGameScreen = React.lazy(() => import('./screens/SamaloyangMiniGameScreen').then(m => ({ default: m.SamaloyangMiniGameScreen })));
@@ -24,8 +24,7 @@ const PisangAsarMiniGameScreen = React.lazy(() => import('./screens/PisangAsarMi
 const CookingIntroScreen = React.lazy(() => import('./screens/CookingIntroScreen').then(m => ({ default: m.CookingIntroScreen })));
 
 
-const ProgressScreen = React.lazy(() => import('./screens/ProgressScreen').then(m => ({ default: m.ProgressScreen })));
-const ColliderTestScreen = React.lazy(() => import('./screens/ColliderTestScreen').then(m => ({ default: m.ColliderTestScreen })));
+
 const JajanpediaScreen = React.lazy(() => import('./screens/JajanpediaScreen').then(m => ({ default: m.JajanpediaScreen })));
 
 
@@ -135,8 +134,7 @@ export default function App() {
   const renderScreen = () => {
     switch (currentScreen) {
       case 'login': return <LoginScreen />;
-      case 'mainMenu':
-      case 'home': return <MainMenuScreen />;
+      case 'mainMenu': return <MainMenuScreen />;
       case 'mapSelect': return <MapSelectScreen />;
       case 'settings': return <SettingsScreen />;
       case 'jajanpedia': return <JajanpediaScreen />;
@@ -173,14 +171,13 @@ export default function App() {
       case 'pisangasarCard': return <PisangAsarCardScreen />;
       case 'game': return <GameScreen />;
       case 'result': return <ResultScreen />;
-      case 'cooking': return <CookingScreen />;
+
       case 'kleponGame': return <KleponMiniGameScreen />;
       case 'pieSusuGame': return <PieSusuMiniGameScreen />;
       case 'samaloyangGame': return <SamaloyangMiniGameScreen />;
       case 'pisangAsarGame': return <PisangAsarMiniGameScreen />;
       case 'cookingIntro': return <CookingIntroScreen />;
-      case 'progress': return <ProgressScreen />;
-      case 'colliderTest': return <ColliderTestScreen />;
+
       default: return <MainMenuScreen />;
     }
   };
