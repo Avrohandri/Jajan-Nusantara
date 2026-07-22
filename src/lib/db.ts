@@ -12,13 +12,13 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { getDb, isFirebaseConfigured } from './firebase/config';
-import { fallbackSnacks } from './datastore/fallbackSnacks';
+
 import { fallbackQuizzes } from './datastore/fallbackQuizzes';
 
-import type { SnackData, QuizData, UserProfile, UserSession, IslandProgress, IslandStars, IslandMerges, RegionBestScores, LeaderboardEntry } from '../types';
+import type { QuizData, UserProfile, UserSession, IslandProgress, IslandStars, IslandMerges, RegionBestScores, LeaderboardEntry } from '../types';
 import { PROFILE_ICONS } from '../utils/profileIcons';
 
-const LS_SNACKS = 'kuliner_snacks';
+
 
 const LS_PROFILE = 'kuliner_profile_v2';
 
@@ -36,25 +36,6 @@ const DEFAULT_REGION_SCORES: RegionBestScores = {
   maluku: 0,
 };
 
-
-export async function fetchSnacks(): Promise<SnackData[]> {
-  if (isFirebaseConfigured()) {
-    try {
-      const db = getDb()!;
-      const snap = await getDocs(collection(db, 'snacks'));
-      const data = snap.docs.map(d => d.data() as SnackData).sort((a, b) => a.tier - b.tier);
-      if (data.length > 0) {
-        localStorage.setItem(LS_SNACKS, JSON.stringify(data));
-        return data;
-      }
-    } catch (e) {
-      console.warn('[DB] Gagal ambil snacks dari Firestore:', e);
-    }
-  }
-  const cached = localStorage.getItem(LS_SNACKS);
-  if (cached) return JSON.parse(cached);
-  return fallbackSnacks;
-}
 
 export async function fetchQuizzes(): Promise<QuizData[]> {
   localStorage.removeItem('kuliner_quizzes');

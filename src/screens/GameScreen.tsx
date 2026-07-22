@@ -7,7 +7,7 @@ import { Modal } from '../components/Modal';
 import { Button } from '../components/Button';
 import { NpcNotification } from '../components/NpcNotification';
 import { IslandPauseConfirm } from '../components/IslandPauseConfirm';
-import type { SnackData } from '../types';
+
 import { REGION_FOOD_CONFIGS } from '../game/characters/FoodConfig';
 import pauseBtnImg from '../assets/universal/pause_btn.png';
 import latarapauseImg from '../assets/universal/latar_pause.png';
@@ -38,7 +38,7 @@ export function GameScreen() {
   const currentConfig = REGION_FOOD_CONFIGS[activeRegion] || REGION_FOOD_CONFIGS['jogja'];
   const assetFolder = `foods_${activeRegion}`;
 
-  const [nextItem, setNextItem] = useState<SnackData | null>(null);
+  const [nextItem, setNextItem] = useState<{ tier: number } | null>(null);
   const [showInstructions, setShowInstructions] = useState(!hasSeenInstructions);
   const [showHomeConfirm, setShowHomeConfirm] = useState(false);
 
@@ -54,7 +54,7 @@ export function GameScreen() {
     resetGame();
 
     const handleNextItem = (data: unknown) => {
-      const snack = data as SnackData;
+      const snack = data as { tier: number };
       setNextItem(snack);
       if (snack.tier !== undefined) {
         useGameStore.getState().markTierSeen(snack.tier);

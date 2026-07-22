@@ -3,7 +3,7 @@ import { REGION_FOOD_CONFIGS, REGION_FOOD_CONFIGS_RAW, scaleFoodConfig, type Foo
 import { ColliderFactory } from '../physics/ColliderFactory';
 import { EventBus } from '../EventBus';
 import { useGameStore } from '../../store/gameStore';
-import type { SnackData } from '../../types';
+
 
 const WALL_THICKNESS = 30;
 const DROP_COOLDOWN_BASE = 500;
@@ -13,7 +13,7 @@ export class GameScene extends Phaser.Scene {
   private debugMode: boolean = false;
   private debugGraphics!: Phaser.GameObjects.Graphics;
 
-  private snacks: SnackData[] = [];
+
   private activeItems: Phaser.Physics.Matter.Sprite[] = [];
   private nextTier = 0;
   private isFirstDrop = true;
@@ -115,12 +115,6 @@ export class GameScene extends Phaser.Scene {
       EventBus.emit('next-item', { tier: this.nextTier });
     });
 
-    const onSetSnacks = (data: unknown) => {
-      this.snacks = data as SnackData[];
-      this.pickNextTier();
-      this.updatePreview();
-    };
-
     const onPause = () => {
       if (this.matter?.world) this.matter.world.pause();
       this.pausedAt = Date.now();
@@ -152,7 +146,7 @@ export class GameScene extends Phaser.Scene {
       this.updatePreview();
     };
 
-    EventBus.on('set-snacks', onSetSnacks);
+
     EventBus.on('pause-game', onPause);
     EventBus.on('resume-game', onResume);
     EventBus.on('restart-game', onRestart);
@@ -163,7 +157,7 @@ export class GameScene extends Phaser.Scene {
     EventBus.on('npc-queue-size', onNpcQueueSize);
 
     this.events.once('destroy', () => {
-      EventBus.off('set-snacks', onSetSnacks);
+
       EventBus.off('pause-game', onPause);
       EventBus.off('resume-game', onResume);
       EventBus.off('restart-game', onRestart);
@@ -353,8 +347,7 @@ export class GameScene extends Phaser.Scene {
       this.previewSprite.setDisplaySize(config.displaySize.width, config.displaySize.height);
     }
 
-    const snack = this.snacks.find(s => s.tier === this.nextTier) || { tier: this.nextTier };
-    EventBus.emit('next-item', snack);
+    EventBus.emit('next-item', { tier: this.nextTier });
   }
 
   public spawnFood(tier: number, x: number, y: number) {

@@ -1,8 +1,8 @@
 import { create } from 'zustand';
-import type { SnackData, QuizData, UserSession, ScreenName, IslandProgress, IslandCookingComplete, IslandStars, IslandMerges, RegionBestScores, UserProfile } from '../types';
+import type { QuizData, UserSession, ScreenName, IslandProgress, IslandCookingComplete, IslandStars, IslandMerges, RegionBestScores, UserProfile } from '../types';
 import { calculateStars } from '../config/starThresholds';
 import {
-  fetchSnacks,
+
   fetchQuizzes,
   saveSession,
   getProfile,
@@ -59,7 +59,7 @@ interface GameStore {
   jajanpediaRegionIndex: number;
   setJajanpediaRegionIndex: (index: number) => void;
 
-  snacks: SnackData[];
+
   quizzes: QuizData[];
   contentLoaded: boolean;
   loadContent: () => Promise<void>;
@@ -163,16 +163,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
   setActiveRegion: (region) => set({ activeRegion: region }),
   jajanpediaRegionIndex: 0,
   setJajanpediaRegionIndex: (index) => set({ jajanpediaRegionIndex: index }),
-
-  snacks: [],
   quizzes: [],
   contentLoaded: false,
   loadContent: async () => {
-    const [snacks, quizzes] = await Promise.all([
-      fetchSnacks(),
-      fetchQuizzes(),
-    ]);
-    set({ snacks, quizzes, contentLoaded: true });
+    const quizzes = await fetchQuizzes();
+    set({ quizzes, contentLoaded: true });
   },
 
   score: 0,

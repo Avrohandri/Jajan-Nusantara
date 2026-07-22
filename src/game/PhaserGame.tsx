@@ -14,9 +14,7 @@ interface PhaserGameProps {
 export function PhaserGame({ width, height }: PhaserGameProps) {
   const gameRef = useRef<Phaser.Game | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const {
-    snacks,
-  } = useGameStore();
+
 
   useEffect(() => {
     if (!containerRef.current || gameRef.current) return;
@@ -31,14 +29,7 @@ export function PhaserGame({ width, height }: PhaserGameProps) {
     };
   }, [width, height]);
 
-  useEffect(() => {
-    if (snacks.length > 0) {
-      const timer = setTimeout(() => {
-        EventBus.emit('set-snacks', snacks);
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [snacks]);
+
 
   const mergesSinceQuizRef = useRef(0);
 

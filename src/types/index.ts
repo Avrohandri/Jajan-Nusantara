@@ -1,12 +1,5 @@
 
-export interface SnackData {
-  tier: number;
-  name: string;
-  emoji: string;
-  color: string;
-  radius: number;
-  points: number;
-}
+
 
 export interface QuizData {
   id: string;

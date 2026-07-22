@@ -1,6 +1,6 @@
 import { collection, setDoc, doc } from 'firebase/firestore';
 import { getDb, isFirebaseConfigured } from './firebase/config';
-import { fallbackSnacks } from './datastore/fallbackSnacks';
+
 import { fallbackQuizzes } from './datastore/fallbackQuizzes';
 
 
@@ -17,12 +17,6 @@ export async function seedFirestore() {
   try {
     console.log('🚀 Memulai proses upload data ke Firestore...');
 
-    console.log('📦 Mengunggah daftar Snacks...');
-    for (const snack of fallbackSnacks) {
-      const docRef = doc(collection(db, 'snacks'), `tier_${snack.tier}`);
-      await setDoc(docRef, snack);
-    }
-    console.log('✅ Snacks berhasil diunggah.');
 
     console.log('📦 Mengunggah daftar Quizzes...');
     for (const quiz of fallbackQuizzes) {
