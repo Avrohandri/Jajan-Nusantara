@@ -107,7 +107,7 @@ export function StepSteaming({ onComplete }: Props) {
   return (
     <div className="klepon-step-content">
       <p className="klepon-instruction">
-        Seret klepon ke dalam pengukus! 🫕
+        Seret klepon ke dalam pengukus!
       </p>
 
       {}
@@ -120,7 +120,7 @@ export function StepSteaming({ onComplete }: Props) {
             onDragOver={handlePanDragOver}
             onDrop={handlePanDrop}
           >
-            <span className="pan-emoji">🫕</span>
+
             <div className="pan-contents">
               {inPan.map((inn, i) =>
                 inn ? (
@@ -143,9 +143,7 @@ export function StepSteaming({ onComplete }: Props) {
                 </span>
               ))}
             </div>
-            {allIn || (
-              <span className="pan-hint">Drop di sini</span>
-            )}
+
           </div>
           <div className="flame-row">
             {['🔥', '🔥', '🔥'].map((f, i) => (
