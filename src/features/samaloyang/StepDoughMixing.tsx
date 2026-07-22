@@ -5,7 +5,7 @@ interface Props {
   onComplete: () => void;
 }
 
-const REQUIRED_DEGREES = 1440; // 4 full clockwise rotations
+const REQUIRED_DEGREES = 1440;
 
 export function StepDoughMixing({ onComplete }: Props) {
   const { playButtonClick } = useSfx();
@@ -33,11 +33,9 @@ export function StepDoughMixing({ onComplete }: Props) {
       return;
     }
     let delta = angle - lastAngleRef.current;
-    // Normalize delta to [-180, 180]
     if (delta > 180) delta -= 360;
     if (delta < -180) delta += 360;
 
-    // Only count clockwise (positive) movement
     if (delta > 0) {
       setTotalDegrees(prev => {
         const next = Math.min(prev + delta, REQUIRED_DEGREES);
@@ -52,7 +50,6 @@ export function StepDoughMixing({ onComplete }: Props) {
     lastAngleRef.current = angle;
   }, [onComplete]);
 
-  // Mouse events
   const onMouseDown = (e: React.MouseEvent) => {
     playButtonClick();
     isPressingRef.current = true;
@@ -71,7 +68,6 @@ export function StepDoughMixing({ onComplete }: Props) {
     setIsStirring(false);
   }, []);
 
-  // Touch events
   const onTouchStart = (e: React.TouchEvent) => {
     playButtonClick();
     isPressingRef.current = true;
@@ -107,7 +103,7 @@ export function StepDoughMixing({ onComplete }: Props) {
   }, [onMouseMove, onMouseUp, onTouchMove, onTouchEnd]);
 
   const percent = Math.min((totalDegrees / REQUIRED_DEGREES) * 100, 100);
-  const circumference = 2 * Math.PI * 54; // r=54
+  const circumference = 2 * Math.PI * 54;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
 
   return (
@@ -118,7 +114,7 @@ export function StepDoughMixing({ onComplete }: Props) {
       </p>
 
       <div className="mixing-scene">
-        {/* Circular progress ring */}
+        {}
         <svg className="mixing-ring" width="140" height="140" viewBox="0 0 120 120">
           <circle cx="60" cy="60" r="54" fill="none" stroke="#E8D5C4" strokeWidth="8" />
           <circle
@@ -134,14 +130,14 @@ export function StepDoughMixing({ onComplete }: Props) {
           />
         </svg>
 
-        {/* Bowl Image Container */}
+        {}
         <div
           ref={bowlRef}
           className={`mixing-bowl-container ${isStirring ? 'bowl-stirring' : ''}`}
           onMouseDown={onMouseDown}
           onTouchStart={onTouchStart}
         >
-          {/* Mangkok visual */}
+          {}
           <img 
             src="/assets/samaloyang/mangkok_aduk.png" 
             alt="mangkok aduk" 
@@ -149,7 +145,7 @@ export function StepDoughMixing({ onComplete }: Props) {
             draggable={false} 
           />
           
-          {/* Adonan visual */}
+          {}
           <img 
             src="/assets/samaloyang/adonan_putar.png" 
             alt="adonan" 
@@ -158,7 +154,7 @@ export function StepDoughMixing({ onComplete }: Props) {
             draggable={false}
           />
 
-          {/* Rotation Hint Arrow */}
+          {}
           {!isStirring && percent < 100 && (
             <img 
               src="/assets/universal/rotation_arrow.png" 
@@ -180,13 +176,13 @@ export function StepDoughMixing({ onComplete }: Props) {
             />
           )}
 
-          {/* Mixer Decoration */}
+          {}
           <div className={`mixer-decoration mixer-left ${isStirring ? 'mixer-shaking' : ''}`}>🥄</div>
           <div className={`mixer-decoration mixer-right ${isStirring ? 'mixer-shaking' : ''}`}>🥄</div>
         </div>
       </div>
 
-      {/* Decorative Progress Info */}
+      {}
       <div style={{
         marginTop: '20px',
         background: '#FFF8E1',

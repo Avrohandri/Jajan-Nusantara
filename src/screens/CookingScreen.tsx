@@ -37,7 +37,7 @@ export function CookingScreen() {
         🍳 Memasak: {currentRecipe.snackName}
       </h1>
 
-      {/* Progress Bar */}
+      {}
       <div className="cooking-progress-bar">
         <div
           className="cooking-progress-fill"

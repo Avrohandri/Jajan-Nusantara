@@ -3,10 +3,10 @@ import { useGameStore } from './store/gameStore';
 import { initFirebase, isFirebaseConfigured } from './lib/firebase/config';
 import { useAudio } from './hooks/useAudio';
 
-// Auth & Loading (Keep static for fast initial load)
+
 import { LoginScreen } from './screens/LoginScreen';
 
-// Lazy loaded main screens
+
 const MainMenuScreen = React.lazy(() => import('./screens/MainMenuScreen').then(m => ({ default: m.MainMenuScreen })));
 const MapSelectScreen = React.lazy(() => import('./screens/MapSelectScreen').then(m => ({ default: m.MapSelectScreen })));
 const SettingsScreen = React.lazy(() => import('./screens/SettingsScreen').then(m => ({ default: m.SettingsScreen })));
@@ -15,7 +15,7 @@ const ResultScreen = React.lazy(() => import('./screens/ResultScreen').then(m =>
 const LeaderboardScreen = React.lazy(() => import('./screens/LeaderboardScreen').then(m => ({ default: m.LeaderboardScreen })));
 const ProfileScreen = React.lazy(() => import('./screens/ProfileScreen').then(m => ({ default: m.ProfileScreen })));
 
-// Lazy loaded cooking minigames
+
 const CookingScreen = React.lazy(() => import('./screens/CookingScreen').then(m => ({ default: m.CookingScreen })));
 const KleponMiniGameScreen = React.lazy(() => import('./screens/KleponMiniGameScreen').then(m => ({ default: m.KleponMiniGameScreen })));
 const PieSusuMiniGameScreen = React.lazy(() => import('./screens/PieSusuMiniGameScreen').then(m => ({ default: m.PieSusuMiniGameScreen })));
@@ -23,12 +23,12 @@ const SamaloyangMiniGameScreen = React.lazy(() => import('./screens/SamaloyangMi
 const PisangAsarMiniGameScreen = React.lazy(() => import('./screens/PisangAsarMiniGameScreen').then(m => ({ default: m.PisangAsarMiniGameScreen })));
 const CookingIntroScreen = React.lazy(() => import('./screens/CookingIntroScreen').then(m => ({ default: m.CookingIntroScreen })));
 
-// Other lazy screens
+
 const ProgressScreen = React.lazy(() => import('./screens/ProgressScreen').then(m => ({ default: m.ProgressScreen })));
 const ColliderTestScreen = React.lazy(() => import('./screens/ColliderTestScreen').then(m => ({ default: m.ColliderTestScreen })));
 const JajanpediaScreen = React.lazy(() => import('./screens/JajanpediaScreen').then(m => ({ default: m.JajanpediaScreen })));
 
-// Lazy loaded Jajanpedia cards
+
 const KleponCardScreen = React.lazy(() => import('./screens/KleponCardScreen').then(m => ({ default: m.KleponCardScreen })));
 const CenilCardScreen = React.lazy(() => import('./screens/CenilCardScreen').then(m => ({ default: m.CenilCardScreen })));
 const YangkoCardScreen = React.lazy(() => import('./screens/YangkoCardScreen').then(m => ({ default: m.YangkoCardScreen })));
@@ -59,7 +59,7 @@ const AsidaCardScreen = React.lazy(() => import('./screens/AsidaCardScreen').the
 const KueBageaCardScreen = React.lazy(() => import('./screens/KueBageaCardScreen').then(m => ({ default: m.KueBageaCardScreen })));
 const PisangAsarCardScreen = React.lazy(() => import('./screens/PisangAsarCardScreen').then(m => ({ default: m.PisangAsarCardScreen })));
 
-// Loading Component
+
 const ScreenFallback = () => (
   <div className="loading-screen" style={{ background: '#FFF8EE' }}>
     <div className="loading-content">
@@ -73,15 +73,15 @@ export default function App() {
   const { currentScreen, isLoggedIn, contentLoaded, loadContent } = useGameStore();
   const [initializing, setInitializing] = useState(true);
 
-  // 🎵 Global audio manager — BGM loop + SFX drop/merge
+
   useAudio();
 
   useEffect(() => {
     async function init() {
-      // Initialize Firebase
+
       initFirebase();
 
-      // Force-clear stale quiz cache
+
       try {
         const raw = localStorage.getItem('kuliner_quizzes');
         if (raw) {
@@ -92,7 +92,7 @@ export default function App() {
         }
       } catch (_) {}
 
-      // Start loading game content in background!
+
       loadContent();
       setInitializing(false);
     }
@@ -103,7 +103,7 @@ export default function App() {
     return <ScreenFallback />;
   }
 
-  // Jika belum login, selalu tampilkan layar login
+
   if (!isLoggedIn) {
     return (
       <div className="app-container">
@@ -112,7 +112,7 @@ export default function App() {
     );
   }
 
-  // Jika sudah login tapi konten game belum siap
+
   if (!contentLoaded) {
     return (
       <div className="loading-screen">

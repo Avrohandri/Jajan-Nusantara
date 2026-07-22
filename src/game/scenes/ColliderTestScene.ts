@@ -8,7 +8,6 @@ export class ColliderTestScene extends Phaser.Scene {
   }
 
   preload() {
-    // Load ALL regions' food
     for (const [region, configArray] of Object.entries(REGION_FOOD_CONFIGS)) {
       const assetFolder = `foods_${region}`;
       for (const item of configArray) {
@@ -23,12 +22,10 @@ export class ColliderTestScene extends Phaser.Scene {
   create() {
     const width  = Number(this.game.config.width);
     const height = Number(this.game.config.height);
-    // Scale factor: baseline 560px canvas at DPR=1; mobile DPR=3 → height=1680 → factor=3
     const scaleFactor = height / 560;
     const fontSize = Math.round(24 * scaleFactor);
     const subFontSize = Math.round(14 * scaleFactor);
 
-    // Title
     this.regionTitle = this.add.text(width / 2, Math.round(40 * scaleFactor), 'Collider Test Mode', {
       fontSize: `${fontSize}px`,
       color: '#ffffff',
@@ -40,16 +37,12 @@ export class ColliderTestScene extends Phaser.Scene {
       color: '#aaaaaa'
     }).setOrigin(0.5);
 
-    // Add boundaries so they don't fall off
     this.matter.add.rectangle(width / 2, height, width, 50, { isStatic: true });
     this.matter.add.rectangle(0, height / 2, 50, height, { isStatic: true });
     this.matter.add.rectangle(width, height / 2, 50, height, { isStatic: true });
 
     import('../EventBus').then(({ EventBus }) => {
       EventBus.on('collider-change-region', (region) => this.spawnRegion(region as string));
-      // Read initial region parameter passed via url or fallback to 'jogja'
-      // Or we can just wait for the component to emit the default on mount.
-      // We will init with 'jogja'
       this.spawnRegion('jogja');
     });
   }
@@ -59,7 +52,6 @@ export class ColliderTestScene extends Phaser.Scene {
     const height = Number(this.game.config.height);
     const scaleFactor = height / 560;
     
-    // Clear existing
     this.activeItems.forEach(item => {
       if (item.body) this.matter.world.remove(item.body);
       item.destroy();
@@ -70,7 +62,6 @@ export class ColliderTestScene extends Phaser.Scene {
 
     const rawConfig = REGION_FOOD_CONFIGS_RAW[region];
     if (!rawConfig) return;
-    // Apply base 1.1 scale (matches REGION_FOOD_CONFIGS) × DPR factor
     const configArray = scaleFoodConfig(rawConfig, 1.1 * scaleFactor);
 
     let startX = Math.round(60 * scaleFactor);

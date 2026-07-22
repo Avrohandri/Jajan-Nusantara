@@ -51,7 +51,7 @@ export function createColliderTestConfig(
     physics: {
       default: 'matter',
       matter: {
-        gravity: { x: 0, y: 0 }, // no gravity for testing
+        gravity: { x: 0, y: 0 },
         debug: {
           showBody: true,
           showStaticBody: true,

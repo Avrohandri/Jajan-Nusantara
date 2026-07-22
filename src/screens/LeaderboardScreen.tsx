@@ -37,11 +37,11 @@ export function LeaderboardScreen() {
 
   return (
     <div className="leaderboard-screen leaderboard-screen--pedia">
-      {/* Pedia background */}
+      {}
       <div className="leaderboard-pedia-bg" aria-hidden />
       <div className="leaderboard-pedia-overlay" />
 
-      {/* Header */}
+      {}
       <div className="leaderboard-header leaderboard-header--pedia">
         <button
           type="button"
@@ -56,7 +56,7 @@ export function LeaderboardScreen() {
         <p className="leaderboard-subtitle">Total skor terbaik dari semua pulau</p>
       </div>
 
-      {/* Table */}
+      {}
       <div className="leaderboard-body leaderboard-body--pedia">
         {loading ? (
           <div className="leaderboard-loading">
@@ -70,7 +70,7 @@ export function LeaderboardScreen() {
           </div>
         ) : (
           <div className="leaderboard-list">
-            {/* Column headers */}
+            {}
             <div className="leaderboard-row leaderboard-row--header">
               <span className="lb-rank">Rank</span>
               <span className="lb-avatar-col" />

@@ -1,24 +1,24 @@
 export interface FoodItem {
-  tier: number;           // 0-7
-  name: string;           // "00_Klepon", dst
-  textureKey: string;     // sama dengan name
-  color: number;          // particle color
+  tier: number;
+  name: string;
+  textureKey: string;
+  color: number;
   colliderType: 'circle' | 'polygon' | 'fromVertices' | 'rectangle';
   colliderOptions: {
-    radius?: number;       // untuk circle
-    sides?: number;        // untuk polygon
-    polyRadius?: number;   // untuk polygon
-    vertices?: { x: number, y: number }[]; // untuk fromVertices
-    width?: number;        // untuk rectangle
-    height?: number;       // untuk rectangle
-    angle?: number;        // rotasi body (radians)
-    chamferRadius?: number; // untuk membuat rectangle menjadi kapsul (lonjong)
-    renderOrigin?: { x: number, y: number }; // untuk menyesuaikan offset visual vs center of mass (khususnya untuk fromVertices)
+    radius?: number;
+    sides?: number;
+    polyRadius?: number;
+    vertices?: { x: number, y: number }[];
+    width?: number;
+    height?: number;
+    angle?: number;
+    chamferRadius?: number;
+    renderOrigin?: { x: number, y: number };
   };
   displaySize: { width: number; height: number };
-  mergeScore: number;     // poin saat merge (tier+1 * 10)
+  mergeScore: number;
   nextTier: number | null;
-  funFact?: string;       // fact for NPC notification
+  funFact?: string;
 }
 
 export const JOGJA_FOOD_CONFIG: FoodItem[] = [
@@ -99,12 +99,12 @@ export const BALI_FOOD_CONFIG: FoodItem[] = [
     tier: 6, name: "Pisang Rai", textureKey: "06_pisang rai", color: 0xDBC36D,
     colliderType: "fromVertices", colliderOptions: {
       vertices: [
-        { x: -10, y: -65 },    // puncak atas
-        { x: 40, y: -13 },   // tengah kanan
-        { x: 65, y: 38 },    // pojok kanan bawah
-        { x: 0, y: 40 },     // tengah bawah
-        { x: -85, y: 38 },   // pojok kiri bawah
-        { x: -55, y: -13 },  // tengah kiri
+        { x: -10, y: -65 },
+        { x: 40, y: -13 },
+        { x: 65, y: 38 },
+        { x: 0, y: 40 },
+        { x: -85, y: 38 },
+        { x: -55, y: -13 },
       ]
     }, displaySize: { width: 150, height: 120 },
     mergeScore: 80, nextTier: null, funFact: "Pisang Rai — Pisang **manis** khas Bali dengan kelapa parut!"
@@ -121,12 +121,12 @@ export const ACEH_FOOD_CONFIG: FoodItem[] = [
     tier: 1, name: "Timphan", textureKey: "01_timphan", color: 0x3CB371,
     colliderType: "fromVertices", colliderOptions: {
       vertices: [
-        { x: 0, y: -24 },    // atas
-        { x: 32, y: -12 },   // kanan atas
-        { x: 32, y: 16 },    // kanan bawah
-        { x: 0, y: 28 },     // bawah
-        { x: -32, y: 16 },   // kiri bawah
-        { x: -32, y: -12 },  // kiri atas
+        { x: 0, y: -24 },
+        { x: 32, y: -12 },
+        { x: 32, y: 16 },
+        { x: 0, y: 28 },
+        { x: -32, y: 16 },
+        { x: -32, y: -12 },
       ]
     }, displaySize: { width: 80, height: 80 },
     mergeScore: 20, nextTier: 2, funFact: "Timphan: Sajian hari besar, isian **pisang/kelapa** manis."
@@ -191,10 +191,10 @@ export const MALUKU_FOOD_CONFIG: FoodItem[] = [
     tier: 3, name: "Talam Sagu Bakar", textureKey: "03_talam sagu bakar", color: 0xD2B48C,
     colliderType: "fromVertices", colliderOptions: {
       vertices: [
-        { x: -35, y: -37 },  // kiri atas
-        { x: 40, y: -37 },   // kanan atas
-        { x: 50, y: 37 },    // kanan bawah
-        { x: -45, y: 37 },   // kiri bawah
+        { x: -35, y: -37 },
+        { x: 40, y: -37 },
+        { x: 50, y: 37 },
+        { x: -45, y: 37 },
       ],
       renderOrigin: { x: 0.5, y: 0.52 }
     }, displaySize: { width: 97, height: 110 },
@@ -224,8 +224,6 @@ export const REGION_FOOD_CONFIGS_RAW: Record<string, FoodItem[]> = {
   'maluku': MALUKU_FOOD_CONFIG,
 };
 
-/** Scale all numeric collider and display dimensions by `factor`. 
- *  renderOrigin and angle are ratios/radians — they are preserved as-is. */
 export function scaleFoodConfig(config: FoodItem[], factor: number): FoodItem[] {
   return config.map(item => {
     const opts = item.colliderOptions;
@@ -259,6 +257,5 @@ export const REGION_FOOD_CONFIGS: Record<string, FoodItem[]> = Object.fromEntrie
   Object.entries(REGION_FOOD_CONFIGS_RAW).map(([key, cfg]) => [key, scaleFoodConfig(cfg, SCALE_FACTOR)])
 );
 
-// Fallback to jogja for backward compatibility where FOOD_CONFIG is still explicitly imported (will remove later if needed)
 export const FOOD_CONFIG = REGION_FOOD_CONFIGS['jogja'];
 

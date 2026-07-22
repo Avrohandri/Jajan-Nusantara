@@ -14,7 +14,6 @@ const REGIONS = [
   { id: 'maluku', name: 'Maluku', folder: 'foods_maluku', icon: '🥁' }
 ];
 
-// Map food textureKey to a detail screen
 const FOOD_CARD_SCREENS: Record<string, string> = {
   '00_Klepon': 'kleponCard',
   '01_Cenil': 'cenilCard',
@@ -24,7 +23,6 @@ const FOOD_CARD_SCREENS: Record<string, string> = {
   '05_Lemper': 'lemperCard',
   '06_TiwulAyu': 'tiwulAyuCard',
   '07_JadahTempe': 'jadahTempeCard',
-  // Bali
   '00_laklak': 'laklakCard',
   '01_kaliadrem': 'kaliadremCard',
   '02_pie susu': 'pieSusuCard',
@@ -32,7 +30,6 @@ const FOOD_CARD_SCREENS: Record<string, string> = {
   '04_bendu': 'benduCard',
   '05_jaje uli': 'jajeUliCard',
   '06_pisang rai': 'pisangRaiCard',
-  // Aceh
   '00_samaloyang': 'samaloyangCard',
   '01_timphan': 'timphanCard',
   '02_pulot ijo': 'pulotIjoCard',
@@ -40,7 +37,6 @@ const FOOD_CARD_SCREENS: Record<string, string> = {
   '04_bungong kayee': 'bungongKayeeCard',
   '05_meuseukat': 'meuseukatCard',
   '06_kue adee': 'kueAdeeCard',
-  // Maluku
   '00_koyabu': 'koyabuCard',
   '01_sagu lempeng': 'saguLempengCard',
   '02_sagu gula': 'sagugulaCard',
@@ -49,7 +45,6 @@ const FOOD_CARD_SCREENS: Record<string, string> = {
   '05_kue bagea': 'kuebageaCard',
   '06_pisang asar': 'pisangasarCard',
 };
-
 
 
 export function JajanpediaScreen() {
@@ -136,7 +131,7 @@ export function JajanpediaScreen() {
   return (
     <div className="screen jajanpedia-screen">
       <div className="jajanpedia-wrapper">
-        {/* Back Button */}
+        {}
         <button 
           className="jajan-back-btn" 
           onClick={() => { playButtonClick(); setScreen('mainMenu'); }}
@@ -145,10 +140,10 @@ export function JajanpediaScreen() {
           <img src={backButtonImg} alt="Back" className="jajan-back-icon-img" />
         </button>
 
-        {/* Title Image */}
+        {}
         <img src={pediaJudul} alt="Jajanpedia Title" className="jajanpedia-top-title" />
 
-        {/* Content Section */}
+        {}
         <div 
           className="jajanpedia-content"
           onTouchStart={onTouchStart}
@@ -200,7 +195,7 @@ export function JajanpediaScreen() {
         </div>
       </div>
 
-      {/* Instructions Overlay */}
+      {}
       <Modal isOpen={showInstructions} title="Jajanpedia 📖">
         <div className="instructions">
           <p>🏝️ Koleksi kuliner unik dari <strong>4 Pulau</strong> besar.</p>

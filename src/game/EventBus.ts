@@ -1,4 +1,3 @@
-// EventBus — Simple event emitter for React ↔ Phaser communication
 type EventCallback = (...args: unknown[]) => void;
 
 const listeners: Record<string, EventCallback[]> = {};

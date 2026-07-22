@@ -28,9 +28,8 @@ const COLUMN_POS = {
   right: '77%',
 };
 
-/** Pulau bisa dimainkan jika minigame memasak pulau sebelumnya sudah diselesaikan */
 function isUnlocked(id: keyof IslandCookingComplete, cooking: IslandCookingComplete): boolean {
-  if (id === 'jogja') return true;        // pulau pertama selalu terbuka
+  if (id === 'jogja') return true;
   if (id === 'bali')   return cooking.jogja;
   if (id === 'aceh')   return cooking.bali;
   if (id === 'maluku') return cooking.aceh;
@@ -189,14 +188,14 @@ function IslandFace({
         />
       )}
 
-      {/* Lock overlay */}
+      {}
       {locked && (
         <span className="map-island-lock-overlay" aria-hidden>
           🔒
         </span>
       )}
 
-      {/* Star rating - tampil di bawah pulau jika sudah dibuka */}
+      {}
       {!locked && (
         <div className="map-island-stars" aria-label={`${stars} bintang`}>
           {[1, 2, 3].map((i) => (

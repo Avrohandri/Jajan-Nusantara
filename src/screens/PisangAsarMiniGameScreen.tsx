@@ -31,7 +31,6 @@ export function PisangAsarMiniGameScreen() {
   const [showBackConfirm, setShowBackConfirm] = useState(false);
   const { playButtonClick, playStepComplete } = useSfx();
 
-  // Wrapper: putar SFX step selesai sebelum advance
   const handleStepComplete = useCallback(() => {
     playStepComplete();
     advancePisangAsarStep();
@@ -44,7 +43,6 @@ export function PisangAsarMiniGameScreen() {
     setScreen('mainMenu');
   };
 
-  // Award stars + unlock pulau berikutnya saat pisang asar selesai
   useEffect(() => {
     if (pisangAsarComplete) {
       awardStarsForRegion('maluku');
@@ -52,7 +50,6 @@ export function PisangAsarMiniGameScreen() {
     }
   }, [pisangAsarComplete]);
 
-  /* ── Complete screen ── */
   if (pisangAsarComplete) {
     return (
       <div className="klepon-root">
@@ -82,13 +79,12 @@ export function PisangAsarMiniGameScreen() {
     );
   }
 
-  /* ── Game screen ── */
   return (
     <div className="klepon-root">
-      {/* Background kitchen */}
+      {}
       <img src="/assets/klepon/bg_kitchen.png" alt="" className="klepon-bg" />
 
-      {/* ── Header bar ── */}
+      {}
       <div className="klepon-topbar">
         <button className="klepon-back-btn" onClick={handleBack} title="Kembali">
           <img src={backButtonImg} alt="Back" className="klepon-back-icon-img" />
@@ -99,7 +95,7 @@ export function PisangAsarMiniGameScreen() {
         </div>
       </div>
 
-      {/* ── Step dots ── */}
+      {}
       <div className="klepon-step-dots">
         {STEPS.map((_, idx) => (
           <div
@@ -114,7 +110,7 @@ export function PisangAsarMiniGameScreen() {
         ))}
       </div>
 
-      {/* ── Step content ── */}
+      {}
       <div className="klepon-generic-card">
         {pisangAsarStep !== 0 && (
           <div className="klepon-generic-header">
@@ -131,7 +127,7 @@ export function PisangAsarMiniGameScreen() {
         </div>
       </div>
 
-      {/* Back confirm dialog */}
+      {}
       {showBackConfirm && (
         <MiniGameBackConfirm
           foodName="Pisang Asar"

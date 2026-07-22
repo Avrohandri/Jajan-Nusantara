@@ -20,22 +20,18 @@ export class SnackItem extends Phaser.GameObjects.Container {
 
     const r = snackData.radius;
 
-    // Draw circle
     const circle = scene.add.graphics();
     circle.fillStyle(Phaser.Display.Color.HexStringToColor(snackData.color).color, 1);
     circle.fillCircle(0, 0, r);
-    // Border
     circle.lineStyle(2, 0xffffff, 0.6);
     circle.strokeCircle(0, 0, r);
     this.add(circle);
 
-    // Emoji text
     const emoji = scene.add.text(0, -2, snackData.emoji, {
       fontSize: `${Math.max(r * 0.9, 14)}px`,
     }).setOrigin(0.5, 0.5);
     this.add(emoji);
 
-    // Name label (small)
     const label = scene.add.text(0, r * 0.45, snackData.name, {
       fontSize: `${Math.max(r * 0.35, 8)}px`,
       color: '#ffffff',
@@ -46,7 +42,6 @@ export class SnackItem extends Phaser.GameObjects.Container {
 
     scene.add.existing(this);
 
-    // Add Matter.js circular body
     const body = scene.matter.add.circle(x, y, r, {
       restitution: 0.2,
       friction: 0.5,
@@ -57,7 +52,6 @@ export class SnackItem extends Phaser.GameObjects.Container {
     });
     this.matterBody = body;
 
-    // Store reference to this container on the body
     (body as any).gameObject = this;
   }
 

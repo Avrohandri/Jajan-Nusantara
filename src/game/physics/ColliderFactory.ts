@@ -14,9 +14,6 @@ export class ColliderFactory {
 
     let body: MatterJS.BodyType;
 
-    // Gunakan scene.matter.bodies untuk MENGHASILKAN definisi body-nya saja,
-    // (Bukan otomatis di map/ditempatkan ke world seperti scene.matter.add)
-    // agar bisa di attach secara aman ke setExistingBody().
     switch (config.colliderType) {
       case 'circle':
         body = scene.matter.bodies.circle(x, y, config.colliderOptions.radius || 10, defaultOptions);
@@ -34,7 +31,6 @@ export class ColliderFactory {
         }
         break;
       case 'fromVertices':
-        // fromVertices expects an array of vertex arrays (Vector[][])
         const verts = config.colliderOptions.vertices || [];
         body = scene.matter.bodies.fromVertices(x, y, [verts], defaultOptions);
         break;

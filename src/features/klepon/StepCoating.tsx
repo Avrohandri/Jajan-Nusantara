@@ -24,7 +24,6 @@ export function StepCoating({ onComplete }: Props) {
     });
   };
 
-  // Mouse drag from coconut source
   const handleDragStart = (e: React.DragEvent) => {
     playButtonClick();
     setDragging(true);
@@ -40,7 +39,6 @@ export function StepCoating({ onComplete }: Props) {
     if (!coated[idx]) coatKlepon(idx);
   };
 
-  // Touch drag
   const handleTouchStart = (e: React.TouchEvent) => {
     playButtonClick();
     const touch = e.touches[0];
@@ -90,7 +88,7 @@ export function StepCoating({ onComplete }: Props) {
         Taburi setiap klepon dengan kelapa parut!
       </p>
 
-      {/* Coconut source */}
+      {}
       <div className="coconut-source">
         <div
           className={`coconut-bowl ${dragging ? 'coconut-dragging' : ''}`}
@@ -105,7 +103,7 @@ export function StepCoating({ onComplete }: Props) {
         </div>
       </div>
 
-      {/* Plate with klepon */}
+      {}
       <div className="plate-area">
         <div className="serving-plate">
           <div className="plate-klepon-row">

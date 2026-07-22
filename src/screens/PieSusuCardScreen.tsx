@@ -17,7 +17,7 @@ export function PieSusuCardScreen() {
         backgroundPosition: 'center'
       }}
     >
-      {/* Back Button */}
+      {}
       <button
         className="klepon-card-back-btn"
         onClick={() => { playButtonClick(); setScreen('jajanpedia'); }}
@@ -27,14 +27,14 @@ export function PieSusuCardScreen() {
       </button>
 
       <div className="klepon-card-content">
-        {/* Header */}
+        {}
         <div className="klepon-card-header">
           <span className="klepon-card-leaf">🥧</span>
           <h1 className="klepon-card-title">Pie Susu</h1>
           <span className="klepon-card-leaf">🥧</span>
         </div>
 
-        {/* Mascot */}
+        {}
         <div className="klepon-card-mascot-wrapper">
           <div className="klepon-card-sparkle top-left">✦</div>
           <div className="klepon-card-sparkle top-right">✦</div>
@@ -46,21 +46,21 @@ export function PieSusuCardScreen() {
           <img src={pieSusuImg} alt="Pie Susu Mascot" className="klepon-card-mascot" />
         </div>
 
-        {/* Tagline */}
+        {}
         <div className="klepon-card-tagline">
           <span className="klepon-leaf-sm">✨</span>
           <p>Ikonik Bali yang lumer di mulut!</p>
           <span className="klepon-leaf-sm">✨</span>
         </div>
 
-        {/* About Box */}
+        {}
         <div className="klepon-card-about-box">
           <p className="klepon-card-about-text">
             Pie susu adalah kue dengan kulit renyah dan isian susu yang lembut dan manis. Bentuknya pipih dengan bagian tengah yang <span className="klepon-highlight">lembut dan creamy</span>.
           </p>
         </div>
 
-        {/* Info Row */}
+        {}
         <div className="klepon-card-info-row">
           <div className="klepon-card-info-item">
             <div className="klepon-card-info-icon klepon-icon-red">📍</div>
@@ -79,7 +79,7 @@ export function PieSusuCardScreen() {
           </div>
         </div>
 
-        {/* Fun Fact */}
+        {}
         <div className="klepon-card-funfact">
           <span className="klepon-card-funfact-icon">🎁</span>
           <div>

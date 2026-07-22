@@ -17,7 +17,7 @@ export function SaguLempengCardScreen() {
         backgroundPosition: 'center'
       }}
     >
-      {/* Back Button */}
+      {}
       <button
         className="klepon-card-back-btn"
         onClick={() => { playButtonClick(); setScreen('jajanpedia'); }}
@@ -27,14 +27,14 @@ export function SaguLempengCardScreen() {
       </button>
 
       <div className="klepon-card-content">
-        {/* Header */}
+        {}
         <div className="klepon-card-header">
           <span className="klepon-card-leaf">🍘</span>
           <h1 className="klepon-card-title">Sagu Lempeng</h1>
           <span className="klepon-card-leaf">🍘</span>
         </div>
 
-        {/* Mascot */}
+        {}
         <div className="klepon-card-mascot-wrapper">
           <div className="klepon-card-sparkle top-left">✦</div>
           <div className="klepon-card-sparkle top-right">✦</div>
@@ -46,21 +46,21 @@ export function SaguLempengCardScreen() {
           <img src={saguLempengImg} alt="Sagu Lempeng Mascot" className="klepon-card-mascot" />
         </div>
 
-        {/* Tagline */}
+        {}
         <div className="klepon-card-tagline">
           <span className="klepon-leaf-sm">✨</span>
           <p>Kering, gurih, dan teman setia minum teh!</p>
           <span className="klepon-leaf-sm">✨</span>
         </div>
 
-        {/* About Box */}
+        {}
         <div className="klepon-card-about-box">
           <p className="klepon-card-about-text">
             Sagu lempeng adalah makanan berbentuk pipih dan keras yang terbuat dari <span className="klepon-highlight">sagu</span>. Teksturnya kering dan sangat pas dinikmati bersama teh atau kopi.
           </p>
         </div>
 
-        {/* Info Row */}
+        {}
         <div className="klepon-card-info-row">
           <div className="klepon-card-info-item">
             <div className="klepon-card-info-icon klepon-icon-red">📍</div>
@@ -79,7 +79,7 @@ export function SaguLempengCardScreen() {
           </div>
         </div>
 
-        {/* Fun Fact */}
+        {}
         <div className="klepon-card-funfact">
           <span className="klepon-card-funfact-icon">🎒</span>
           <div>

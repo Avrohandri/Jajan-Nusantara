@@ -1,7 +1,6 @@
 import type { QuizData } from '../../types';
 
 export const fallbackQuizzes: QuizData[] = [
-  // JOGJA
   {
     id: 'jogja_1',
     region: 'jogja',
@@ -67,7 +66,6 @@ export const fallbackQuizzes: QuizData[] = [
     explanation: 'Jadah tempe berasal dari daerah dekat Gunung Merapi.'
   },
 
-  // BALI
   {
     id: 'bali_1',
     region: 'bali',
@@ -133,7 +131,6 @@ export const fallbackQuizzes: QuizData[] = [
     explanation: 'Pisang rai diberi taburan kelapa parut.'
   },
 
-  // ACEH
   {
     id: 'aceh_1',
     region: 'aceh',
@@ -199,7 +196,6 @@ export const fallbackQuizzes: QuizData[] = [
     explanation: 'Kue adee rasanya manis.'
   },
 
-  // MALUKU
   {
     id: 'maluku_1',
     region: 'maluku',

@@ -31,7 +31,6 @@ export function KleponMiniGameScreen() {
   const [showBackConfirm, setShowBackConfirm] = useState(false);
   const { playButtonClick, playStepComplete } = useSfx();
 
-  // Wrapper: putar SFX step selesai sebelum advance
   const handleStepComplete = useCallback(() => {
     playStepComplete();
     advanceKleponStep();
@@ -44,7 +43,6 @@ export function KleponMiniGameScreen() {
     setScreen('mainMenu');
   };
 
-  // Award stars + unlock pulau berikutnya saat klepon selesai
   useEffect(() => {
     if (kleponComplete) {
       awardStarsForRegion('jogja');
@@ -52,7 +50,6 @@ export function KleponMiniGameScreen() {
     }
   }, [kleponComplete]);
 
-  /* ── Complete screen ── */
   if (kleponComplete) {
     return (
       <div className="klepon-root">
@@ -83,13 +80,12 @@ export function KleponMiniGameScreen() {
     );
   }
 
-  /* ── Game screen ── */
   return (
     <div className="klepon-root">
-      {/* Background kitchen */}
+      {}
       <img src="/assets/klepon/bg_kitchen.png" alt="" className="klepon-bg" />
 
-      {/* ── Header bar ── */}
+      {}
       <div className="klepon-topbar">
         <button className="klepon-back-btn" onClick={handleBack} title="Kembali">
           <img src={backButtonImg} alt="Back" className="klepon-back-icon-img" />
@@ -100,7 +96,7 @@ export function KleponMiniGameScreen() {
         </div>
       </div>
 
-      {/* ── Step dots ── */}
+      {}
       <div className="klepon-step-dots">
         {STEPS.map((_, idx) => (
           <div
@@ -116,11 +112,11 @@ export function KleponMiniGameScreen() {
         ))}
       </div>
 
-      {/* ── Step content ── */}
-      {/* Step 0 owns its own layout (matches kitchen reference) */}
+      {}
+      {}
       {kleponStep === 0 && <StepIngredients onComplete={handleStepComplete} />}
 
-      {/* Steps 1-4: generic card wrapper */}
+      {}
       {kleponStep > 0 && (
         <div className="klepon-generic-card">
           <div className="klepon-generic-header">
@@ -136,7 +132,7 @@ export function KleponMiniGameScreen() {
         </div>
       )}
 
-      {/* Back confirm dialog */}
+      {}
       {showBackConfirm && (
         <MiniGameBackConfirm
           foodName="Klepon"

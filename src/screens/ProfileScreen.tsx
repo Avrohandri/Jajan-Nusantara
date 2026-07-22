@@ -67,7 +67,7 @@ export function ProfileScreen() {
       <div className="leaderboard-pedia-overlay"></div>
       
       <div style={{ position: 'relative', zIndex: 1 }}>
-        {/* Header */}
+        {}
       <div className="profile-header">
         <button
           type="button"
@@ -81,9 +81,9 @@ export function ProfileScreen() {
         <h1 className="profile-title">{username}</h1>
       </div>
 
-      {/* Profile card */}
+      {}
       <div className="profile-card">
-        {/* Avatar + change button */}
+        {}
         <div className="profile-avatar-wrap">
           <ProfileIconAvatar icon={profileIcon} size={90} />
           <button
@@ -96,7 +96,7 @@ export function ProfileScreen() {
         </div>
 
 
-        {/* Island progress row */}
+        {}
         <div className="profile-islands">
           {REGION_ORDER.map(r => (
             <div key={r} className={`profile-island-chip ${islandProgress[r] ? 'done' : 'locked'}`}>
@@ -108,7 +108,7 @@ export function ProfileScreen() {
         </div>
       </div>
 
-      {/* Stats grid */}
+      {}
       <div className="profile-stats">
         <div className="pstat-card pstat-total-score">
           <div className="pstat-icon">🏆</div>
@@ -142,7 +142,7 @@ export function ProfileScreen() {
         </div>
       </div>
 
-      {/* Icon Picker Modal */}
+      {}
       {showIconPicker && (
         <div className="profile-picker-overlay" onClick={() => setShowIconPicker(false)}>
           <div className="profile-picker-modal" onClick={e => e.stopPropagation()}>

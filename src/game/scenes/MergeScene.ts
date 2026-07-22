@@ -3,12 +3,9 @@ import { SnackItem } from '../objects/SnackItem';
 import { EventBus } from '../EventBus';
 import type { SnackData } from '../../types';
 
-// === PENGATURAN TINGGI GARIS DEADLINE ===
-// Garis deadline dan spawn Y kini dihitung proporsional terhadap tinggi canvas
-// agar tampilan konsisten di semua ukuran layar (desktop & mobile).
 
 const WALL_THICKNESS = 30;
-const DROP_COOLDOWN = 500; // ms
+const DROP_COOLDOWN = 500;
 
 export class MergeScene extends Phaser.Scene {
   private snacks: SnackData[] = [];
@@ -24,7 +21,6 @@ export class MergeScene extends Phaser.Scene {
   private dangerLine: Phaser.GameObjects.Graphics | null = null;
   private pointerX = 0;
   private scaleFactor = 1.0;
-  // Y positions — computed proportionally from canvas height in create()
   private dangerLineY = 170;
   private spawnY = 140;
 
@@ -43,49 +39,34 @@ export class MergeScene extends Phaser.Scene {
     this.containerWidth = Number(this.game.config.width);
     this.containerHeight = Number(this.game.config.height);
 
-    // Compute proportional Y values — baseline 560px canvas
     this.dangerLineY = Math.round(this.containerHeight * 0.30);
     this.spawnY      = Math.round(this.containerHeight * 0.25);
     this.pointerX = this.containerWidth / 2;
 
-    // Build container walls
     const w = this.containerWidth;
     const h = this.containerHeight;
 
-    // Floor
     this.matter.add.rectangle(w / 2, h, w, WALL_THICKNESS, {
       isStatic: true, label: 'wall',
       friction: 0.8,
     });
-    // Left wall
     this.matter.add.rectangle(0, h / 2, WALL_THICKNESS, h, {
       isStatic: true, label: 'wall',
     });
-    // Right wall
     this.matter.add.rectangle(w, h / 2, WALL_THICKNESS, h, {
       isStatic: true, label: 'wall',
     });
 
-    // Draw visible walls (DINONAKTIFKAN agar bingkai murni dari CSS dan background terlihat full)
-    // const wallGfx = this.add.graphics();
-    // wallGfx.fillStyle(0xD4A373, 1);
-    // wallGfx.fillRect(0, h - Math.floor(WALL_THICKNESS / 2), w, WALL_THICKNESS); // floor
-    // wallGfx.fillRect(-Math.floor(WALL_THICKNESS / 2), 0, WALL_THICKNESS, h); // left
-    // wallGfx.fillRect(w - Math.floor(WALL_THICKNESS / 2), 0, WALL_THICKNESS, h); // right
 
-    // Danger line
     this.dangerLine = this.add.graphics();
     this.dangerLine.lineStyle(2, 0xff0000, 0.4);
     this.dangerLine.lineBetween(WALL_THICKNESS, this.dangerLineY, w - WALL_THICKNESS, this.dangerLineY);
 
-    // Drop indicator line
     this.dropIndicator = this.add.graphics();
 
-    // Arrow functions so we can remove them later
     const onSetSnacks = (data: unknown) => {
       const payload = data as { snacks: SnackData[]; scaleFactor: number };
       this.scaleFactor = payload.scaleFactor ?? 1.0;
-      // Scale snack radius so food size matches canvas proportionally
       this.snacks = payload.snacks.map(s => ({
         ...s,
         radius: Math.round(s.radius * this.scaleFactor),
@@ -105,7 +86,6 @@ export class MergeScene extends Phaser.Scene {
     };
 
     const onRestart = () => {
-      // Destroy all items
       this.activeItems.forEach(item => item.destroySnack());
       this.activeItems = [];
       this.gameOver = false;
@@ -115,13 +95,11 @@ export class MergeScene extends Phaser.Scene {
       this.updatePreview();
     };
 
-    // Listen for events from React
     EventBus.on('set-snacks', onSetSnacks);
     EventBus.on('pause-game', onPause);
     EventBus.on('resume-game', onResume);
     EventBus.on('restart-game', onRestart);
 
-    // Clean up listeners when scene is destroyed to prevent dead-scene errors
     this.events.once('destroy', () => {
       EventBus.off('set-snacks', onSetSnacks);
       EventBus.off('pause-game', onPause);
@@ -129,7 +107,6 @@ export class MergeScene extends Phaser.Scene {
       EventBus.off('restart-game', onRestart);
     });
 
-    // Collision detection
     this.matter.world.on('collisionstart', (_event: any, bodyA: MatterJS.BodyType, bodyB: MatterJS.BodyType) => {
       if (this.gameOver) return;
       const itemA = (bodyA as any).gameObject as SnackItem | undefined;
@@ -139,31 +116,25 @@ export class MergeScene extends Phaser.Scene {
       if (itemA.isDestroyed || itemB.isDestroyed) return;
       if (itemA.tier !== itemB.tier) return;
 
-      // Find next tier
       const currentTier = itemA.tier;
       const nextSnack = this.snacks.find(s => s.tier === currentTier + 1);
 
-      // Merge!
       const midX = (itemA.x + itemB.x) / 2;
       const midY = (itemA.y + itemB.y) / 2;
 
-      // Destroy old
       this.removeItem(itemA);
       this.removeItem(itemB);
 
       if (nextSnack) {
-        // Spawn merged item
         const merged = new SnackItem(this, midX, midY, nextSnack);
         this.activeItems.push(merged);
 
         EventBus.emit('on-merge', { tier: nextSnack.tier, points: nextSnack.points, name: nextSnack.name });
       } else {
-        // Max tier reached — big points!
         EventBus.emit('on-merge', { tier: currentTier, points: 200, name: itemA.snackData.name });
       }
     });
 
-    // Input — pointer move
     this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
       this.pointerX = Phaser.Math.Clamp(
         pointer.x,
@@ -172,11 +143,8 @@ export class MergeScene extends Phaser.Scene {
       );
     });
 
-    // Input — drop on click/tap
     this.input.on('pointerup', () => {
       if (this.gameOver || !this.canDrop) return;
-      // Removed y-restriction to allow dropping from anywhere
-      // if (pointer.y > DANGER_LINE_Y + 40) return;
 
       const now = Date.now();
       if (now - this.lastDropTime < DROP_COOLDOWN) return;
@@ -188,28 +156,22 @@ export class MergeScene extends Phaser.Scene {
   update() {
     if (this.gameOver) return;
 
-    // Sync all item positions
     for (const item of this.activeItems) {
       item.syncPosition();
     }
 
-    // Update drop indicator
     if (this.dropIndicator) {
       this.dropIndicator.clear();
 
-      // Cari titik pantul terjauh ke bawah (lantai atau jajanan lain)
       let targetY = this.containerHeight - Math.floor(WALL_THICKNESS / 2);
 
       for (const item of this.activeItems) {
         if (item.isDestroyed || !item.matterBody) continue;
         const body = item.matterBody;
         const snackRadius = item.snackData.radius;
-        // Hitung jarak mendatar (X)
         const dx = Math.abs(body.position.x - this.pointerX);
 
-        // Cek jika garis panduan menabrak lingkaran jajanan ini
         if (dx < snackRadius) {
-          // Rumus Pythagoras untuk mencari titik potong Y pada lingkaran
           const dy = Math.sqrt(snackRadius * snackRadius - dx * dx);
           const hitY = body.position.y - dy;
           if (hitY < targetY && hitY > this.spawnY) {
@@ -220,12 +182,10 @@ export class MergeScene extends Phaser.Scene {
 
       this.dropIndicator.lineStyle(2, 0xFFFFFF, 0.5);
 
-      // Gambar garis putus-putus yang bergerak (animasi)
       const dashLength = 8;
       const gapLength = 8;
       const step = dashLength + gapLength;
 
-      // Waktu offset agar garis terlihat berjalan turun
       const timeOffset = (this.time.now / 30) % step;
       let currentY = this.spawnY + timeOffset - step;
 
@@ -238,7 +198,6 @@ export class MergeScene extends Phaser.Scene {
         currentY += step;
       }
 
-      // Show small preview circle at drop position
       const snack = this.snacks.find(s => s.tier === this.nextTier);
       if (snack) {
         this.dropIndicator.fillStyle(
@@ -248,12 +207,10 @@ export class MergeScene extends Phaser.Scene {
       }
     }
 
-    // Check game over — any settled item above danger line
     this.checkGameOver();
   }
 
   private pickNextTier() {
-    // Random from tier 1–3 (lower tiers only for dropping)
     const maxDrop = Math.min(3, this.snacks.length);
     this.nextTier = Phaser.Math.Between(1, maxDrop);
   }
@@ -265,7 +222,6 @@ export class MergeScene extends Phaser.Scene {
     }
     const snack = this.snacks.find(s => s.tier === this.nextTier);
     if (!snack) return;
-    // Emit to React for HUD preview
     EventBus.emit('next-item', snack);
   }
 
@@ -278,7 +234,6 @@ export class MergeScene extends Phaser.Scene {
     this.lastDropTime = Date.now();
     this.canDrop = false;
 
-    // Cooldown before next drop
     this.time.delayedCall(DROP_COOLDOWN, () => {
       this.canDrop = true;
     });
@@ -295,10 +250,8 @@ export class MergeScene extends Phaser.Scene {
   }
 
   private checkGameOver() {
-    // 1. JANGAN cek game over jika sedang kuis/paused atau sudah game over
     if (this.gameOver || !this.matter.world.enabled || !this.canDrop) return;
 
-    // 2. Beri waktu toleransi setelah drop agar jajanan punya waktu untuk jatuh
     if (Date.now() - this.lastDropTime < 2500) return;
 
     for (const item of this.activeItems) {
@@ -307,10 +260,7 @@ export class MergeScene extends Phaser.Scene {
 
       const speed = Math.sqrt(body.velocity.x ** 2 + body.velocity.y ** 2);
 
-      // 3. Jajanan dianggap melanggar deadline HANYA jika diam (speed rendah) 
-      // dan posisinya di atas garis deadline (y < DANGER_LINE_Y)
       if (speed < 0.2 && body.position.y < this.dangerLineY) {
-        // Abaikan jika posisi Y masih di area start
         if (body.position.y <= this.spawnY + 5) continue;
 
         this.gameOver = true;

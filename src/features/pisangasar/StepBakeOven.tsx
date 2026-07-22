@@ -30,7 +30,6 @@ export function StepBakeOven({ onComplete }: Props) {
     }
   }, [bakingProgress, isDone, onComplete]);
 
-  // Mouse Drag Events
   const handleDragStart = (e: React.DragEvent) => {
     playButtonClick();
     setTimeout(() => setDragging(true), 0);
@@ -45,7 +44,6 @@ export function StepBakeOven({ onComplete }: Props) {
     if (!inOven) setInOven(true);
   };
 
-  // Touch Events
   const handleTouchStart = (e: React.TouchEvent) => {
     if (inOven) return;
     playButtonClick();
@@ -105,7 +103,7 @@ export function StepBakeOven({ onComplete }: Props) {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '30px', alignItems: 'center', width: '100%' }}>
         
-        {/* Source: The Topped Bananas */}
+        {}
         <div style={{ minHeight: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {!inOven && (
             <div
@@ -134,7 +132,7 @@ export function StepBakeOven({ onComplete }: Props) {
           )}
         </div>
 
-        {/* Target: The Oven */}
+        {}
         <div
           id="pisang-oven-target"
           onDragOver={handleOvenDragOver}
@@ -156,13 +154,13 @@ export function StepBakeOven({ onComplete }: Props) {
             transition: 'background 0.3s'
           }}
         >
-          {/* Oven Controls Decoration */}
+          {}
           <div style={{ position: 'absolute', top: '10px', right: '20px', display: 'flex', gap: '8px' }}>
             <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#222' }}></div>
             <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#222' }}></div>
           </div>
 
-          {/* Oven Inside / Glowing when baking */}
+          {}
           <div style={{
             position: 'absolute',
             inset: '30px 10px 10px 10px',
@@ -186,7 +184,7 @@ export function StepBakeOven({ onComplete }: Props) {
           </div>
         </div>
 
-        {/* Baking Progress Bar */}
+        {}
         {inOven && (
           <div style={{ width: '200px', height: '12px', background: '#E0E0E0', borderRadius: '6px', overflow: 'hidden' }}>
             <div style={{

@@ -27,7 +27,6 @@ export function SamaloyangMiniGameScreen() {
   const [showBackConfirm, setShowBackConfirm] = useState(false);
   const { playButtonClick, playStepComplete } = useSfx();
 
-  // Wrapper: putar SFX step selesai sebelum advance
   const handleStepComplete = useCallback(() => {
     playStepComplete();
     advanceSamaloyangStep();
@@ -40,7 +39,6 @@ export function SamaloyangMiniGameScreen() {
     setScreen('mainMenu');
   };
 
-  // Award stars + unlock pulau berikutnya saat samaloyang selesai
   useEffect(() => {
     if (samaloyangComplete) {
       awardStarsForRegion('aceh');
@@ -48,7 +46,6 @@ export function SamaloyangMiniGameScreen() {
     }
   }, [samaloyangComplete]);
 
-  /* ── Complete screen ── */
   if (samaloyangComplete) {
     return (
       <div className="klepon-root">
@@ -80,13 +77,12 @@ export function SamaloyangMiniGameScreen() {
     );
   }
 
-  /* ── Game screen ── */
   return (
     <div className="klepon-root">
-      {/* Background kitchen */}
+      {}
       <img src="/assets/klepon/bg_kitchen.png" alt="" className="klepon-bg" />
 
-      {/* ── Header bar ── */}
+      {}
       <div className="klepon-topbar">
         <button className="klepon-back-btn" onClick={handleBack} title="Kembali">
           <img src={backButtonImg} alt="Back" className="klepon-back-icon-img" />
@@ -102,7 +98,7 @@ export function SamaloyangMiniGameScreen() {
         </div>
       </div>
 
-      {/* ── Step dots ── */}
+      {}
       <div className="klepon-step-dots">
         {STEPS.map((_, idx) => (
           <div
@@ -118,7 +114,7 @@ export function SamaloyangMiniGameScreen() {
         ))}
       </div>
 
-      {/* ── Step content ── */}
+      {}
       <div className="klepon-generic-card">
         <div className="klepon-generic-header">
           <h2 className="klepon-generic-title">{STEPS[samaloyangStep]?.label}</h2>
@@ -132,7 +128,7 @@ export function SamaloyangMiniGameScreen() {
         </div>
       </div>
 
-      {/* Back confirm dialog */}
+      {}
       {showBackConfirm && (
         <MiniGameBackConfirm
           foodName="Samaloyang"

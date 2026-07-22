@@ -17,11 +17,9 @@ export function StepMatchIngredients({ onComplete }: Props) {
   const [complete, setComplete] = useState(false);
   const [matches, setMatches] = useState<Record<string, string>>({});
 
-  // Shuffled arrays
   const [shuffledLabels] = useState(() => [...ITEMS].sort(() => Math.random() - 0.5));
   const [shuffledImages] = useState(() => [...ITEMS].sort(() => Math.random() - 0.5));
 
-  // Drag states
   const [draggingLabelId, setDraggingLabelId] = useState<string | null>(null);
   const [pointerPos, setPointerPos] = useState({ x: 0, y: 0 });
 
@@ -38,7 +36,6 @@ export function StepMatchIngredients({ onComplete }: Props) {
     }
   }, [matches, complete, onComplete]);
 
-  // Update layout positions for SVG lines
   const updatePositions = () => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -50,7 +47,6 @@ export function StepMatchIngredients({ onComplete }: Props) {
       const el = document.getElementById(`label-${item.id}`);
       if (el) {
         const elRect = el.getBoundingClientRect();
-        // Label is on the LEFT, anchor is its RIGHT side
         newLabelPos[item.id] = {
           x: elRect.right - rect.left,
           y: elRect.top + elRect.height / 2 - rect.top
@@ -62,7 +58,6 @@ export function StepMatchIngredients({ onComplete }: Props) {
       const el = document.getElementById(`img-${item.id}`);
       if (el) {
         const elRect = el.getBoundingClientRect();
-        // Image is on the RIGHT, anchor is its LEFT side
         newImgPos[item.id] = {
           x: elRect.left - rect.left,
           y: elRect.top + elRect.height / 2 - rect.top
@@ -80,9 +75,8 @@ export function StepMatchIngredients({ onComplete }: Props) {
     return () => window.removeEventListener('resize', updatePositions);
   }, [shuffledLabels, shuffledImages]);
 
-  // Pointer interactions
   const handlePointerDown = (id: string, e: React.PointerEvent) => {
-    if (matches[id]) return; // already matched
+    if (matches[id]) return;
     playButtonClick();
     e.currentTarget.setPointerCapture(e.pointerId);
     setDraggingLabelId(id);
@@ -144,9 +138,9 @@ export function StepMatchIngredients({ onComplete }: Props) {
         `}
       </style>
 
-      {/* SVG Overlay for Lines */}
+      {}
       <svg id="match-svg-overlay" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
-        {/* Draw confirmed matches */}
+        {}
         {Object.entries(matches).map(([labelId, imgId]) => {
           const start = labelPositions[labelId];
           const end = imagePositions[imgId];
@@ -158,7 +152,7 @@ export function StepMatchIngredients({ onComplete }: Props) {
             />
           );
         })}
-        {/* Draw active drag line */}
+        {}
         {draggingLabelId && labelPositions[draggingLabelId] && (
           <line
             x1={labelPositions[draggingLabelId].x} y1={labelPositions[draggingLabelId].y}
@@ -171,7 +165,7 @@ export function StepMatchIngredients({ onComplete }: Props) {
 
       <div style={{ display: 'flex', width: '100%', justifyContent: 'center', alignItems: 'flex-start', gap: '80px', marginTop: '10px', zIndex: 2 }}>
         
-        {/* Left Column: Labels */}
+        {}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {shuffledLabels.map(item => {
             const isMatched = !!matches[item.id];
@@ -203,7 +197,7 @@ export function StepMatchIngredients({ onComplete }: Props) {
           })}
         </div>
 
-        {/* Right Column: Images */}
+        {}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {shuffledImages.map(item => {
             const isMatched = Object.values(matches).includes(item.id);

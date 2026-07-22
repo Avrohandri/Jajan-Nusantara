@@ -48,17 +48,14 @@ export function StepFrying({ onComplete }: Props) {
         setIsDone(true);
         setTimeout(onComplete, 1000);
       } else {
-        // Reset if pulled out early
         setProgress(0);
       }
     }
   };
 
-  // Timer effect for 5 seconds
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
     if (isDipped && !isDone) {
-      // 5 seconds = 5000ms. Update every 50ms = 100 ticks. 1% per tick.
       interval = setInterval(() => {
         setProgress(p => {
           if (p >= 100) return 100;
@@ -66,12 +63,11 @@ export function StepFrying({ onComplete }: Props) {
         });
       }, 50);
     } else {
-      if (progress < 100 && !isDone) setProgress(0); // auto reset if not full when not dipped
+      if (progress < 100 && !isDone) setProgress(0);
     }
     return () => clearInterval(interval);
   }, [isDipped, isDone, progress]);
 
-  // Event handlers
   const handlePointerDown = (e: React.PointerEvent) => {
     e.currentTarget.setPointerCapture(e.pointerId);
     playButtonClick();
@@ -91,7 +87,7 @@ export function StepFrying({ onComplete }: Props) {
         {isDone ? 'Samaloyang Matang! ✨' : progress >= 100 ? 'Matang! Tarik cetakan keluar!' : progress > 0 ? 'Tahan di minyak panas!' : 'Celupkan cetakan ke minyak panas hingga matang!'}
       </p>
 
-      {/* Container area */}
+      {}
       <div 
         ref={containerRef}
         style={{ position: 'relative', width: '300px', height: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center', touchAction: 'none' }}
@@ -101,48 +97,48 @@ export function StepFrying({ onComplete }: Props) {
         onPointerCancel={handlePointerUp}
       >
         
-        {/* Pointer tracking UI - The Mold */}
+        {}
         {!isDone && (
           <div style={{
-            position: 'absolute', // Keep it relative to the 300x400 container!
+            position: 'absolute',
             left: isDragging ? `${pointerPos.x}px` : '50%',
             top: isDragging ? `${pointerPos.y}px` : '20px',
-            transform: isDragging ? 'translate(-50%, -80%)' : 'translateX(-50%)', // -80% makes the handle snap to the pointer
-            zIndex: 5, // Draw behind the wok
-            pointerEvents: 'none', // Critical so it doesn't block container tracking
+            transform: isDragging ? 'translate(-50%, -80%)' : 'translateX(-50%)',
+            zIndex: 5,
+            pointerEvents: 'none',
             transition: isDragging ? 'none' : 'all 0.3s ease-out'
           }}>
             <img
               src="/assets/samaloyang/cetakan_berisi.png"
               alt="Cetakan Berisi"
-              draggable={false} // Prevent native drag bugs
+              draggable={false}
               style={{
                 height: '240px', width: '140px', objectFit: 'contain',
                 filter: progress >= 100 
-                  ? 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) sepia(0.8) hue-rotate(-20deg) brightness(0.8)' // Kuning kecoklatan (matang)
-                  : 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) sepia(0.1) brightness(1.1)' // Warna adonan awal
+                  ? 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) sepia(0.8) hue-rotate(-20deg) brightness(0.8)'
+                  : 'drop-shadow(0 4px 8px rgba(0,0,0,0.5)) sepia(0.1) brightness(1.1)'
               }}
             />
           </div>
         )}
 
-        {/* The Hot Oil Pan */}
+        {}
         <div 
           ref={oilPanRef}
           style={{
             position: 'absolute', bottom: 0,
             width: '260px', height: '140px',
-            background: '#E65100', // Deep orange oil
+            background: '#E65100',
             borderRadius: '20px 20px 100px 100px',
-            border: '6px solid #212121', // Pan border
+            border: '6px solid #212121',
             borderTopWidth: '10px',
             boxShadow: 'inset 0 -20px 40px rgba(0,0,0,0.4), 0 10px 20px rgba(0,0,0,0.3), 0 -10px 30px rgba(255,140,0,0.4)',
             display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
             overflow: 'hidden',
-            zIndex: 10 // Draw IN FRONT of the mold
+            zIndex: 10
           }}
         >
-          {/* Bubbles animation inside oil (visual only) */}
+          {}
           <div style={{
             position: 'absolute', top: '10px', left: '-20px', right: '-20px', height: '40px',
             background: 'rgba(255, 140, 0, 0.6)',
@@ -150,14 +146,14 @@ export function StepFrying({ onComplete }: Props) {
             boxShadow: isDipped ? 'inset 0 0 20px rgba(255,100,0,1)' : 'inset 0 -5px 10px rgba(0,0,0,0.1)',
             transition: 'box-shadow 0.3s'
           }}>
-            {/* Visual indicator of boiling */}
+            {}
             {isDipped && (
               <div style={{ position: 'absolute', width: '100%', height: '100%', animation: 'boil 0.5s infinite alternate' }} />
             )}
           </div>
         </div>
 
-        {/* Visual representation of it being cooked when dropped/done */}
+        {}
         {isDone && (
           <div style={{ position: 'absolute', bottom: '150px', zIndex: 5, animation: 'floatUp 1s ease-out forwards' }}>
             <img
@@ -171,7 +167,7 @@ export function StepFrying({ onComplete }: Props) {
           </div>
         )}
 
-        {/* Animated Fire below the pan */}
+        {}
         <div style={{ display: 'flex', gap: '30px', position: 'absolute', bottom: '-25px', zIndex: 11 }}>
           <div style={{ fontSize: '32px', filter: 'drop-shadow(0 0 10px rgba(255,100,0,0.8))', animation: 'floatUp 0.8s ease-in-out infinite alternate', animationDelay: '0s' }}>🔥</div>
           <div style={{ fontSize: '40px', filter: 'drop-shadow(0 0 10px rgba(255,100,0,0.8))', animation: 'floatUp 0.7s ease-in-out infinite alternate', animationDelay: '0.2s', transform: 'translateY(-5px)' }}>🔥</div>
@@ -180,7 +176,7 @@ export function StepFrying({ onComplete }: Props) {
 
       </div>
 
-      {/* Progress Ring / Timer */}
+      {}
       <div style={{ width: '200px', height: '14px', background: '#FFF8E1', borderRadius: '10px', overflow: 'hidden', border: '2px solid #D4A373' }}>
         <div style={{ height: '100%', width: `${progress}%`, background: progress >= 100 ? '#4CAF50' : '#FF9800', transition: 'width 0.1s linear' }} />
       </div>

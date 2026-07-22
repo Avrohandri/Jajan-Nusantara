@@ -24,7 +24,6 @@ export function StepSpreadTopping({ onComplete }: Props) {
     };
   }, []);
 
-  // Mouse Handlers
   const handleToppingDragStart = (e: React.DragEvent) => {
     playButtonClick();
     setTimeout(() => setDraggingTopping(true), 0);
@@ -40,7 +39,6 @@ export function StepSpreadTopping({ onComplete }: Props) {
     applyTopping(id);
   };
 
-  // Touch Handlers
   const handleToppingTouchStart = (e: React.TouchEvent) => {
     playButtonClick();
     const touch = e.touches[0];
@@ -77,7 +75,6 @@ export function StepSpreadTopping({ onComplete }: Props) {
     setDraggingTopping(false);
 
     const touch = e.changedTouches[0];
-    // Check collision with any banana
     bananas.forEach(b => {
       if (b.topped) return;
       const el = document.getElementById(`banana-${b.id}`);
@@ -114,7 +111,7 @@ export function StepSpreadTopping({ onComplete }: Props) {
         {allTopped ? 'Semua pisang sudah diolesi taburan! 🍌🟤' : 'Lumeri pisang 🍌 dengan adonan 🥣'}
       </p>
 
-      {/* The Topping Source */}
+      {}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100px', width: '100px' }}>
         <div
           draggable
@@ -138,7 +135,7 @@ export function StepSpreadTopping({ onComplete }: Props) {
         </div>
       </div>
 
-      {/* The Bananas Target */}
+      {}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px', justifyContent: 'center', maxWidth: '400px' }}>
         {bananas.map(banana => (
           <div 

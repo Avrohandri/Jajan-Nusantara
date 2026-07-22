@@ -18,12 +18,10 @@ import { fallbackRecipes } from './datastore/fallbackRecipes';
 import type { SnackData, QuizData, RecipeData, UserProfile, UserSession, IslandProgress, IslandStars, IslandMerges, RegionBestScores, LeaderboardEntry } from '../types';
 import { PROFILE_ICONS } from '../utils/profileIcons';
 
-// ========== Konstanta LocalStorage ==========
 const LS_SNACKS = 'kuliner_snacks';
 const LS_RECIPES = 'kuliner_recipes';
 const LS_PROFILE = 'kuliner_profile_v2';
 
-// ========== Default values ==========
 const DEFAULT_ISLAND_PROGRESS: IslandProgress = {
   jogja: false,
   bali: false,
@@ -38,7 +36,6 @@ const DEFAULT_REGION_SCORES: RegionBestScores = {
   maluku: 0,
 };
 
-// ========== Game Content Fetchers ==========
 
 export async function fetchSnacks(): Promise<SnackData[]> {
   if (isFirebaseConfigured()) {
@@ -83,9 +80,7 @@ export async function fetchRecipes(): Promise<RecipeData[]> {
   return fallbackRecipes;
 }
 
-// ========== Username Management ==========
 
-/** Cek apakah username sudah dipakai (di koleksi usernames) */
 export async function checkUsernameExists(username: string): Promise<boolean> {
   if (!isFirebaseConfigured()) return false;
   try {
@@ -98,7 +93,6 @@ export async function checkUsernameExists(username: string): Promise<boolean> {
   }
 }
 
-/** Simpan mapping username → userId di koleksi usernames */
 export async function saveUsername(userId: string, username: string): Promise<void> {
   if (!isFirebaseConfigured()) return;
   try {
@@ -112,7 +106,6 @@ export async function saveUsername(userId: string, username: string): Promise<vo
   }
 }
 
-// ========== Player Profile ==========
 
 export async function createProfile(userId: string, username: string): Promise<void> {
   if (isFirebaseConfigured()) {
@@ -183,12 +176,7 @@ export async function saveProfile(userId: string, profile: Partial<UserProfile>)
   localStorage.setItem(LS_PROFILE, JSON.stringify({ ...current, ...profile }));
 }
 
-// ========== Island Progress ==========
 
-/**
- * Update progress pulau setelah berhasil menyelesaikan Drop & Merge di region tersebut.
- * Juga update skor terbaik per-pulau dan totalBestScore di leaderboard.
- */
 export async function updateIslandProgress(
   userId: string,
   region: keyof IslandProgress,
@@ -215,7 +203,6 @@ export async function updateIslandProgress(
         totalBestScore: newTotalBestScore,
         lastPlayedAt: Date.now(),
       });
-      // Update leaderboard
       await setDoc(doc(db, 'leaderboard', userId), {
         userId,
         username: currentProfile.username,
@@ -230,7 +217,6 @@ export async function updateIslandProgress(
   return { newRegionBestScores, newTotalBestScore };
 }
 
-// ========== Leaderboard ==========
 
 export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
   if (isFirebaseConfigured()) {
@@ -250,13 +236,11 @@ export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
   return [];
 }
 
-/** Update icon profil user di koleksi users dan leaderboard */
 export async function updateProfileIcon(userId: string, username: string, icon: string): Promise<void> {
   if (!isFirebaseConfigured()) return;
   try {
     const db = getDb()!;
     await updateDoc(doc(db, 'users', userId), { profileIcon: icon });
-    // Sync ke leaderboard juga (merge agar totalBestScore tidak hilang)
     const lbSnap = await getDoc(doc(db, 'leaderboard', userId));
     if (lbSnap.exists()) {
       await updateDoc(doc(db, 'leaderboard', userId), { profileIcon: icon });
@@ -268,7 +252,6 @@ export async function updateProfileIcon(userId: string, username: string, icon: 
   }
 }
 
-// ========== Sessions ==========
 
 export async function saveSession(userId: string, session: UserSession): Promise<void> {
   if (isFirebaseConfigured()) {
@@ -300,7 +283,6 @@ export async function getSessions(userId: string): Promise<UserSession[]> {
   return [];
 }
 
-/** Simpan data bintang (islandStars) dan merge count per pulau ke Firestore / localStorage */
 export async function saveIslandStars(
   userId: string,
   islandStars: IslandStars,
@@ -319,7 +301,6 @@ export async function saveIslandStars(
       console.warn('[DB] Gagal simpan island stars:', e);
     }
   }
-  // Fallback: simpan ke localStorage
   const existing = localStorage.getItem('kuliner_profile_v2');
   const current = existing ? JSON.parse(existing) : {};
   localStorage.setItem('kuliner_profile_v2', JSON.stringify({ ...current, islandStars, islandMerges }));

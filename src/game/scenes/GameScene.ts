@@ -6,8 +6,8 @@ import { useGameStore } from '../../store/gameStore';
 import type { SnackData } from '../../types';
 
 const WALL_THICKNESS = 30;
-const DROP_COOLDOWN_BASE = 500;  // ms saat tidak ada notifikasi antri
-const DROP_COOLDOWN_MAX  = 2200; // ms maksimum saat antrian penuh
+const DROP_COOLDOWN_BASE = 500;
+const DROP_COOLDOWN_MAX  = 2200;
 
 export class GameScene extends Phaser.Scene {
   private debugMode: boolean = false;
@@ -25,19 +25,15 @@ export class GameScene extends Phaser.Scene {
   private dropIndicator: Phaser.GameObjects.Graphics | null = null;
   private previewSprite: Phaser.GameObjects.Sprite | null = null;
   private dangerLine: Phaser.GameObjects.Graphics | null = null;
-  private dangerTimers: Map<number, number> = new Map(); // bodyId -> timestamp when first entered danger zone
+  private dangerTimers: Map<number, number> = new Map();
   private pointerX = 0;
-  /** Set berisi key "idA_idB" untuk mencegah satu collision dihitung merge berkali-kali */
   private pendingMerges: Set<string> = new Set();
-  /** Ukuran antrian notifikasi NPC — digunakan untuk memperlambat drop saat banyak notif */
   private npcQueueSize = 0;
-  /** Timestamp saat game di-pause — dipakai untuk offset dangerTimers agar tidak bug saat alt-tab */
   private pausedAt = 0;
 
   private currentRegion: string = 'jogja';
   private currentConfig: FoodItem[] = [];
 
-  // Computed in create() — proportional to canvas size (includes DPR)
   private scaleFactor = 1;
   private dangerLineY = 170;
   private spawnY = 140;
@@ -47,17 +43,13 @@ export class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    // Determine current region
     this.currentRegion = useGameStore.getState().activeRegion || 'jogja';
-    // currentConfig will be set in create() after we know containerHeight.
-    // For preload, use the unscaled config just to get texture keys.
     const baseConfig = REGION_FOOD_CONFIGS[this.currentRegion] || REGION_FOOD_CONFIGS['jogja'];
     
     const assetFolder = `foods_${this.currentRegion}`;
     for (const item of baseConfig) {
       this.load.image(item.textureKey, `/assets/${assetFolder}/${item.textureKey}.png`);
     }
-    // Store region for use in create()
     this.currentConfig = baseConfig;
   }
 
@@ -76,19 +68,12 @@ export class GameScene extends Phaser.Scene {
     this.containerHeight = Number(this.game.config.height);
     this.pointerX = this.containerWidth / 2;
 
-    // Baseline canvas is 560px tall at DPR=1 → containerHeight = 560.
-    // On mobile DPR=3, containerHeight = 1680, so scaleFactor = 3.
-    // Scale the ENTIRE config (displaySize + all collider dimensions) so
-    // both sprite visual and physics body are proportional on all screens.
     this.scaleFactor  = this.containerHeight / 560;
     this.dangerLineY  = Math.round(this.containerHeight * 0.30);
     this.spawnY       = Math.round(this.containerHeight * 0.25);
 
-    // Override gravity to feel the same on all screen sizes.
-    // In a 3× world, gravity needs to be 3× stronger for the same apparent fall speed.
     this.matter.world.setGravity(0, 1.5 * this.scaleFactor);
 
-    // Re-build scaled config — start from RAW and apply base 1.1 × DPR factor
     const rawConfig = REGION_FOOD_CONFIGS_RAW[this.currentRegion] || REGION_FOOD_CONFIGS_RAW['jogja'];
     this.currentConfig = scaleFoodConfig(rawConfig, 1.1 * this.scaleFactor);
 
@@ -98,26 +83,21 @@ export class GameScene extends Phaser.Scene {
     const w = this.containerWidth;
     const h = this.containerHeight;
 
-    // Floor
     this.matter.add.rectangle(w / 2, h, w, WALL_THICKNESS, {
       isStatic: true, label: 'wall',
       friction: 0.8,
     });
-    // Left wall
     this.matter.add.rectangle(0, h / 2, WALL_THICKNESS, h, {
       isStatic: true, label: 'wall',
     });
-    // Right wall
     this.matter.add.rectangle(w, h / 2, WALL_THICKNESS, h, {
       isStatic: true, label: 'wall',
     });
 
-    // Danger line — scale line width with world size
     this.dangerLine = this.add.graphics();
     this.dangerLine.lineStyle(Math.max(2, Math.round(2 * this.scaleFactor)), 0xff0000, 0.6);
     this.dangerLine.lineBetween(WALL_THICKNESS, this.dangerLineY, w - WALL_THICKNESS, this.dangerLineY);
 
-    // Buat texture untuk partikel — scale ukuran agar terlihat di semua layar
     const pxGraphics = this.make.graphics({ x: 0, y: 0 }, false);
     const pSize = Math.round(12 * this.scaleFactor);
     pxGraphics.fillStyle(0xffffff, 1);
@@ -128,15 +108,13 @@ export class GameScene extends Phaser.Scene {
     const previewConfig = this.currentConfig[0];
     this.previewSprite = this.add.sprite(this.pointerX, this.spawnY, previewConfig.textureKey);
     this.previewSprite.setDisplaySize(previewConfig.displaySize.width, previewConfig.displaySize.height);
-    this.previewSprite.setAlpha(0.6); // Semi-transparent preview
-    this.previewSprite.setDepth(50); // Pastikan ada di atas indikator
+    this.previewSprite.setAlpha(0.6);
+    this.previewSprite.setDepth(50);
 
-    // Berikan hint langsung agar UI React tidak kosong
     this.time.delayedCall(100, () => {
       EventBus.emit('next-item', { tier: this.nextTier });
     });
 
-    // Event hooks
     const onSetSnacks = (data: unknown) => {
       this.snacks = data as SnackData[];
       this.pickNextTier();
@@ -145,7 +123,6 @@ export class GameScene extends Phaser.Scene {
 
     const onPause = () => {
       if (this.matter?.world) this.matter.world.pause();
-      // Catat kapan mulai pause agar dangerTimers bisa di-offset saat resume
       this.pausedAt = Date.now();
     };
 
@@ -153,8 +130,6 @@ export class GameScene extends Phaser.Scene {
       if (this.matter?.world && !this.gameOver) {
         this.matter.world.resume();
       }
-      // Offset semua dangerTimers sebesar durasi pause
-      // sehingga 3-detik countdown tidak menghitung waktu saat tab tidak aktif / quiz terbuka
       if (this.pausedAt > 0) {
         const pauseDuration = Date.now() - this.pausedAt;
         for (const [id, enteredAt] of this.dangerTimers.entries()) {
@@ -171,7 +146,7 @@ export class GameScene extends Phaser.Scene {
       this.dangerTimers.clear();
       this.gameOver = false;
       this.canDrop = true;
-      this.isFirstDrop = true; // Reset agar klepon muncul lagi pertama kali
+      this.isFirstDrop = true;
       if (this.matter?.world) this.matter.world.resume();
       this.pickNextTier();
       this.updatePreview();
@@ -182,7 +157,6 @@ export class GameScene extends Phaser.Scene {
     EventBus.on('resume-game', onResume);
     EventBus.on('restart-game', onRestart);
 
-    // Dengarkan perubahan ukuran antrian NPC untuk menyesuaikan cooldown drop
     const onNpcQueueSize = (size: unknown) => {
       this.npcQueueSize = typeof size === 'number' ? size : 0;
     };
@@ -203,7 +177,6 @@ export class GameScene extends Phaser.Scene {
       }
     });
 
-    // Merge system
     const handleMergeCollision = (event: any) => {
       if (this.gameOver) return;
 
@@ -218,7 +191,6 @@ export class GameScene extends Phaser.Scene {
         if (!objA || !objB) continue;
         if (!objA.active || !objB.active) continue;
 
-        // Dedup guard — cegah collision yang sama diproses lebih dari sekali
         const pairKey = bodyA.id < bodyB.id
           ? `${bodyA.id}_${bodyB.id}`
           : `${bodyB.id}_${bodyA.id}`;
@@ -233,13 +205,11 @@ export class GameScene extends Phaser.Scene {
           const midX = (bodyA.position.x + bodyB.position.x) / 2;
           const midY = (bodyA.position.y + bodyB.position.y) / 2;
 
-          // Tandai pair ini sedang diproses agar tidak double-merge
           this.pendingMerges.add(pairKey);
 
           this.removeItem(objA);
           this.removeItem(objB);
 
-          // Particles Effect — scale speed and push radius with world size
           const sf = this.scaleFactor;
           const particles = this.add.particles(midX, midY, 'particle_circle', {
             speed: { min: Math.round(60 * sf), max: Math.round(180 * sf) },
@@ -254,7 +224,6 @@ export class GameScene extends Phaser.Scene {
           particles.explode(15);
           this.time.delayedCall(1000, () => particles.destroy());
 
-          // Push Effect
           this.applyPushEffect(midX, midY, Math.round(180 * sf), 0.25 * sf);
 
           if (tier < this.currentConfig.length - 1) {
@@ -267,19 +236,15 @@ export class GameScene extends Phaser.Scene {
             this.time.delayedCall(50, () => {
               this.spawnFood(nextTier, midX, midY);
               EventBus.emit('on-merge', { tier: nextTier, points: pts, name: nm });
-              // Emit food-revealed saat kuliner baru muncul hasil merge
               EventBus.emit('food-revealed', { tier: nextTier });
 
-              // Hapus dari pending setelah spawn selesai
               this.time.delayedCall(200, () => {
                 this.pendingMerges.delete(pairKey);
               });
 
-              // Jika hasil merge adalah kuliner TERTINGGI, emit event kemenangan
               if (isMaxTier) {
-                this.gameOver = true; // Blok drop baru
+                this.gameOver = true;
                 this.canDrop = false;
-                // Beri sedikit jeda agar animasi kuliner spawn terlihat sebelum transisi
                 this.time.delayedCall(1500, () => {
                   if (this.matter?.world) this.matter.world.pause();
                   EventBus.emit('max-tier-reached', { name: nm, tier: nextTier });
@@ -296,7 +261,6 @@ export class GameScene extends Phaser.Scene {
       }
     };
 
-    // Hanya gunakan collisionstart — collisionactive menyebabkan merge dihitung ratusan kali
     this.matter.world.on('collisionstart', handleMergeCollision);
 
     this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
@@ -375,7 +339,7 @@ export class GameScene extends Phaser.Scene {
 
   private pickNextTier() {
     if (this.isFirstDrop) {
-      this.nextTier = 0; // Klepon selalu pertama
+      this.nextTier = 0;
       this.isFirstDrop = false;
     } else {
       this.nextTier = Phaser.Math.Between(0, 2);
@@ -383,14 +347,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updatePreview() {
-    // Selalu update preview sprite dalam engine (tidak bergantung pada react store array)
     const config = this.currentConfig[this.nextTier];
     if (this.previewSprite && config) {
       this.previewSprite.setTexture(config.textureKey);
       this.previewSprite.setDisplaySize(config.displaySize.width, config.displaySize.height);
     }
 
-    // Update HUD React jika ada tipe
     const snack = this.snacks.find(s => s.tier === this.nextTier) || { tier: this.nextTier };
     EventBus.emit('next-item', snack);
   }
@@ -420,12 +382,6 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  /** Hitung cooldown drop saat ini berdasarkan antrian notifikasi NPC.
-   *  0 notif  = 500 ms  (normal)
-   *  1 notif  = 1100 ms (sedikit melambat)
-   *  2 notif  = 1600 ms (lebih lambat)
-   *  ≥3 notif = 2200 ms (maksimum — beri waktu player membaca)
-   */
   private getDropCooldown(): number {
     const q = this.npcQueueSize;
     if (q <= 0) return DROP_COOLDOWN_BASE;
@@ -438,20 +394,18 @@ export class GameScene extends Phaser.Scene {
     const droppedTier = this.nextTier;
     this.spawnFood(droppedTier, x, this.spawnY);
 
-    // Emit food-revealed saat kuliner benar-benar di-drop ke papan
     EventBus.emit('food-revealed', { tier: droppedTier });
 
     this.lastDropTime = Date.now();
     this.canDrop = false;
 
-    // Preview redup (dan abu-abu jika ada antrian NPC) saat cooldown berjalan
     if (this.previewSprite) {
       this.previewSprite.setVisible(true);
       if (this.npcQueueSize > 0) {
-        this.previewSprite.setTint(0x555555); // warna abu-abu/gelap
-        this.previewSprite.setAlpha(0.4); // sedikit lebih jelas dari 0.25 agar warna terlihat
+        this.previewSprite.setTint(0x555555);
+        this.previewSprite.setAlpha(0.4);
       } else {
-        this.previewSprite.setAlpha(0.25); // redup normal
+        this.previewSprite.setAlpha(0.25);
       }
     }
 
@@ -459,7 +413,7 @@ export class GameScene extends Phaser.Scene {
     this.time.delayedCall(cooldown, () => {
       this.canDrop = true;
       if (this.previewSprite) {
-        this.previewSprite.setAlpha(0.6); // kembali normal
+        this.previewSprite.setAlpha(0.6);
         this.previewSprite.clearTint();
       }
     });
@@ -467,7 +421,6 @@ export class GameScene extends Phaser.Scene {
     this.pickNextTier();
     this.updatePreview();
     EventBus.emit('on-drop');
-    // Kirim sinyal ke React agar memutar SFX drop (Web Audio harus dipanggil dari React)
     EventBus.emit('drop-sfx');
   }
 
@@ -483,31 +436,25 @@ export class GameScene extends Phaser.Scene {
   private checkGameOver() {
     if (this.gameOver || !this.matter.world.enabled) return;
 
-    const DANGER_THRESHOLD_MS = 3000; // item must stay above danger line for 3 seconds continuously
+    const DANGER_THRESHOLD_MS = 3000;
     const now = Date.now();
 
-    // Track which body IDs are currently crossing the danger line
     const inDangerNow = new Set<number>();
 
     for (const item of this.activeItems) {
       if (!item.active || !item.body) continue;
       const body = item.body as MatterJS.BodyType;
 
-      // Skip items that were just spawned at the top (within spawn area)
       if (body.position.y <= this.spawnY + 5) continue;
 
-      // Trigger danger as soon as the collider top is above the danger line
-      // (no speed requirement — any item above the line counts)
       if (body.position.y < this.dangerLineY) {
         inDangerNow.add(body.id);
 
         if (!this.dangerTimers.has(body.id)) {
-          // First frame this body crosses the danger line
           this.dangerTimers.set(body.id, now);
         } else {
           const enteredAt = this.dangerTimers.get(body.id)!;
           if (now - enteredAt >= DANGER_THRESHOLD_MS) {
-            // Has been above the danger line continuously for 3+ seconds → game over
             this.gameOver = true;
             this.canDrop = false;
             this.matter.world.pause();
@@ -519,7 +466,6 @@ export class GameScene extends Phaser.Scene {
       }
     }
 
-    // Reset timers for bodies that have fallen back below the danger line
     for (const id of this.dangerTimers.keys()) {
       if (!inDangerNow.has(id)) {
         this.dangerTimers.delete(id);
@@ -548,7 +494,7 @@ export class GameScene extends Phaser.Scene {
           this.debugGraphics.lineStyle(2, 0xff0000, 1);
           break;
         case 'rectangle':
-          this.debugGraphics.lineStyle(2, 0x0000ff, 1); // Biru untuk rectangle
+          this.debugGraphics.lineStyle(2, 0x0000ff, 1);
           break;
       }
 
@@ -566,7 +512,6 @@ export class GameScene extends Phaser.Scene {
   private applyPushEffect(x: number, y: number, radius: number, force: number) {
     if (!this.matter || !this.matter.world) return;
 
-    // Gunakan getAllBodies() untuk menghindari error query method yang mungkin tidak di-support dan menyebabkan freeze
     const bodies = this.matter.world.getAllBodies();
 
     bodies.forEach((body: any) => {
@@ -577,12 +522,10 @@ export class GameScene extends Phaser.Scene {
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       if (distance > 0 && distance < radius) {
-        // Semakin dekat, semakin kuat dorongannya
         const strength = (1 - distance / radius) * force;
         const pushX = (dx / distance) * strength;
         const pushY = (dy / distance) * strength;
 
-        // Terapkan force
         try {
           this.matter.body.applyForce(body, body.position, { x: pushX, y: pushY });
         } catch (e) {

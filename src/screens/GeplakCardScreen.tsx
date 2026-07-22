@@ -17,7 +17,7 @@ export function GeplakCardScreen() {
         backgroundPosition: 'center' 
       }}
     >
-      {/* Back Button */}
+      {}
       <button
         className="klepon-card-back-btn"
         onClick={() => { playButtonClick(); setScreen('jajanpedia'); }}
@@ -27,14 +27,14 @@ export function GeplakCardScreen() {
       </button>
 
       <div className="klepon-card-content">
-        {/* Header */}
+        {}
         <div className="klepon-card-header">
           <span className="klepon-card-leaf">🍡</span>
           <h1 className="klepon-card-title">Geplak</h1>
           <span className="klepon-card-leaf">🍡</span>
         </div>
 
-        {/* Mascot */}
+        {}
         <div className="klepon-card-mascot-wrapper">
           <div className="klepon-card-sparkle top-left">✦</div>
           <div className="klepon-card-sparkle top-right">✦</div>
@@ -46,14 +46,14 @@ export function GeplakCardScreen() {
           <img src={geplakImg} alt="Geplak Mascot" className="klepon-card-mascot" />
         </div>
 
-        {/* Tagline */}
+        {}
         <div className="klepon-card-tagline">
           <span className="klepon-leaf-sm">☀️</span>
           <p>Manis gurih dari parutan kelapa!</p>
           <span className="klepon-leaf-sm">☀️</span>
         </div>
 
-        {/* About Box */}
+        {}
         <div className="klepon-card-about-box">
           <p className="klepon-card-about-text">
             Geplak adalah jajanan tradisional berbentuk bulat atau kotak dengan warna cerah. 
@@ -62,7 +62,7 @@ export function GeplakCardScreen() {
           </p>
         </div>
 
-        {/* Info Row */}
+        {}
         <div className="klepon-card-info-row">
           <div className="klepon-card-info-item">
             <div className="klepon-card-info-icon klepon-icon-red">📍</div>
@@ -81,7 +81,7 @@ export function GeplakCardScreen() {
           </div>
         </div>
 
-        {/* Fun Fact */}
+        {}
         <div className="klepon-card-funfact">
           <span className="klepon-card-funfact-icon">🎨</span>
           <div>

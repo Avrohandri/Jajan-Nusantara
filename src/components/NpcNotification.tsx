@@ -9,17 +9,14 @@ export function NpcNotification() {
   const [queue, setQueue] = useState<NotificationData[]>([]);
   const [activeItem, setActiveItem] = useState<NotificationData | null>(null);
 
-  // Track tiers we've already shown the NPC for in this session
   const notifiedTiers = useRef(new Set<number>());
 
-  // Ref for the auto-dismiss timer so we can pause/resume it
   const timerRef = useRef<number | null>(null);
-  const remainingRef = useRef<number>(0);   // ms remaining when paused
-  const startedAtRef = useRef<number>(0);   // timestamp when timer last started
+  const remainingRef = useRef<number>(0);
+  const startedAtRef = useRef<number>(0);
 
-  /** Start or resume the dismiss countdown */
   const startTimer = (ms: number) => {
-    if (timerRef.current !== null) return; // already running
+    if (timerRef.current !== null) return;
     startedAtRef.current = performance.now();
     timerRef.current = window.setTimeout(() => {
       timerRef.current = null;
@@ -28,7 +25,6 @@ export function NpcNotification() {
     }, ms);
   };
 
-  /** Pause the dismiss countdown */
   const pauseTimer = () => {
     if (timerRef.current === null) return;
     window.clearTimeout(timerRef.current);
@@ -37,14 +33,12 @@ export function NpcNotification() {
     remainingRef.current = Math.max(0, remainingRef.current - elapsed);
   };
 
-  /** Resume the dismiss countdown with whatever time was left */
   const resumeTimer = () => {
     if (remainingRef.current > 0) {
       startTimer(remainingRef.current);
     }
   };
 
-  // ── Subscribe to EventBus ──────────────────────────────────────────
   useEffect(() => {
     const handleCheckUnlock = (tier: number) => {
       if (notifiedTiers.current.has(tier)) return;
@@ -100,7 +94,6 @@ export function NpcNotification() {
     };
   }, []);
 
-  // ── Process queue sequentially ────────────────────────────────────
   useEffect(() => {
     if (!activeItem && queue.length > 0) {
       setActiveItem(queue[0]);
@@ -108,21 +101,17 @@ export function NpcNotification() {
     }
   }, [activeItem, queue]);
 
-  // ── Broadcast ukuran antrian ke GameScene via EventBus ───────────
   useEffect(() => {
-    // Total notifikasi yang belum ditampilkan = antrian + yang sedang aktif
     const total = queue.length + (activeItem ? 1 : 0);
     EventBus.emit('npc-queue-size', total);
   }, [queue, activeItem]);
 
-  // ── Start the dismiss timer when a new item becomes active ────────
   useEffect(() => {
     if (!activeItem) return;
 
     const waitTime = 5000;
     remainingRef.current = waitTime;
 
-    // Only start immediately if quiz is NOT currently showing
     const { showQuiz } = useGameStore.getState();
     if (!showQuiz) {
       startTimer(waitTime);
@@ -137,7 +126,6 @@ export function NpcNotification() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeItem]);
 
-  // ── Freeze / unfreeze timer when quiz/pause opens ─────────────
   const showQuiz = useGameStore((s) => s.showQuiz);
   const isPaused = useGameStore((s) => s.isPaused);
   const shouldFreeze = showQuiz || isPaused;
@@ -154,7 +142,6 @@ export function NpcNotification() {
 
   if (!activeItem) return null;
 
-  /** Split on **...** markers and return bold spans for marked segments */
   function parseBold(text: string): React.ReactNode[] {
     return text.split('**').map((part, i) =>
       i % 2 === 1 ? <strong key={i}>{part}</strong> : part

@@ -1,18 +1,14 @@
 import { useGameStore } from '../store/gameStore';
 import { useSfx } from '../hooks/useSfx';
 
-// --- SLOT 1: Background utama ---
 import menuBackground from '../assets/menu/background.png';
 
-// --- SLOT 2: Tombol Play ---
 import btnPlay from '../assets/menu/btn_play.png';
 
-// --- SLOT 3: Tombol Pengaturan ---
 import btnPengaturan from '../assets/menu/btn_pengaturan.png';
 
 import btnJajanpedia from '../assets/menu/btn_jajanpedia.png';
 
-// --- SLOT 5: Tombol Peringkat (Leaderboard) ---
 import btnPeringkat from '../assets/menu/btn_peringkat.png';
 
 import { getProfileIconData } from '../utils/profileIcons';
@@ -25,7 +21,7 @@ export function MainMenuScreen() {
   return (
     <div className="main-menu-screen">
       <div className="main-menu-container">
-        {/* Background Image */}
+        {}
         <div className="main-menu-bg">
           <img
             src={menuBackground}
@@ -34,10 +30,10 @@ export function MainMenuScreen() {
           />
         </div>
 
-        {/* Overlay content */}
+        {}
         <div className="main-menu-overlay">
 
-          {/* Profile icon button — pojok kanan atas */}
+          {}
           <button
             className="main-menu-profile-btn"
             onClick={() => { playButtonClick(); setScreen('profile'); }}
@@ -50,7 +46,7 @@ export function MainMenuScreen() {
             </div>
           </button>
 
-          {/* Play button area - centered */}
+          {}
           <div className="main-menu-play-area">
             <button
               className="main-menu-play-btn"
@@ -66,9 +62,9 @@ export function MainMenuScreen() {
             </button>
           </div>
 
-          {/* Bottom buttons row: Leaderboard | Jajanpedia | Pengaturan */}
+          {}
           <div className="main-menu-bottom-buttons">
-            {/* Tombol Leaderboard */}
+            {}
             <button
               className="main-menu-btn main-menu-btn-leaderboard"
               onClick={() => { playButtonClick(); setScreen('leaderboard'); }}
@@ -84,7 +80,7 @@ export function MainMenuScreen() {
               )}
             </button>
 
-            {/* Tombol Jajanpedia */}
+            {}
             <button
               className="main-menu-btn main-menu-btn-jajanpedia"
               onClick={() => { playButtonClick(); setScreen('jajanpedia'); }}
@@ -100,7 +96,7 @@ export function MainMenuScreen() {
               )}
             </button>
 
-            {/* Tombol Pengaturan */}
+            {}
             <button
               className="main-menu-btn main-menu-btn-settings"
               onClick={() => { playButtonClick(); setScreen('settings'); }}

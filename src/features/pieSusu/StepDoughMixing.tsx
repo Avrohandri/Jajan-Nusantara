@@ -5,7 +5,7 @@ interface Props {
   onComplete: () => void;
 }
 
-const REQUIRED_DEGREES = 1440; // 4 full clockwise rotations
+const REQUIRED_DEGREES = 1440;
 
 export function StepDoughMixing({ onComplete }: Props) {
   const { playButtonClick } = useSfx();
@@ -33,11 +33,9 @@ export function StepDoughMixing({ onComplete }: Props) {
       return;
     }
     let delta = angle - lastAngleRef.current;
-    // Normalize delta to [-180, 180]
     if (delta > 180) delta -= 360;
     if (delta < -180) delta += 360;
 
-    // Only count clockwise (positive) movement
     if (delta > 0) {
       setTotalDegrees(prev => {
         const next = Math.min(prev + delta, REQUIRED_DEGREES);
@@ -52,7 +50,6 @@ export function StepDoughMixing({ onComplete }: Props) {
     lastAngleRef.current = angle;
   }, [onComplete]);
 
-  // Mouse events
   const onMouseDown = (e: React.MouseEvent) => {
     playButtonClick();
     isPressingRef.current = true;
@@ -71,7 +68,6 @@ export function StepDoughMixing({ onComplete }: Props) {
     setIsStirring(false);
   }, []);
 
-  // Touch events
   const onTouchStart = (e: React.TouchEvent) => {
     playButtonClick();
     isPressingRef.current = true;
@@ -107,7 +103,7 @@ export function StepDoughMixing({ onComplete }: Props) {
   }, [onMouseMove, onMouseUp, onTouchMove, onTouchEnd]);
 
   const percent = Math.min((totalDegrees / REQUIRED_DEGREES) * 100, 100);
-  const circumference = 2 * Math.PI * 54; // r=54
+  const circumference = 2 * Math.PI * 54;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
 
   return (
@@ -119,14 +115,14 @@ export function StepDoughMixing({ onComplete }: Props) {
 
       <div className="mixing-scene" style={{ position: 'relative', width: '200px', height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         
-        {/* Decorative Ingredients (Below the bowl) */}
+        {}
         <div style={{ position: 'absolute', bottom: '-10px', zIndex: 1, display: 'flex', gap: '15px', pointerEvents: 'none' }}>
            <img src="/assets/pie_susu/ing_tepung.png" alt="tepung" style={{ width: '35px', height: '35px', objectFit: 'contain', animation: 'floatUp 2s ease-in-out infinite alternate' }} />
            <img src="/assets/pie_susu/ing_mentega.png" alt="mentega" style={{ width: '35px', height: '35px', objectFit: 'contain', animation: 'floatUp 2.5s ease-in-out infinite alternate-reverse' }} />
            <img src="/assets/pie_susu/ing_telur.png" alt="telur" style={{ width: '35px', height: '35px', objectFit: 'contain', animation: 'floatUp 2.2s ease-in-out infinite alternate' }} />
         </div>
 
-        {/* Circular progress ring */}
+        {}
         <svg className="mixing-ring" width="140" height="140" viewBox="0 0 120 120" style={{ position: 'absolute', zIndex: 10, pointerEvents: 'none' }}>
           <circle cx="60" cy="60" r="54" fill="none" stroke="#E8D5C4" strokeWidth="8" />
           <circle
@@ -138,11 +134,10 @@ export function StepDoughMixing({ onComplete }: Props) {
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
             transform="rotate(-90 60 60)"
-            // Transition removed for real-time update
           />
         </svg>
 
-        {/* Bowl Container */}
+        {}
         <div
           ref={bowlRef}
           style={{
@@ -160,13 +155,13 @@ export function StepDoughMixing({ onComplete }: Props) {
           onMouseDown={onMouseDown}
           onTouchStart={onTouchStart}
         >
-          {/* Expanded Touch Area (20% larger than bowl) */}
+          {}
           <div style={{ position: 'absolute', top: '-20%', left: '-20%', right: '-20%', bottom: '-20%', zIndex: 10, touchAction: 'none' }} />
 
-          {/* Mangkok Image (Background) */}
+          {}
           <img src="/assets/pie_susu/mangkok_aduk.png" alt="bowl" style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'contain', zIndex: 0, pointerEvents: 'none' }} />
 
-          {/* Adonan visual rotating (Enlarged) */}
+          {}
           <div
             style={{
               width: '110px',
@@ -183,7 +178,7 @@ export function StepDoughMixing({ onComplete }: Props) {
              <img src="/assets/pie_susu/adonan_putar.png" alt="dough" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </div>
 
-          {/* Rotation Hint Arrow */}
+          {}
           {!isStirring && percent < 100 && (
             <img 
               src="/assets/universal/rotation_arrow.png" 
@@ -206,12 +201,12 @@ export function StepDoughMixing({ onComplete }: Props) {
           )}
         </div>
 
-        {/* Rotating Spoon placed absolutely in the scene to float above everything */}
+        {}
         <div style={{
            position: 'absolute',
            width: '100px', height: '100px',
            transform: `rotate(${whirlAngle}deg)`,
-           zIndex: 15, // Above ring
+           zIndex: 15,
            pointerEvents: 'none'
         }}>
            <div style={{ 
@@ -219,7 +214,7 @@ export function StepDoughMixing({ onComplete }: Props) {
               top: '-30px', 
               left: '10px', 
               fontSize: '56px', 
-              transform: 'rotate(200deg)', // Sendok terbalik
+              transform: 'rotate(200deg)',
               filter: 'drop-shadow(2px 2px 2px rgba(0,0,0,0.3))'
            }}>
               🥄

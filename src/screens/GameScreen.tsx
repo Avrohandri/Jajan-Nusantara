@@ -42,12 +42,9 @@ export function GameScreen() {
   const [showInstructions, setShowInstructions] = useState(!hasSeenInstructions);
   const [showHomeConfirm, setShowHomeConfirm] = useState(false);
 
-  // State untuk flash-transisi ke ResultScreen
   const [transitioning, setTransitioning] = useState(false);
   const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // Flag: max-tier sudah tercapai tapi masih menunggu quiz selesai
   const pendingResultRef = useRef(false);
-  // Guard: cegah doTransition dipanggil lebih dari sekali
   const hasTransitionedRef = useRef(false);
 
   const [gameWidth] = useState(() => Math.min(360, window.innerWidth - 32));
@@ -64,9 +61,8 @@ export function GameScreen() {
       }
     };
 
-    // Saat board penuh (game over karena papan), langsung ke ResultScreen tanpa popup
     const handleGameOver = async () => {
-      if (useGameStore.getState().isGameOver) return; // cegah double-trigger
+      if (useGameStore.getState().isGameOver) return;
       useGameStore.getState().setGameOver();
       await useGameStore.getState().endSession('board_full');
       useGameStore.getState().setScreen('result');
@@ -80,7 +76,6 @@ export function GameScreen() {
     };
   }, [resetGame]);
 
-  // SFX saat player menjatuhkan kuliner di drop & merge
   useEffect(() => {
     const handleDropSfx = () => playDropSfx();
     EventBus.on('drop-sfx', handleDropSfx);
@@ -89,11 +84,9 @@ export function GameScreen() {
     };
   }, [playDropSfx]);
 
-  // Saat kuliner tertinggi terbentuk → flash putih → ResultScreen
   useEffect(() => {
-    /** Jalankan animasi flash lalu pindah ke result — hanya sekali */
     const doTransition = async () => {
-      if (hasTransitionedRef.current) return; // guard double-call
+      if (hasTransitionedRef.current) return;
       hasTransitionedRef.current = true;
       setTransitioning(true);
       transitionTimerRef.current = setTimeout(async () => {
@@ -103,12 +96,10 @@ export function GameScreen() {
     };
 
     const handleMaxTier = () => {
-      // Jika quiz sedang terbuka, tunda sampai quiz ditutup
       if (useGameStore.getState().showQuiz) {
         pendingResultRef.current = true;
         return;
       }
-      // Beri 600ms agar kuliner hasil merge sempat terlihat
       transitionTimerRef.current = setTimeout(() => doTransition(), 600);
     };
 
@@ -119,11 +110,10 @@ export function GameScreen() {
     };
   }, [endSession, setScreen]);
 
-  // Pantau showQuiz: jika ada pending result dan quiz baru ditutup → lanjut result
   useEffect(() => {
     if (!showQuiz && pendingResultRef.current) {
-      pendingResultRef.current = false; // reset segera agar tidak double-trigger
-      if (hasTransitionedRef.current) return; // sudah transisi, abaikan
+      pendingResultRef.current = false;
+      if (hasTransitionedRef.current) return;
       const doTransition = async () => {
         if (hasTransitionedRef.current) return;
         hasTransitionedRef.current = true;
@@ -133,7 +123,6 @@ export function GameScreen() {
           setScreen('result');
         }, 700);
       };
-      // Beri 400ms setelah quiz tutup agar transisi terasa natural
       transitionTimerRef.current = setTimeout(() => doTransition(), 400);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -182,7 +171,7 @@ export function GameScreen() {
 
   return (
     <div className="screen game-screen">
-      {/* HUD */}
+      {}
       <div className="game-hud">
         <div className="hud-left">
           <button onClick={handlePause} className="pause-btn-top" aria-label="Pause">
@@ -213,7 +202,7 @@ export function GameScreen() {
         </div>
       </div>
 
-      {/* Game Canvas */}
+      {}
       <div
         className="game-canvas-wrapper"
         style={{ width: gameWidth, height: gameHeight, flex: 'none', backgroundImage: `url('/${activeRegion}BG.png')` }}
@@ -221,7 +210,7 @@ export function GameScreen() {
         <PhaserGame width={gameWidth} height={gameHeight} />
       </div>
 
-      {/* Bottom Controls / Progress */}
+      {}
       <div className="game-progress-bar">
         {currentConfig.map((item) => {
           const isUnlocked = seenTiers.includes(item.tier);
@@ -237,7 +226,7 @@ export function GameScreen() {
         })}
       </div>
 
-      {/* Instructions Overlay (first launch only) */}
+      {}
       <Modal isOpen={showInstructions} title="Cara Bermain 🎮">
         <div className="instructions">
           <p>🤝 <strong>Gabungkan</strong> jajanan yang sama untuk naik ke tier lebih tinggi.</p>
@@ -249,12 +238,12 @@ export function GameScreen() {
         </Button>
       </Modal>
 
-      {/* Quiz Modal */}
+      {}
       {showQuiz && <QuizModal />}
 
-      {/* Game Over: langsung pindah ke ResultScreen via useEffect, tidak ada overlay popup */}
+      {}
 
-      {/* Pause Overlay */}
+      {}
       {isPaused && !showQuiz && !isGameOver && (
         <div className="pause-overlay">
           <button
@@ -299,7 +288,7 @@ export function GameScreen() {
             </div>
           </div>
 
-          {/* Home confirmation dialog */}
+          {}
           {showHomeConfirm && (
             <IslandPauseConfirm
               onConfirm={handleConfirmHome}
@@ -309,10 +298,10 @@ export function GameScreen() {
         </div>
       )}
 
-      {/* Flash transisi putih saat kuliner tertinggi tercapai */}
+      {}
       {transitioning && <div className="game-win-flash" aria-hidden="true" />}
 
-      {/* NPC Notification Overlay */}
+      {}
       <NpcNotification />
     </div>
   );

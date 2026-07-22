@@ -10,7 +10,6 @@ export function LoginScreen() {
   const [username, setUsername] = useState('');
   const { playButtonClick } = useSfx();
 
-  // Preload semua aset game di background saat halaman login tampil
   const { progress, done } = useGlobalPreload();
 
   const errorMessage =
@@ -33,7 +32,6 @@ export function LoginScreen() {
     } else {
       await login(username.trim());
     }
-    // Jika berhasil, store otomatis set isLoggedIn → App.tsx render MainMenu
   };
 
   const switchMode = () => {
@@ -45,15 +43,15 @@ export function LoginScreen() {
 
   return (
     <div className="login-screen">
-      {/* Background */}
+      {}
       <div className="login-bg">
         <img src={menuBackground} alt="" className="login-bg-img" />
         <div className="login-bg-overlay" />
       </div>
 
-      {/* Card */}
+      {}
       <div className="login-card">
-        {/* Logo / title */}
+        {}
         <div className="login-header">
           <span className="login-logo-emoji">🍡</span>
           <h1 className="login-title">Jajan Nusantara</h1>
@@ -62,7 +60,7 @@ export function LoginScreen() {
           </p>
         </div>
 
-        {/* Form */}
+        {}
         <form className="login-form" onSubmit={handleSubmit} autoComplete="off">
           <div className="login-field">
             <label htmlFor="login-username" className="login-label">
@@ -81,7 +79,7 @@ export function LoginScreen() {
             />
           </div>
 
-          {/* Error notification */}
+          {}
           {errorMessage && (
             <div className="login-error" role="alert">
               ⚠️ {errorMessage}
@@ -106,7 +104,7 @@ export function LoginScreen() {
           </button>
         </form>
 
-        {/* Toggle */}
+        {}
         <div className="login-toggle">
           {mode === 'login' ? (
             <>
@@ -135,7 +133,7 @@ export function LoginScreen() {
           )}
         </div>
 
-        {/* Asset preload progress bar */}
+        {}
         <div className="login-preload">
           <div className="login-preload-bar-wrap">
             <div

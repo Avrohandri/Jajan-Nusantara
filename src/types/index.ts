@@ -1,4 +1,3 @@
-// === Data Types (matches Firestore document structure) ===
 
 export interface SnackData {
   tier: number;
@@ -29,7 +28,6 @@ export interface RecipeData {
   steps: RecipeStep[];
 }
 
-// === Player Data Types ===
 
 export interface UserSession {
   sessionId: string;
@@ -44,7 +42,6 @@ export interface UserSession {
   region?: string;
 }
 
-/** Progress per-island. true = sudah pernah menyelesaikan game drop-and-merge di pulau itu */
 export interface IslandProgress {
   jogja: boolean;
   bali: boolean;
@@ -52,7 +49,6 @@ export interface IslandProgress {
   maluku: boolean;
 }
 
-/** Cooking completion per-island. true = mini game memasak sudah diselesaikan */
 export interface IslandCookingComplete {
   jogja: boolean;
   bali: boolean;
@@ -60,7 +56,6 @@ export interface IslandCookingComplete {
   maluku: boolean;
 }
 
-/** Bintang per-island. 0 = belum, 1/2/3 = jumlah bintang dari mini game */
 export interface IslandStars {
   jogja: 0 | 1 | 2 | 3;
   bali: 0 | 1 | 2 | 3;
@@ -68,7 +63,6 @@ export interface IslandStars {
   maluku: 0 | 1 | 2 | 3;
 }
 
-/** Merge count saat menyelesaikan drop-and-merge per pulau (untuk hitung bintang) */
 export interface IslandMerges {
   jogja: number;
   bali: number;
@@ -76,7 +70,6 @@ export interface IslandMerges {
   maluku: number;
 }
 
-/** Skor terbaik per-pulau */
 export interface RegionBestScores {
   jogja: number;
   bali: number;
@@ -88,22 +81,16 @@ export interface UserProfile {
   userId: string;
   username: string;
   totalSessions: number;
-  /** Skor terbaik per-pulau */
   regionBestScores: RegionBestScores;
-  /** Total dari semua skor terbaik per-pulau (untuk leaderboard) */
   totalBestScore: number;
   totalMerges: number;
   totalQuizzesCorrect: number;
   totalQuizzesAnswered: number;
   unlockedRecipes: string[];
   islandProgress: IslandProgress;
-  /** true = mini game memasak sudah diselesaikan (syarat unlock pulau berikutnya) */
   islandCookingComplete?: IslandCookingComplete;
-  /** Bintang per pulau — 0=belum, 1/2/3 sesuai performa skor */
   islandStars?: IslandStars;
-  /** Jumlah merge terbaik per pulau saat selesai Drop & Merge */
   islandMerges?: IslandMerges;
-  /** Icon profil — nama kuliner, misal 'Klepon', 'Pisang Asar', dll */
   profileIcon: string;
   createdAt: number;
   lastPlayedAt: number;
@@ -117,7 +104,6 @@ export interface LeaderboardEntry {
   rank: number;
 }
 
-// === App State Types ===
 
 export type ScreenName =
   | 'home'

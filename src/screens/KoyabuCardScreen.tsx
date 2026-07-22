@@ -17,7 +17,7 @@ export function KoyabuCardScreen() {
         backgroundPosition: 'center'
       }}
     >
-      {/* Back Button */}
+      {}
       <button
         className="klepon-card-back-btn"
         onClick={() => { playButtonClick(); setScreen('jajanpedia'); }}
@@ -27,14 +27,14 @@ export function KoyabuCardScreen() {
       </button>
 
       <div className="klepon-card-content">
-        {/* Header */}
+        {}
         <div className="klepon-card-header">
           <span className="klepon-card-leaf">🍡</span>
           <h1 className="klepon-card-title">Koyabu</h1>
           <span className="klepon-card-leaf">🍡</span>
         </div>
 
-        {/* Mascot */}
+        {}
         <div className="klepon-card-mascot-wrapper">
           <div className="klepon-card-sparkle top-left">✦</div>
           <div className="klepon-card-sparkle top-right">✦</div>
@@ -46,21 +46,21 @@ export function KoyabuCardScreen() {
           <img src={koyabuImg} alt="Koyabu Mascot" className="klepon-card-mascot" />
         </div>
 
-        {/* Tagline */}
+        {}
         <div className="klepon-card-tagline">
           <span className="klepon-leaf-sm">✨</span>
           <p>Kenyal, manis, dan lumer di mulut!</p>
           <span className="klepon-leaf-sm">✨</span>
         </div>
 
-        {/* About Box */}
+        {}
         <div className="klepon-card-about-box">
           <p className="klepon-card-about-text">
             Koyabu adalah jajanan tradisional Maluku berbahan <span className="klepon-highlight">sagu</span> yang disajikan dengan kuah <span className="klepon-highlight">gula merah</span>. Teksturnya lembut dan sedikit kenyal dengan rasa manis yang dominan.
           </p>
         </div>
 
-        {/* Info Row */}
+        {}
         <div className="klepon-card-info-row">
           <div className="klepon-card-info-item">
             <div className="klepon-card-info-icon klepon-icon-red">📍</div>
@@ -79,7 +79,7 @@ export function KoyabuCardScreen() {
           </div>
         </div>
 
-        {/* Fun Fact */}
+        {}
         <div className="klepon-card-funfact">
           <span className="klepon-card-funfact-icon">🔥</span>
           <div>

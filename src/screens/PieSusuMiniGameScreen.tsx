@@ -33,7 +33,6 @@ export function PieSusuMiniGameScreen() {
   const [showBackConfirm, setShowBackConfirm] = useState(false);
   const { playButtonClick, playStepComplete } = useSfx();
 
-  // Wrapper: putar SFX step selesai sebelum advance
   const handleStepComplete = useCallback(() => {
     playStepComplete();
     advancePieSusuStep();
@@ -46,7 +45,6 @@ export function PieSusuMiniGameScreen() {
     setScreen('mainMenu');
   };
 
-  // Award stars + unlock pulau berikutnya saat pie susu selesai
   useEffect(() => {
     if (pieSusuComplete) {
       awardStarsForRegion('bali');
@@ -54,14 +52,13 @@ export function PieSusuMiniGameScreen() {
     }
   }, [pieSusuComplete]);
 
-  /* ── Complete screen ── */
   if (pieSusuComplete) {
     return (
       <div className="klepon-root">
         <img src="/assets/klepon/bg_kitchen.png" alt="" className="klepon-bg" />
         <div className="klepon-complete-screen">
           <div className="complete-confetti">✨✨✨</div>
-          {/* Using custom asset instead of emoji */}
+          {}
           <img 
             src="/assets/pie_susu/pie susu_jadi.png" 
             alt="Pie Susu" 
@@ -89,13 +86,12 @@ export function PieSusuMiniGameScreen() {
     );
   }
 
-  /* ── Game screen ── */
   return (
     <div className="klepon-root">
-      {/* Background kitchen */}
+      {}
       <img src="/assets/klepon/bg_kitchen.png" alt="" className="klepon-bg" />
 
-      {/* ── Header bar ── */}
+      {}
       <div className="klepon-topbar">
         <button className="klepon-back-btn" onClick={handleBack} title="Kembali">
           <img src={backButtonImg} alt="Back" className="klepon-back-icon-img" />
@@ -106,7 +102,7 @@ export function PieSusuMiniGameScreen() {
         </div>
       </div>
 
-      {/* ── Step dots ── */}
+      {}
       <div className="klepon-step-dots">
         {STEPS.map((_, idx) => (
           <div
@@ -122,7 +118,7 @@ export function PieSusuMiniGameScreen() {
         ))}
       </div>
 
-      {/* ── Step content ── */}
+      {}
       <div className="klepon-generic-card">
         <div className="klepon-generic-header">
           <h2 className="klepon-generic-title">{STEPS[pieSusuStep]?.label}</h2>
@@ -137,7 +133,7 @@ export function PieSusuMiniGameScreen() {
         </div>
       </div>
 
-      {/* Back confirm dialog */}
+      {}
       {showBackConfirm && (
         <MiniGameBackConfirm
           foodName="Pie Susu"

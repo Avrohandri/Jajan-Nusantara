@@ -5,7 +5,7 @@ interface Props {
   onComplete: () => void;
 }
 
-const REQUIRED_DEGREES = 1440; // 4 full clockwise rotations
+const REQUIRED_DEGREES = 1440;
 
 export function StepMixTopping({ onComplete }: Props) {
   const { playButtonClick } = useSfx();
@@ -50,7 +50,6 @@ export function StepMixTopping({ onComplete }: Props) {
     lastAngleRef.current = angle;
   }, [onComplete]);
 
-  // Mouse events
   const onMouseDown = (e: React.MouseEvent) => {
     playButtonClick();
     isPressingRef.current = true;
@@ -69,7 +68,6 @@ export function StepMixTopping({ onComplete }: Props) {
     setIsStirring(false);
   }, []);
 
-  // Touch events
   const onTouchStart = (e: React.TouchEvent) => {
     playButtonClick();
     isPressingRef.current = true;
@@ -105,7 +103,7 @@ export function StepMixTopping({ onComplete }: Props) {
   }, [onMouseMove, onMouseUp, onTouchMove, onTouchEnd]);
 
   const percent = Math.min((totalDegrees / REQUIRED_DEGREES) * 100, 100);
-  const circumference = 2 * Math.PI * 54; // r=54
+  const circumference = 2 * Math.PI * 54;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
 
   return (
@@ -117,7 +115,7 @@ export function StepMixTopping({ onComplete }: Props) {
 
       <div className="mixing-scene" style={{ position: 'relative', width: '200px', height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         
-        {/* Decorative Ingredients (Below the bowl) */}
+        {}
         <div style={{ position: 'absolute', bottom: '-10px', zIndex: 1, display: 'flex', gap: '15px', pointerEvents: 'none' }}>
            <div style={{ animation: 'floatUp 2s ease-in-out infinite alternate', width: '35px', height: '35px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
              <img src="/assets/pisang_asar/telur.png" alt="telur" style={{ width: '100%', height: '100%', objectFit: 'contain' }} onError={(e) => { e.currentTarget.outerHTML = '<span style="font-size:35px">🥚</span>' }} />
@@ -133,13 +131,13 @@ export function StepMixTopping({ onComplete }: Props) {
            </div>
         </div>
 
-        {/* Circular progress ring */}
+        {}
         <svg className="mixing-ring" width="140" height="140" viewBox="0 0 120 120" style={{ position: 'absolute', zIndex: 10, pointerEvents: 'none' }}>
           <circle cx="60" cy="60" r="54" fill="none" stroke="#E8D5C4" strokeWidth="8" />
           <circle
             cx="60" cy="60" r="54"
             fill="none"
-            stroke="#8D6E63" // Brownish color for topping mixture
+            stroke="#8D6E63"
             strokeWidth="8"
             strokeLinecap="round"
             strokeDasharray={circumference}
@@ -148,7 +146,7 @@ export function StepMixTopping({ onComplete }: Props) {
           />
         </svg>
 
-        {/* Bowl Container */}
+        {}
         <div
           ref={bowlRef}
           style={{
@@ -166,15 +164,15 @@ export function StepMixTopping({ onComplete }: Props) {
           onMouseDown={onMouseDown}
           onTouchStart={onTouchStart}
         >
-          {/* Expanded Touch Area (20% larger than bowl) */}
+          {}
           <div style={{ position: 'absolute', top: '-20%', left: '-20%', right: '-20%', bottom: '-20%', zIndex: 10, touchAction: 'none' }} />
 
-          {/* Mangkok Emoji (Background) */}
+          {}
           <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 0, pointerEvents: 'none' }}>
             <img src="/assets/pisang_asar/mangkok_aduk.png" alt="bowl" style={{ width: '100%', height: '100%', objectFit: 'contain' }} onError={(e) => { e.currentTarget.outerHTML = '<span style="font-size:100px">🥣</span>'; }} />
           </div>
 
-          {/* Adonan visual rotating */}
+          {}
           <div
             style={{
               width: '100px',
@@ -191,7 +189,7 @@ export function StepMixTopping({ onComplete }: Props) {
              <img src="/assets/pisang_asar/adonan_putar.png" alt="dough" style={{ width: '100%', height: '100%', objectFit: 'contain' }} onError={(e) => { e.currentTarget.outerHTML = '<div style="background: #8D6E63; border-radius: 50%; font-size: 40px; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;"><span style="filter: blur(2px)">🟤</span></div>'; }} />
           </div>
 
-          {/* Rotation Hint Arrow */}
+          {}
           {!isStirring && percent < 100 && (
             <img 
               src="/assets/universal/rotation_arrow.png" 
@@ -214,7 +212,7 @@ export function StepMixTopping({ onComplete }: Props) {
           )}
         </div>
 
-        {/* Rotating Spoon placed absolutely in the scene to float above everything */}
+        {}
         <div style={{
            position: 'absolute',
            width: '100px', height: '100px',

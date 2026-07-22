@@ -22,7 +22,6 @@ export function StepShapingMold({ onComplete }: Props) {
     }
   };
 
-  // Determine image source based on tap progress
   let imgSrc = '/assets/pie_susu/ing_adonan 1.png';
   if (tapCount === 1) imgSrc = '/assets/pie_susu/ing_adonan 2.png';
   if (tapCount >= 2) imgSrc = '/assets/pie_susu/ing_adonan jadi.png';

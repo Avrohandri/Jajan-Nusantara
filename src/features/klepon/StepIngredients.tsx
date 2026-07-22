@@ -3,9 +3,9 @@ import { useSfx } from '../../hooks/useSfx';
 
 interface Ingredient {
   id: string;
-  name: string;        // display name
-  imgSrc: string;       // path to transparent PNG (user-supplied)
-  plateColor: string;   // CSS color for the decorative plate
+  name: string;
+  imgSrc: string;
+  plateColor: string;
   correct: boolean;
   dropped: boolean;
 }
@@ -45,14 +45,12 @@ export function StepIngredients({ onComplete }: Props) {
   const correctCount  = ingredients.filter(i => i.correct && i.dropped).length;
   const totalCorrect  = ingredients.filter(i => i.correct).length;
 
-  /* ─── feedback ─── */
   const triggerFeedback = useCallback((correct: boolean) => {
     setBowlState(correct ? 'correct' : 'wrong');
     if (shakeTimer.current) clearTimeout(shakeTimer.current);
     shakeTimer.current = setTimeout(() => setBowlState('idle'), 800);
   }, []);
 
-  /* ─── drop logic ─── */
   const handleDrop = useCallback((id: string) => {
     const ing = ingredients.find(i => i.id === id);
     if (!ing || ing.dropped) return;
@@ -67,7 +65,6 @@ export function StepIngredients({ onComplete }: Props) {
     setDraggingId(null);
   }, [ingredients, correctCount, totalCorrect, onComplete, triggerFeedback]);
 
-  /* ─── mouse drag ─── */
   const onDragStart = (e: React.DragEvent, id: string) => {
     playButtonClick();
     setDraggingId(id);
@@ -81,7 +78,6 @@ export function StepIngredients({ onComplete }: Props) {
     if (draggingId) handleDrop(draggingId);
   };
 
-  /* ─── touch drag ─── */
   const touchIngId = useRef<string | null>(null);
 
   const onTouchStart = (e: React.TouchEvent, id: string) => {
@@ -153,7 +149,7 @@ export function StepIngredients({ onComplete }: Props) {
   return (
     <div className="ing-screen">
 
-      {/* ── Info card ── */}
+      {}
       <div className="ing-info-card">
         <div className="ing-info-header">
           <div className="ing-info-left">
@@ -162,7 +158,7 @@ export function StepIngredients({ onComplete }: Props) {
           </div>
         </div>
 
-        {/* Instruction bar */}
+        {}
         <div className="ing-instruction-bar">
           Seret bahan yang benar ke dalam mangkok! ☕
         </div>
@@ -170,7 +166,7 @@ export function StepIngredients({ onComplete }: Props) {
 
       </div>
 
-      {/* ── 2 × 3 ingredient grid ── */}
+      {}
       <div className="ing-grid">
         {ingredients.map(ing => (
           <div
@@ -184,7 +180,7 @@ export function StepIngredients({ onComplete }: Props) {
             onTouchEnd={onTouchEnd}
             style={{ opacity: ing.dropped ? 0.25 : 1 }}
           >
-            {/* Wooden coaster */}
+            {}
             <div className="ing-coaster">
               <img
                 src={ing.imgSrc}
@@ -195,7 +191,7 @@ export function StepIngredients({ onComplete }: Props) {
               />
             </div>
 
-            {/* Ingredient Name Label */}
+            {}
             {!ing.dropped && (
               <div className="ing-label">
                 {ing.name}
@@ -205,7 +201,7 @@ export function StepIngredients({ onComplete }: Props) {
         ))}
       </div>
 
-      {/* ── Bowl drop-zone ── */}
+      {}
       <div
         ref={bowlRef}
         className={bowlClass}
@@ -213,17 +209,17 @@ export function StepIngredients({ onComplete }: Props) {
         onDragLeave={onBowlDragLeave}
         onDrop={onBowlDrop}
       >
-        {/* Use actual bowl image; user will supply */}
+        {}
         <img src="/assets/klepon/mangkok.png" alt="mangkok" className="ing-bowl-img" />
 
-        {/* Dropped ingredients float inside bowl */}
+        {}
         <div className="ing-bowl-contents">
           {ingredients.filter(i => i.correct && i.dropped).map(i => (
             <img key={i.id} src={i.imgSrc} alt="" className="ing-bowl-item" />
           ))}
         </div>
 
-        {/* Hint text shown when bowl is empty */}
+        {}
         {correctCount === 0 && (
           <span className="ing-bowl-hint">Taruh bahan<br />di sini</span>
         )}

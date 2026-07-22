@@ -11,7 +11,6 @@ export function StepDippingMold({ onComplete }: Props) {
   const [isDragging, setIsDragging] = useState(false);
   const ghostRef = useRef<HTMLImageElement | null>(null);
 
-  // Desktop Drag
   const handleDragStart = () => {
     playButtonClick();
     setTimeout(() => setIsDragging(true), 0);
@@ -22,12 +21,11 @@ export function StepDippingMold({ onComplete }: Props) {
     setIsDragging(false);
     if (!moldCoated) {
       setMoldCoated(true);
-      setTimeout(onComplete, 3000); // Wait 3 seconds to let animation finish!
+      setTimeout(onComplete, 3000);
     }
   };
   const handleDragEnd = () => setIsDragging(false);
 
-    // Mobile Touch
   const handleTouchStart = (e: React.TouchEvent) => {
     if (moldCoated) return;
     playButtonClick();
@@ -70,7 +68,7 @@ export function StepDippingMold({ onComplete }: Props) {
         touch.clientY >= rect.top && touch.clientY <= rect.bottom
       ) {
         setMoldCoated(true);
-        setTimeout(onComplete, 3000); // Wait 3 seconds to let animation finish!
+        setTimeout(onComplete, 3000);
       }
     }
   };
@@ -81,9 +79,9 @@ export function StepDippingMold({ onComplete }: Props) {
         {`
           @keyframes dipAndRise {
             0%   { transform: translateX(-50%) translateY(0px); opacity: 1; }
-            25%  { transform: translateX(-50%) translateY(120px); } /* Celup ke dalam mangkok */
-            65%  { transform: translateX(-50%) translateY(120px); } /* Tahan di dalam */
-            100% { transform: translateX(-50%) translateY(0px); }   /* Kembali ke posisi awal */
+            25%  { transform: translateX(-50%) translateY(120px); }
+            65%  { transform: translateX(-50%) translateY(120px); }
+            100% { transform: translateX(-50%) translateY(0px); }
           }
         `}
       </style>
@@ -91,10 +89,10 @@ export function StepDippingMold({ onComplete }: Props) {
         {moldCoated ? 'Cetakan terisi adonan! ✨' : 'Tarik cetakan ke dalam mangkok adonan!'}
       </p>
 
-      {/* Container area */}
+      {}
       <div style={{ position: 'relative', width: '300px', height: '420px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-        {/* Cetakan animasi — z-index 1, di belakang mangkok */}
+        {}
         {moldCoated && (
           <div style={{
             position: 'absolute',
@@ -114,7 +112,7 @@ export function StepDippingMold({ onComplete }: Props) {
           </div>
         )}
 
-        {/* Upper Zone: Mold draggable — z-index 1 (di belakang mangkok) */}
+        {}
         <div style={{ position: 'relative', zIndex: 1, height: '220px', display: 'flex', alignItems: 'center' }}>
           {!moldCoated && (
             <img
@@ -139,7 +137,7 @@ export function StepDippingMold({ onComplete }: Props) {
           )}
         </div>
 
-        {/* Lower Zone: Dough Bowl — z-index 2, lebih ke bawah dari cetakan */}
+        {}
         <div
           id="dough-bowl-target"
           onDragOver={handleDragOver}
@@ -147,7 +145,7 @@ export function StepDippingMold({ onComplete }: Props) {
           style={{
             position: 'relative',
             zIndex: 2,
-            marginTop: '10px', /* Mangkok di bawah, tidak menutupi pencetak saat idle */
+            marginTop: '10px',
             width: '240px', height: '160px',
             background: '#F5DEB3',
             borderRadius: '10px 10px 100px 100px',
@@ -158,7 +156,7 @@ export function StepDippingMold({ onComplete }: Props) {
             overflow: 'visible',
           }}
         >
-          {/* Inner Dough liquid representation */}
+          {}
           <div style={{
             position: 'absolute', top: '0px', left: '0px', right: '0px', height: '30px',
             background: 'rgba(245, 222, 179, 0.9)',

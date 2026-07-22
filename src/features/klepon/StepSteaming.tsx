@@ -26,14 +26,12 @@ export function StepSteaming({ onComplete }: Props) {
     if (allIn && !boilingStartedRef.current) {
       boilingStartedRef.current = true;
       setBoiling(true);
-      // Start bubble animation (simulating steam/heat)
       bubbleInterval.current = setInterval(() => {
         setBubbles(prev => {
           const newBubble = { id: bubbleIdRef.current++, x: 20 + Math.random() * 60 };
           return [...prev.slice(-8), newBubble];
         });
       }, 250);
-      // Complete after 2.5s
       setTimeout(() => {
         if (bubbleInterval.current) clearInterval(bubbleInterval.current);
         setDone(true);
@@ -53,7 +51,6 @@ export function StepSteaming({ onComplete }: Props) {
     setInPan(prev => { const n = [...prev]; n[idx] = true; return n; });
   };
 
-  // Mouse drag
   const handleDragStart = (e: React.DragEvent, idx: number) => {
     playButtonClick();
     e.dataTransfer.effectAllowed = 'move';
@@ -68,7 +65,6 @@ export function StepSteaming({ onComplete }: Props) {
     if (!isNaN(idx)) dropKlepon(idx);
   };
 
-  // Touch drag
   const handleTouchStart = (e: React.TouchEvent, idx: number) => {
     playButtonClick();
     const touch = e.touches[0];
@@ -114,7 +110,7 @@ export function StepSteaming({ onComplete }: Props) {
         Seret klepon ke dalam pengukus! 🫕
       </p>
 
-      {/* Kompor & Panci/Pengukus */}
+      {}
       <div className="boiling-scene">
         <div className="stove-area">
 
@@ -158,7 +154,7 @@ export function StepSteaming({ onComplete }: Props) {
           </div>
         </div>
 
-        {/* Klepon yang belum masuk */}
+        {}
         <div className="klepon-source-row">
           {inPan.map((inn, idx) =>
             !inn ? (

@@ -32,7 +32,6 @@ export function StepPieIngredients({ onComplete }: Props) {
 
   const startX = useRef(0);
 
-  // Initialize and shuffle on mount
   useEffect(() => {
     const shuffled = [...INITIAL_INGREDIENTS].sort(() => Math.random() - 0.5);
     setShuffledIngs(shuffled);
@@ -56,7 +55,7 @@ export function StepPieIngredients({ onComplete }: Props) {
     setFeedback(null);
     const nextIdx = currentIndex + 1;
     if (nextIdx >= shuffledIngs.length) {
-      setTimeout(() => onComplete(), 400); // give a bit of time before moving to next step
+      setTimeout(() => onComplete(), 400);
     }
     setCurrentIndex(nextIdx);
   };
@@ -70,25 +69,22 @@ export function StepPieIngredients({ onComplete }: Props) {
     if (!ing) return;
 
     if (dragX > 100) {
-      // Swipe Right -> Accept (Should be correct)
       if (ing.correct) {
         setFeedback('right');
         setTimeout(() => nextCard(), 250);
       } else {
         setFeedback('error');
-        setDragX(0); // Snap back
+        setDragX(0);
       }
     } else if (dragX < -100) {
-      // Swipe Left -> Reject (Should be false)
       if (!ing.correct) {
         setFeedback('left');
         setTimeout(() => nextCard(), 250);
       } else {
         setFeedback('error');
-        setDragX(0); // Snap back
+        setDragX(0);
       }
     } else {
-      // Didn't swipe far enough
       setDragX(0);
     }
   };
@@ -96,20 +92,19 @@ export function StepPieIngredients({ onComplete }: Props) {
   const currentIng = shuffledIngs[currentIndex];
   const isComplete = currentIndex >= shuffledIngs.length;
 
-  // Visual cues based on drag pos
   const bgColor = dragX > 50 ? 'rgba(40, 167, 69, 0.05)' : dragX < -50 ? 'rgba(220, 53, 69, 0.05)' : 'transparent';
   
   return (
     <div className="ing-screen" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: bgColor, transition: 'background-color 0.3s', paddingBottom: '40px', paddingTop: '20px', borderRadius: '16px' }}>
       
-      {/* Remove duplicate header since PieSusuMiniGameScreen already renders one */}
+      {}
       
-      {/* Instruction match Image 1 */}
+      {}
       <div className="ing-instruction-bar" style={{ marginTop: '-10px', marginBottom: '20px', fontWeight: 'bold' }}>
         Geser bahan ke tempat yang benar
       </div>
 
-      {/* Swipe direction indicators */}
+      {}
       <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: '320px', marginBottom: '20px', fontWeight: 'bold', fontSize: '14px' }}>
         <div style={{ color: '#dc3545', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <span style={{ fontSize: '24px' }}>⬅️❌</span>
@@ -132,7 +127,7 @@ export function StepPieIngredients({ onComplete }: Props) {
           </div>
         ) : (
           <>
-            {/* The Next Card (Decorative, behind) */}
+            {}
             {currentIndex + 1 < shuffledIngs.length && (
               <div style={{
                 position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
@@ -143,7 +138,7 @@ export function StepPieIngredients({ onComplete }: Props) {
               }} />
             )}
 
-            {/* The Current Card */}
+            {}
             {currentIng && (
               <div
                 onPointerDown={handlePointerDown}
@@ -158,7 +153,6 @@ export function StepPieIngredients({ onComplete }: Props) {
                   boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
                   display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                   touchAction: 'none', cursor: isDragging ? 'grabbing' : 'grab',
-                  // Animations
                   transform: feedback === 'right' ? `translateX(200px) rotate(30deg)` :
                              feedback === 'left' ? `translateX(-200px) rotate(-30deg)` :
                              `translateX(${dragX}px) rotate(${dragX * 0.05}deg)`,
@@ -167,11 +161,11 @@ export function StepPieIngredients({ onComplete }: Props) {
                   zIndex: 2
                 }}
               >
-                {/* Stamp visual feedback overlay */}
+                {}
                 {dragX > 80 && !feedback && <div style={{ position: 'absolute', top: '20px', left: '20px', color: '#28a745', fontWeight: 'bold', fontSize: '24px', transform: 'rotate(-15deg)', border: '2px solid #28a745', padding: '4px 8px', borderRadius: '4px', opacity: 0.8, zIndex: 10 }}>BENAR</div>}
                 {dragX < -80 && !feedback && <div style={{ position: 'absolute', top: '20px', right: '20px', color: '#dc3545', fontWeight: 'bold', fontSize: '24px', transform: 'rotate(15deg)', border: '2px solid #dc3545', padding: '4px 8px', borderRadius: '4px', opacity: 0.8, zIndex: 10 }}>SALAH</div>}
 
-                {/* Optional red glow if wrong */}
+                {}
                 <div style={{ position: 'absolute', inset: 0, borderRadius: '10px', background: feedback === 'error' ? 'rgba(220,53,69,0.3)' : 'transparent', transition: 'background 0.2s', zIndex: 0, pointerEvents: 'none' }} />
 
                 <img 

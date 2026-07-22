@@ -17,7 +17,7 @@ export function LemperCardScreen() {
         backgroundPosition: 'center' 
       }}
     >
-      {/* Back Button */}
+      {}
       <button
         className="klepon-card-back-btn"
         onClick={() => { playButtonClick(); setScreen('jajanpedia'); }}
@@ -27,14 +27,14 @@ export function LemperCardScreen() {
       </button>
 
       <div className="klepon-card-content">
-        {/* Header */}
+        {}
         <div className="klepon-card-header">
           <span className="klepon-card-leaf">🌿</span>
           <h1 className="klepon-card-title">Lemper</h1>
           <span className="klepon-card-leaf">🌿</span>
         </div>
 
-        {/* Mascot */}
+        {}
         <div className="klepon-card-mascot-wrapper">
           <div className="klepon-card-sparkle top-left">✦</div>
           <div className="klepon-card-sparkle top-right">✦</div>
@@ -46,14 +46,14 @@ export function LemperCardScreen() {
           <img src={lemperImg} alt="Lemper Mascot" className="klepon-card-mascot" />
         </div>
 
-        {/* Tagline */}
+        {}
         <div className="klepon-card-tagline">
           <span className="klepon-leaf-sm">🍃</span>
           <p>Ketan kenyal, isian ayam gurih!</p>
           <span className="klepon-leaf-sm">🍃</span>
         </div>
 
-        {/* About Box */}
+        {}
         <div className="klepon-card-about-box">
           <p className="klepon-card-about-text">
             Lemper adalah jajanan berbahan ketan yang dibungkus daun pisang dengan <span className="klepon-highlight">isian ayam gurih</span> di dalamnya. 
@@ -61,7 +61,7 @@ export function LemperCardScreen() {
           </p>
         </div>
 
-        {/* Info Row */}
+        {}
         <div className="klepon-card-info-row">
           <div className="klepon-card-info-item">
             <div className="klepon-card-info-icon klepon-icon-red">📍</div>
@@ -80,7 +80,7 @@ export function LemperCardScreen() {
           </div>
         </div>
 
-        {/* Fun Fact */}
+        {}
         <div className="klepon-card-funfact">
           <span className="klepon-card-funfact-icon">🥳</span>
           <div>

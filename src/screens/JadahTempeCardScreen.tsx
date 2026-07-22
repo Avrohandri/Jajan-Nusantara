@@ -17,7 +17,7 @@ export function JadahTempeCardScreen() {
         backgroundPosition: 'center' 
       }}
     >
-      {/* Back Button */}
+      {}
       <button
         className="klepon-card-back-btn"
         onClick={() => { playButtonClick(); setScreen('jajanpedia'); }}
@@ -27,14 +27,14 @@ export function JadahTempeCardScreen() {
       </button>
 
       <div className="klepon-card-content">
-        {/* Header */}
+        {}
         <div className="klepon-card-header">
           <span className="klepon-card-leaf">🥪</span>
           <h1 className="klepon-card-title">Jadah Tempe</h1>
           <span className="klepon-card-leaf">🥪</span>
         </div>
 
-        {/* Mascot */}
+        {}
         <div className="klepon-card-mascot-wrapper">
           <div className="klepon-card-sparkle top-left">✦</div>
           <div className="klepon-card-sparkle top-right">✦</div>
@@ -46,14 +46,14 @@ export function JadahTempeCardScreen() {
           <img src={jadahTempeImg} alt="Jadah Tempe Mascot" className="klepon-card-mascot" />
         </div>
 
-        {/* Tagline */}
+        {}
         <div className="klepon-card-tagline">
           <span className="klepon-leaf-sm">🔥</span>
           <p>Kombinasi gurih jadah & tempe manis!</p>
           <span className="klepon-leaf-sm">🔥</span>
         </div>
 
-        {/* About Box */}
+        {}
         <div className="klepon-card-about-box">
           <p className="klepon-card-about-text">
             Jadah tempe adalah perpaduan ketan putih yang lembut dengan <span className="klepon-highlight">tempe manis berbumbu</span>. 
@@ -61,7 +61,7 @@ export function JadahTempeCardScreen() {
           </p>
         </div>
 
-        {/* Info Row */}
+        {}
         <div className="klepon-card-info-row">
           <div className="klepon-card-info-item">
             <div className="klepon-card-info-icon klepon-icon-red">📍</div>
@@ -80,7 +80,7 @@ export function JadahTempeCardScreen() {
           </div>
         </div>
 
-        {/* Fun Fact */}
+        {}
         <div className="klepon-card-funfact">
           <span className="klepon-card-funfact-icon">🌋</span>
           <div>

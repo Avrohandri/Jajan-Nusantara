@@ -55,7 +55,7 @@ export function ProgressScreen() {
         </Card>
       </div>
 
-      {/* Unlocked Recipes */}
+      {}
       <div className="progress-section">
         <h2>🍡 Resep Terbuka ({unlockedRecipes.length})</h2>
         {unlockedRecipes.length > 0 ? (
@@ -80,7 +80,7 @@ export function ProgressScreen() {
         )}
       </div>
 
-      {/* Recent Sessions */}
+      {}
       <div className="progress-section">
         <h2>🕐 Riwayat Permainan</h2>
         {sessions.length > 0 ? (

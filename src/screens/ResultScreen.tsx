@@ -3,10 +3,7 @@ import { useGameStore } from '../store/gameStore';
 import { calculateStars, STAR_THRESHOLDS } from '../config/starThresholds';
 import { useSfx } from '../hooks/useSfx';
 
-/* ── region config is built INSIDE the component so it always has
-   fresh references to store actions ── */
 
-/* Confetti particle data */
 const CONFETTI_COLORS = ['#FF6B35', '#FFD166', '#06D6A0', '#118AB2', '#EF476F', '#FFF'];
 const CONFETTI_COUNT = 22;
 
@@ -14,7 +11,6 @@ function randomBetween(a: number, b: number) {
   return a + Math.random() * (b - a);
 }
 
-/* Komponen bintang — menampilkan 3 ikon bintang, aktif sesuai jumlah earned */
 function StarDisplay({ earned }: { earned: 0 | 1 | 2 | 3 }) {
   return (
     <div className="result-stars-row" aria-label={`${earned} dari 3 bintang`}>
@@ -69,11 +65,9 @@ export function ResultScreen() {
 
   const config = REGION_CONFIG[activeRegion] ?? REGION_CONFIG['jogja'];
 
-  /* Hitung bintang dari skor sesi ini */
   const earned: 0 | 1 | 2 | 3 = calculateStars(activeRegion, score);
   const threshold = STAR_THRESHOLDS[activeRegion];
 
-  /* Stable confetti */
   const confettiRef = useRef(
     Array.from({ length: CONFETTI_COUNT }, (_, i) => ({
       id: i,
@@ -87,11 +81,9 @@ export function ResultScreen() {
     }))
   );
 
-  /* Scroll to top + mark island complete on mount */
   useEffect(() => {
     window.scrollTo(0, 0);
     if (!isGameOver) {
-      // Tandai pulau ini sebagai selesai dan update skor/leaderboard di Firestore
       completeIsland();
     }
   }, [isGameOver, completeIsland]);
@@ -108,7 +100,6 @@ export function ResultScreen() {
             <span>Wadah jajananmu sudah penuh!</span>
           </div>
         </div>
-
 
 
         <div className="result-banner-wrap" style={{ marginTop: '20px' }}>
@@ -151,7 +142,7 @@ export function ResultScreen() {
 
   return (
     <div className="result-hebat-screen">
-      {/* Confetti */}
+      {}
       <div className="result-confetti-layer" aria-hidden="true">
         {confettiRef.current.map((p) => (
           <div
@@ -170,26 +161,26 @@ export function ResultScreen() {
         ))}
       </div>
 
-      {/* Top sparkle decoration */}
+      {}
       <div className="result-top-deco" aria-hidden="true">
         <span className="result-sparkle result-sparkle--lg">✦</span>
         <span className="result-sparkle result-sparkle--sm">✦</span>
         <span className="result-sparkle result-sparkle--md">✦</span>
       </div>
 
-      {/* HEBAT! title */}
+      {}
       <div className="result-hebat-title-wrap">
         <h1 className="result-hebat-title">HEBAT!</h1>
       </div>
 
-      {/* Subtitle banner */}
+      {}
       <div className="result-banner-wrap">
         <div className="result-banner">
           <span>Kamu berhasil meraih skor {score.toLocaleString('id-ID')}!</span>
         </div>
       </div>
 
-      {/* Mascot image */}
+      {}
       <div className="result-mascot-wrap">
         <div className="result-mascot-glow" aria-hidden="true" />
         <img
@@ -204,7 +195,7 @@ export function ResultScreen() {
         <span className="result-side-spark result-side-spark--right">⭐</span>
       </div>
 
-      {/* Star rating */}
+      {}
       <div className="result-star-section">
         <StarDisplay earned={earned} />
         {threshold && (
@@ -216,13 +207,13 @@ export function ResultScreen() {
         )}
       </div>
 
-      {/* Info card */}
+      {}
       <div className="result-info-card">
         <p className="result-info-main">Sekarang saatnya kita memasak!</p>
         <p className="result-info-sub">Siap jadi koki hebat?</p>
       </div>
 
-      {/* Action buttons */}
+      {}
       <div className="result-actions-wrap">
         <button
           className="result-lanjut-btn"

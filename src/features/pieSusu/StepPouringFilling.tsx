@@ -43,7 +43,7 @@ export function StepPouringFilling({ onComplete }: Props) {
         {isFilled ? 'Pie sudah terisi manis! ✨' : 'Tahan tombol untuk menuangkan susu!'}
       </p>
 
-      {/* Button to pour */}
+      {}
       <div style={{ height: '50px' }}>
         {!isFilled && (
           <button 
@@ -66,10 +66,10 @@ export function StepPouringFilling({ onComplete }: Props) {
         )}
       </div>
 
-      {/* Scene Area */}
+      {}
       <div style={{ position: 'relative', width: '240px', height: '240px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', marginTop: '20px' }}>
         
-        {/* Pitcher Bowl (Appears when holding) */}
+        {}
         <div style={{
           position: 'absolute',
           top: '-60px',
@@ -82,7 +82,7 @@ export function StepPouringFilling({ onComplete }: Props) {
           🥣
         </div>
 
-        {/* The Milk Stream */}
+        {}
         <div style={{
           position: 'absolute',
           top: '0px',
@@ -95,7 +95,7 @@ export function StepPouringFilling({ onComplete }: Props) {
           zIndex: 3
         }} />
 
-        {/* The Pie Image - Crossfade Effect */}
+        {}
         <img 
           src="/assets/pie_susu/ing_adonan jadi.png"
           style={{

@@ -6,7 +6,6 @@ interface Props {
 }
 
 export function StepCutBanana({ onComplete }: Props) {
-  // We need 4 bananas
   const { playButtonClick } = useSfx();
   const [bananas, setBananas] = useState([
     { id: 1, cut: false },
@@ -66,7 +65,7 @@ export function StepCutBanana({ onComplete }: Props) {
           >
             {banana.cut ? (
               <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', height: '100%' }}>
-                {/* Visual for cut banana halves */}
+                {}
                 <div style={{ width: '48%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <img src="/assets/pisang_asar/pisang_terpotong.png" alt="pisang terpotong" style={{ width: '100%', height: '100%', objectFit: 'contain' }} onError={(e) => { e.currentTarget.outerHTML = '<div style="background: #FFF176; border-radius: 10px 0 0 10px; border: 2px solid #FBC02D; width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; font-size:30px;">🍌</div>'; }} />
                 </div>
@@ -77,7 +76,7 @@ export function StepCutBanana({ onComplete }: Props) {
             ) : (
               <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <img src="/assets/pisang_asar/pisang_utuh.png" alt="pisang utuh" style={{ width: '100%', height: '100%', objectFit: 'contain' }} onError={(e) => { e.currentTarget.outerHTML = '<div style="background: #FFEE58; border-radius: 10px; border: 2px solid #FBC02D; font-size: 40px; width: 100%; height: 80px; display: flex; align-items: center; justify-content: center;">🍌</div>'; }} />
-                {/* Cut line hint */}
+                {}
                 <div style={{ position: 'absolute', width: '2px', height: '100%', background: 'rgba(0,0,0,0.2)', left: '50%', transform: 'translateX(-50%)', borderStyle: 'dashed', borderWidth: '0 1px' }} />
               </div>
             )}

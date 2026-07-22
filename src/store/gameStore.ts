@@ -53,7 +53,6 @@ const DEFAULT_REGION_SCORES: RegionBestScores = {
 };
 
 interface GameStore {
-  // --- Screen ---
   currentScreen: ScreenName;
   setScreen: (screen: ScreenName) => void;
   activeRegion: string;
@@ -61,14 +60,12 @@ interface GameStore {
   jajanpediaRegionIndex: number;
   setJajanpediaRegionIndex: (index: number) => void;
 
-  // --- Game Content (from Firestore / fallback) ---
   snacks: SnackData[];
   quizzes: QuizData[];
   recipes: RecipeData[];
   contentLoaded: boolean;
   loadContent: () => Promise<void>;
 
-  // --- Current Session State ---
   score: number;
   mergeCount: number;
   highestTier: number;
@@ -84,7 +81,6 @@ interface GameStore {
   setGameOver: () => void;
   resetGame: () => void;
 
-  // --- Quiz State ---
   showQuiz: boolean;
   currentQuizIndex: number;
   quizzesCorrect: number;
@@ -93,7 +89,6 @@ interface GameStore {
   answerQuiz: (correct: boolean) => void;
   closeQuiz: () => void;
 
-  // --- Cooking Minigame State (Legacy) ---
   currentRecipe: RecipeData | null;
   cookingStep: number;
   cookingComplete: boolean;
@@ -101,35 +96,30 @@ interface GameStore {
   advanceCookingStep: () => void;
   resetCooking: () => void;
 
-  // --- Klepon Mini-Game State ---
   kleponStep: number;
   kleponComplete: boolean;
   startKleponGame: () => void;
   advanceKleponStep: () => void;
   resetKleponGame: () => void;
 
-  // --- Pie Susu Mini-Game State ---
   pieSusuStep: number;
   pieSusuComplete: boolean;
   startPieSusuGame: () => void;
   advancePieSusuStep: () => void;
   resetPieSusuGame: () => void;
 
-  // --- Pisang Asar Mini-Game State ---
   pisangAsarStep: number;
   pisangAsarComplete: boolean;
   startPisangAsarGame: () => void;
   advancePisangAsarStep: () => void;
   resetPisangAsarGame: () => void;
 
-  // --- Samaloyang Mini-Game State ---
   samaloyangStep: number;
   samaloyangComplete: boolean;
   startSamaloyangGame: () => void;
   advanceSamaloyangStep: () => void;
   resetSamaloyangGame: () => void;
 
-  // --- Auth State ---
   userId: string;
   username: string;
   profileIcon: string;
@@ -143,7 +133,6 @@ interface GameStore {
   setAuthError: (msg: string | null) => void;
   setProfileIcon: (icon: string) => Promise<void>;
 
-  // --- Player Profile ---
   totalSessions: number;
   regionBestScores: RegionBestScores;
   totalBestScore: number;
@@ -153,24 +142,20 @@ interface GameStore {
   unlockedRecipes: string[];
   sessions: UserSession[];
   islandProgress: IslandProgress;
-  /** true = mini game memasak sudah diselesaikan — dipakai untuk unlock pulau berikutnya */
   islandCookingComplete: IslandCookingComplete;
   islandStars: IslandStars;
   islandMerges: IslandMerges;
   loadProfile: () => Promise<void>;
   endSession: (reason: 'board_full' | 'target_reached' | 'quit') => Promise<void>;
   completeIsland: () => Promise<void>;
-  /** Dipanggil dari setiap MiniGameScreen saat cooking selesai */
   completeMinigameCooking: (region: string) => Promise<void>;
   awardStarsForRegion: (region: string) => Promise<void>;
 
-  // --- First Launch ---
   hasSeenInstructions: boolean;
   setHasSeenInstructions: () => void;
   hasSeenJajanpediaInstructions: boolean;
   setHasSeenJajanpediaInstructions: () => void;
 
-  // --- Settings ---
   soundEnabled: boolean;
   toggleSound: () => void;
   isMusicOn: boolean;
@@ -180,7 +165,6 @@ interface GameStore {
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
-  // Screen
   currentScreen: 'login',
   setScreen: (screen) => set({ currentScreen: screen }),
   activeRegion: 'jogja',
@@ -188,7 +172,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   jajanpediaRegionIndex: 0,
   setJajanpediaRegionIndex: (index) => set({ jajanpediaRegionIndex: index }),
 
-  // Content
   snacks: [],
   quizzes: [],
   recipes: [],
@@ -202,7 +185,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ snacks, quizzes, recipes, contentLoaded: true });
   },
 
-  // Session
   score: 0,
   mergeCount: 0,
   highestTier: 0,
@@ -236,7 +218,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     currentQuizIndex: 0,
   }),
 
-  // Quiz
   showQuiz: false,
   currentQuizIndex: 0,
   quizzesCorrect: 0,
@@ -256,7 +237,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   })),
   closeQuiz: () => set(s => ({ showQuiz: false, isPaused: false, currentQuizIndex: s.currentQuizIndex + 1 })),
 
-  // Cooking
   currentRecipe: null,
   cookingStep: 0,
   cookingComplete: false,
@@ -285,7 +265,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
   resetCooking: () => set({ currentRecipe: null, cookingStep: 0, cookingComplete: false }),
 
-  // Klepon Mini-Game
   kleponStep: 0,
   kleponComplete: false,
   startKleponGame: () => {
@@ -311,7 +290,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
   resetKleponGame: () => set({ kleponStep: 0, kleponComplete: false }),
 
-  // Pie Susu Mini-Game
   pieSusuStep: 0,
   pieSusuComplete: false,
   startPieSusuGame: () => {
@@ -337,7 +315,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
   resetPieSusuGame: () => set({ pieSusuStep: 0, pieSusuComplete: false }),
 
-  // Pisang Asar Mini-Game
   pisangAsarStep: 0,
   pisangAsarComplete: false,
   startPisangAsarGame: () => {
@@ -363,7 +340,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
   resetPisangAsarGame: () => set({ pisangAsarStep: 0, pisangAsarComplete: false }),
 
-  // Samaloyang Mini-Game
   samaloyangStep: 0,
   samaloyangComplete: false,
   startSamaloyangGame: () => {
@@ -389,7 +365,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
   resetSamaloyangGame: () => set({ samaloyangStep: 0, samaloyangComplete: false }),
 
-  // Auth
   userId: '',
   username: '',
   profileIcon: 'Klepon',
@@ -407,7 +382,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   register: async (username) => {
     set({ authLoading: true, authError: null });
     try {
-      // Cek dulu apakah username sudah dipakai di Firestore
       const taken = await checkUsernameExists(username);
       if (taken) {
         set({ authError: 'USERNAME_TAKEN', authLoading: false });
@@ -420,17 +394,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       } catch (authErr: unknown) {
         const authMsg = authErr instanceof Error ? authErr.message : '';
         if (authMsg.startsWith('AUTH_EXISTS_UID:')) {
-          // Akun Firebase Auth masih ada tapi data Firestore sudah dihapus.
-          // Gunakan uid yang sama dan rekonstruksi profil baru.
           uid = authMsg.replace('AUTH_EXISTS_UID:', '');
         } else {
-          throw authErr; // USERNAME_TAKEN atau error lainnya
+          throw authErr;
         }
       }
 
-      // Simpan mapping username → userId
       await saveUsername(uid, username);
-      // Buat profil default (akan overwrite jika sudah ada)
       await createProfile(uid, username);
       const profile = await getProfile(uid);
 
@@ -506,7 +476,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  // Profile
   totalSessions: 0,
   regionBestScores: { ...DEFAULT_REGION_SCORES },
   totalBestScore: 0,
@@ -583,15 +552,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
 
-  /** 
-   * Dipanggil dari ResultScreen ketika player berhasil menyelesaikan Drop & Merge.
-   * Menandai pulau saat ini sebagai selesai dan update skor + leaderboard.
-   */
   completeIsland: async () => {
     const s = get();
     const region = s.activeRegion as keyof IslandProgress;
 
-    // Buat partial profile yang dibutuhkan updateIslandProgress
     const currentProfile: UserProfile = {
       userId: s.userId,
       username: s.username,
@@ -610,7 +574,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       lastPlayedAt: Date.now(),
     };
 
-    // Simpan merge count saat selesai untuk hitung bintang nanti
     const newIslandMerges: IslandMerges = {
       ...s.islandMerges,
       [region]: s.mergeCount,
@@ -636,25 +599,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  /**
-   * Dihitung & disimpan setelah player menyelesaikan mini game memasak.
-   * Bintang dihitung dari SKOR pemain di Drop & Merge berdasarkan threshold
-   * yang bisa diatur manual di: src/config/starThresholds.ts
-   */
   awardStarsForRegion: async (region: string) => {
     const s = get();
     const key = region as keyof IslandStars;
 
-    // Ambil skor terbaik region ini (sudah disimpan oleh completeIsland)
     const score = s.regionBestScores[key] ?? s.score;
 
-    // Hitung bintang berdasarkan skor dan threshold per-pulau
     const earned = calculateStars(region, score);
 
-    // Tidak ada bintang jika skor terlalu rendah
     if (earned === 0) return;
 
-    // Hanya update jika bintang baru lebih baik dari sebelumnya
     const currentStars = s.islandStars[key] as 0 | 1 | 2 | 3;
     if (earned <= currentStars) return;
 
@@ -665,22 +619,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({ islandStars: newIslandStars });
 
-    // Persist ke Firestore / localStorage
     if (s.userId) {
       const { saveIslandStars } = await import('../lib/db');
       await saveIslandStars(s.userId, newIslandStars, s.islandMerges);
     }
   },
 
-  /**
-   * Dipanggil ketika player menyelesaikan mini game memasak suatu pulau.
-   * Menandai pulau sebagai FULLY COMPLETE sehingga pulau berikutnya terbuka di peta.
-   */
   completeMinigameCooking: async (region: string) => {
     const s = get();
     const key = region as keyof IslandCookingComplete;
 
-    // Sudah selesai sebelumnya — tidak perlu update
     if (s.islandCookingComplete[key]) return;
 
     const newCooking: IslandCookingComplete = {
@@ -690,20 +638,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({ islandCookingComplete: newCooking });
 
-    // Persist ke Firestore
     if (s.userId) {
       await saveProfile(s.userId, { islandCookingComplete: newCooking } as any);
     }
   },
 
-  // First launch (session based)
   hasSeenInstructions: false,
   setHasSeenInstructions: () => set({ hasSeenInstructions: true }),
   
   hasSeenJajanpediaInstructions: false,
   setHasSeenJajanpediaInstructions: () => set({ hasSeenJajanpediaInstructions: true }),
 
-  // Settings
   soundEnabled: true,
   toggleSound: () => set(s => ({ soundEnabled: !s.soundEnabled })),
   isMusicOn: true,

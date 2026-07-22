@@ -8,7 +8,7 @@ export function SettingsScreen() {
 
   return (
     <div className="screen settings-screen">
-      {/* Back button */}
+      {}
       <button
         className="back-btn"
         onClick={() => { playButtonClick(); setScreen('mainMenu'); }}
@@ -17,14 +17,14 @@ export function SettingsScreen() {
         <img src={backButtonImg} alt="Back" className="settings-back-icon-img" />
       </button>
 
-      {/* Header */}
+      {}
       <div className="settings-header">
         <h1 className="settings-title">Pengaturan</h1>
       </div>
 
-      {/* Settings panel */}
+      {}
       <div className="settings-panel">
-        {/* Music toggle */}
+        {}
         <div className="settings-row" id="setting-music">
           <div className="settings-row-left">
             <span className="settings-icon">🎵</span>
@@ -39,7 +39,7 @@ export function SettingsScreen() {
           </button>
         </div>
 
-        {/* SFX toggle */}
+        {}
         <div className="settings-row" id="setting-sfx">
           <div className="settings-row-left">
             <span className="settings-icon">🔊</span>
@@ -55,7 +55,7 @@ export function SettingsScreen() {
         </div>
       </div>
 
-      {/* Version label */}
+      {}
       <div className="settings-version">
         Versi 0.1.0 — Jajan Nusantara
       </div>

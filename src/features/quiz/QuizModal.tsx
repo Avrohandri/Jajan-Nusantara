@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { EventBus } from '../../game/EventBus';
 
-/** Fisher-Yates shuffle — returns new array */
 function shuffleArray<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -17,7 +16,6 @@ export function QuizModal() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
 
-  // Filter quizzes by region
   const regionalQuizzes = quizzes.filter(q => q.region === activeRegion);
   const validQuizzes = regionalQuizzes.length > 0 ? regionalQuizzes : quizzes;
   const quiz = validQuizzes[currentQuizIndex % validQuizzes.length];
@@ -49,14 +47,13 @@ export function QuizModal() {
 
   const isCorrect = answered && selectedAnswer === shuffledCorrectIndex;
 
-  // Answer letter labels
   const letters = ['A', 'B', 'C', 'D'];
 
   return (
     <div className="quiz-overlay">
       <div className="quiz-card">
 
-        {/* Header */}
+        {}
         <div className="quiz-card-header">
           <div className="quiz-header-deco" aria-hidden="true">🍜</div>
           <div className="quiz-header-center">
@@ -66,18 +63,18 @@ export function QuizModal() {
           <div className="quiz-header-deco" aria-hidden="true">🍡</div>
         </div>
 
-        {/* Divider wave */}
+        {}
         <div className="quiz-wave-divider" aria-hidden="true">
           <svg viewBox="0 0 360 18" preserveAspectRatio="none">
             <path d="M0,10 C60,18 120,2 180,10 C240,18 300,2 360,10 L360,18 L0,18 Z" fill="#FFF7ED"/>
           </svg>
         </div>
 
-        {/* Question */}
+        {}
         <div className="quiz-body">
           <p className="quiz-question-new">{quiz.question}</p>
 
-          {/* Options */}
+          {}
           <div className="quiz-options-new">
             {shuffledOptions.map((option, index) => {
               let cls = 'quiz-option-new';
@@ -109,7 +106,7 @@ export function QuizModal() {
             })}
           </div>
 
-          {/* Result feedback */}
+          {}
           {answered && (
             <div className={`quiz-feedback ${isCorrect ? 'quiz-feedback--correct' : 'quiz-feedback--wrong'}`}>
               <div className="quiz-feedback-top">
@@ -132,7 +129,7 @@ export function QuizModal() {
           )}
         </div>
 
-        {/* Decorative dots */}
+        {}
         <div className="quiz-dots" aria-hidden="true">
           {Array.from({ length: 5 }).map((_, i) => (
             <span key={i} className="quiz-dot" style={{ animationDelay: `${i * 0.15}s` }} />

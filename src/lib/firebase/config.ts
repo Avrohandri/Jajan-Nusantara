@@ -21,18 +21,10 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || '',
 };
 
-/**
- * Ubah username menjadi email palsu yang konsisten untuk Firebase Auth.
- * Email format: username@sukikuliner.game
- */
 function usernameToEmail(username: string): string {
   return `${username.toLowerCase().trim()}@sukikuliner.game`;
 }
 
-/**
- * Buat password konsisten berdasarkan username untuk keperluan passwordless login.
- * Minimal 6 karakter.
- */
 function getPasswordForUsername(username: string): string {
   return `SukiPass#${username.toLowerCase().trim()}`;
 }
@@ -56,10 +48,6 @@ export function initFirebase() {
   }
 }
 
-/**
- * Daftarkan user baru dengan username saja (menggunakan password hardcode).
- * @returns uid jika berhasil, atau melempar Error dengan pesan user-friendly
- */
 export async function registerWithUsername(username: string): Promise<string> {
   if (!auth) throw new Error('Firebase belum diinisialisasi.');
   const email = usernameToEmail(username);
@@ -70,17 +58,12 @@ export async function registerWithUsername(username: string): Promise<string> {
   } catch (e: unknown) {
     const code = (e as { code?: string }).code;
     if (code === 'auth/email-already-in-use') {
-      // Akun Auth masih ada (mungkin datanya dihapus dari Firestore).
-      // Coba login dengan kredensial yang sama untuk mendapat uid.
       try {
         const existingCred = await signInWithEmailAndPassword(auth, email, password);
-        // Lempar kode khusus agar pemanggil tahu uid-nya (untuk rekonstruksi profil)
         throw new Error(`AUTH_EXISTS_UID:${existingCred.user.uid}`);
       } catch (loginErr: unknown) {
         const loginMsg = loginErr instanceof Error ? loginErr.message : '';
-        // Teruskan error khusus AUTH_EXISTS_UID ke pemanggil
         if (loginMsg.startsWith('AUTH_EXISTS_UID:')) throw loginErr;
-        // Login juga gagal (password berbeda → benar-benar milik orang lain)
         throw new Error('USERNAME_TAKEN');
       }
     }
@@ -92,10 +75,6 @@ export async function registerWithUsername(username: string): Promise<string> {
   }
 }
 
-/**
- * Login dengan username saja.
- * @returns uid jika berhasil, atau melempar Error dengan pesan user-friendly
- */
 export async function loginWithUsername(username: string): Promise<string> {
   if (!auth) throw new Error('Firebase belum diinisialisasi.');
   const email = usernameToEmail(username);
@@ -113,9 +92,6 @@ export async function loginWithUsername(username: string): Promise<string> {
   }
 }
 
-/**
- * Logout user yang sedang aktif.
- */
 export async function logoutUser(): Promise<void> {
   if (!auth) return;
   try {

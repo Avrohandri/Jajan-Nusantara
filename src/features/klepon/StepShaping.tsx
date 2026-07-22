@@ -36,9 +36,7 @@ export function StepShaping({ onComplete }: Props) {
     }
   };
 
-  // Mouse drag sugar
   const handleSugarDragStart = (e: React.DragEvent) => {
-    // Delay setting dragging state so browser can capture full-opacity drag ghost
     playButtonClick();
     setTimeout(() => setDraggingSugar(true), 0);
     e.dataTransfer.effectAllowed = 'move';
@@ -61,7 +59,6 @@ export function StepShaping({ onComplete }: Props) {
     });
   };
 
-  // Touch support for sugar drag
   const handleSugarTouchStart = (e: React.TouchEvent) => {
     playButtonClick();
     const touch = e.touches[0];

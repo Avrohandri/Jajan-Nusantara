@@ -13,7 +13,6 @@ export function ColliderTestScreen() {
   const [gameHeight] = useState(() => Math.min(560, window.innerHeight - 150));
   const [activeTab, setActiveTab] = useState('jogja');
 
-  // When tab changes, tell the scene to respawn
   useEffect(() => {
     EventBus.emit('collider-change-region', activeTab);
   }, [activeTab]);
@@ -26,7 +25,7 @@ export function ColliderTestScreen() {
         </Button>
       </div>
 
-      {/* Tabs */}
+      {}
       <div style={{ width: gameWidth, display: 'flex', gap: '8px', marginBottom: 10, flexWrap: 'wrap' }}>
         {REGIONS.map(region => (
           <Button

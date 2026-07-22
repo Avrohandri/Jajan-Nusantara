@@ -2,7 +2,6 @@ import { useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useSfx } from '../hooks/useSfx';
 
-// Pedia (real-photo style) images — from src/assets/pedia (imported as module)
 import kleponPedia from '../assets/pedia/klepon.png';
 import pieSusuPedia from '../assets/pedia/pie susu.png';
 import samaloyangPedia from '../assets/pedia/samaloyang.png';
@@ -13,8 +12,8 @@ interface RegionFood {
   region: string;
   regionLabel: string;
   flag: string;
-  cartoonImg: string;  // from public/assets/foods_xxx/
-  realImg: string;     // pedia photo (imported)
+  cartoonImg: string;
+  realImg: string;
   color: string;
   accent: string;
   description: string;
@@ -87,7 +86,6 @@ export function CookingIntroScreen() {
     }
   }
 
-  // Stable floating particles
   const particles = useRef(
     Array.from({ length: 14 }, (_, i) => ({
       id: i,
@@ -101,10 +99,10 @@ export function CookingIntroScreen() {
 
   return (
     <div className="ci-overlay" role="dialog" aria-modal="true" aria-label="Minigame memasak selanjutnya">
-      {/* Blurred backdrop — uses the game background colour */}
+      {}
       <div className="ci-backdrop" />
 
-      {/* Floating deco particles */}
+      {}
       {particles.map(p => (
         <FloatingParticle
           key={p.id}
@@ -119,9 +117,9 @@ export function CookingIntroScreen() {
         />
       ))}
 
-      {/* Main panel */}
+      {}
       <div className="ci-panel">
-        {/* ── Header ── */}
+        {}
         <div className="ci-header">
           <div className="ci-header-sparkle ci-sparkle--left">✦</div>
           <div className="ci-header-inner">
@@ -131,7 +129,7 @@ export function CookingIntroScreen() {
           <div className="ci-header-sparkle ci-sparkle--right">✦</div>
         </div>
 
-        {/* ── Food cards grid ── */}
+        {}
         <div className="ci-foods-grid">
           {FOODS.map((food) => {
             const isActive = food.region === activeRegion;
@@ -141,16 +139,16 @@ export function CookingIntroScreen() {
                 className={`ci-food-card ${isActive ? 'ci-food-card--active' : 'ci-food-card--dim'}`}
                 style={{ '--card-color': food.color, '--card-accent': food.accent } as React.CSSProperties}
               >
-                {/* Active glow ring */}
+                {}
                 {isActive && <div className="ci-active-ring" />}
 
-                {/* Region badge */}
+                {}
                 <div className="ci-region-badge">
                   <span className="ci-region-flag">{food.flag}</span>
                   <span className="ci-region-label">{food.regionLabel}</span>
                 </div>
 
-                {/* Images — real (big) + cartoon thumbnail (small) */}
+                {}
                 <div className="ci-images-wrap">
                   <img
                     src={food.realImg}
@@ -166,15 +164,15 @@ export function CookingIntroScreen() {
                   />
                 </div>
 
-                {/* Food name */}
+                {}
                 <div className="ci-food-name">{food.name}</div>
 
-                {/* Description — only on active card */}
+                {}
                 {isActive && (
                   <p className="ci-food-desc">{food.description}</p>
                 )}
 
-                {/* Active indicator */}
+                {}
                 {isActive && (
                   <div className="ci-now-badge">▶ SEKARANG</div>
                 )}
@@ -184,8 +182,7 @@ export function CookingIntroScreen() {
         </div>
 
 
-
-        {/* ── Action button ── */}
+        {}
         <button className="ci-start-btn" onClick={handleStart}>
           <span className="ci-btn-icon">👨‍🍳</span>
           <span>MULAI MEMASAK {currentFood.name.toUpperCase()}!</span>
