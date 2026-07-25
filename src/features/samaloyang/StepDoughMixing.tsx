@@ -108,10 +108,30 @@ export function StepDoughMixing({ onComplete }: Props) {
 
   return (
     <div className="klepon-step-content">
-      <p className="klepon-instruction">
-        Putar adonan searah jarum jam ↻<br />
-        <span style={{ fontSize: '13px', opacity: 0.7 }}>Tekan & putar di dalam mangkok</span>
-      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+        <div className="klepon-instruction" style={{ 
+          textAlign: 'left', 
+          background: 'rgba(255, 255, 255, 0.95)', 
+          padding: '12px 24px', 
+          borderRadius: '16px', 
+          border: '2px solid #D4A373',
+          boxShadow: '0 4px 12px rgba(212, 163, 115, 0.2)',
+          color: '#5D4037',
+          fontWeight: 'bold',
+          fontSize: '14px'
+        }}>
+          <div style={{ marginBottom: '8px', textAlign: 'center', borderBottom: '1px solid rgba(93, 64, 55, 0.2)', paddingBottom: '4px' }}>Campuran Adonan:</div>
+          <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <li>200g Tepung Beras 🌾</li>
+            <li>1 Butir Telur 🥚</li>
+            <li>150ml Santan 🥥</li>
+            <li>1 sdt Vanilla 🌼</li>
+          </ul>
+        </div>
+        <div style={{ fontSize: '13px', opacity: 0.8, fontWeight: 'bold', textAlign: 'center' }}>
+          Tekan & putar searah jarum jam di dalam mangkok ↻
+        </div>
+      </div>
 
       <div className="mixing-scene">
         {}

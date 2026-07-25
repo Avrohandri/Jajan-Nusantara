@@ -227,6 +227,33 @@ export function StepMatchIngredients({ onComplete }: Props) {
         </div>
 
       </div>
+
+      {Object.keys(matches).length > 0 && (
+        <div style={{ marginTop: '20px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', width: '100%', maxWidth: '340px', animation: 'bowlItemIn 0.3s ease', zIndex: 3 }}>
+          {Object.keys(matches).map((id, i) => {
+            const label = ITEMS.find(item => item.id === id)?.label;
+            return (
+              <div key={i} style={{ 
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.9), rgba(245,235,220,0.9))', 
+                border: '2px solid rgba(212,163,115,0.6)', 
+                borderRadius: '12px', 
+                padding: '6px 10px', 
+                boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                fontSize: '11px',
+                fontWeight: 'bold',
+                color: '#5D4037',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flex: '1 1 calc(50% - 8px)',
+                minWidth: '120px'
+              }}>
+                {label}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

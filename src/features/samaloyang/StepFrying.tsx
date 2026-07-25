@@ -83,9 +83,38 @@ export function StepFrying({ onComplete }: Props) {
 
   return (
     <div className="klepon-step-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-      <p className="klepon-instruction" style={{ textAlign: 'center', zIndex: 11 }}>
-        {isDone ? 'Samaloyang Matang! ✨' : progress >= 100 ? 'Matang! Tarik cetakan keluar!' : progress > 0 ? 'Tahan di minyak panas!' : 'Celupkan cetakan ke minyak panas hingga matang!'}
-      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', zIndex: 11 }}>
+        <div className="klepon-instruction" style={{ 
+          textAlign: 'center', 
+          background: 'rgba(255, 255, 255, 0.95)', 
+          padding: '12px 16px', 
+          borderRadius: '16px', 
+          border: '2px solid #D4A373',
+          boxShadow: '0 4px 12px rgba(212, 163, 115, 0.2)',
+          color: '#5D4037',
+          fontWeight: 'bold'
+        }}>
+          <div style={{ fontSize: '14px' }}>
+            {isDone ? 'Samaloyang Matang! ✨' : progress >= 100 ? 'Matang! Tarik cetakan keluar!' : progress > 0 ? 'Tahan di minyak panas!' : 'Celupkan cetakan ke minyak panas hingga matang!'}
+          </div>
+        </div>
+        
+        {isDragging && !isDone && (
+          <div style={{ 
+            fontSize: '12px', 
+            fontWeight: 'bold', 
+            textAlign: 'center',
+            background: 'rgba(255, 255, 255, 0.95)', 
+            padding: '8px 12px', 
+            borderRadius: '12px', 
+            border: '2px solid #D4A373',
+            color: '#5D4037',
+            animation: 'bowlItemIn 0.3s ease'
+          }}>
+            Tunggu 15-30 detik hingga kuning kecoklatan!
+          </div>
+        )}
+      </div>
 
       {}
       <div 
