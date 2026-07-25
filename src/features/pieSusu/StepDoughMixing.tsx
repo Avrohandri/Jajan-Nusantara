@@ -108,18 +108,28 @@ export function StepDoughMixing({ onComplete }: Props) {
 
   return (
     <div className="klepon-step-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-      <div className="klepon-instruction" style={{ 
-        textAlign: 'center', 
-        background: 'linear-gradient(135deg, #FFE4B5, #FFDAB9)', 
-        padding: '12px 16px', 
-        borderRadius: '16px', 
-        border: '2px solid #D4A373',
-        boxShadow: '0 4px 12px rgba(212, 163, 115, 0.3)',
-        color: '#5D4037',
-        fontWeight: 'bold'
-      }}>
-        <div style={{ fontSize: '14px', marginBottom: '4px' }}>Aduk 250g Tepung 🌾, 150g Mentega 🧈, & 1 Telur 🥚</div>
-        <div style={{ fontSize: '12px', opacity: 0.8, fontWeight: 'normal' }}>Tekan & putar searah jarum jam di dalam mangkok ↻</div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+        <div className="klepon-instruction" style={{ 
+          textAlign: 'left', 
+          background: 'linear-gradient(135deg, #FFE4B5, #FFDAB9)', 
+          padding: '12px 24px', 
+          borderRadius: '16px', 
+          border: '2px solid #D4A373',
+          boxShadow: '0 4px 12px rgba(212, 163, 115, 0.3)',
+          color: '#5D4037',
+          fontWeight: 'bold',
+          fontSize: '14px'
+        }}>
+          <div style={{ marginBottom: '8px', textAlign: 'center', borderBottom: '1px solid rgba(93, 64, 55, 0.2)', paddingBottom: '4px' }}>Campuran Adonan:</div>
+          <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <li>250g Tepung 🌾</li>
+            <li>150g Mentega 🧈</li>
+            <li>1 Butir Telur 🥚</li>
+          </ul>
+        </div>
+        <div style={{ fontSize: '13px', opacity: 0.8, fontWeight: 'bold', textAlign: 'center' }}>
+          Tekan & putar searah jarum jam di dalam mangkok ↻
+        </div>
       </div>
 
       <div className="mixing-scene" style={{ position: 'relative', width: '200px', height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

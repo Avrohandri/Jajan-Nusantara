@@ -39,18 +39,22 @@ export function StepPouringFilling({ onComplete }: Props) {
 
   return (
     <div className="klepon-step-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-      <div className="klepon-instruction" style={{ 
-        textAlign: 'center', 
-        background: 'linear-gradient(135deg, #E0F7FA, #B2EBF2)', 
-        padding: '12px 16px', 
-        borderRadius: '16px', 
-        border: '2px solid #4DD0E1',
-        boxShadow: '0 4px 12px rgba(77, 208, 225, 0.3)',
-        color: '#006064',
-        fontWeight: 'bold'
-      }}>
-        <div style={{ fontSize: '14px', marginBottom: '4px' }}>Tuang campuran ±100ml Susu & Air secukupnya hingga penuh!</div>
-        <div style={{ fontSize: '12px', opacity: 0.8, fontWeight: 'normal' }}>{isFilled ? 'Pie sudah terisi manis! ✨' : 'Tahan tombol untuk menuangkan!'}</div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+        <div className="klepon-instruction" style={{ 
+          textAlign: 'center', 
+          background: 'rgba(255, 255, 255, 0.95)', 
+          padding: '12px 16px', 
+          borderRadius: '16px', 
+          border: '2px solid #D4A373',
+          boxShadow: '0 4px 12px rgba(212, 163, 115, 0.2)',
+          color: '#5D4037',
+          fontWeight: 'bold'
+        }}>
+          <div style={{ fontSize: '14px' }}>Tuang campuran ±100ml Susu & Air secukupnya hingga penuh!</div>
+        </div>
+        <div style={{ fontSize: '13px', opacity: 0.8, fontWeight: 'bold', textAlign: 'center' }}>
+          {isFilled ? 'Pie sudah terisi manis! ✨' : 'Tahan tombol untuk menuangkan!'}
+        </div>
       </div>
 
       {}
