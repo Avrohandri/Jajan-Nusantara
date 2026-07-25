@@ -94,6 +94,8 @@ export class GameScene extends Phaser.Scene {
       isStatic: true, label: 'wall',
     });
 
+    // Menggambar "Garis Deadline" (Garis merah batas Game Over)
+    // Jika tumpukan jajanan melewati garis ini selama beberapa detik, permainan berakhir.
     this.dangerLine = this.add.graphics();
     this.dangerLine.lineStyle(Math.max(2, Math.round(2 * this.scaleFactor)), 0xff0000, 0.6);
     this.dangerLine.lineBetween(WALL_THICKNESS, this.dangerLineY, w - WALL_THICKNESS, this.dangerLineY);
@@ -134,6 +136,7 @@ export class GameScene extends Phaser.Scene {
     };
 
     const onRestart = () => {
+      // Reset semua objek fisika dan state game
       this.activeItems.forEach(item => item.destroy());
       this.activeItems = [];
       this.pendingMerges.clear();
@@ -171,6 +174,7 @@ export class GameScene extends Phaser.Scene {
       }
     });
 
+    // collisionstart: deteksi dua jajanan sejenis bertabrakan → gabungkan jadi jajanan baru
     const handleMergeCollision = (event: any) => {
       if (this.gameOver) return;
 
@@ -188,12 +192,12 @@ export class GameScene extends Phaser.Scene {
         const pairKey = bodyA.id < bodyB.id
           ? `${bodyA.id}_${bodyB.id}`
           : `${bodyB.id}_${bodyA.id}`;
-        if (this.pendingMerges.has(pairKey)) continue;
+        if (this.pendingMerges.has(pairKey)) continue; // Hindari merge ganda
 
         const configA = this.currentConfig.find(f => f.name === bodyA.label);
         if (!configA) continue;
 
-        if (bodyA.label === bodyB.label) {
+        if (bodyA.label === bodyB.label) { // Dua jajanan nama sama → merge
           const tier = configA.tier;
 
           const midX = (bodyA.position.x + bodyB.position.x) / 2;
@@ -218,7 +222,7 @@ export class GameScene extends Phaser.Scene {
           particles.explode(15);
           this.time.delayedCall(1000, () => particles.destroy());
 
-          this.applyPushEffect(midX, midY, Math.round(180 * sf), 0.25 * sf);
+          this.applyPushEffect(midX, midY, Math.round(180 * sf), 0.25 * sf); // Dorong jajanan sekitar
 
           if (tier < this.currentConfig.length - 1) {
             const nextTier = tier + 1;
@@ -228,7 +232,7 @@ export class GameScene extends Phaser.Scene {
             const isMaxTier = configNext ? configNext.nextTier === null : false;
 
             this.time.delayedCall(50, () => {
-              this.spawnFood(nextTier, midX, midY);
+              this.spawnFood(nextTier, midX, midY); // Spawn jajanan tier berikutnya
               EventBus.emit('on-merge', { tier: nextTier, points: pts, name: nm });
               EventBus.emit('food-revealed', { tier: nextTier });
 
@@ -236,7 +240,7 @@ export class GameScene extends Phaser.Scene {
                 this.pendingMerges.delete(pairKey);
               });
 
-              if (isMaxTier) {
+              if (isMaxTier) { // Jajanan tertinggi tercapai → pemain menang
                 this.gameOver = true;
                 this.canDrop = false;
                 this.time.delayedCall(1500, () => {
@@ -266,6 +270,7 @@ export class GameScene extends Phaser.Scene {
       );
     });
 
+    // Pemicu (Trigger) utama saat klik mouse/layar dilepas untuk menjatuhkan jajanan
     this.input.on('pointerup', () => {
       if (this.gameOver || !this.canDrop) return;
 
@@ -350,6 +355,8 @@ export class GameScene extends Phaser.Scene {
     EventBus.emit('next-item', { tier: this.nextTier });
   }
 
+  // Mencetak (spawn) objek fisik jajanan baru di arena permainan
+  // Jajanan akan otomatis jatuh ke bawah karena gravitasi dari Matter.js
   public spawnFood(tier: number, x: number, y: number) {
     const config = this.currentConfig[tier];
     if (!config) return;
@@ -383,6 +390,7 @@ export class GameScene extends Phaser.Scene {
     return DROP_COOLDOWN_MAX;
   }
 
+  // Fungsi inti untuk mengeksekusi jatuhnya jajanan dan mengatur jeda (cooldown) drop
   private dropSnack(x: number) {
     const droppedTier = this.nextTier;
     this.spawnFood(droppedTier, x, this.spawnY);
@@ -426,10 +434,11 @@ export class GameScene extends Phaser.Scene {
     item.destroy();
   }
 
+  // checkGameOver: cek apakah ada jajanan yang melewati garis bahaya terlalu lama
   private checkGameOver() {
     if (this.gameOver || !this.matter.world.enabled) return;
 
-    const DANGER_THRESHOLD_MS = 3000;
+    const DANGER_THRESHOLD_MS = 3000; // Batas waktu (ms) sebelum game over dipicu
     const now = Date.now();
 
     const inDangerNow = new Set<number>();
@@ -440,14 +449,15 @@ export class GameScene extends Phaser.Scene {
 
       if (body.position.y <= this.spawnY + 5) continue;
 
-      if (body.position.y < this.dangerLineY) {
+      if (body.position.y < this.dangerLineY) { // Jajanan di atas garis merah
         inDangerNow.add(body.id);
 
         if (!this.dangerTimers.has(body.id)) {
-          this.dangerTimers.set(body.id, now);
+          this.dangerTimers.set(body.id, now); // Mulai timer bahaya
         } else {
           const enteredAt = this.dangerTimers.get(body.id)!;
           if (now - enteredAt >= DANGER_THRESHOLD_MS) {
+            // Melebihi threshold → trigger game over
             this.gameOver = true;
             this.canDrop = false;
             this.matter.world.pause();
@@ -459,6 +469,7 @@ export class GameScene extends Phaser.Scene {
       }
     }
 
+    // Hapus timer untuk jajanan yang sudah turun dari garis bahaya
     for (const id of this.dangerTimers.keys()) {
       if (!inDangerNow.has(id)) {
         this.dangerTimers.delete(id);

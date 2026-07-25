@@ -10,14 +10,16 @@ import backButtonImg from '../assets/universal/back button.png';
 import { usePreloadImages } from '../hooks/usePreloadImages';
 import { useSfx } from '../hooks/useSfx';
 
+// Urutan langkah minigame memasak Klepon
 const STEPS = [
-  { label: '🌾 Pilih Bahan',    desc: 'Pilih bahan yang tepat'   },
-  { label: '🥄 Aduk Adonan',    desc: 'Campur hingga merata'      },
-  { label: 'Bentuk Klepon',  desc: 'Bulatkan & isi gula merah' },
-  { label: 'Kukus Klepon',   desc: 'Kukus hingga matang'       },
-  { label: 'Taburi Kelapa',  desc: 'Balut dengan kelapa parut' },
+  { label: '🌾 Pilih Bahan', desc: 'Pilih bahan yang tepat' },
+  { label: '🥄 Aduk Adonan', desc: 'Campur hingga merata' },
+  { label: 'Bentuk Klepon', desc: 'Bulatkan & isi gula merah' },
+  { label: 'Kukus Klepon', desc: 'Kukus hingga matang' },
+  { label: 'Taburi Kelapa', desc: 'Balut dengan kelapa parut' },
 ];
 
+// Minigame memasak: Klepon (Jogja)
 export function KleponMiniGameScreen() {
   usePreloadImages([
     '/assets/klepon/adonan_bolong.png',
@@ -31,6 +33,7 @@ export function KleponMiniGameScreen() {
   const [showBackConfirm, setShowBackConfirm] = useState(false);
   const { playButtonClick, playStepComplete } = useSfx();
 
+  // Lanjut ke langkah berikutnya saat pemain menyelesaikan tahap
   const handleStepComplete = useCallback(() => {
     playStepComplete();
     advanceKleponStep();
@@ -43,6 +46,7 @@ export function KleponMiniGameScreen() {
     setScreen('mainMenu');
   };
 
+  // Setelah selesai: beri bintang dan buka pulau Bali
   useEffect(() => {
     if (kleponComplete) {
       awardStarsForRegion('jogja');
@@ -50,6 +54,7 @@ export function KleponMiniGameScreen() {
     }
   }, [kleponComplete]);
 
+  // Layar selesai memasak (berhasil menamatkan minigame)
   if (kleponComplete) {
     return (
       <div className="klepon-root">
@@ -82,10 +87,9 @@ export function KleponMiniGameScreen() {
 
   return (
     <div className="klepon-root">
-      {}
       <img src="/assets/klepon/bg_kitchen.png" alt="" className="klepon-bg" />
 
-      {}
+      {/* Topbar: tombol kembali dan judul */}
       <div className="klepon-topbar">
         <button className="klepon-back-btn" onClick={handleBack} title="Kembali">
           <img src={backButtonImg} alt="Back" className="klepon-back-icon-img" />
@@ -96,27 +100,23 @@ export function KleponMiniGameScreen() {
         </div>
       </div>
 
-      {}
+      {/* Progress dot: indikator tahap yang sudah/belum selesai */}
       <div className="klepon-step-dots">
         {STEPS.map((_, idx) => (
           <div
             key={idx}
-            className={`kstep-dot ${
-              idx < kleponStep  ? 'kstep-done'    :
-              idx === kleponStep ? 'kstep-active'  :
-                                   'kstep-pending'
-            }`}
+            className={`kstep-dot ${idx < kleponStep ? 'kstep-done' :
+              idx === kleponStep ? 'kstep-active' :
+                'kstep-pending'
+              }`}
           >
             {idx < kleponStep ? '✓' : idx + 1}
           </div>
         ))}
       </div>
 
-      {}
-      {}
       {kleponStep === 0 && <StepIngredients onComplete={handleStepComplete} />}
 
-      {}
       {kleponStep > 0 && (
         <div className="klepon-generic-card">
           <div className="klepon-generic-header">
@@ -124,15 +124,15 @@ export function KleponMiniGameScreen() {
             <p className="klepon-generic-desc">{STEPS[kleponStep].desc}</p>
           </div>
           <div className="klepon-generic-body">
-            {kleponStep === 1 && <StepMixing   onComplete={handleStepComplete} />}
-            {kleponStep === 2 && <StepShaping  onComplete={handleStepComplete} />}
-            {kleponStep === 3 && <StepSteaming  onComplete={handleStepComplete} />}
-            {kleponStep === 4 && <StepCoating  onComplete={handleStepComplete} />}
+            {kleponStep === 1 && <StepMixing onComplete={handleStepComplete} />}
+            {kleponStep === 2 && <StepShaping onComplete={handleStepComplete} />}
+            {kleponStep === 3 && <StepSteaming onComplete={handleStepComplete} />}
+            {kleponStep === 4 && <StepCoating onComplete={handleStepComplete} />}
           </div>
         </div>
       )}
 
-      {}
+      {/* Konfirmasi keluar dari minigame */}
       {showBackConfirm && (
         <MiniGameBackConfirm
           foodName="Klepon"

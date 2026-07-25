@@ -12,6 +12,7 @@ let app: FirebaseApp | null = null;
 let db: Firestore | null = null;
 let auth: Auth | null = null;
 
+// Kredensial Firebase dibaca dari environment variable (.env)
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || '',
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '',
@@ -21,6 +22,7 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || '',
 };
 
+// Firebase tidak pakai email asli, username dikonversi ke email virtual
 function usernameToEmail(username: string): string {
   return `${username.toLowerCase().trim()}@sukikuliner.game`;
 }
@@ -48,6 +50,7 @@ export function initFirebase() {
   }
 }
 
+// Daftarkan akun baru: buat email virtual lalu simpan ke Firebase Auth
 export async function registerWithUsername(username: string): Promise<string> {
   if (!auth) throw new Error('Firebase belum diinisialisasi.');
   const email = usernameToEmail(username);
@@ -59,6 +62,7 @@ export async function registerWithUsername(username: string): Promise<string> {
     const code = (e as { code?: string }).code;
     if (code === 'auth/email-already-in-use') {
       try {
+        // Username sudah ada → coba login untuk ambil UID-nya
         const existingCred = await signInWithEmailAndPassword(auth, email, password);
         throw new Error(`AUTH_EXISTS_UID:${existingCred.user.uid}`);
       } catch (loginErr: unknown) {
@@ -75,6 +79,7 @@ export async function registerWithUsername(username: string): Promise<string> {
   }
 }
 
+// Login: verifikasi email virtual ke Firebase Auth, kembalikan UID
 export async function loginWithUsername(username: string): Promise<string> {
   if (!auth) throw new Error('Firebase belum diinisialisasi.');
   const email = usernameToEmail(username);

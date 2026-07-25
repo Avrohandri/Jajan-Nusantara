@@ -70,6 +70,7 @@ export function JajanpediaScreen() {
     setTimeout(() => setToast(null), 2500);
   };
 
+  // Cek apakah pulau sudah terbuka (progress mengikuti urutan: jogja → bali → aceh → maluku)
   const isRegionUnlocked = (id: string): boolean => {
     if (id === 'jogja') return true;
     if (id === 'bali') return islandProgress.jogja;

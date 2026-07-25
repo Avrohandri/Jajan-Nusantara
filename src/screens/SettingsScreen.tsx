@@ -45,6 +45,7 @@ export function SettingsScreen() {
             <span className="settings-icon">🔊</span>
             <span className="settings-label">Efek Suara</span>
           </div>
+          {/* Toggle SFX */}
           <button
             className={`toggle-btn ${isSfxOn ? 'toggle-on' : 'toggle-off'}`}
             onClick={() => { playButtonClick(); toggleSfx(); }}

@@ -17,7 +17,7 @@ export function IslandPauseConfirm({ onConfirm, onCancel }: IslandPauseConfirmPr
         {}
         <h2 className="mgbc-title">Yakin mau keluar?</h2>
 
-        {}
+        {/* Peringatan: progress dan skor saat ini akan hilang */}
         <p className="mgbc-body">
           Apakah anda yakin? Ini akan <strong>mereset semua progress</strong> pada pulau ini.
         </p>

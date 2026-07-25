@@ -28,9 +28,9 @@ export function LoginScreen() {
         setAuthError('Nama pengguna minimal 3 karakter.');
         return;
       }
-      await register(username.trim());
+      await register(username.trim()); // Buat akun baru via Firebase
     } else {
-      await login(username.trim());
+      await login(username.trim()); // Masuk ke akun yang sudah ada
     }
   };
 

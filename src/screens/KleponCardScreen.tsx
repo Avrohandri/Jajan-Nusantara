@@ -53,7 +53,7 @@ export function KleponCardScreen() {
           <span className="klepon-leaf-sm">🍃</span>
         </div>
 
-        {}
+        {/* Deskripsi singkat sejarah dan filosofi jajanan */}
         <div className="klepon-card-about-box">
           <p className="klepon-card-about-text">
             Klepon adalah jajanan tradisional berbentuk bulat

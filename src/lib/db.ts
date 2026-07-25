@@ -48,6 +48,7 @@ export async function checkUsernameExists(username: string): Promise<boolean> {
   if (!isFirebaseConfigured()) return false;
   try {
     const db = getDb()!;
+    // Cek apakah username sudah terdaftar di Firestore
     const snap = await getDoc(doc(db, 'usernames', username.toLowerCase().trim()));
     return snap.exists();
   } catch (e) {
@@ -90,7 +91,10 @@ export async function createProfile(userId: string, username: string): Promise<v
         createdAt: Date.now(),
         lastPlayedAt: Date.now(),
       };
+      // Simpan profil baru ke collection 'users'
       await setDoc(doc(db, 'users', userId), profile);
+      
+      // Daftarkan ke leaderboard dengan skor awal 0
       await setDoc(doc(db, 'leaderboard', userId), {
         userId,
         username,

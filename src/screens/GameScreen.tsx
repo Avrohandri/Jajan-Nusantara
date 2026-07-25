@@ -16,6 +16,7 @@ import continueBtnImg from '../assets/universal/continue_btn.png';
 import restartBtnImg from '../assets/universal/restart_btn.png';
 import { useSfx } from '../hooks/useSfx';
 
+// Layar utama gameplay: Drop & Merge jajanan
 export function GameScreen() {
   const {
     score,
@@ -47,12 +48,14 @@ export function GameScreen() {
   const pendingResultRef = useRef(false);
   const hasTransitionedRef = useRef(false);
 
+  // Sesuaikan ukuran kanvas dengan layar perangkat
   const [gameWidth] = useState(() => Math.min(360, window.innerWidth - 32));
   const [gameHeight] = useState(() => Math.min(560, window.innerHeight - 200));
 
   useEffect(() => {
     resetGame();
 
+    // Terima info jajanan berikutnya dari Phaser
     const handleNextItem = (data: unknown) => {
       const snack = data as { tier: number };
       setNextItem(snack);
@@ -61,6 +64,7 @@ export function GameScreen() {
       }
     };
 
+    // Wadah penuh → game over, simpan sesi, pindah ke layar hasil
     const handleGameOver = async () => {
       if (useGameStore.getState().isGameOver) return;
       useGameStore.getState().setGameOver();
@@ -95,6 +99,7 @@ export function GameScreen() {
       }, 700);
     };
 
+    // Jajanan tier tertinggi berhasil dibuat → pemain menang
     const handleMaxTier = () => {
       if (useGameStore.getState().showQuiz) {
         pendingResultRef.current = true;
@@ -110,6 +115,7 @@ export function GameScreen() {
     };
   }, [endSession, setScreen]);
 
+  // Lanjutkan transisi ke layar hasil setelah kuis ditutup
   useEffect(() => {
     if (!showQuiz && pendingResultRef.current) {
       pendingResultRef.current = false;
@@ -128,18 +134,21 @@ export function GameScreen() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showQuiz]);
 
+  // Pause: hentikan fisika Phaser
   const handlePause = () => {
     playButtonClick();
     setPaused(true);
     EventBus.emit('pause-game');
   };
 
+  // Resume: lanjutkan fisika Phaser
   const handleResume = () => {
     playButtonClick();
     setPaused(false);
     EventBus.emit('resume-game');
   };
 
+  // Restart: reset state + beri sinyal ke Phaser
   const handleRestart = () => {
     playButtonClick();
     resetGame();
@@ -163,6 +172,7 @@ export function GameScreen() {
     setScreen('mainMenu');
   };
 
+  // Tutup tutorial dan tandai sudah dilihat
   const dismissInstructions = () => {
     playButtonClick();
     setShowInstructions(false);
@@ -171,7 +181,7 @@ export function GameScreen() {
 
   return (
     <div className="screen game-screen">
-      {}
+      {/* HUD: skor, jumlah gabungan, tombol pause */}
       <div className="game-hud">
         <div className="hud-left">
           <button onClick={handlePause} className="pause-btn-top" aria-label="Pause">
@@ -187,6 +197,7 @@ export function GameScreen() {
           </div>
         </div>
         <div className="hud-right">
+          {/* Preview jajanan berikutnya */}
           {nextItem && (
             <div className="hud-next">
               <span className="hud-label">Berikutnya</span>
@@ -202,7 +213,7 @@ export function GameScreen() {
         </div>
       </div>
 
-      {}
+      {/* Kanvas game Phaser (area jatuh dan gabung jajanan) */}
       <div
         className="game-canvas-wrapper"
         style={{ width: gameWidth, height: gameHeight, flex: 'none', backgroundImage: `url('/${activeRegion}BG.png')` }}
@@ -210,7 +221,7 @@ export function GameScreen() {
         <PhaserGame width={gameWidth} height={gameHeight} />
       </div>
 
-      {}
+      {/* Progress bar: jajanan yang sudah pernah muncul */}
       <div className="game-progress-bar">
         {currentConfig.map((item) => {
           const isUnlocked = seenTiers.includes(item.tier);
@@ -226,7 +237,7 @@ export function GameScreen() {
         })}
       </div>
 
-      {}
+      {/* Tutorial cara bermain (muncul sekali di awal) */}
       <Modal isOpen={showInstructions} title="Cara Bermain 🎮">
         <div className="instructions">
           <p>🤝 <strong>Gabungkan</strong> jajanan yang sama untuk naik ke tier lebih tinggi.</p>
@@ -238,14 +249,13 @@ export function GameScreen() {
         </Button>
       </Modal>
 
-      {}
+      {/* Kuis edukasi: muncul tiap beberapa merge */}
       {showQuiz && <QuizModal />}
 
-      {}
-
-      {}
+      {/* Menu jeda */}
       {isPaused && !showQuiz && !isGameOver && (
         <div className="pause-overlay">
+          {/* Tombol debug (testing) */}
           <button
             onClick={handleEndGame}
             style={{
@@ -288,7 +298,7 @@ export function GameScreen() {
             </div>
           </div>
 
-          {}
+          {/* Konfirmasi sebelum keluar ke menu utama */}
           {showHomeConfirm && (
             <IslandPauseConfirm
               onConfirm={handleConfirmHome}
@@ -298,10 +308,9 @@ export function GameScreen() {
         </div>
       )}
 
-      {}
       {transitioning && <div className="game-win-flash" aria-hidden="true" />}
 
-      {}
+      {/* NPC fun fact: muncul saat jajanan baru ditemukan */}
       <NpcNotification />
     </div>
   );

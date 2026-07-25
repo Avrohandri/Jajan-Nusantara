@@ -58,6 +58,7 @@ export function MapSelectScreen() {
     playButtonClick();
     const unlocked = isUnlocked(map.id, islandCookingComplete);
     if (unlocked) {
+      // Pulau terbuka: set region aktif dan mulai game
       useGameStore.getState().setActiveRegion(map.id);
       resetGame();
       setScreen('game');

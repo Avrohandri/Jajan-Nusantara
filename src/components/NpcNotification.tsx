@@ -74,6 +74,7 @@ export function NpcNotification() {
       }
     };
 
+    // Saat jajanan baru terbuka (merge) → cari fun fact dari config
     const onFoodRevealed = (data: unknown) => handleCheckUnlock((data as any).tier);
     const onRestart = () => {
       notifiedTiers.current.clear();
@@ -123,7 +124,8 @@ export function NpcNotification() {
         timerRef.current = null;
       }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Abaikan peringatan kode: Sengaja dibatasi agar timer tidak mengulang dari awal tanpa alasan
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeItem]);
 
   const showQuiz = useGameStore((s) => s.showQuiz);
@@ -137,7 +139,8 @@ export function NpcNotification() {
     } else {
       resumeTimer();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Abaikan peringatan kode: Sengaja dibatasi agar fungsi jeda tidak dipanggil dobel
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shouldFreeze]);
 
   if (!activeItem) return null;

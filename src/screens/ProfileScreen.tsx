@@ -56,7 +56,7 @@ export function ProfileScreen() {
   const handlePickIcon = async (name: string) => {
     playButtonClick();
     setSaving(true);
-    await setProfileIcon(name);
+    await setProfileIcon(name); // Update avatar di store dan Firestore
     setSaving(false);
     setShowIconPicker(false);
   };

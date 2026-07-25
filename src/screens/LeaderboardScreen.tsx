@@ -29,7 +29,7 @@ export function LeaderboardScreen() {
   const { playButtonClick } = useSfx();
 
   useEffect(() => {
-    getLeaderboard().then(data => {
+    getLeaderboard().then(data => { // Ambil top skor dari Firestore
       setEntries(data);
       setLoading(false);
     });

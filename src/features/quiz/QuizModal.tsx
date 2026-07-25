@@ -11,6 +11,7 @@ function shuffleArray<T>(arr: T[]): T[] {
   return a;
 }
 
+// Modal kuis edukasi: muncul tiap beberapa merge, menampilkan soal pilihan ganda
 export function QuizModal() {
   const { quizzes, currentQuizIndex, answerQuiz, closeQuiz, activeRegion } = useGameStore();
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -20,24 +21,27 @@ export function QuizModal() {
   const validQuizzes = regionalQuizzes.length > 0 ? regionalQuizzes : quizzes;
   const quiz = validQuizzes[currentQuizIndex % validQuizzes.length];
 
+  // Acak urutan pilihan jawaban agar tidak selalu di posisi yang sama
   const { shuffledOptions, shuffledCorrectIndex } = useMemo(() => {
     if (!quiz) return { shuffledOptions: [], shuffledCorrectIndex: 0 };
     const correctAnswer = quiz.options[quiz.correctAnswerIndex];
     const shuffled = shuffleArray(quiz.options);
     const newCorrectIndex = shuffled.indexOf(correctAnswer);
     return { shuffledOptions: shuffled, shuffledCorrectIndex: newCorrectIndex };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quiz?.id]);
 
   if (!quiz) return null;
 
+  // Saat jawaban dipilih: tandai sudah dijawab & kirim hasilnya ke Gamestore
   const handleAnswer = (index: number) => {
     if (answered) return;
     setSelectedAnswer(index);
     setAnswered(true);
-    answerQuiz(index === shuffledCorrectIndex);
+    answerQuiz(index === shuffledCorrectIndex); // Benar/salah dikirim ke Zustand (tambah/tidak skor)
   };
 
+  // Tutup kuis dan lanjutkan game Phaser
   const handleClose = () => {
     setSelectedAnswer(null);
     setAnswered(false);
@@ -53,7 +57,7 @@ export function QuizModal() {
     <div className="quiz-overlay">
       <div className="quiz-card">
 
-        {}
+        { }
         <div className="quiz-card-header">
           <div className="quiz-header-deco" aria-hidden="true">🍜</div>
           <div className="quiz-header-center">
@@ -63,18 +67,18 @@ export function QuizModal() {
           <div className="quiz-header-deco" aria-hidden="true">🍡</div>
         </div>
 
-        {}
+        { }
         <div className="quiz-wave-divider" aria-hidden="true">
           <svg viewBox="0 0 360 18" preserveAspectRatio="none">
-            <path d="M0,10 C60,18 120,2 180,10 C240,18 300,2 360,10 L360,18 L0,18 Z" fill="#FFF7ED"/>
+            <path d="M0,10 C60,18 120,2 180,10 C240,18 300,2 360,10 L360,18 L0,18 Z" fill="#FFF7ED" />
           </svg>
         </div>
 
-        {}
+        { }
         <div className="quiz-body">
           <p className="quiz-question-new">{quiz.question}</p>
 
-          {}
+          { }
           <div className="quiz-options-new">
             {shuffledOptions.map((option, index) => {
               let cls = 'quiz-option-new';
@@ -106,7 +110,7 @@ export function QuizModal() {
             })}
           </div>
 
-          {}
+          { }
           {answered && (
             <div className={`quiz-feedback ${isCorrect ? 'quiz-feedback--correct' : 'quiz-feedback--wrong'}`}>
               <div className="quiz-feedback-top">
@@ -129,7 +133,7 @@ export function QuizModal() {
           )}
         </div>
 
-        {}
+        { }
         <div className="quiz-dots" aria-hidden="true">
           {Array.from({ length: 5 }).map((_, i) => (
             <span key={i} className="quiz-dot" style={{ animationDelay: `${i * 0.15}s` }} />

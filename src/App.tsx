@@ -77,10 +77,9 @@ export default function App() {
 
   useEffect(() => {
     async function init() {
+      initFirebase(); // Hubungkan ke Firebase
 
-      initFirebase();
-
-
+      // Bersihkan cache kuis lama yang formatnya tidak sesuai
       try {
         const raw = localStorage.getItem('kuliner_quizzes');
         if (raw) {
@@ -90,7 +89,6 @@ export default function App() {
           }
         }
       } catch (_) {}
-
 
       loadContent();
       setInitializing(false);
@@ -132,6 +130,7 @@ export default function App() {
   }
 
   const renderScreen = () => {
+    // Router state-based: ganti layar berdasarkan currentScreen
     switch (currentScreen) {
       case 'login': return <LoginScreen />;
       case 'mainMenu': return <MainMenuScreen />;

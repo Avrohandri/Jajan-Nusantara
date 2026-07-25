@@ -13,6 +13,7 @@ import btnPeringkat from '../assets/menu/btn_peringkat.png';
 
 import { getProfileIconData } from '../utils/profileIcons';
 
+// Layar menu utama: titik awal navigasi ke semua fitur game
 export function MainMenuScreen() {
   const { setScreen, profileIcon } = useGameStore();
   const { playButtonClick } = useSfx();
@@ -21,7 +22,6 @@ export function MainMenuScreen() {
   return (
     <div className="main-menu-screen">
       <div className="main-menu-container">
-        {}
         <div className="main-menu-bg">
           <img
             src={menuBackground}
@@ -30,10 +30,9 @@ export function MainMenuScreen() {
           />
         </div>
 
-        {}
         <div className="main-menu-overlay">
 
-          {}
+          {/* Avatar profil pemain — klik untuk ke halaman profil */}
           <button
             className="main-menu-profile-btn"
             onClick={() => { playButtonClick(); setScreen('profile'); }}
@@ -46,7 +45,7 @@ export function MainMenuScreen() {
             </div>
           </button>
 
-          {}
+          {/* Tombol Play — masuk ke pemilihan daerah */}
           <div className="main-menu-play-area">
             <button
               className="main-menu-play-btn"
@@ -62,7 +61,7 @@ export function MainMenuScreen() {
             </button>
           </div>
 
-          {}
+          {/* Tombol bawah: Peringkat, Jajanpedia, Pengaturan */}
           <div className="main-menu-bottom-buttons">
             {}
             <button

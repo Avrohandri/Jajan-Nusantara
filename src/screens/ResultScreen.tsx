@@ -11,6 +11,7 @@ function randomBetween(a: number, b: number) {
   return a + Math.random() * (b - a);
 }
 
+// Tampilkan 1–3 bintang berdasarkan skor yang diraih
 function StarDisplay({ earned }: { earned: 0 | 1 | 2 | 3 }) {
   return (
     <div className="result-stars-row" aria-label={`${earned} dari 3 bintang`}>
@@ -27,10 +28,12 @@ function StarDisplay({ earned }: { earned: 0 | 1 | 2 | 3 }) {
   );
 }
 
+// Layar hasil akhir: tampil setelah game over atau menang
 export function ResultScreen() {
   const { activeRegion, completeIsland, score, setScreen, isGameOver, resetGame } = useGameStore();
   const { playButtonClick } = useSfx();
 
+  // Maskot dan minigame memasak tiap daerah
   const REGION_CONFIG: Record<string, {
     mascot: string;
     foodName: string;
@@ -65,8 +68,9 @@ export function ResultScreen() {
 
   const config = REGION_CONFIG[activeRegion] ?? REGION_CONFIG['jogja'];
 
+  // Hitung jumlah bintang berdasarkan skor
   const earned: 0 | 1 | 2 | 3 = calculateStars(activeRegion, score);
-  const threshold = STAR_THRESHOLDS[activeRegion];
+  const threshold = STAR_THRESHOLDS[activeRegion]; // Ambang batas skor per bintang
 
   const confettiRef = useRef(
     Array.from({ length: CONFETTI_COUNT }, (_, i) => ({
@@ -84,10 +88,11 @@ export function ResultScreen() {
   useEffect(() => {
     window.scrollTo(0, 0);
     if (!isGameOver) {
-      completeIsland();
+      completeIsland(); // Simpan progress pulau ke database
     }
   }, [isGameOver, completeIsland]);
 
+  // Layar game over: wadah jajanan penuh
   if (isGameOver) {
     return (
       <div className="result-hebat-screen" style={{ background: 'linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%)' }}>
@@ -100,7 +105,6 @@ export function ResultScreen() {
             <span>Wadah jajananmu sudah penuh!</span>
           </div>
         </div>
-
 
         <div className="result-banner-wrap" style={{ marginTop: '20px' }}>
           <div className="result-banner" style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', fontSize: '1.2rem', padding: '12px 24px' }}>
@@ -140,9 +144,10 @@ export function ResultScreen() {
     );
   }
 
+  // Layar kemenangan: pemain berhasil meraih skor target
   return (
     <div className="result-hebat-screen">
-      {}
+      {/* Efek confetti */}
       <div className="result-confetti-layer" aria-hidden="true">
         {confettiRef.current.map((p) => (
           <div
@@ -161,26 +166,23 @@ export function ResultScreen() {
         ))}
       </div>
 
-      {}
       <div className="result-top-deco" aria-hidden="true">
         <span className="result-sparkle result-sparkle--lg">✦</span>
         <span className="result-sparkle result-sparkle--sm">✦</span>
         <span className="result-sparkle result-sparkle--md">✦</span>
       </div>
 
-      {}
       <div className="result-hebat-title-wrap">
         <h1 className="result-hebat-title">HEBAT!</h1>
       </div>
 
-      {}
       <div className="result-banner-wrap">
         <div className="result-banner">
           <span>Kamu berhasil meraih skor {score.toLocaleString('id-ID')}!</span>
         </div>
       </div>
 
-      {}
+      {/* Maskot jajanan khas daerah */}
       <div className="result-mascot-wrap">
         <div className="result-mascot-glow" aria-hidden="true" />
         <img
@@ -195,7 +197,7 @@ export function ResultScreen() {
         <span className="result-side-spark result-side-spark--right">⭐</span>
       </div>
 
-      {}
+      {/* Hasil bintang + petunjuk ambang batas skor */}
       <div className="result-star-section">
         <StarDisplay earned={earned} />
         {threshold && (
@@ -207,13 +209,12 @@ export function ResultScreen() {
         )}
       </div>
 
-      {}
       <div className="result-info-card">
         <p className="result-info-main">Sekarang saatnya kita memasak!</p>
         <p className="result-info-sub">Siap jadi koki hebat?</p>
       </div>
 
-      {}
+      {/* Tombol lanjut ke minigame memasak */}
       <div className="result-actions-wrap">
         <button
           className="result-lanjut-btn"

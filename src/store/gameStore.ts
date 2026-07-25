@@ -215,6 +215,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ showQuiz: true, isPaused: true, currentQuizIndex: state.currentQuizIndex });
     return true;
   },
+  // Mencatat hasil kuis (Benar/Salah) HANYA ke dalam memori lokal (Zustand).
+  // Jika benar skor bertambah 50. Data skor ini belum dikirim ke internet (Firebase) sampai game selesai/Game Over.
   answerQuiz: (correct) => set(s => ({
     quizzesCorrect: s.quizzesCorrect + (correct ? 1 : 0),
     quizzesTriggered: s.quizzesTriggered + 1,
@@ -603,7 +605,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   hasSeenInstructions: false,
   setHasSeenInstructions: () => set({ hasSeenInstructions: true }),
-  
+
   hasSeenJajanpediaInstructions: false,
   setHasSeenJajanpediaInstructions: () => set({ hasSeenJajanpediaInstructions: true }),
 
