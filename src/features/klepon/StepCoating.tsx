@@ -92,15 +92,7 @@ export function StepCoating({ onComplete }: Props) {
 
   return (
     <div className="klepon-step-content">
-      {/* Static info card kelapa parut */}
-      <div className="cog-static-card cog-static-card--compact">
-        <div className="cog-static-label">🥥 Info Taburan Kelapa</div>
-        <div className="cog-static-rows">
-          <div className="cog-static-row"><span>⚖️ Takaran</span><strong>Secukupnya (~100 g/10 klepon)</strong></div>
-          <div className="cog-static-row"><span>✅ Target</span><strong>Hampir menutupi seluruh permukaan</strong></div>
-          <div className="cog-static-row"><span>🍳 Tips</span><strong>Kukus kelapa ±5 menit agar tahan lama</strong></div>
-        </div>
-      </div>
+
 
       <p className="klepon-instruction">
         Taburi setiap klepon dengan kelapa parut!
@@ -157,17 +149,8 @@ export function StepCoating({ onComplete }: Props) {
       {/* Popup info setelah semua klepon dibalut */}
       {showCoatPopup && (
         <CognitiveInfoPopup
-          title="🥥 Klepon Siap Disajikan!"
-          subtitle="Proses pelapisan kelapa parut selesai"
+          title="🥥 100 gram Kelapa Parut (Secukupnya)"
           accentColor="#7CAD58"
-          items={[
-            { icon: '⚖️', label: 'Takaran kelapa parut', value: 'Secukupnya — hampir menutupi seluruh permukaan', highlight: true },
-            { icon: '📏', label: 'Untuk 10 klepon (1 porsi)', value: '±100 gram kelapa parut', highlight: true },
-            { icon: '🍳', label: 'Tips ketahanan', value: 'Kukus kelapa parut ±5 menit sebelum dipakai agar tidak cepat basi' },
-            { icon: '🌡️', label: 'Sajikan', value: 'Klepon paling nikmat disajikan saat masih hangat!' },
-            { icon: '💥', label: 'Sensasi makan', value: 'Gigit → gula merah meletus manis di mulut! 😋' },
-          ]}
-          tip="Kelapa parut yang sudah dikukus bisa tahan 1–2 hari di suhu ruang. Lebih lama? Simpan di kulkas!"
           onClose={() => {
             setShowCoatPopup(false);
             setTimeout(() => onComplete(), 400);

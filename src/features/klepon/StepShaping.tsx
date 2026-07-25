@@ -110,21 +110,11 @@ export function StepShaping({ onComplete }: Props) {
     });
   };
 
-  const filledCount = sugarDropped.filter(Boolean).length;
-
   return (
     <div className="klepon-step-content">
       {phase === 'tapping' && (
         <>
-          {/* Static info card — takaran adonan per klepon */}
-          <div className="cog-static-card cog-static-card--compact">
-            <div className="cog-static-label">🤲 Cara Membentuk Klepon</div>
-            <div className="cog-static-rows">
-              <div className="cog-static-row"><span>⚖️ Per 1 klepon</span><strong>±25 gram adonan</strong></div>
-              <div className="cog-static-row"><span>📏 Ukuran</span><strong>Sebesar bola pingpong kecil</strong></div>
-              <div className="cog-static-row"><span>👋 Teknik</span><strong>Pipihkan, buat cekungan di tengah</strong></div>
-            </div>
-          </div>
+
 
           <p className="klepon-instruction">
             Ketuk untuk membentuk adonan menjadi bulat! 👆
@@ -153,15 +143,7 @@ export function StepShaping({ onComplete }: Props) {
 
       {(phase === 'filling' || phase === 'done') && (
         <>
-          {/* Static info saat fase isi gula */}
-          <div className="cog-static-card cog-static-card--compact cog-static-card--sugar">
-            <div className="cog-static-label">🍬 Cara Mengisi Gula Merah</div>
-            <div className="cog-static-rows">
-              <div className="cog-static-row"><span>⚖️ Per 1 klepon</span><strong>±1 sdt / ±5 gram</strong></div>
-              <div className="cog-static-row"><span>👆 Langkah</span><strong>Lubangi dulu → isi gula → tutup rapat</strong></div>
-              <div className="cog-static-row"><span>📊 Progress</span><strong>{filledCount}/{KLEPON_COUNT} klepon terisi</strong></div>
-            </div>
-          </div>
+
 
           <p className="klepon-instruction">
             Seret gula merah ke dalam setiap klepon!
@@ -204,17 +186,8 @@ export function StepShaping({ onComplete }: Props) {
       {/* Popup info saat masuk fase isi gula merah */}
       {showSugarPopup && (
         <CognitiveInfoPopup
-          title="🍬 Cara Mengisi Gula Merah"
-          subtitle="Rahasia isian klepon yang tidak bocor!"
+          title="🍬 ±5 gram Gula Merah Per Klepon"
           accentColor="#8B4513"
-          items={[
-            { icon: '⚖️', label: 'Takaran gula per 1 klepon', value: '±1 sdt / ±5 gram', highlight: true },
-            { icon: '👆', label: 'Langkah 1', value: 'Lubangi adonan dengan ibu jari hingga setengah kedalaman' },
-            { icon: '🍬', label: 'Langkah 2', value: 'Masukkan gula merah sisir ke dalam lubang' },
-            { icon: '🤲', label: 'Langkah 3', value: 'Tutup lubang rapat-rapat & bulatkan kembali' },
-            { icon: '⚠️', label: 'Penting!', value: 'Pastikan tidak ada celah agar gula tidak bocor saat dikukus', highlight: true },
-          ]}
-          tip="Gunakan gula merah yang sudah disisir halus agar lebih mudah masuk ke dalam adonan!"
           onClose={() => setShowSugarPopup(false)}
         />
       )}

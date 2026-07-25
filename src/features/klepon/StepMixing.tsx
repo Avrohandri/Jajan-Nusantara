@@ -121,15 +121,7 @@ export function StepMixing({ onComplete }: Props) {
 
   return (
     <div className="klepon-step-content">
-      {/* Static info card cara mengaduk */}
-      <div className="cog-static-card cog-static-card--compact">
-        <div className="cog-static-label">📝 Cara Mengaduk Adonan</div>
-        <div className="cog-static-rows">
-          <div className="cog-static-row"><span>🌿 Campur</span><strong>Tepung ketan + air pandan</strong></div>
-          <div className="cog-static-row"><span>💧 Teknik</span><strong>Masukkan air sedikit demi sedikit</strong></div>
-          <div className="cog-static-row"><span>✅ Target</span><strong>Lembut, tidak lengket, hijau merata</strong></div>
-        </div>
-      </div>
+
 
       <p className="klepon-instruction">
         Putar adonan searah jarum jam ↻<br />
@@ -219,16 +211,8 @@ export function StepMixing({ onComplete }: Props) {
       {/* Popup saat adonan selesai diaduk */}
       {showDonePopup && (
         <CognitiveInfoPopup
-          title="✅ Adonan Pandan Sempurna!"
-          subtitle="Adonan siap dibentuk menjadi klepon"
+          title="✅ Adonan Siap Dibentuk!"
           accentColor="#7CAD58"
-          items={[
-            { icon: '🎨', label: 'Warna', value: 'Hijau merata dari air pandan', highlight: true },
-            { icon: '🤲', label: 'Tekstur', value: 'Lembut, tidak lengket di tangan', highlight: true },
-            { icon: '⚖️', label: 'Konsistensi', value: 'Bisa dibentuk bulat tanpa retak' },
-            { icon: '🕐', label: 'Waktu mengaduk', value: '±5 menit hingga merata sempurna' },
-          ]}
-          tip="Kalau adonan terlalu lembek, tambah sedikit tepung. Terlalu keras? Tambah sedikit air pandan!"
           onClose={() => {
             setShowDonePopup(false);
             setTimeout(() => onComplete(), 400);

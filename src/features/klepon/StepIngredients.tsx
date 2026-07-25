@@ -21,41 +21,18 @@ const INITIAL_INGREDIENTS: Ingredient[] = [
 ];
 
 // Info kognitif per bahan — muncul sebagai popup setelah di-drag
-const ING_POPUP_INFO: Record<string, { title: string; subtitle?: string; items: { icon: string; label: string; value: string; highlight?: boolean }[]; tip?: string; accentColor?: string }> = {
+const ING_POPUP_INFO: Record<string, { title: string; accentColor?: string }> = {
   tepung: {
-    title: '🌾 Tepung Ketan',
-    subtitle: 'Bahan dasar adonan klepon',
+    title: '🌾 250 gram Tepung Ketan',
     accentColor: '#C4A35A',
-    items: [
-      { icon: '⚖️', label: 'Jumlah untuk 1 porsi (10 klepon)', value: '250 gram', highlight: true },
-      { icon: '🥣', label: 'Jenis tepung', value: 'Tepung ketan putih' },
-      { icon: '💧', label: 'Kandungan', value: 'Gluten rendah, menghasilkan tekstur kenyal khas klepon' },
-    ],
-    tip: 'Jangan gunakan tepung terigu biasa — klepon tidak akan kenyal!',
   },
   pandan: {
-    title: '🌿 Daun Pandan',
-    subtitle: 'Pewarna & aroma alami klepon',
+    title: '🌿 100 ml Air Pandan',
     accentColor: '#7CAD58',
-    items: [
-      { icon: '🍃', label: 'Daun pandan segar', value: '±15 lembar', highlight: true },
-      { icon: '💧', label: 'Hasil setelah diolah', value: '±100 ml air pandan', highlight: true },
-      { icon: '🔧', label: 'Cara membuat', value: 'Blender daun pandan + sedikit air → saring' },
-      { icon: '🎨', label: 'Fungsi', value: 'Warna hijau alami + aroma harum khas' },
-    ],
-    tip: 'Air pandan dimasukkan sedikit demi sedikit agar adonan tidak terlalu lembek!',
   },
   gula: {
-    title: '🍬 Gula Merah',
-    subtitle: 'Isian manis kejutan klepon',
+    title: '🍬 100 gram Gula Merah',
     accentColor: '#8B4513',
-    items: [
-      { icon: '⚖️', label: 'Per 1 klepon', value: '±1 sdt / ±5 gram', highlight: true },
-      { icon: '⚖️', label: 'Untuk 1 porsi (10 klepon)', value: '±50–100 gram gula merah', highlight: false },
-      { icon: '✂️', label: 'Persiapan', value: 'Sisir / potong kecil agar mudah dimasukkan' },
-      { icon: '💥', label: 'Sensasi', value: 'Meletus manis saat digigit!' },
-    ],
-    tip: 'Lubangi adonan dengan ibu jari sebelum memasukkan gula agar mudah ditutup.',
   },
 };
 
@@ -205,31 +182,8 @@ export function StepIngredients({ onComplete }: Props) {
 
   return (
     <div className="ing-screen">
-
-      {/* Info card static — kuantitas bahan 1 porsi */}
-      <div className="ing-info-card">
-        <div className="ing-info-header">
-          <div className="ing-info-left">
-            <h2 className="ing-card-title">🌾 Pilih Bahan</h2>
-            <p className="ing-card-sub">Pilih bahan yang tepat untuk klepon</p>
-          </div>
-        </div>
-
-        {/* Tabel kuantitas static */}
-        <div className="cog-static-card">
-          <div className="cog-static-label">📋 Takaran 1 Porsi (10 klepon)</div>
-          <div className="cog-static-rows">
-            <div className="cog-static-row"><span>🌾 Tepung ketan</span><strong>250 gram</strong></div>
-            <div className="cog-static-row"><span>🌿 Air pandan</span><strong>100 ml</strong></div>
-            <div className="cog-static-row"><span>🍬 Gula merah</span><strong>100 gram</strong></div>
-            <div className="cog-static-row"><span>🥥 Kelapa parut</span><strong>100 gram</strong></div>
-          </div>
-        </div>
-
-        {/* Instruksi drag */}
-        <div className="ing-instruction-bar">
-          Seret bahan yang benar ke dalam mangkok! ☕
-        </div>
+      <div className="ing-instruction-bar">
+        Seret bahan yang benar ke dalam mangkok! ☕
       </div>
 
       {/* Grid bahan */}
@@ -290,9 +244,6 @@ export function StepIngredients({ onComplete }: Props) {
       {popup && popupInfo && (
         <CognitiveInfoPopup
           title={popupInfo.title}
-          subtitle={popupInfo.subtitle}
-          items={popupInfo.items}
-          tip={popupInfo.tip}
           accentColor={popupInfo.accentColor}
           onClose={handlePopupClose}
         />

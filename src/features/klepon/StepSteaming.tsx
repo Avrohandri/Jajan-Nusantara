@@ -139,17 +139,7 @@ export function StepSteaming({ onComplete }: Props) {
 
   return (
     <div className="klepon-step-content">
-      {/* Static info sebelum kukus */}
-      {!allIn && (
-        <div className="cog-static-card cog-static-card--compact">
-          <div className="cog-static-label">♨️ Info Mengukus Klepon</div>
-          <div className="cog-static-rows">
-            <div className="cog-static-row"><span>🕐 Waktu</span><strong>15–20 menit api sedang</strong></div>
-            <div className="cog-static-row"><span>💡 Pastikan</span><strong>Air sudah mendidih sebelum dimasukkan</strong></div>
-            <div className="cog-static-row"><span>✅ Tanda matang</span><strong>Warna lebih pekat & mengapung</strong></div>
-          </div>
-        </div>
-      )}
+
 
       <p className="klepon-instruction">
         Seret klepon ke dalam pengukus!
@@ -242,17 +232,8 @@ export function StepSteaming({ onComplete }: Props) {
       {/* Popup info waktu kukus — muncul saat semua klepon masuk */}
       {showSteamPopup && (
         <CognitiveInfoPopup
-          title="♨️ Mengukus Klepon"
-          subtitle="Proses pemasakan dengan uap panas"
+          title="♨️ Waktu Mengukus: 15–20 menit"
           accentColor="#E07A2F"
-          items={[
-            { icon: '🕐', label: 'Waktu mengukus', value: '15–20 menit dengan api sedang', highlight: true },
-            { icon: '💧', label: 'Persiapan', value: 'Pastikan air kukusan sudah mendidih sebelum memasukkan klepon', highlight: true },
-            { icon: '✅', label: 'Tanda matang', value: 'Warna klepon lebih pekat & mengapung ke atas' },
-            { icon: '🚫', label: 'Hindari', value: 'Membuka tutup kukusan terlalu sering — uap akan terbuang' },
-            { icon: '🌡️', label: 'Suhu', value: 'Api sedang — jangan terlalu besar agar tidak pecah' },
-          ]}
-          tip="Alasi loyang kukusan dengan daun pisang agar klepon tidak lengket!"
           onClose={() => setShowSteamPopup(false)}
         />
       )}
