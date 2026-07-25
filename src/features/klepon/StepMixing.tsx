@@ -113,10 +113,23 @@ export function StepMixing({ onComplete }: Props) {
     <div className="klepon-step-content">
 
 
-      <p className="klepon-instruction">
-        Campur <strong>Tepung Ketan</strong> dan <strong>Air Pandan</strong>!<br />
-        <span style={{ fontSize: '13px', opacity: 0.7 }}>Tekan & putar searah jarum jam di dalam mangkok</span>
-      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+        <div className="klepon-instruction" style={{ 
+          textAlign: 'center', 
+          background: 'rgba(255, 255, 255, 0.95)', 
+          padding: '12px 16px', 
+          borderRadius: '16px', 
+          border: '2px solid #D4A373',
+          boxShadow: '0 4px 12px rgba(212, 163, 115, 0.2)',
+          color: '#5D4037',
+          fontWeight: 'bold'
+        }}>
+          <div style={{ fontSize: '14px' }}>Campur Tepung Ketan dan Air Pandan!</div>
+        </div>
+        <div style={{ fontSize: '13px', opacity: 0.8, fontWeight: 'bold', textAlign: 'center' }}>
+          Tekan & putar searah jarum jam di dalam mangkok ↻
+        </div>
+      </div>
 
       <div className="mixing-scene">
         {/* Ring progress */}

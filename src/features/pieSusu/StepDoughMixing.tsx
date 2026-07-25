@@ -111,11 +111,11 @@ export function StepDoughMixing({ onComplete }: Props) {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
         <div className="klepon-instruction" style={{ 
           textAlign: 'left', 
-          background: 'linear-gradient(135deg, #FFE4B5, #FFDAB9)', 
+          background: 'rgba(255, 255, 255, 0.95)', 
           padding: '12px 24px', 
           borderRadius: '16px', 
           border: '2px solid #D4A373',
-          boxShadow: '0 4px 12px rgba(212, 163, 115, 0.3)',
+          boxShadow: '0 4px 12px rgba(212, 163, 115, 0.2)',
           color: '#5D4037',
           fontWeight: 'bold',
           fontSize: '14px'

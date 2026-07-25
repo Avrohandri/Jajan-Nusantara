@@ -105,10 +105,23 @@ export function StepShaping({ onComplete }: Props) {
         <>
 
 
-          <p className="klepon-instruction">
-            ⚾︎ Ambil adonan sebesar biji kelereng <br/>
-            <span style={{ fontSize: '13px', opacity: 0.8 }}>Ketuk untuk membentuk adonan menjadi bulat! 👆</span>
-          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+            <div className="klepon-instruction" style={{ 
+              textAlign: 'center', 
+              background: 'rgba(255, 255, 255, 0.95)', 
+              padding: '12px 16px', 
+              borderRadius: '16px', 
+              border: '2px solid #D4A373',
+              boxShadow: '0 4px 12px rgba(212, 163, 115, 0.2)',
+              color: '#5D4037',
+              fontWeight: 'bold'
+            }}>
+              <div style={{ fontSize: '14px' }}>⚾︎ Ambil adonan sebesar biji kelereng</div>
+            </div>
+            <div style={{ fontSize: '13px', opacity: 0.8, fontWeight: 'bold', textAlign: 'center' }}>
+              Ketuk untuk membentuk adonan menjadi bulat! 👆
+            </div>
+          </div>
           <div className="shaping-area" onClick={handleTap}>
             <img
               src={`/assets/klepon/${tapCount === 0 ? 'adonan 1' : tapCount === 1 ? 'adonan 2' : 'adonan_bundar'}.png`}
@@ -135,10 +148,23 @@ export function StepShaping({ onComplete }: Props) {
         <>
 
 
-          <p className="klepon-instruction">
-            🍬 Isi gula merah ±5 gram per klepon <br/>
-            <span style={{ fontSize: '13px', opacity: 0.8 }}>Seret gula merah ke dalam setiap klepon!</span>
-          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+            <div className="klepon-instruction" style={{ 
+              textAlign: 'center', 
+              background: 'rgba(255, 255, 255, 0.95)', 
+              padding: '12px 16px', 
+              borderRadius: '16px', 
+              border: '2px solid #D4A373',
+              boxShadow: '0 4px 12px rgba(212, 163, 115, 0.2)',
+              color: '#5D4037',
+              fontWeight: 'bold'
+            }}>
+              <div style={{ fontSize: '14px' }}>🍬 Isi gula merah ±5 gram per klepon</div>
+            </div>
+            <div style={{ fontSize: '13px', opacity: 0.8, fontWeight: 'bold', textAlign: 'center' }}>
+              Seret gula merah ke dalam setiap klepon!
+            </div>
+          </div>
           <div className="sugar-source">
             <div
               ref={sugarRef}
