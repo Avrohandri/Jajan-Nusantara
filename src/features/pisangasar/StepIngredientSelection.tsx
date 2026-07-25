@@ -4,6 +4,7 @@ import { useSfx } from '../../hooks/useSfx';
 interface Ingredient {
   id: string;
   name: string;
+  qty?: string;
   imgSrc: string;
   emoji: string;
   correct: boolean;
@@ -11,12 +12,12 @@ interface Ingredient {
 }
 
 const INITIAL_INGREDIENTS: Ingredient[] = [
-  { id: 'pisang',   name: 'Pisang',        imgSrc: '/assets/pisang_asar/pisang.png',        emoji: '🍌', correct: true,  dropped: false },
-  { id: 'kenari',   name: 'Kacang Kenari', imgSrc: '/assets/pisang_asar/kacang_kenari.png', emoji: '🥜', correct: true,  dropped: false },
-  { id: 'telur',    name: 'Telur',         imgSrc: '/assets/pisang_asar/telur.png',         emoji: '🥚', correct: true,  dropped: false },
-  { id: 'margarin', name: 'Margarin',      imgSrc: '/assets/pisang_asar/margarin.png',      emoji: '🧈', correct: true,  dropped: false },
-  { id: 'gula',     name: 'Gula Aren',     imgSrc: '/assets/pisang_asar/gula_aren.png',     emoji: '🟤', correct: true,  dropped: false },
-  { id: 'salah',    name: 'Tempe',         imgSrc: '/assets/pisang_asar/tempe.png',         emoji: '🟫', correct: false, dropped: false },
+  { id: 'pisang',   name: 'Pisang',        qty: '3 Buah',  imgSrc: '/assets/pisang_asar/pisang.png',        emoji: '🍌', correct: true,  dropped: false },
+  { id: 'kenari',   name: 'Kacang Kenari', qty: '50g',     imgSrc: '/assets/pisang_asar/kacang_kenari.png', emoji: '🥜', correct: true,  dropped: false },
+  { id: 'telur',    name: 'Telur',         qty: '1 Butir', imgSrc: '/assets/pisang_asar/telur.png',         emoji: '🥚', correct: true,  dropped: false },
+  { id: 'margarin', name: 'Margarin',      qty: '2 sdm',   imgSrc: '/assets/pisang_asar/margarin.png',      emoji: '🧈', correct: true,  dropped: false },
+  { id: 'gula',     name: 'Gula Aren',     qty: '30g',     imgSrc: '/assets/pisang_asar/gula_aren.png',     emoji: '🟤', correct: true,  dropped: false },
+  { id: 'salah',    name: 'Tempe',         qty: '1 Papan', imgSrc: '/assets/pisang_asar/tempe.png',         emoji: '🟫', correct: false, dropped: false },
 ];
 
 interface Props {
@@ -187,7 +188,7 @@ export function StepIngredientSelection({ onComplete }: Props) {
         </div>
         {}
         <div className="ing-instruction-bar">
-          Seret bahan yang benar ke dalam panci! 🍲
+          Seret bahan yang benar ke dalam panci!
         </div>
       </div>
 
@@ -269,6 +270,30 @@ export function StepIngredientSelection({ onComplete }: Props) {
           <span className="ing-bowl-hint">Taruh bahan<br />di sini</span>
         )}
       </div>
+
+      {correctCount > 0 && (
+        <div style={{ marginTop: '20px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', width: '100%', maxWidth: '340px', animation: 'bowlItemIn 0.3s ease', zIndex: 3 }}>
+          {ingredients.filter(i => i.correct && i.dropped).map((ing, i) => (
+            <div key={i} style={{ 
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.9), rgba(245,235,220,0.9))', 
+              border: '2px solid rgba(212,163,115,0.6)', 
+              borderRadius: '12px', 
+              padding: '6px 10px', 
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+              fontSize: '11px',
+              fontWeight: 'bold',
+              color: '#5D4037',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flex: '1 1 calc(50% - 8px)',
+              minWidth: '120px'
+            }}>
+              {ing.qty} {ing.name}
+            </div>
+          ))}
+        </div>
+      )}
 
     </div>
   );

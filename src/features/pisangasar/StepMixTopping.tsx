@@ -108,10 +108,30 @@ export function StepMixTopping({ onComplete }: Props) {
 
   return (
     <div className="klepon-step-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-      <p className="klepon-instruction" style={{ textAlign: 'center' }}>
-        Putar adonan taburan searah jarum jam ↻<br />
-        <span style={{ fontSize: '13px', opacity: 0.7 }}>Campur telur 🥚, gula aren 🟤, kacang 🥜, margarin 🧈</span>
-      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+        <div className="klepon-instruction" style={{ 
+          textAlign: 'left', 
+          background: 'rgba(255, 245, 230, 0.95)', 
+          padding: '12px 16px', 
+          borderRadius: '16px', 
+          border: '2px solid #D4A373',
+          boxShadow: '0 4px 12px rgba(212, 163, 115, 0.2)',
+          color: '#5D4037',
+          fontWeight: 'bold',
+          fontSize: '13px'
+        }}>
+          <div style={{ marginBottom: '8px', textAlign: 'center', borderBottom: '1px solid rgba(93, 64, 55, 0.2)', paddingBottom: '4px' }}>Campuran Topping:</div>
+          <ul style={{ margin: 0, paddingLeft: '20px', display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: '4px 16px' }}>
+            <li>50g Kacang Kenari 🥜</li>
+            <li>1 Butir Telur 🥚</li>
+            <li>2 sdm Margarin 🧈</li>
+            <li>30g Gula Aren 🟤</li>
+          </ul>
+        </div>
+        <div style={{ fontSize: '13px', opacity: 0.8, fontWeight: 'bold', textAlign: 'center' }}>
+          Tekan & putar searah jarum jam di dalam mangkok ↻
+        </div>
+      </div>
 
       <div className="mixing-scene" style={{ position: 'relative', width: '200px', height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         
