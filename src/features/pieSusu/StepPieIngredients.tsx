@@ -18,6 +18,13 @@ const INITIAL_INGREDIENTS: Ingredient[] = [
   { id: 'tomat',  name: 'Tomat',      imgSrc: '/assets/pie_susu/ing_tomat.png',   correct: false },
 ];
 
+const ING_INFO: Record<string, string> = {
+  tepung: '🌾 Tepung Terigu ±250g',
+  mentega: '🧈 Mentega ±150g',
+  telur: '🥚 1 Butir Telur',
+  susu: '🥛 Susu Kental Manis ±100ml',
+};
+
 interface Props {
   onComplete: () => void;
 }
@@ -29,6 +36,7 @@ export function StepPieIngredients({ onComplete }: Props) {
   const [dragX, setDragX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [feedback, setFeedback] = useState<'right' | 'left' | 'error' | null>(null);
+  const [droppedInfos, setDroppedInfos] = useState<string[]>([]);
 
   const startX = useRef(0);
 
@@ -71,6 +79,9 @@ export function StepPieIngredients({ onComplete }: Props) {
     if (dragX > 100) {
       if (ing.correct) {
         setFeedback('right');
+        if (ING_INFO[ing.id] && !droppedInfos.includes(ING_INFO[ing.id])) {
+          setDroppedInfos(prev => [...prev, ING_INFO[ing.id]]);
+        }
         setTimeout(() => nextCard(), 250);
       } else {
         setFeedback('error');
@@ -104,7 +115,6 @@ export function StepPieIngredients({ onComplete }: Props) {
         Geser bahan ke tempat yang benar
       </div>
 
-      {}
       <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: '320px', marginBottom: '20px', fontWeight: 'bold', fontSize: '14px' }}>
         <div style={{ color: '#dc3545', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <span style={{ fontSize: '24px' }}>⬅️❌</span>
@@ -187,6 +197,18 @@ export function StepPieIngredients({ onComplete }: Props) {
       <div style={{ marginTop: '30px', fontWeight: 'bold', color: '#555' }}>
         Sisa Bahan: {shuffledIngs.length - currentIndex}
       </div>
+
+      {droppedInfos.length > 0 && (
+        <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', maxWidth: '320px', animation: 'bowlItemIn 0.3s ease' }}>
+          {droppedInfos.map((info, i) => (
+            <div key={i} className="cog-static-card cog-static-card--compact" style={{ padding: '8px 12px' }}>
+              <div className="cog-static-label" style={{ justifyContent: 'center', fontSize: '13px' }}>
+                {info}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
     </div>
   );

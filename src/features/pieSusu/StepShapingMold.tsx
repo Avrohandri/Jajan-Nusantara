@@ -29,7 +29,8 @@ export function StepShapingMold({ onComplete }: Props) {
   return (
     <div className="klepon-step-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
       <p className="klepon-instruction" style={{ textAlign: 'center' }}>
-        Ketuk adonan untuk memipihkannya ke loyang! 👆
+        Bentuk adonan hingga menutupi bagian dalam loyang pai<br/>
+        <span style={{ fontSize: '13px', opacity: 0.8 }}>Ketuk adonan untuk memipihkannya! 👆</span>
       </p>
 
       <div 

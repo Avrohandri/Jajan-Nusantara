@@ -109,8 +109,8 @@ export function StepDoughMixing({ onComplete }: Props) {
   return (
     <div className="klepon-step-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
       <p className="klepon-instruction" style={{ textAlign: 'center' }}>
-        Putar adonan searah jarum jam ↻<br />
-        <span style={{ fontSize: '13px', opacity: 0.7 }}>Campur tepung 🌾, mentega 🧈, telur 🥚</span>
+        Aduk 250g Tepung 🌾, 150g Mentega 🧈, & 1 Telur 🥚<br />
+        <span style={{ fontSize: '13px', opacity: 0.7 }}>Tekan & putar searah jarum jam di dalam mangkok</span>
       </p>
 
       <div className="mixing-scene" style={{ position: 'relative', width: '200px', height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

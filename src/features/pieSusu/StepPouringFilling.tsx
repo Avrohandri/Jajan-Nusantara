@@ -40,7 +40,8 @@ export function StepPouringFilling({ onComplete }: Props) {
   return (
     <div className="klepon-step-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
       <p className="klepon-instruction" style={{ textAlign: 'center' }}>
-        {isFilled ? 'Pie sudah terisi manis! ✨' : 'Tahan tombol untuk menuangkan susu!'}
+        Tuang campuran ±100ml Susu & Air secukupnya hingga penuh!<br/>
+        <span style={{ fontSize: '13px', opacity: 0.8 }}>{isFilled ? 'Pie sudah terisi manis! ✨' : 'Tahan tombol untuk menuangkan!'}</span>
       </p>
 
       {}

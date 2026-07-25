@@ -120,10 +120,12 @@ export function PieSusuMiniGameScreen() {
 
       {}
       <div className="klepon-generic-card">
-        <div className="klepon-generic-header">
-          <h2 className="klepon-generic-title">{STEPS[pieSusuStep]?.label}</h2>
-          <p className="klepon-generic-desc">{STEPS[pieSusuStep]?.desc}</p>
-        </div>
+        {pieSusuStep > 0 && (
+          <div className="klepon-generic-header">
+            <h2 className="klepon-generic-title">{STEPS[pieSusuStep]?.label}</h2>
+            <p className="klepon-generic-desc">{STEPS[pieSusuStep]?.desc}</p>
+          </div>
+        )}
         <div className="klepon-generic-body" style={{ minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {pieSusuStep === 0 && <StepPieIngredients onComplete={handleStepComplete} />}
           {pieSusuStep === 1 && <StepDoughMixing onComplete={handleStepComplete} />}

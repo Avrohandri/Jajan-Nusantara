@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSfx } from '../../hooks/useSfx';
+import { CognitiveInfoPopup } from '../klepon/CognitiveInfoPopup';
 
 interface Props {
   onComplete: () => void;
@@ -13,9 +14,15 @@ export function StepBakingOven({ onComplete }: Props) {
   const [draggingPie, setDraggingPie] = useState(false);
   
   const ghostRef = useRef<HTMLDivElement | null>(null);
+  const [showOvenPopup, setShowOvenPopup] = useState(false);
+  const ovenPopupShownRef = useRef(false);
 
   useEffect(() => {
     if (pieInOven && !isDone) {
+      if (!ovenPopupShownRef.current) {
+        ovenPopupShownRef.current = true;
+        setTimeout(() => setShowOvenPopup(true), 400);
+      }
       const timer = setInterval(() => {
         setBakingProgress((prev) => Math.min(prev + 5, 100));
       }, 100);
@@ -199,6 +206,15 @@ export function StepBakingOven({ onComplete }: Props) {
           </div>
         )}
       </div>
+
+      {showOvenPopup && (
+        <CognitiveInfoPopup
+          title="♨️ Waktu Panggang: 45–60 menit (Suhu 150°C)"
+          accentColor="#E07A2F"
+          position="bottom"
+          onClose={() => setShowOvenPopup(false)}
+        />
+      )}
     </div>
   );
 }
