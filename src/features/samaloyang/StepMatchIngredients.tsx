@@ -6,10 +6,10 @@ interface Props {
 }
 
 const ITEMS = [
-  { id: 'tepung', label: 'Tepung', imgSrc: '/assets/samaloyang/ing_tepung.png' }, 
-  { id: 'telur', label: 'Telur', imgSrc: '/assets/samaloyang/ing_telur.png' },
-  { id: 'santan', label: 'Santan', imgSrc: '/assets/samaloyang/ing_santan.png' }, 
-  { id: 'vanilla', label: 'Vanilla', imgSrc: '/assets/samaloyang/ing_vanilla.png' } 
+  { id: 'tepung', label: 'Tepung Beras', qty: '200g', imgSrc: '/assets/samaloyang/ing_tepung.png' }, 
+  { id: 'telur', label: 'Telur', qty: '1 Butir', imgSrc: '/assets/samaloyang/ing_telur.png' },
+  { id: 'santan', label: 'Santan', qty: '150ml', imgSrc: '/assets/samaloyang/ing_santan.png' }, 
+  { id: 'vanilla', label: 'Vanilla', qty: '1 sdt', imgSrc: '/assets/samaloyang/ing_vanilla.png' } 
 ];
 
 export function StepMatchIngredients({ onComplete }: Props) {
@@ -72,8 +72,20 @@ export function StepMatchIngredients({ onComplete }: Props) {
   useEffect(() => {
     updatePositions();
     window.addEventListener('resize', updatePositions);
-    return () => window.removeEventListener('resize', updatePositions);
-  }, [shuffledLabels, shuffledImages]);
+    
+    let observer: ResizeObserver | null = null;
+    if (containerRef.current) {
+      observer = new ResizeObserver(() => {
+        updatePositions();
+      });
+      observer.observe(containerRef.current);
+    }
+    
+    return () => {
+      window.removeEventListener('resize', updatePositions);
+      if (observer) observer.disconnect();
+    };
+  }, [shuffledLabels, shuffledImages, matches]);
 
   const handlePointerDown = (id: string, e: React.PointerEvent) => {
     if (matches[id]) return;
@@ -177,12 +189,12 @@ export function StepMatchIngredients({ onComplete }: Props) {
                 onPointerDown={(e) => handlePointerDown(item.id, e)}
                 style={{
                   height: '80px',
-                  width: '90px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: '100px',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                   background: isMatched ? '#E8F5E9' : isDragging ? '#FFF8E1' : '#FFF',
                   border: `3px solid ${isMatched ? '#4CAF50' : isDragging ? '#FFC107' : '#D4A373'}`,
                   borderRadius: '14px',
-                  fontWeight: 'bold', fontSize: '15px',
+                  fontWeight: 'bold', fontSize: '14px', textAlign: 'center',
                   boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
                   cursor: isMatched ? 'default' : 'grab',
                   opacity: isMatched ? 0.7 : 1,
@@ -191,7 +203,8 @@ export function StepMatchIngredients({ onComplete }: Props) {
                   touchAction: 'none'
                 }}
               >
-                {item.label}
+                <div>{item.label}</div>
+                <div style={{ fontSize: '12px', fontWeight: 'normal' }}>{item.qty}</div>
               </div>
             );
           })}
@@ -231,7 +244,7 @@ export function StepMatchIngredients({ onComplete }: Props) {
       {Object.keys(matches).length > 0 && (
         <div style={{ marginTop: '20px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', width: '100%', maxWidth: '340px', animation: 'bowlItemIn 0.3s ease', zIndex: 3 }}>
           {Object.keys(matches).map((id, i) => {
-            const label = ITEMS.find(item => item.id === id)?.label;
+            const item = ITEMS.find(item => item.id === id);
             return (
               <div key={i} style={{ 
                 background: 'linear-gradient(135deg, rgba(255,255,255,0.9), rgba(245,235,220,0.9))', 
@@ -248,7 +261,7 @@ export function StepMatchIngredients({ onComplete }: Props) {
                 flex: '1 1 calc(50% - 8px)',
                 minWidth: '120px'
               }}>
-                {label}
+                {item ? `${item.qty} ${item.label}` : ''}
               </div>
             );
           })}
