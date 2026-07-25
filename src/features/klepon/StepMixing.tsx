@@ -107,10 +107,7 @@ export function StepMixing({ onComplete }: Props) {
   const strokeDashoffset = circumference - (percent / 100) * circumference;
 
   // Warna adonan berubah dari putih → hijau pandan sesuai progress
-  const doughHue = Math.round(percent * 1.2); // 0–120 (putih→hijau)
-  const doughFilter = percent < 10
-    ? 'none'
-    : `hue-rotate(${doughHue}deg) saturate(${0.5 + percent / 100})`;
+
 
   return (
     <div className="klepon-step-content">
@@ -158,7 +155,6 @@ export function StepMixing({ onComplete }: Props) {
             className="mixing-dough-img"
             style={{
               transform: `rotate(${whirlAngle}deg)`,
-              filter: doughFilter,
               transition: 'filter 0.5s ease',
             }}
             draggable={false}
