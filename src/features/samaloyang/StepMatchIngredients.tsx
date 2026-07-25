@@ -204,7 +204,6 @@ export function StepMatchIngredients({ onComplete }: Props) {
                 }}
               >
                 <div>{item.label}</div>
-                <div style={{ fontSize: '12px', fontWeight: 'normal' }}>{item.qty}</div>
               </div>
             );
           })}

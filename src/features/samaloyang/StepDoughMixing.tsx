@@ -121,7 +121,7 @@ export function StepDoughMixing({ onComplete }: Props) {
           fontSize: '13px'
         }}>
           <div style={{ marginBottom: '8px', textAlign: 'center', borderBottom: '1px solid rgba(93, 64, 55, 0.2)', paddingBottom: '4px' }}>Campuran Adonan:</div>
-          <ul style={{ margin: 0, paddingLeft: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 8px' }}>
+          <ul style={{ margin: 0, paddingLeft: '20px', display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: '4px 16px' }}>
             <li>200g Tepung Beras 🌾</li>
             <li>1 Butir Telur 🥚</li>
             <li>150ml Santan 🥥</li>
