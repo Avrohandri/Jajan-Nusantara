@@ -105,11 +105,9 @@ export function StepShaping({ onComplete }: Props) {
         <>
 
 
-          <div className="cog-static-card cog-static-card--compact" style={{ marginBottom: 12 }}>
-            <div className="cog-static-label" style={{ justifyContent: 'center' }}>🤲 Ambil adonan sebesar biji kelereng</div>
-          </div>
           <p className="klepon-instruction">
-            Ketuk untuk membentuk adonan menjadi bulat! 👆
+            🤲 Ambil adonan sebesar biji kelereng <br/>
+            <span style={{ fontSize: '13px', opacity: 0.8 }}>Ketuk untuk membentuk adonan menjadi bulat! 👆</span>
           </p>
           <div className="shaping-area" onClick={handleTap}>
             <img
@@ -137,11 +135,9 @@ export function StepShaping({ onComplete }: Props) {
         <>
 
 
-          <div className="cog-static-card cog-static-card--compact cog-static-card--sugar" style={{ marginBottom: 12 }}>
-            <div className="cog-static-label" style={{ justifyContent: 'center', color: '#8B4513' }}>🍬 Isi gula merah ±5 gram per klepon</div>
-          </div>
           <p className="klepon-instruction">
-            Seret gula merah ke dalam setiap klepon!
+            🍬 Isi gula merah ±5 gram per klepon <br/>
+            <span style={{ fontSize: '13px', opacity: 0.8 }}>Seret gula merah ke dalam setiap klepon!</span>
           </p>
           <div className="sugar-source">
             <div
