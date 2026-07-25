@@ -7,6 +7,7 @@ export interface CogPopupProps {
   tip?: string;
   onClose: () => void;
   accentColor?: string; // default hijau pandan
+  position?: 'top' | 'center' | 'bottom';
 }
 
 /**
@@ -17,6 +18,7 @@ export function CognitiveInfoPopup({
   title,
   onClose,
   accentColor = '#7CAD58',
+  position = 'top',
 }: CogPopupProps) {
   const [visible, setVisible] = useState(false);
 
@@ -38,7 +40,7 @@ export function CognitiveInfoPopup({
 
   return (
     <div
-      className={`cog-toast ${visible ? 'cog-toast--in' : ''}`}
+      className={`cog-toast cog-toast--${position} ${visible ? 'cog-toast--in' : ''}`}
       style={{ backgroundColor: accentColor }}
     >
       <span className="cog-toast-text">{title}</span>

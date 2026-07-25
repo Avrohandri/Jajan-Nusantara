@@ -3192,9 +3192,7 @@ body {
    ======================================================== */
 .cog-toast {
   position: fixed;
-  top: 100px;
   left: 50%;
-  transform: translate(-50%, -20px);
   z-index: 8000;
   padding: 12px 24px;
   border-radius: 99px;
@@ -3206,7 +3204,29 @@ body {
   border: 2px solid rgba(255, 255, 255, 0.8);
 }
 
-.cog-toast--in {
+.cog-toast--top {
+  top: 100px;
+  transform: translate(-50%, -20px);
+}
+.cog-toast--top.cog-toast--in {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+.cog-toast--center {
+  top: 50%;
+  transform: translate(-50%, -70%);
+}
+.cog-toast--center.cog-toast--in {
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+
+.cog-toast--bottom {
+  bottom: 100px;
+  transform: translate(-50%, 20px);
+}
+.cog-toast--bottom.cog-toast--in {
   transform: translate(-50%, 0);
   opacity: 1;
 }

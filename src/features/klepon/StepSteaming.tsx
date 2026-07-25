@@ -234,6 +234,7 @@ export function StepSteaming({ onComplete }: Props) {
         <CognitiveInfoPopup
           title="♨️ Waktu Mengukus: 15–20 menit"
           accentColor="#E07A2F"
+          position="bottom"
           onClose={() => setShowSteamPopup(false)}
         />
       )}

@@ -1,6 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useSfx } from '../../hooks/useSfx';
-import { CognitiveInfoPopup } from './CognitiveInfoPopup';
 
 interface Props {
   onComplete: () => void;
@@ -13,9 +12,7 @@ export function StepMixing({ onComplete }: Props) {
   const [totalDegrees, setTotalDegrees] = useState(0);
   const [isStirring, setIsStirring] = useState(false);
   const [whirlAngle, setWhirlAngle] = useState(0);
-  const [showDonePopup, setShowDonePopup] = useState(false);
   const completedRef = useRef(false);
-  const popupShownRef = useRef(false);
 
   const bowlRef = useRef<HTMLDivElement>(null);
   const lastAngleRef = useRef<number | null>(null);
@@ -44,11 +41,7 @@ export function StepMixing({ onComplete }: Props) {
         const next = Math.min(prev + delta, REQUIRED_DEGREES);
         if (next >= REQUIRED_DEGREES && !completedRef.current) {
           completedRef.current = true;
-          // Tampilkan popup dulu, baru lanjut setelah ditutup
-          if (!popupShownRef.current) {
-            popupShownRef.current = true;
-            setTimeout(() => setShowDonePopup(true), 300);
-          }
+          setTimeout(() => onComplete(), 800);
         }
         return next;
       });
@@ -124,8 +117,8 @@ export function StepMixing({ onComplete }: Props) {
 
 
       <p className="klepon-instruction">
-        Putar adonan searah jarum jam ↻<br />
-        <span style={{ fontSize: '13px', opacity: 0.7 }}>Tekan & putar di dalam mangkok</span>
+        Campur <strong>Tepung Ketan</strong> dan <strong>Air Pandan</strong>!<br />
+        <span style={{ fontSize: '13px', opacity: 0.7 }}>Tekan & putar searah jarum jam di dalam mangkok</span>
       </p>
 
       <div className="mixing-scene">
@@ -208,17 +201,7 @@ export function StepMixing({ onComplete }: Props) {
         <p className="mixing-hint">↻ Terus putar!</p>
       )}
 
-      {/* Popup saat adonan selesai diaduk */}
-      {showDonePopup && (
-        <CognitiveInfoPopup
-          title="✅ Adonan Siap Dibentuk!"
-          accentColor="#7CAD58"
-          onClose={() => {
-            setShowDonePopup(false);
-            setTimeout(() => onComplete(), 400);
-          }}
-        />
-      )}
+
     </div>
   );
 }

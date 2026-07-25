@@ -245,6 +245,7 @@ export function StepIngredients({ onComplete }: Props) {
         <CognitiveInfoPopup
           title={popupInfo.title}
           accentColor={popupInfo.accentColor}
+          position="center"
           onClose={handlePopupClose}
         />
       )}

@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSfx } from '../../hooks/useSfx';
-import { CognitiveInfoPopup } from './CognitiveInfoPopup';
 
 interface Props {
   onComplete: () => void;
@@ -15,11 +14,9 @@ export function StepShaping({ onComplete }: Props) {
   const [sugarDropped, setSugarDropped] = useState<boolean[]>(Array(KLEPON_COUNT).fill(false));
   const [draggingSugar, setDraggingSugar] = useState(false);
   const [phase, setPhase] = useState<'tapping' | 'filling' | 'done'>('tapping');
-  const [showSugarPopup, setShowSugarPopup] = useState(false);
   const sugarRef = useRef<HTMLDivElement>(null);
   const ghostRef = useRef<HTMLDivElement | null>(null);
   const completedRef = useRef(false);
-  const sugarPopupShownRef = useRef(false);
 
   useEffect(() => {
     if (phase === 'filling' && sugarDropped.every(Boolean) && !completedRef.current) {
@@ -28,14 +25,6 @@ export function StepShaping({ onComplete }: Props) {
       setTimeout(() => onComplete(), 800);
     }
   }, [sugarDropped, phase, onComplete]);
-
-  // Tampilkan popup ketika masuk fase filling
-  useEffect(() => {
-    if (phase === 'filling' && !sugarPopupShownRef.current) {
-      sugarPopupShownRef.current = true;
-      setTimeout(() => setShowSugarPopup(true), 300);
-    }
-  }, [phase]);
 
   const handleTap = () => {
     if (phase !== 'tapping') return;
@@ -116,6 +105,9 @@ export function StepShaping({ onComplete }: Props) {
         <>
 
 
+          <div className="cog-static-card cog-static-card--compact" style={{ marginBottom: 12 }}>
+            <div className="cog-static-label" style={{ justifyContent: 'center' }}>🤲 Ambil adonan sebesar biji kelereng</div>
+          </div>
           <p className="klepon-instruction">
             Ketuk untuk membentuk adonan menjadi bulat! 👆
           </p>
@@ -145,6 +137,9 @@ export function StepShaping({ onComplete }: Props) {
         <>
 
 
+          <div className="cog-static-card cog-static-card--compact cog-static-card--sugar" style={{ marginBottom: 12 }}>
+            <div className="cog-static-label" style={{ justifyContent: 'center', color: '#8B4513' }}>🍬 Isi gula merah ±5 gram per klepon</div>
+          </div>
           <p className="klepon-instruction">
             Seret gula merah ke dalam setiap klepon!
           </p>
@@ -183,14 +178,7 @@ export function StepShaping({ onComplete }: Props) {
         </>
       )}
 
-      {/* Popup info saat masuk fase isi gula merah */}
-      {showSugarPopup && (
-        <CognitiveInfoPopup
-          title="🍬 ±5 gram Gula Merah Per Klepon"
-          accentColor="#8B4513"
-          onClose={() => setShowSugarPopup(false)}
-        />
-      )}
+
     </div>
   );
 }

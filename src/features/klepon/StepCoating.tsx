@@ -151,6 +151,7 @@ export function StepCoating({ onComplete }: Props) {
         <CognitiveInfoPopup
           title="🥥 100 gram Kelapa Parut (Secukupnya)"
           accentColor="#7CAD58"
+          position="bottom"
           onClose={() => {
             setShowCoatPopup(false);
             setTimeout(() => onComplete(), 400);
