@@ -31,7 +31,7 @@ export function StepShapingMold({ onComplete }: Props) {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
         <div className="klepon-instruction" style={{ 
           textAlign: 'center', 
-          background: 'rgba(255, 255, 255, 0.95)', 
+          background: 'rgba(255, 245, 230, 0.6)', 
           padding: '12px 16px', 
           borderRadius: '16px', 
           border: '2px solid #D4A373',

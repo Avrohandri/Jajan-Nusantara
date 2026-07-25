@@ -100,7 +100,7 @@ export function StepBakeOven({ onComplete }: Props) {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', zIndex: 11 }}>
         <div className="klepon-instruction" style={{ 
           textAlign: 'center', 
-          background: 'rgba(255, 245, 230, 0.95)', 
+          background: 'rgba(255, 245, 230, 0.6)', 
           padding: '12px 16px', 
           borderRadius: '16px', 
           border: '2px solid #D4A373',
@@ -118,7 +118,7 @@ export function StepBakeOven({ onComplete }: Props) {
             fontSize: '12px', 
             fontWeight: 'bold', 
             textAlign: 'center',
-            background: 'rgba(255, 245, 230, 0.95)', 
+            background: 'rgba(255, 245, 230, 0.6)', 
             padding: '8px 12px', 
             borderRadius: '12px', 
             border: '2px solid #D4A373',

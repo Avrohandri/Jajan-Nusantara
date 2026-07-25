@@ -12,7 +12,7 @@ interface Ingredient {
 }
 
 const INITIAL_INGREDIENTS: Ingredient[] = [
-  { id: 'pisang',   name: 'Pisang',        qty: '3 Buah',  imgSrc: '/assets/pisang_asar/pisang.png',        emoji: '🍌', correct: true,  dropped: false },
+  { id: 'pisang',   name: 'Pisang',        qty: '4 Buah',  imgSrc: '/assets/pisang_asar/pisang.png',        emoji: '🍌', correct: true,  dropped: false },
   { id: 'kenari',   name: 'Kacang Kenari', qty: '50g',     imgSrc: '/assets/pisang_asar/kacang_kenari.png', emoji: '🥜', correct: true,  dropped: false },
   { id: 'telur',    name: 'Telur',         qty: '1 Butir', imgSrc: '/assets/pisang_asar/telur.png',         emoji: '🥚', correct: true,  dropped: false },
   { id: 'margarin', name: 'Margarin',      qty: '2 sdm',   imgSrc: '/assets/pisang_asar/margarin.png',      emoji: '🧈', correct: true,  dropped: false },
