@@ -199,12 +199,24 @@ export function StepPieIngredients({ onComplete }: Props) {
       </div>
 
       {droppedInfos.length > 0 && (
-        <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', maxWidth: '320px', animation: 'bowlItemIn 0.3s ease' }}>
+        <div style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', width: '100%', maxWidth: '340px', animation: 'bowlItemIn 0.3s ease' }}>
           {droppedInfos.map((info, i) => (
-            <div key={i} className="cog-static-card cog-static-card--compact" style={{ padding: '8px 12px' }}>
-              <div className="cog-static-label" style={{ justifyContent: 'center', fontSize: '13px' }}>
-                {info}
-              </div>
+            <div key={i} style={{ 
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.9), rgba(245,235,220,0.9))', 
+              border: '2px solid rgba(212,163,115,0.6)', 
+              borderRadius: '12px', 
+              padding: '6px 10px', 
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+              fontSize: '11px',
+              fontWeight: 'bold',
+              color: '#5D4037',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flex: '1 1 calc(50% - 8px)',
+              minWidth: '120px'
+            }}>
+              {info}
             </div>
           ))}
         </div>

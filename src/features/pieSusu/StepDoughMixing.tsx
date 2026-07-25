@@ -108,10 +108,19 @@ export function StepDoughMixing({ onComplete }: Props) {
 
   return (
     <div className="klepon-step-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-      <p className="klepon-instruction" style={{ textAlign: 'center' }}>
-        Aduk 250g Tepung 🌾, 150g Mentega 🧈, & 1 Telur 🥚<br />
-        <span style={{ fontSize: '13px', opacity: 0.7 }}>Tekan & putar searah jarum jam di dalam mangkok</span>
-      </p>
+      <div className="klepon-instruction" style={{ 
+        textAlign: 'center', 
+        background: 'linear-gradient(135deg, #FFE4B5, #FFDAB9)', 
+        padding: '12px 16px', 
+        borderRadius: '16px', 
+        border: '2px solid #D4A373',
+        boxShadow: '0 4px 12px rgba(212, 163, 115, 0.3)',
+        color: '#5D4037',
+        fontWeight: 'bold'
+      }}>
+        <div style={{ fontSize: '14px', marginBottom: '4px' }}>Aduk 250g Tepung 🌾, 150g Mentega 🧈, & 1 Telur 🥚</div>
+        <div style={{ fontSize: '12px', opacity: 0.8, fontWeight: 'normal' }}>Tekan & putar searah jarum jam di dalam mangkok ↻</div>
+      </div>
 
       <div className="mixing-scene" style={{ position: 'relative', width: '200px', height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         

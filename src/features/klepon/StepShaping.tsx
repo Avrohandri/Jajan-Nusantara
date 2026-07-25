@@ -106,7 +106,7 @@ export function StepShaping({ onComplete }: Props) {
 
 
           <p className="klepon-instruction">
-            🤲 Ambil adonan sebesar biji kelereng <br/>
+            ⚾︎ Ambil adonan sebesar biji kelereng <br/>
             <span style={{ fontSize: '13px', opacity: 0.8 }}>Ketuk untuk membentuk adonan menjadi bulat! 👆</span>
           </p>
           <div className="shaping-area" onClick={handleTap}>
