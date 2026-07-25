@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { useSfx } from '../../hooks/useSfx';
+import { CognitiveInfoPopup } from './CognitiveInfoPopup';
 
 interface Props {
   onComplete: () => void;
@@ -11,14 +12,21 @@ export function StepCoating({ onComplete }: Props) {
   const { playButtonClick } = useSfx();
   const [coated, setCoated] = useState<boolean[]>(Array(KLEPON_COUNT).fill(false));
   const [dragging, setDragging] = useState(false);
+  const [showCoatPopup, setShowCoatPopup] = useState(false);
   const ghostRef = useRef<HTMLDivElement | null>(null);
+  const coatPopupShownRef = useRef(false);
 
   const coatKlepon = (idx: number) => {
     setCoated(prev => {
       const next = [...prev];
       next[idx] = true;
-      if (next.every(Boolean)) {
-        setTimeout(() => onComplete(), 700);
+      const allDone = next.every(Boolean);
+      if (allDone) {
+        // Tampilkan popup selesai
+        if (!coatPopupShownRef.current) {
+          coatPopupShownRef.current = true;
+          setTimeout(() => setShowCoatPopup(true), 300);
+        }
       }
       return next;
     });
@@ -84,11 +92,21 @@ export function StepCoating({ onComplete }: Props) {
 
   return (
     <div className="klepon-step-content">
+      {/* Static info card kelapa parut */}
+      <div className="cog-static-card cog-static-card--compact">
+        <div className="cog-static-label">🥥 Info Taburan Kelapa</div>
+        <div className="cog-static-rows">
+          <div className="cog-static-row"><span>⚖️ Takaran</span><strong>Secukupnya (~100 g/10 klepon)</strong></div>
+          <div className="cog-static-row"><span>✅ Target</span><strong>Hampir menutupi seluruh permukaan</strong></div>
+          <div className="cog-static-row"><span>🍳 Tips</span><strong>Kukus kelapa ±5 menit agar tahan lama</strong></div>
+        </div>
+      </div>
+
       <p className="klepon-instruction">
         Taburi setiap klepon dengan kelapa parut!
       </p>
 
-      {}
+      {/* Sumber kelapa parut */}
       <div className="coconut-source">
         <div
           className={`coconut-bowl ${dragging ? 'coconut-dragging' : ''}`}
@@ -103,7 +121,7 @@ export function StepCoating({ onComplete }: Props) {
         </div>
       </div>
 
-      {}
+      {/* Plate klepon */}
       <div className="plate-area">
         <div className="serving-plate">
           <div className="plate-klepon-row">
@@ -132,8 +150,29 @@ export function StepCoating({ onComplete }: Props) {
         ))}
       </div>
 
-      {allCoated && (
+      {allCoated && !showCoatPopup && (
         <p className="coating-done">Klepon siap disajikan!</p>
+      )}
+
+      {/* Popup info setelah semua klepon dibalut */}
+      {showCoatPopup && (
+        <CognitiveInfoPopup
+          title="🥥 Klepon Siap Disajikan!"
+          subtitle="Proses pelapisan kelapa parut selesai"
+          accentColor="#7CAD58"
+          items={[
+            { icon: '⚖️', label: 'Takaran kelapa parut', value: 'Secukupnya — hampir menutupi seluruh permukaan', highlight: true },
+            { icon: '📏', label: 'Untuk 10 klepon (1 porsi)', value: '±100 gram kelapa parut', highlight: true },
+            { icon: '🍳', label: 'Tips ketahanan', value: 'Kukus kelapa parut ±5 menit sebelum dipakai agar tidak cepat basi' },
+            { icon: '🌡️', label: 'Sajikan', value: 'Klepon paling nikmat disajikan saat masih hangat!' },
+            { icon: '💥', label: 'Sensasi makan', value: 'Gigit → gula merah meletus manis di mulut! 😋' },
+          ]}
+          tip="Kelapa parut yang sudah dikukus bisa tahan 1–2 hari di suhu ruang. Lebih lama? Simpan di kulkas!"
+          onClose={() => {
+            setShowCoatPopup(false);
+            setTimeout(() => onComplete(), 400);
+          }}
+        />
       )}
     </div>
   );

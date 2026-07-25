@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useSfx } from '../../hooks/useSfx';
+import { CognitiveInfoPopup } from './CognitiveInfoPopup';
 
 interface Props {
   onComplete: () => void;
@@ -12,7 +13,9 @@ export function StepMixing({ onComplete }: Props) {
   const [totalDegrees, setTotalDegrees] = useState(0);
   const [isStirring, setIsStirring] = useState(false);
   const [whirlAngle, setWhirlAngle] = useState(0);
+  const [showDonePopup, setShowDonePopup] = useState(false);
   const completedRef = useRef(false);
+  const popupShownRef = useRef(false);
 
   const bowlRef = useRef<HTMLDivElement>(null);
   const lastAngleRef = useRef<number | null>(null);
@@ -41,14 +44,18 @@ export function StepMixing({ onComplete }: Props) {
         const next = Math.min(prev + delta, REQUIRED_DEGREES);
         if (next >= REQUIRED_DEGREES && !completedRef.current) {
           completedRef.current = true;
-          setTimeout(() => onComplete(), 600);
+          // Tampilkan popup dulu, baru lanjut setelah ditutup
+          if (!popupShownRef.current) {
+            popupShownRef.current = true;
+            setTimeout(() => setShowDonePopup(true), 300);
+          }
         }
         return next;
       });
       setWhirlAngle(a => a + delta);
     }
     lastAngleRef.current = angle;
-  }, [onComplete]);
+  }, []);
 
   const onMouseDown = (e: React.MouseEvent) => {
     playButtonClick();
@@ -106,15 +113,31 @@ export function StepMixing({ onComplete }: Props) {
   const circumference = 2 * Math.PI * 54;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
 
+  // Warna adonan berubah dari putih → hijau pandan sesuai progress
+  const doughHue = Math.round(percent * 1.2); // 0–120 (putih→hijau)
+  const doughFilter = percent < 10
+    ? 'none'
+    : `hue-rotate(${doughHue}deg) saturate(${0.5 + percent / 100})`;
+
   return (
     <div className="klepon-step-content">
+      {/* Static info card cara mengaduk */}
+      <div className="cog-static-card cog-static-card--compact">
+        <div className="cog-static-label">📝 Cara Mengaduk Adonan</div>
+        <div className="cog-static-rows">
+          <div className="cog-static-row"><span>🌿 Campur</span><strong>Tepung ketan + air pandan</strong></div>
+          <div className="cog-static-row"><span>💧 Teknik</span><strong>Masukkan air sedikit demi sedikit</strong></div>
+          <div className="cog-static-row"><span>✅ Target</span><strong>Lembut, tidak lengket, hijau merata</strong></div>
+        </div>
+      </div>
+
       <p className="klepon-instruction">
         Putar adonan searah jarum jam ↻<br />
         <span style={{ fontSize: '13px', opacity: 0.7 }}>Tekan & putar di dalam mangkok</span>
       </p>
 
       <div className="mixing-scene">
-        {}
+        {/* Ring progress */}
         <svg className="mixing-ring" width="140" height="140" viewBox="0 0 120 120">
           <circle cx="60" cy="60" r="54" fill="none" stroke="#E8D5C4" strokeWidth="8" />
           <circle
@@ -130,35 +153,36 @@ export function StepMixing({ onComplete }: Props) {
           />
         </svg>
 
-        {}
+        {/* Mangkok */}
         <div
           ref={bowlRef}
           className={`mixing-bowl-container ${isStirring ? 'bowl-stirring' : ''}`}
           onMouseDown={onMouseDown}
           onTouchStart={onTouchStart}
         >
-          {}
-          <img 
-            src="/assets/klepon/mangkok_aduk.png" 
-            alt="mangkok aduk" 
-            className="mixing-bowl-bg" 
-            draggable={false} 
-          />
-          
-          {}
-          <img 
-            src="/assets/klepon/adonan_putar.png" 
-            alt="adonan" 
-            className="mixing-dough-img"
-            style={{ transform: `rotate(${whirlAngle}deg)` }}
+          <img
+            src="/assets/klepon/mangkok_aduk.png"
+            alt="mangkok aduk"
+            className="mixing-bowl-bg"
             draggable={false}
           />
 
-          {}
+          <img
+            src="/assets/klepon/adonan_putar.png"
+            alt="adonan"
+            className="mixing-dough-img"
+            style={{
+              transform: `rotate(${whirlAngle}deg)`,
+              filter: doughFilter,
+              transition: 'filter 0.5s ease',
+            }}
+            draggable={false}
+          />
+
           {!isStirring && percent < 100 && (
-            <img 
-              src="/assets/universal/rotation_arrow.png" 
-              alt="Rotate clockwise" 
+            <img
+              src="/assets/universal/rotation_arrow.png"
+              alt="Rotate clockwise"
               style={{
                 position: 'absolute',
                 top: '50%',
@@ -176,7 +200,6 @@ export function StepMixing({ onComplete }: Props) {
             />
           )}
 
-          {}
           <div className={`mixer-decoration mixer-left ${isStirring ? 'mixer-shaking' : ''}`}>🥄</div>
           <div className={`mixer-decoration mixer-right ${isStirring ? 'mixer-shaking' : ''}`}>🥄</div>
         </div>
@@ -191,6 +214,26 @@ export function StepMixing({ onComplete }: Props) {
 
       {!isStirring && percent < 100 && percent > 0 && (
         <p className="mixing-hint">↻ Terus putar!</p>
+      )}
+
+      {/* Popup saat adonan selesai diaduk */}
+      {showDonePopup && (
+        <CognitiveInfoPopup
+          title="✅ Adonan Pandan Sempurna!"
+          subtitle="Adonan siap dibentuk menjadi klepon"
+          accentColor="#7CAD58"
+          items={[
+            { icon: '🎨', label: 'Warna', value: 'Hijau merata dari air pandan', highlight: true },
+            { icon: '🤲', label: 'Tekstur', value: 'Lembut, tidak lengket di tangan', highlight: true },
+            { icon: '⚖️', label: 'Konsistensi', value: 'Bisa dibentuk bulat tanpa retak' },
+            { icon: '🕐', label: 'Waktu mengaduk', value: '±5 menit hingga merata sempurna' },
+          ]}
+          tip="Kalau adonan terlalu lembek, tambah sedikit tepung. Terlalu keras? Tambah sedikit air pandan!"
+          onClose={() => {
+            setShowDonePopup(false);
+            setTimeout(() => onComplete(), 400);
+          }}
+        />
       )}
     </div>
   );

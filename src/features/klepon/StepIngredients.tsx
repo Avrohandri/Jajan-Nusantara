@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useSfx } from '../../hooks/useSfx';
+import { CognitiveInfoPopup } from './CognitiveInfoPopup';
 
 interface Ingredient {
   id: string;
@@ -19,6 +20,45 @@ const INITIAL_INGREDIENTS: Ingredient[] = [
   { id: 'cabai',  name: 'Cabai',      imgSrc: '/assets/klepon/ing_cabai.png',   plateColor: '#FFC107', correct: false, dropped: false },
 ];
 
+// Info kognitif per bahan — muncul sebagai popup setelah di-drag
+const ING_POPUP_INFO: Record<string, { title: string; subtitle?: string; items: { icon: string; label: string; value: string; highlight?: boolean }[]; tip?: string; accentColor?: string }> = {
+  tepung: {
+    title: '🌾 Tepung Ketan',
+    subtitle: 'Bahan dasar adonan klepon',
+    accentColor: '#C4A35A',
+    items: [
+      { icon: '⚖️', label: 'Jumlah untuk 1 porsi (10 klepon)', value: '250 gram', highlight: true },
+      { icon: '🥣', label: 'Jenis tepung', value: 'Tepung ketan putih' },
+      { icon: '💧', label: 'Kandungan', value: 'Gluten rendah, menghasilkan tekstur kenyal khas klepon' },
+    ],
+    tip: 'Jangan gunakan tepung terigu biasa — klepon tidak akan kenyal!',
+  },
+  pandan: {
+    title: '🌿 Daun Pandan',
+    subtitle: 'Pewarna & aroma alami klepon',
+    accentColor: '#7CAD58',
+    items: [
+      { icon: '🍃', label: 'Daun pandan segar', value: '±15 lembar', highlight: true },
+      { icon: '💧', label: 'Hasil setelah diolah', value: '±100 ml air pandan', highlight: true },
+      { icon: '🔧', label: 'Cara membuat', value: 'Blender daun pandan + sedikit air → saring' },
+      { icon: '🎨', label: 'Fungsi', value: 'Warna hijau alami + aroma harum khas' },
+    ],
+    tip: 'Air pandan dimasukkan sedikit demi sedikit agar adonan tidak terlalu lembek!',
+  },
+  gula: {
+    title: '🍬 Gula Merah',
+    subtitle: 'Isian manis kejutan klepon',
+    accentColor: '#8B4513',
+    items: [
+      { icon: '⚖️', label: 'Per 1 klepon', value: '±1 sdt / ±5 gram', highlight: true },
+      { icon: '⚖️', label: 'Untuk 1 porsi (10 klepon)', value: '±50–100 gram gula merah', highlight: false },
+      { icon: '✂️', label: 'Persiapan', value: 'Sisir / potong kecil agar mudah dimasukkan' },
+      { icon: '💥', label: 'Sensasi', value: 'Meletus manis saat digigit!' },
+    ],
+    tip: 'Lubangi adonan dengan ibu jari sebelum memasukkan gula agar mudah ditutup.',
+  },
+};
+
 interface Props {
   onComplete: () => void;
 }
@@ -29,6 +69,7 @@ export function StepIngredients({ onComplete }: Props) {
   const [bowlState, setBowlState]     = useState<'idle' | 'correct' | 'wrong'>('idle');
   const [draggingId, setDraggingId]   = useState<string | null>(null);
   const [isOver, setIsOver]           = useState(false);
+  const [popup, setPopup]             = useState<string | null>(null); // id bahan yang muncul popup
 
   const bowlRef       = useRef<HTMLDivElement>(null);
   const ghostRef      = useRef<HTMLDivElement | null>(null);
@@ -43,7 +84,6 @@ export function StepIngredients({ onComplete }: Props) {
   }, []);
 
   const correctCount  = ingredients.filter(i => i.correct && i.dropped).length;
-  const totalCorrect  = ingredients.filter(i => i.correct).length;
 
   const triggerFeedback = useCallback((correct: boolean) => {
     setBowlState(correct ? 'correct' : 'wrong');
@@ -58,12 +98,27 @@ export function StepIngredients({ onComplete }: Props) {
     if (ing.correct) {
       setIngredients(prev => prev.map(i => i.id === id ? { ...i, dropped: true } : i));
       triggerFeedback(true);
-      if (correctCount + 1 >= totalCorrect) setTimeout(() => onComplete(), 700);
+      // Tampilkan popup info untuk bahan yang benar
+      if (ING_POPUP_INFO[id]) setPopup(id);
+      // Lanjut hanya jika popup sudah di-dismiss (dihandle di onClose popup)
     } else {
       triggerFeedback(false);
     }
     setDraggingId(null);
-  }, [ingredients, correctCount, totalCorrect, onComplete, triggerFeedback]);
+  }, [ingredients, triggerFeedback]);
+
+  // Ketika popup ditutup, cek apakah semua bahan sudah dimasukkan
+  const handlePopupClose = useCallback(() => {
+    setPopup(null);
+    setIngredients(prev => {
+      const newCorrectCount = prev.filter(i => i.correct && i.dropped).length;
+      const total = prev.filter(i => i.correct).length;
+      if (newCorrectCount >= total) {
+        setTimeout(() => onComplete(), 400);
+      }
+      return prev;
+    });
+  }, [onComplete]);
 
   const onDragStart = (e: React.DragEvent, id: string) => {
     playButtonClick();
@@ -146,10 +201,12 @@ export function StepIngredients({ onComplete }: Props) {
     bowlState === 'correct' ? 'bowl-zone-correct'  : '',
   ].filter(Boolean).join(' ');
 
+  const popupInfo = popup ? ING_POPUP_INFO[popup] : null;
+
   return (
     <div className="ing-screen">
 
-      {}
+      {/* Info card static — kuantitas bahan 1 porsi */}
       <div className="ing-info-card">
         <div className="ing-info-header">
           <div className="ing-info-left">
@@ -158,15 +215,24 @@ export function StepIngredients({ onComplete }: Props) {
           </div>
         </div>
 
-        {}
+        {/* Tabel kuantitas static */}
+        <div className="cog-static-card">
+          <div className="cog-static-label">📋 Takaran 1 Porsi (10 klepon)</div>
+          <div className="cog-static-rows">
+            <div className="cog-static-row"><span>🌾 Tepung ketan</span><strong>250 gram</strong></div>
+            <div className="cog-static-row"><span>🌿 Air pandan</span><strong>100 ml</strong></div>
+            <div className="cog-static-row"><span>🍬 Gula merah</span><strong>100 gram</strong></div>
+            <div className="cog-static-row"><span>🥥 Kelapa parut</span><strong>100 gram</strong></div>
+          </div>
+        </div>
+
+        {/* Instruksi drag */}
         <div className="ing-instruction-bar">
           Seret bahan yang benar ke dalam mangkok! ☕
         </div>
-
-
       </div>
 
-      {}
+      {/* Grid bahan */}
       <div className="ing-grid">
         {ingredients.map(ing => (
           <div
@@ -180,7 +246,6 @@ export function StepIngredients({ onComplete }: Props) {
             onTouchEnd={onTouchEnd}
             style={{ opacity: ing.dropped ? 0.25 : 1 }}
           >
-            {}
             <div className="ing-coaster">
               <img
                 src={ing.imgSrc}
@@ -191,7 +256,6 @@ export function StepIngredients({ onComplete }: Props) {
               />
             </div>
 
-            {}
             {!ing.dropped && (
               <div className="ing-label">
                 {ing.name}
@@ -201,7 +265,7 @@ export function StepIngredients({ onComplete }: Props) {
         ))}
       </div>
 
-      {}
+      {/* Bowl drop zone */}
       <div
         ref={bowlRef}
         className={bowlClass}
@@ -209,22 +273,30 @@ export function StepIngredients({ onComplete }: Props) {
         onDragLeave={onBowlDragLeave}
         onDrop={onBowlDrop}
       >
-        {}
         <img src="/assets/klepon/mangkok.png" alt="mangkok" className="ing-bowl-img" />
 
-        {}
         <div className="ing-bowl-contents">
           {ingredients.filter(i => i.correct && i.dropped).map(i => (
             <img key={i.id} src={i.imgSrc} alt="" className="ing-bowl-item" />
           ))}
         </div>
 
-        {}
         {correctCount === 0 && (
           <span className="ing-bowl-hint">Taruh bahan<br />di sini</span>
         )}
       </div>
 
+      {/* Popup kognitif per bahan */}
+      {popup && popupInfo && (
+        <CognitiveInfoPopup
+          title={popupInfo.title}
+          subtitle={popupInfo.subtitle}
+          items={popupInfo.items}
+          tip={popupInfo.tip}
+          accentColor={popupInfo.accentColor}
+          onClose={handlePopupClose}
+        />
+      )}
     </div>
   );
 }
