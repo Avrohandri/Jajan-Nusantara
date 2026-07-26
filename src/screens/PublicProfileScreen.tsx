@@ -180,7 +180,7 @@ export function PublicProfileScreen() {
         </div>
 
         {/* Last played info */}
-        {profile.lastPlayedAt && (
+        {profile.lastPlayedAt ? (
           <div className="pubprofile-lastplayed">
             <span className="pubprofile-lastplayed-icon">🕐</span>
             <span>
@@ -190,11 +190,16 @@ export function PublicProfileScreen() {
                   day: 'numeric',
                   month: 'long',
                   year: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
                 })}
               </strong>
             </span>
+          </div>
+        ) : null}
+
+        {/* Sync info jika belum pernah login ulang */}
+        {(profile.totalSessions === 0 && profile.totalBestScore > 0) && (
+          <div style={{ textAlign: 'center', fontSize: '10px', color: '#8b6914', marginTop: '8px', padding: '0 16px', opacity: 0.8, fontStyle: 'italic' }}>
+            *Data pulau & kuis akan tampil setelah pemain masuk kembali
           </div>
         )}
       </div>

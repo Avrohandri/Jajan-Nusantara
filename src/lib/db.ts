@@ -211,11 +211,35 @@ export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
       const db = getDb()!;
       const q = query(collection(db, 'leaderboard'), orderBy('totalBestScore', 'desc'), limit(50));
       const snap = await getDocs(q);
-      return snap.docs.map((d, i) => ({
+      const entries = snap.docs.map((d, i) => ({
         ...(d.data() as Omit<LeaderboardEntry, 'rank'>),
         profileIcon: (d.data() as { profileIcon?: string }).profileIcon ?? 'Klepon',
         rank: i + 1,
       }));
+
+      // Fetch tanggal pembuatan akun on-the-fly dari collection usernames jika tidak ada
+      const enriched = await Promise.all(
+        entries.map(async (e) => {
+          if (!e.accountCreatedAt) {
+            try {
+              const unSnap = await getDoc(doc(db, 'usernames', e.username.toLowerCase().trim()));
+              if (unSnap.exists()) {
+                const unData = unSnap.data();
+                if (unData.createdAt) {
+                  // Firebase Timestamp to millis
+                  e.accountCreatedAt = typeof unData.createdAt.toMillis === 'function'
+                    ? unData.createdAt.toMillis()
+                    : unData.createdAt;
+                }
+              }
+            } catch {
+              // Jika gagal, biarkan saja (jangan lempar error agar array tetap utuh)
+            }
+          }
+          return e;
+        })
+      );
+      return enriched;
     } catch (e) {
       console.warn('[DB] Gagal ambil leaderboard:', e);
     }
@@ -239,6 +263,21 @@ export async function getPublicProfile(userId: string): Promise<UserProfile | nu
     const lbSnap = await getDoc(doc(db, 'leaderboard', userId));
     if (lbSnap.exists()) {
       const d = lbSnap.data();
+      
+      // Ambil fallback createdAt dari usernames
+      let fallbackCreatedAt = d.accountCreatedAt ?? d.createdAt ?? 0;
+      if (!fallbackCreatedAt && d.username) {
+        try {
+          const unSnap = await getDoc(doc(db, 'usernames', d.username.toLowerCase().trim()));
+          if (unSnap.exists()) {
+            const unData = unSnap.data();
+            if (unData.createdAt) {
+              fallbackCreatedAt = typeof unData.createdAt.toMillis === 'function' ? unData.createdAt.toMillis() : unData.createdAt;
+            }
+          }
+        } catch {}
+      }
+
       return {
         userId: d.userId ?? userId,
         username: d.username ?? '',
@@ -251,8 +290,8 @@ export async function getPublicProfile(userId: string): Promise<UserProfile | nu
         totalQuizzesCorrect: d.totalQuizzesCorrect ?? 0,
         totalQuizzesAnswered: d.totalQuizzesAnswered ?? 0,
         unlockedRecipes: Array(d.unlockedRecipesCount ?? 0).fill('recipe'),
-        lastPlayedAt: d.lastPlayedAt ?? 0,
-        createdAt: d.accountCreatedAt ?? d.createdAt ?? 0,
+        lastPlayedAt: d.lastPlayedAt ?? fallbackCreatedAt,
+        createdAt: fallbackCreatedAt,
       } as UserProfile;
     }
   } catch (e) {
@@ -316,58 +355,6 @@ export async function syncFullLeaderboardProfile(userId: string, profile: UserPr
   }
 }
 
-// Migrasi batch: isi accountCreatedAt + data profil untuk semua entry leaderboard lama
-// Dipanggil saat LeaderboardScreen dibuka — satu kali per session
-export async function migrateLeaderboardTimestamps(): Promise<void> {
-  if (!isFirebaseConfigured()) return;
-  try {
-    const db = getDb()!;
-    const q = query(collection(db, 'leaderboard'), orderBy('totalBestScore', 'desc'), limit(50));
-    const snap = await getDocs(q);
-
-    // Filter hanya entry yang belum punya accountCreatedAt
-    const needMigration = snap.docs.filter(d => !d.data().accountCreatedAt);
-    if (needMigration.length === 0) return; // Sudah semua ter-migrate
-
-    const migrationTasks = needMigration.map(async (d) => {
-      const lbData = d.data();
-      const uid = lbData.userId;
-      const lbRef = doc(db, 'leaderboard', uid);
-
-      try {
-        // Coba baca dari users collection (ada data lengkap termasuk createdAt)
-        const userSnap = await getDoc(doc(db, 'users', uid));
-        if (userSnap.exists()) {
-          const u = userSnap.data() as UserProfile;
-          await updateDoc(lbRef, {
-            accountCreatedAt: u.createdAt ?? Date.now(),
-            lastPlayedAt: u.lastPlayedAt ?? u.createdAt ?? Date.now(),
-            islandProgress: u.islandProgress ?? { jogja: false, bali: false, aceh: false, maluku: false },
-            regionBestScores: u.regionBestScores ?? { jogja: 0, bali: 0, aceh: 0, maluku: 0 },
-            totalSessions: u.totalSessions ?? 0,
-            totalMerges: u.totalMerges ?? 0,
-            totalQuizzesCorrect: u.totalQuizzesCorrect ?? 0,
-            totalQuizzesAnswered: u.totalQuizzesAnswered ?? 0,
-            unlockedRecipesCount: (u.unlockedRecipes ?? []).length,
-            profileIcon: u.profileIcon ?? lbData.profileIcon ?? 'Klepon',
-          });
-        } else {
-          // User doc tidak ada, pakai dummy timestamp
-          await updateDoc(lbRef, { accountCreatedAt: Date.now() });
-        }
-      } catch {
-        // Security rules blokir baca users/{uid}, pakai dummy timestamp
-        try {
-          await updateDoc(lbRef, { accountCreatedAt: Date.now() });
-        } catch {}
-      }
-    });
-
-    await Promise.allSettled(migrationTasks);
-  } catch (e) {
-    console.warn('[DB] Migration leaderboard gagal:', e);
-  }
-}
 
 export async function updateProfileIcon(userId: string, username: string, icon: string): Promise<void> {
   if (!isFirebaseConfigured()) return;

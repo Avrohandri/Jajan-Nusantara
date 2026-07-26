@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
-import { getLeaderboard, migrateLeaderboardTimestamps } from '../lib/db';
+import { getLeaderboard } from '../lib/db';
 import type { LeaderboardEntry } from '../types';
 import backButtonImg from '../assets/universal/back button.png';
 import peringkatJudul from '../assets/pedia/peringkat_judul.png';
@@ -45,17 +45,12 @@ export function LeaderboardScreen() {
   const { playButtonClick } = useSfx();
 
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      // Jalankan migrasi dulu: isi timestamp & data profil entry lama
-      await migrateLeaderboardTimestamps();
-      // Ambil data leaderboard yang sudah ter-update
-      const data = await getLeaderboard();
+    getLeaderboard().then(data => {
       setEntries(data);
       setLoading(false);
-    };
-    load();
+    });
   }, []);
+
 
   const handleRowClick = (entry: LeaderboardEntry, isMe: boolean) => {
     playButtonClick();
