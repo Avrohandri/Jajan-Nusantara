@@ -94,13 +94,21 @@ export async function createProfile(userId: string, username: string): Promise<v
       // Simpan profil baru ke collection 'users'
       await setDoc(doc(db, 'users', userId), profile);
       
-      // Daftarkan ke leaderboard dengan skor awal 0
+      // Daftarkan ke leaderboard dengan skor awal 0 + data publik lengkap
       await setDoc(doc(db, 'leaderboard', userId), {
         userId,
         username,
         totalBestScore: 0,
         profileIcon: randomIcon,
         lastScoreUpdatedAt: Date.now(),
+        lastPlayedAt: Date.now(),
+        islandProgress: { ...DEFAULT_ISLAND_PROGRESS },
+        regionBestScores: { ...DEFAULT_REGION_SCORES },
+        totalSessions: 0,
+        totalMerges: 0,
+        totalQuizzesCorrect: 0,
+        totalQuizzesAnswered: 0,
+        unlockedRecipesCount: 0,
       });
       return;
     } catch (e) {
@@ -171,12 +179,21 @@ export async function updateIslandProgress(
         totalBestScore: newTotalBestScore,
         lastPlayedAt: Date.now(),
       });
+      // Simpan data publik lengkap ke leaderboard (dibaca oleh getPublicProfile)
       await setDoc(doc(db, 'leaderboard', userId), {
         userId,
         username: currentProfile.username,
         totalBestScore: newTotalBestScore,
         profileIcon: currentProfile.profileIcon ?? 'Klepon',
         lastScoreUpdatedAt: Date.now(),
+        lastPlayedAt: Date.now(),
+        islandProgress: updatedProgress,
+        regionBestScores: newRegionBestScores,
+        totalSessions: currentProfile.totalSessions,
+        totalMerges: currentProfile.totalMerges,
+        totalQuizzesCorrect: currentProfile.totalQuizzesCorrect,
+        totalQuizzesAnswered: currentProfile.totalQuizzesAnswered,
+        unlockedRecipesCount: (currentProfile.unlockedRecipes ?? []).length,
       });
     } catch (e) {
       console.warn('[DB] Gagal update island progress:', e);
@@ -205,16 +222,61 @@ export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
   return [];
 }
 
+// Baca profil publik dari koleksi leaderboard (sudah public readable, tidak blokir security rules)
 export async function getPublicProfile(userId: string): Promise<UserProfile | null> {
   if (!isFirebaseConfigured()) return null;
   try {
     const db = getDb()!;
-    const snap = await getDoc(doc(db, 'users', userId));
-    if (snap.exists()) return snap.data() as UserProfile;
+    const snap = await getDoc(doc(db, 'leaderboard', userId));
+    if (snap.exists()) {
+      const d = snap.data();
+      // Map leaderboard fields → UserProfile shape untuk PublicProfileScreen
+      return {
+        userId: d.userId ?? userId,
+        username: d.username ?? '',
+        profileIcon: d.profileIcon ?? 'Klepon',
+        totalBestScore: d.totalBestScore ?? 0,
+        regionBestScores: d.regionBestScores ?? { jogja: 0, bali: 0, aceh: 0, maluku: 0 },
+        islandProgress: d.islandProgress ?? { jogja: false, bali: false, aceh: false, maluku: false },
+        totalSessions: d.totalSessions ?? 0,
+        totalMerges: d.totalMerges ?? 0,
+        totalQuizzesCorrect: d.totalQuizzesCorrect ?? 0,
+        totalQuizzesAnswered: d.totalQuizzesAnswered ?? 0,
+        // unlockedRecipes disimpan sebagai count di leaderboard — buat array dummy untuk length
+        unlockedRecipes: Array(d.unlockedRecipesCount ?? 0).fill('recipe'),
+        lastPlayedAt: d.lastPlayedAt ?? 0,
+        createdAt: d.createdAt ?? 0,
+      } as UserProfile;
+    }
   } catch (e) {
     console.warn('[DB] Gagal ambil profil publik:', e);
   }
   return null;
+}
+
+// Sync stats sesi ke leaderboard doc (dipanggil setelah endSession)
+export async function syncLeaderboardStats(
+  userId: string,
+  stats: {
+    totalSessions?: number;
+    totalMerges?: number;
+    totalQuizzesCorrect?: number;
+    totalQuizzesAnswered?: number;
+    lastPlayedAt?: number;
+    unlockedRecipesCount?: number;
+  },
+): Promise<void> {
+  if (!isFirebaseConfigured()) return;
+  try {
+    const db = getDb()!;
+    const ref = doc(db, 'leaderboard', userId);
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+      await updateDoc(ref, { ...stats });
+    }
+  } catch (e) {
+    console.warn('[DB] Gagal sync stats leaderboard:', e);
+  }
 }
 
 export async function updateProfileIcon(userId: string, username: string, icon: string): Promise<void> {

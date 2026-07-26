@@ -514,6 +514,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
         totalQuizzesCorrect: newTotalQuizzesCorrect,
         totalQuizzesAnswered: newTotalQuizzesAnswered,
       });
+      // Sync stats ke leaderboard agar profil publik terbaru
+      const { syncLeaderboardStats } = await import('../lib/db');
+      await syncLeaderboardStats(s.userId, {
+        totalSessions: newTotalSessions,
+        totalMerges: newTotalMerges,
+        totalQuizzesCorrect: newTotalQuizzesCorrect,
+        totalQuizzesAnswered: newTotalQuizzesAnswered,
+        lastPlayedAt: Date.now(),
+      });
     }
   },
 
