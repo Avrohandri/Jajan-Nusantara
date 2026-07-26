@@ -116,11 +116,7 @@ export function PublicProfileScreen() {
           <h1 className="profile-title">{profile.username}</h1>
         </div>
 
-        {/* Read-only badge */}
-        <div className="pubprofile-badge">
-          <span className="pubprofile-badge-icon">👁️</span>
-          <span>Profil Siswa (Read-only)</span>
-        </div>
+
 
         {/* Profile Card */}
         <div className="profile-card">
