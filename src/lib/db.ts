@@ -223,15 +223,22 @@ export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
   return [];
 }
 
-// Baca profil publik dari koleksi leaderboard (sudah public readable, tidak blokir security rules)
+// Baca profil publik — coba users collection dulu (data lengkap), fallback ke leaderboard
 export async function getPublicProfile(userId: string): Promise<UserProfile | null> {
   if (!isFirebaseConfigured()) return null;
+  const db = getDb()!;
+  // Coba users collection dulu (data paling lengkap)
   try {
-    const db = getDb()!;
-    const snap = await getDoc(doc(db, 'leaderboard', userId));
-    if (snap.exists()) {
-      const d = snap.data();
-      // Map leaderboard fields → UserProfile shape untuk PublicProfileScreen
+    const usersSnap = await getDoc(doc(db, 'users', userId));
+    if (usersSnap.exists()) return usersSnap.data() as UserProfile;
+  } catch {
+    // Security rules blokir, lanjut ke leaderboard
+  }
+  // Fallback: baca dari leaderboard (selalu accessible)
+  try {
+    const lbSnap = await getDoc(doc(db, 'leaderboard', userId));
+    if (lbSnap.exists()) {
+      const d = lbSnap.data();
       return {
         userId: d.userId ?? userId,
         username: d.username ?? '',
@@ -243,10 +250,9 @@ export async function getPublicProfile(userId: string): Promise<UserProfile | nu
         totalMerges: d.totalMerges ?? 0,
         totalQuizzesCorrect: d.totalQuizzesCorrect ?? 0,
         totalQuizzesAnswered: d.totalQuizzesAnswered ?? 0,
-        // unlockedRecipes disimpan sebagai count di leaderboard — buat array dummy untuk length
         unlockedRecipes: Array(d.unlockedRecipesCount ?? 0).fill('recipe'),
         lastPlayedAt: d.lastPlayedAt ?? 0,
-        createdAt: d.createdAt ?? 0,
+        createdAt: d.accountCreatedAt ?? d.createdAt ?? 0,
       } as UserProfile;
     }
   } catch (e) {
@@ -307,6 +313,59 @@ export async function syncFullLeaderboardProfile(userId: string, profile: UserPr
     }
   } catch (e) {
     console.warn('[DB] Gagal sync full leaderboard profile:', e);
+  }
+}
+
+// Migrasi batch: isi accountCreatedAt + data profil untuk semua entry leaderboard lama
+// Dipanggil saat LeaderboardScreen dibuka — satu kali per session
+export async function migrateLeaderboardTimestamps(): Promise<void> {
+  if (!isFirebaseConfigured()) return;
+  try {
+    const db = getDb()!;
+    const q = query(collection(db, 'leaderboard'), orderBy('totalBestScore', 'desc'), limit(50));
+    const snap = await getDocs(q);
+
+    // Filter hanya entry yang belum punya accountCreatedAt
+    const needMigration = snap.docs.filter(d => !d.data().accountCreatedAt);
+    if (needMigration.length === 0) return; // Sudah semua ter-migrate
+
+    const migrationTasks = needMigration.map(async (d) => {
+      const lbData = d.data();
+      const uid = lbData.userId;
+      const lbRef = doc(db, 'leaderboard', uid);
+
+      try {
+        // Coba baca dari users collection (ada data lengkap termasuk createdAt)
+        const userSnap = await getDoc(doc(db, 'users', uid));
+        if (userSnap.exists()) {
+          const u = userSnap.data() as UserProfile;
+          await updateDoc(lbRef, {
+            accountCreatedAt: u.createdAt ?? Date.now(),
+            lastPlayedAt: u.lastPlayedAt ?? u.createdAt ?? Date.now(),
+            islandProgress: u.islandProgress ?? { jogja: false, bali: false, aceh: false, maluku: false },
+            regionBestScores: u.regionBestScores ?? { jogja: 0, bali: 0, aceh: 0, maluku: 0 },
+            totalSessions: u.totalSessions ?? 0,
+            totalMerges: u.totalMerges ?? 0,
+            totalQuizzesCorrect: u.totalQuizzesCorrect ?? 0,
+            totalQuizzesAnswered: u.totalQuizzesAnswered ?? 0,
+            unlockedRecipesCount: (u.unlockedRecipes ?? []).length,
+            profileIcon: u.profileIcon ?? lbData.profileIcon ?? 'Klepon',
+          });
+        } else {
+          // User doc tidak ada, pakai dummy timestamp
+          await updateDoc(lbRef, { accountCreatedAt: Date.now() });
+        }
+      } catch {
+        // Security rules blokir baca users/{uid}, pakai dummy timestamp
+        try {
+          await updateDoc(lbRef, { accountCreatedAt: Date.now() });
+        } catch {}
+      }
+    });
+
+    await Promise.allSettled(migrationTasks);
+  } catch (e) {
+    console.warn('[DB] Migration leaderboard gagal:', e);
   }
 }
 

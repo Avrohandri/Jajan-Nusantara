@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
-import { getLeaderboard } from '../lib/db';
+import { getLeaderboard, migrateLeaderboardTimestamps } from '../lib/db';
 import type { LeaderboardEntry } from '../types';
 import backButtonImg from '../assets/universal/back button.png';
 import peringkatJudul from '../assets/pedia/peringkat_judul.png';
@@ -25,10 +25,8 @@ function LeaderboardAvatar({ icon, size = 38 }: { icon: string; size?: number })
 function formatTimestamp(ts: number): string {
   return new Date(ts).toLocaleDateString('id-ID', {
     day: 'numeric',
-    month: 'short',
+    month: 'long',
     year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
   });
 }
 
@@ -47,10 +45,16 @@ export function LeaderboardScreen() {
   const { playButtonClick } = useSfx();
 
   useEffect(() => {
-    getLeaderboard().then(data => { // Ambil top skor dari Firestore
+    const load = async () => {
+      setLoading(true);
+      // Jalankan migrasi dulu: isi timestamp & data profil entry lama
+      await migrateLeaderboardTimestamps();
+      // Ambil data leaderboard yang sudah ter-update
+      const data = await getLeaderboard();
       setEntries(data);
       setLoading(false);
-    });
+    };
+    load();
   }, []);
 
   const handleRowClick = (entry: LeaderboardEntry, isMe: boolean) => {
