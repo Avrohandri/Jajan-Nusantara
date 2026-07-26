@@ -22,8 +22,19 @@ function LeaderboardAvatar({ icon, size = 38 }: { icon: string; size?: number })
   );
 }
 
+function formatTimestamp(ts?: number): string {
+  if (!ts) return '';
+  return new Date(ts).toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 export function LeaderboardScreen() {
-  const { setScreen, userId } = useGameStore();
+  const { setScreen, userId, setViewingUserId } = useGameStore();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const { playButtonClick } = useSfx();
@@ -34,6 +45,16 @@ export function LeaderboardScreen() {
       setLoading(false);
     });
   }, []);
+
+  const handleRowClick = (entry: LeaderboardEntry, isMe: boolean) => {
+    playButtonClick();
+    if (isMe) {
+      setScreen('profile');
+    } else {
+      setViewingUserId(entry.userId);
+      setScreen('viewProfile');
+    }
+  };
 
   return (
     <div className="leaderboard-screen leaderboard-screen--pedia">
@@ -83,7 +104,12 @@ export function LeaderboardScreen() {
               return (
                 <div
                   key={entry.userId}
-                  className={`leaderboard-row${isMe ? ' leaderboard-row--me' : ''}`}
+                  className={`leaderboard-row leaderboard-row--clickable${isMe ? ' leaderboard-row--me' : ''}`}
+                  onClick={() => handleRowClick(entry, isMe)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Lihat profil ${entry.username}`}
+                  onKeyDown={e => e.key === 'Enter' && handleRowClick(entry, isMe)}
                 >
                   <span className="lb-rank">
                     {entry.rank <= 3
@@ -91,10 +117,19 @@ export function LeaderboardScreen() {
                       : `#${entry.rank}`}
                   </span>
                   <LeaderboardAvatar icon={entry.profileIcon ?? 'Klepon'} />
-                  <span className="lb-name">
-                    {entry.username}
-                    {isMe && <span className="lb-me-badge"> (Kamu)</span>}
-                  </span>
+                  <div className="lb-row-inner">
+                    <span className="lb-name">
+                      {entry.username}
+                      {isMe && <span className="lb-me-badge"> (Kamu)</span>}
+                    </span>
+                    {entry.lastScoreUpdatedAt ? (
+                      <span className="lb-timestamp">
+                        📅 {formatTimestamp(entry.lastScoreUpdatedAt)}
+                      </span>
+                    ) : (
+                      <span className="lb-timestamp lb-timestamp--none">📅 Belum diperbarui</span>
+                    )}
+                  </div>
                   <span className="lb-score">
                     {entry.totalBestScore.toLocaleString('id-ID')}
                   </span>

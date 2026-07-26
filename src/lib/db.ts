@@ -100,6 +100,7 @@ export async function createProfile(userId: string, username: string): Promise<v
         username,
         totalBestScore: 0,
         profileIcon: randomIcon,
+        lastScoreUpdatedAt: Date.now(),
       });
       return;
     } catch (e) {
@@ -175,6 +176,7 @@ export async function updateIslandProgress(
         username: currentProfile.username,
         totalBestScore: newTotalBestScore,
         profileIcon: currentProfile.profileIcon ?? 'Klepon',
+        lastScoreUpdatedAt: Date.now(),
       });
     } catch (e) {
       console.warn('[DB] Gagal update island progress:', e);
@@ -201,6 +203,18 @@ export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
     }
   }
   return [];
+}
+
+export async function getPublicProfile(userId: string): Promise<UserProfile | null> {
+  if (!isFirebaseConfigured()) return null;
+  try {
+    const db = getDb()!;
+    const snap = await getDoc(doc(db, 'users', userId));
+    if (snap.exists()) return snap.data() as UserProfile;
+  } catch (e) {
+    console.warn('[DB] Gagal ambil profil publik:', e);
+  }
+  return null;
 }
 
 export async function updateProfileIcon(userId: string, username: string, icon: string): Promise<void> {

@@ -85,6 +85,7 @@ export interface LeaderboardEntry {
   totalBestScore: number;
   profileIcon: string;
   rank: number;
+  lastScoreUpdatedAt?: number;
 }
 
 
@@ -96,6 +97,7 @@ export type ScreenName =
   | 'jajanpedia'
   | 'leaderboard'
   | 'profile'
+  | 'viewProfile'
   | 'kleponCard'
   | 'cenilCard'
   | 'yangkoCard'

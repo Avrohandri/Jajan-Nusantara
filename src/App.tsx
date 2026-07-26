@@ -14,6 +14,7 @@ const GameScreen = React.lazy(() => import('./screens/GameScreen').then(m => ({ 
 const ResultScreen = React.lazy(() => import('./screens/ResultScreen').then(m => ({ default: m.ResultScreen })));
 const LeaderboardScreen = React.lazy(() => import('./screens/LeaderboardScreen').then(m => ({ default: m.LeaderboardScreen })));
 const ProfileScreen = React.lazy(() => import('./screens/ProfileScreen').then(m => ({ default: m.ProfileScreen })));
+const PublicProfileScreen = React.lazy(() => import('./screens/PublicProfileScreen').then(m => ({ default: m.PublicProfileScreen })));
 
 
 
@@ -139,6 +140,7 @@ export default function App() {
       case 'jajanpedia': return <JajanpediaScreen />;
       case 'leaderboard': return <LeaderboardScreen />;
       case 'profile': return <ProfileScreen />;
+      case 'viewProfile': return <PublicProfileScreen />;
       case 'kleponCard': return <KleponCardScreen />;
       case 'cenilCard': return <CenilCardScreen />;
       case 'yangkoCard': return <YangkoCardScreen />;

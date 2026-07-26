@@ -124,6 +124,8 @@ interface GameStore {
   logout: () => Promise<void>;
   setAuthError: (msg: string | null) => void;
   setProfileIcon: (icon: string) => Promise<void>;
+  viewingUserId: string;
+  setViewingUserId: (uid: string) => void;
 
   totalSessions: number;
   regionBestScores: RegionBestScores;
@@ -338,6 +340,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ profileIcon: icon });
     await updateProfileIcon(userId, username, icon);
   },
+
+  viewingUserId: '',
+  setViewingUserId: (uid) => set({ viewingUserId: uid }),
 
   register: async (username) => {
     set({ authLoading: true, authError: null });
