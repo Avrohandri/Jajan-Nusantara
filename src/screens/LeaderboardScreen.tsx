@@ -131,8 +131,7 @@ export function LeaderboardScreen() {
                     </span>
                     {tsInfo ? (
                       <span className={`lb-timestamp${tsInfo.type === 'joined' ? ' lb-timestamp--joined' : ''}`}>
-                        {tsInfo.type === 'joined' ? '🗓️ Bergabung ' : '📅 '}
-                        {formatTimestamp(tsInfo.ts)}
+                        📅 {formatTimestamp(tsInfo.ts)}
                       </span>
                     ) : (
                       <span className="lb-timestamp lb-timestamp--none">📅 Belum diperbarui</span>
