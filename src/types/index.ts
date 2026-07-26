@@ -86,6 +86,8 @@ export interface LeaderboardEntry {
   profileIcon: string;
   rank: number;
   lastScoreUpdatedAt?: number;
+  lastPlayedAt?: number;
+  accountCreatedAt?: number;
 }
 
 

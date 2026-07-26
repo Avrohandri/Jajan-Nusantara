@@ -13,6 +13,7 @@ import {
   updateIslandProgress,
   updateProfileIcon,
   saveProfile,
+  syncFullLeaderboardProfile,
 } from '../lib/db';
 import { registerWithUsername, loginWithUsername, logoutUser } from '../lib/firebase/config';
 
@@ -416,6 +417,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         authLoading: false,
         authError: null,
       });
+      // Sync data profil ke leaderboard doc (background, non-blocking)
+      // Ini backfill data lama + pastikan data selalu fresh untuk profil publik
+      syncFullLeaderboardProfile(uid, profile).catch(() => {});
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : 'Gagal masuk.';
       set({ authError: msg, authLoading: false });

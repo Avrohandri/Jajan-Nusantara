@@ -102,6 +102,7 @@ export async function createProfile(userId: string, username: string): Promise<v
         profileIcon: randomIcon,
         lastScoreUpdatedAt: Date.now(),
         lastPlayedAt: Date.now(),
+        accountCreatedAt: Date.now(),
         islandProgress: { ...DEFAULT_ISLAND_PROGRESS },
         regionBestScores: { ...DEFAULT_REGION_SCORES },
         totalSessions: 0,
@@ -276,6 +277,36 @@ export async function syncLeaderboardStats(
     }
   } catch (e) {
     console.warn('[DB] Gagal sync stats leaderboard:', e);
+  }
+}
+
+// Sync PENUH profil user ke leaderboard doc saat login (backfill data lama)
+export async function syncFullLeaderboardProfile(userId: string, profile: UserProfile): Promise<void> {
+  if (!isFirebaseConfigured()) return;
+  try {
+    const db = getDb()!;
+    const ref = doc(db, 'leaderboard', userId);
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+      const existing = snap.data();
+      await updateDoc(ref, {
+        username: profile.username,
+        profileIcon: profile.profileIcon ?? 'Klepon',
+        totalBestScore: profile.totalBestScore ?? 0,
+        lastPlayedAt: profile.lastPlayedAt ?? Date.now(),
+        // Simpan createdAt akun sebagai dummy timestamp jika lastScoreUpdatedAt belum ada
+        accountCreatedAt: existing.accountCreatedAt ?? profile.createdAt ?? Date.now(),
+        islandProgress: profile.islandProgress ?? { jogja: false, bali: false, aceh: false, maluku: false },
+        regionBestScores: profile.regionBestScores ?? { jogja: 0, bali: 0, aceh: 0, maluku: 0 },
+        totalSessions: profile.totalSessions ?? 0,
+        totalMerges: profile.totalMerges ?? 0,
+        totalQuizzesCorrect: profile.totalQuizzesCorrect ?? 0,
+        totalQuizzesAnswered: profile.totalQuizzesAnswered ?? 0,
+        unlockedRecipesCount: (profile.unlockedRecipes ?? []).length,
+      });
+    }
+  } catch (e) {
+    console.warn('[DB] Gagal sync full leaderboard profile:', e);
   }
 }
 

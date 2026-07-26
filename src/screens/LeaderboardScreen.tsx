@@ -22,8 +22,7 @@ function LeaderboardAvatar({ icon, size = 38 }: { icon: string; size?: number })
   );
 }
 
-function formatTimestamp(ts?: number): string {
-  if (!ts) return '';
+function formatTimestamp(ts: number): string {
   return new Date(ts).toLocaleDateString('id-ID', {
     day: 'numeric',
     month: 'short',
@@ -31,6 +30,14 @@ function formatTimestamp(ts?: number): string {
     hour: '2-digit',
     minute: '2-digit',
   });
+}
+
+// Resolusi timestamp: skor > main > daftar
+function resolveTimestamp(entry: LeaderboardEntry): { ts: number; type: 'score' | 'played' | 'joined' } | null {
+  if (entry.lastScoreUpdatedAt) return { ts: entry.lastScoreUpdatedAt, type: 'score' };
+  if (entry.lastPlayedAt) return { ts: entry.lastPlayedAt, type: 'played' };
+  if (entry.accountCreatedAt) return { ts: entry.accountCreatedAt, type: 'joined' };
+  return null;
 }
 
 export function LeaderboardScreen() {
@@ -101,6 +108,7 @@ export function LeaderboardScreen() {
 
             {entries.map(entry => {
               const isMe = entry.userId === userId;
+              const tsInfo = resolveTimestamp(entry);
               return (
                 <div
                   key={entry.userId}
@@ -122,9 +130,10 @@ export function LeaderboardScreen() {
                       {entry.username}
                       {isMe && <span className="lb-me-badge"> (Kamu)</span>}
                     </span>
-                    {entry.lastScoreUpdatedAt ? (
-                      <span className="lb-timestamp">
-                        📅 {formatTimestamp(entry.lastScoreUpdatedAt)}
+                    {tsInfo ? (
+                      <span className={`lb-timestamp${tsInfo.type === 'joined' ? ' lb-timestamp--joined' : ''}`}>
+                        {tsInfo.type === 'joined' ? '🗓️ Bergabung ' : '📅 '}
+                        {formatTimestamp(tsInfo.ts)}
                       </span>
                     ) : (
                       <span className="lb-timestamp lb-timestamp--none">📅 Belum diperbarui</span>
