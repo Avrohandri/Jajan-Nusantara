@@ -5310,17 +5310,18 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-style: normal;
 }
 
 .lb-timestamp--none {
   opacity: 0.4;
-  font-style: italic;
+  font-style: normal;
 }
 
 .lb-timestamp--joined {
   opacity: 0.55;
   color: #8B6914;
-  font-style: italic;
+  font-style: normal;
 }
 
 /* ========================================================
